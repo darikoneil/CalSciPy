@@ -3,13 +3,13 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "PyCal"
+name = "CalciPy"
 version = "0.0.1"
 description = "A collection"
 readme = "README.md"
 requires-python = ">=3.7, <4"
 license = {file = "LICENSE"}
-keywords = ["PyCal", "calcium imaging"]
+keywords = ["CalciPy", "Calcium Imaging"]
 authors = [
   {email = "d.oneil@columbia.edu"},
   {name = "Darik A. O'Neil"}
@@ -23,6 +23,10 @@ classifiers = [
 ]
 
 dependencies = [
+    "imageio",
     "numpy",
+    "pillow",
+    "prettytable",
+    "tifffile",
     "tqdm"
 ]
