@@ -11,8 +11,11 @@ import math
 import pathlib
 from prettytable import PrettyTable
 from imageio import mimwrite
+from src.CalSciPy._validation import validate_extension, validate_filename, validate_path, convert_optionals
 
 
+@validate_path(pos=0)
+@convert_optionals(allowed=(str, pathlib.Path), required=pathlib.Path)
 def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
     Function determine contents of the bruker folder
@@ -22,11 +25,8 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
     :returns: Channels, Planes, Frames, Height, Width
     :rtype: tuple
     """
-    if isinstance(ImageDirectory, str):
-        ImageDirectory = pathlib.Path(ImageDirectory)
 
     _files = [_file for _file in ImageDirectory.glob("*.tif") if _file.is_file()]
-    # preallocate
 
     def parser(Tag_: str, SplitStrs: list) -> str:
         return [_tag for _tag in SplitStrs if Tag_ in _tag]
@@ -78,6 +78,8 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
     return (channels, find_planes(), find_frames(), *find_dimensions())
 
 
+@validate_path(pos=0)
+@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
 def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
     """
     Load a sequence of tiff stacks
@@ -111,6 +113,7 @@ def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
     return complete_image
 
 
+@validate_path(pos=0)
 def load_binary_meta(Filename: str) -> Tuple[int, int, int, str]:
     """
     Loads meta file for binary video
@@ -124,6 +127,7 @@ def load_binary_meta(Filename: str) -> Tuple[int, int, int, str]:
     return int(_num_frames), int(_y_pixels), int(_x_pixels), str(_type)
 
 
+@validate_path(pos=0)
 def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> Union[np.ndarray, Tuple[np.ndarray]]:
     """
     Load a sequence of tiff files from a directory.
@@ -275,6 +279,8 @@ def load_raw_binary(Filename: Union[str, None], MetaFile: Union[str, None], *arg
     return np.reshape(np.fromfile(Filename, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
 
 
+@validate_path(pos=0)
+@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
 def load_single_tiff(Filename: Union[str, pathlib.Path], NumFrames: int) -> np.ndarray:
     """
     Load a single tiff file
@@ -320,6 +326,10 @@ def pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None
     print(_table)
 
 
+@validate_path(pos=0)
+@validate_path(pos=1)
+@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
+@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=1)
 def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirectory: Union[str, pathlib.Path],
                            *args: Union[int, tuple[int]]) -> None:
     """
@@ -358,7 +368,7 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
 
         # reset, rather maintain code as is then make a new temporary variable since this
         # is basically instant
-        _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+        _files = [_file for _file in pathlib.Path(ImageDirectory).glob("*.tif")]
 
         # now find
         if isinstance(Tag, list):
@@ -377,12 +387,6 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
             return True
         else:
             return False
-
-    if isinstance(ImageDirectory, pathlib.Path):
-        ImageDirectory = str(ImageDirectory)
-
-    if isinstance(OutputDirectory, pathlib.Path):
-        OutputDirectory = str(OutputDirectory)
 
     _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
     _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(ImageDirectory)
@@ -472,6 +476,7 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
     return
 
 
+@validate_extension(required_extension=".tif", pos=1)
 def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a single tiff file as type uint16
@@ -484,11 +489,18 @@ def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype]
     :type Type: Optional[Any]
     :rtype: None
     """
+
+    if len(Images.shape) == 2:
+        with tifffile.TiffWriter(Filename) as tif:
+            tif.save(np.floor(Images).astype(Type))
+        return
+
     with tifffile.TiffWriter(Filename) as tif:
         for frame in np.floor(Images).astype(Type):
             tif.save(frame)
 
 
+@validate_path(pos=1)
 def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a sequence of tiff stacks
@@ -526,6 +538,7 @@ def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] 
     return print("Finished Saving Tiffs")
 
 
+@validate_path(pos=1)
 def save_raw_binary(Images: np.ndarray, ImageDirectory: str) -> None:
     """
     This function saves a tiff stack as a binary file
@@ -555,6 +568,8 @@ def save_raw_binary(Images: np.ndarray, ImageDirectory: str) -> None:
     print("Finished saving images as a binary file.")
 
 
+@validate_path(pos=1)
+@validate_extension(required_extension=".mp4", pos=1)
 def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -> None:
     """
     Function writes video to .mp4
@@ -571,9 +586,6 @@ def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -
     if "\\" not in Filename:
         Filename = "".join([os.getcwd(), "\\", Filename])
 
-    if ".mp4" not in Filename:
-        Filename = "".join([Filename, ".mp4"])
-
     if Images.dtype.type != np.uint8:
         print("\nForcing to unsigned 8-bit\n")
         Images = Images.astype(np.uint8)
@@ -581,3 +593,4 @@ def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -
     print("\nWriting Images to .mp4...\n")
     mimwrite(Filename, Images, fps=fps, quality=10, macro_block_size=4)
     print("\nFinished writing images to .mp4.\n")
+
