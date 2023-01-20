@@ -2,7 +2,8 @@ import os
 import pytest
 from shutil import rmtree
 from src.CalSciPy.io import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
-    repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack
+    repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack, \
+    save_video
 import numpy as np
 import pathlib
 
@@ -39,48 +40,7 @@ def test_determine_bruker_folder_contents(datafiles):
 
 
 @DATASET
-def test_repackage_bruker_tiffs(datafiles, tmp_path):
-    for _dir in datafiles.listdir():
-        # INGEST
-        _input_folder = next(pathlib.Path(_dir).glob("bruker_folder"))
-        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
-        # MAKE OUTPUT FOLDER
-        os.mkdir(_output_folder)
-        # RUN FUNCTION
-        repackage_bruker_tiffs(_input_folder, _output_folder, (0, 0))
-        # TEST
-        _descriptions = read_descriptions(_descriptions)
-        _contents = load_all_tiffs(_output_folder)
-        assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Failed On {pathlib.Path(_input_folder).name}"
-
-
-@DATASET
-def test_binaries_load_and_save(datafiles, tmp_path):
-    for _dir in datafiles.listdir():
-        # INGEST
-        _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
-        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
-        # MAKE OUTPUT FOLDER
-        os.mkdir(_output_folder)
-        # GET COMPARISON
-        _descriptions = read_descriptions(_descriptions)
-        # TEST
-        _images1 = load_single_tiff(_input_image, _descriptions[2])
-        np.testing.assert_array_equal(_images1.shape, _descriptions[2:5], err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name} "
-                                                                                f"on first loading")
-        save_raw_binary(_images1, _output_folder)
-        _images2 = load_raw_binary("", "", _output_folder) # FIX ME EW
-        np.testing.assert_array_equal(_images1, _images2, err_msg=f"Failed On {pathlib.Path(_dir).name} "
-                                                                                f"on second loading")
-
-    rmtree(datafiles)
-
-
-@DATASET
-def test_single_tiff_load_save(datafiles, tmp_path):
+def test_single_tiff_load_and_save(datafiles, tmp_path):
     # INGEST
     for _dir in datafiles.listdir():
         _input_image = next(pathlib.Path(_dir).glob("single.tif"))
@@ -102,11 +62,35 @@ def test_single_tiff_load_save(datafiles, tmp_path):
                                                                                 f"{pathlib.Path(_dir).name} "
                                                                                 f"on second loading")
 
-    rmtree(datafiles)
+    rmtree(tmp_path)
 
 
 @DATASET
-def test_tiff_stack_load_save(datafiles, tmp_path):
+def test_binaries_load_and_save(datafiles, tmp_path):
+    for _dir in datafiles.listdir():
+        # INGEST
+        _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
+        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
+        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        # MAKE OUTPUT FOLDER
+        os.mkdir(_output_folder)
+        # GET COMPARISON
+        _descriptions = read_descriptions(_descriptions)
+        # TEST
+        _images1 = load_single_tiff(_input_image, _descriptions[2])
+        np.testing.assert_array_equal(_images1.shape, _descriptions[2:5], err_msg=f"Failed On "
+                                                                                f"{pathlib.Path(_dir).name} "
+                                                                                f"on first loading")
+        save_raw_binary(_images1, _output_folder)
+        _images2 = load_raw_binary(_output_folder)
+        np.testing.assert_array_equal(_images1, _images2, err_msg=f"Failed On {pathlib.Path(_dir).name} "
+                                                                                f"on second loading")
+
+    rmtree(tmp_path)
+
+
+@DATASET
+def test_tiff_stack_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
         # INGEST
 
@@ -127,5 +111,39 @@ def test_tiff_stack_load_save(datafiles, tmp_path):
                                                                                 f"on first loading")
 
 
-def test_clean_up_directory(tmp_path):
+@DATASET
+def test_repackage_bruker_tiffs(datafiles, tmp_path):
+    for _dir in datafiles.listdir():
+        # INGEST
+        _input_folder = next(pathlib.Path(_dir).glob("bruker_folder"))
+        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
+        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        # MAKE OUTPUT FOLDER
+        os.mkdir(_output_folder)
+        # RUN FUNCTION
+        repackage_bruker_tiffs(_input_folder, _output_folder, (0, 0))
+        # TEST
+        _descriptions = read_descriptions(_descriptions)
+        _contents = load_all_tiffs(_output_folder)
+        assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Failed On {pathlib.Path(_input_folder).name}"
+
+
+@DATASET
+def test_video_load_and_save(datafiles, tmp_path):
+    for _dir in datafiles.listdir():
+        # INGEST
+        _input_file = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
+        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
+        _descriptions = read_descriptions(_descriptions)
+        # MAKE OUTPUT FOLDER
+        os.mkdir(_output_folder)
+        _image = load_single_tiff(_input_file, _descriptions[2])
+        save_video(_image, _output_folder)
     rmtree(tmp_path)
+
+
+def test_clean_up_directory(tmp_path):
+    _tmp_dir_to_wipe = str(pathlib.Path(tmp_path).parent)
+    rmtree(_tmp_dir_to_wipe)
+
