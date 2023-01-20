@@ -11,11 +11,13 @@ import math
 import pathlib
 from prettytable import PrettyTable
 from imageio import mimwrite
-from src.CalSciPy._validation import validate_extension, validate_filename, validate_path, convert_optionals
+
+from ._validation import validate_extension, validate_filename, validate_path
+from ._parsing import convert_optionals, if_dir_append_filename, if_dir_join_filename, require_full_path
 
 
 @validate_path(pos=0)
-@convert_optionals(allowed=(str, pathlib.Path), required=pathlib.Path)
+@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path)
 def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
     Function determine contents of the bruker folder
@@ -79,7 +81,7 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
 
 
 @validate_path(pos=0)
-@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
     """
     Load a sequence of tiff stacks
@@ -114,16 +116,18 @@ def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
 
 
 @validate_path(pos=0)
-def load_binary_meta(Filename: str) -> Tuple[int, int, int, str]:
+@if_dir_join_filename(default_name="video_meta.txt", flag_pos=0)
+@validate_extension(required_extension=".txt", pos=0)
+def load_binary_meta(Path: str) -> Tuple[int, int, int, str]:
     """
     Loads meta file for binary video
 
-    :param Filename: The meta file (.txt ext)
-    :type Filename: str
+    :param Path: The meta file (.txt ext) or directory containing metafile
+    :type Path: str
     :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]
     :rtype: tuple[int, int, int, str]
     """
-    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(Filename, delimiter=",", dtype="str")
+    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(Path, delimiter=",", dtype="str")
     return int(_num_frames), int(_y_pixels), int(_x_pixels), str(_type)
 
 
@@ -222,9 +226,14 @@ def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> Union[np.ndar
             find_files(_tag)
             images.append(load_images())
         return images
+# FIXME: I am broken on multi-plane/multi-channel images
 
 
-def load_mapped_binary(Filename: str, MetaFile: str, *args: Optional[str], **kwargs: str) -> np.memmap:
+@validate_filename(pos=0)
+@if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
+@if_dir_join_filename(default_name="binary_video", flag_pos=0)
+@validate_path(pos=1)
+def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) -> np.memmap:
     """
     Loads a raw binary file in the workspace without loading into memory
 
@@ -234,66 +243,56 @@ def load_mapped_binary(Filename: str, MetaFile: str, *args: Optional[str], **kwa
     :type Filename: str
     :param MetaFile: filename for meta file
     :type MetaFile: str
-    :param args: Path
-    :type args: str
     :keyword mode: pass mode to numpy.memmap (str, default = "r")
     :return: memmap(numpy) array [Z x Y x X]
     :rtype: Any
     """
-    if len(args) == 1:
-        Filename = "".join([args[0], "\\binary_video"])
-        MetaFile = "".join([args[0], "\\video_meta.txt"])
 
     _mode = kwargs.get("mode", "r")
 
-    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(MetaFile, delimiter=",", dtype="str")
-    _num_frames = int(_num_frames)
-    _x_pixels = int(_x_pixels)
-    _y_pixels = int(_y_pixels)
+    _num_frames, _y_pixels, _x_pixels, _type = load_binary_meta(MetaFile)
+
     return np.memmap(Filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
 
 
-def load_raw_binary(Filename: Union[str, None], MetaFile: Union[str, None], *args: Optional[str]) -> np.ndarray:
+@validate_filename(pos=0)
+@if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
+@if_dir_join_filename(default_name="binary_video", flag_pos=0)
+@validate_path(pos=1)
+def load_raw_binary(Path: str, MetaFile: Optional[str]) -> np.ndarray:
     """
     Loads a raw binary file
 
     Enter the path to autofill (assumes Filename & meta are path + binary_video, video_meta.txt)
 
-    :param Filename: filename for binary video
-    :type Filename: str
-    :param MetaFile: filename for meta file
-    :type MetaFile: str
-    :param args: path to a directory containing Filename and MetaFile
-    :type args: str
+    :param Path: absolute filepath for binary video or directory containing a file named binary video
+    :type Path: str
+    :param MetaFile: absolute path to meta file
+    :type MetaFile: Optional[str]
     :return: numpy array [Z x Y x X]
     :rtype: Any
     """
-    if len(args) == 1:
-        Filename = "".join([args[0], "\\binary_video"])
-        MetaFile = "".join([args[0], "\\video_meta.txt"])
 
     _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(MetaFile, delimiter=",", dtype="str")
     _num_frames = int(_num_frames)
     _x_pixels = int(_x_pixels)
     _y_pixels = int(_y_pixels)
-    return np.reshape(np.fromfile(Filename, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
+    return np.reshape(np.fromfile(Path, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
 
 
 @validate_path(pos=0)
-@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 def load_single_tiff(Filename: Union[str, pathlib.Path], NumFrames: int) -> np.ndarray:
     """
     Load a single tiff file
 
-    :param Filename: filename
+    :param Filename: absolute filename
     :param NumFrames: number of frames
     :type Filename: Union[str, pathlib.Path]
     :type NumFrames: int
     :return: numpy array [Z x Y x X]
     :rtype: Any
     """
-    if isinstance(Filename, pathlib.Path):
-        Filename = str(Filename)
 
     return tifffile.imread(Filename, key=range(0, NumFrames, 1))
 
@@ -328,8 +327,8 @@ def pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None
 
 @validate_path(pos=0)
 @validate_path(pos=1)
-@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=0)
-@convert_optionals(allowed=(str, pathlib.Path), required=str, pos=1)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
 def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirectory: Union[str, pathlib.Path],
                            *args: Union[int, tuple[int]]) -> None:
     """
@@ -476,39 +475,43 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
     return
 
 
+@validate_filename(pos=1)
+@require_full_path(pos=1)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
 @validate_extension(required_extension=".tif", pos=1)
-def save_single_tiff(Images: np.ndarray, Filename: str, Type: Optional[np.dtype] = np.uint16) -> None:
+def save_single_tiff(Images: np.ndarray, Path: Union[str, pathlib.Path], Type: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a single tiff file as type uint16
 
     :param Images: numpy array [frames, y pixels, x pixels]
     :type Images: Any
-    :param Filename: filename
-    :type Filename: str
+    :param Path: filename or absolute path
+    :type Path: Union[str, pathlib.Path]
     :param Type: type for saving
     :type Type: Optional[Any]
     :rtype: None
     """
 
     if len(Images.shape) == 2:
-        with tifffile.TiffWriter(Filename) as tif:
+        with tifffile.TiffWriter(Path) as tif:
             tif.save(np.floor(Images).astype(Type))
         return
 
-    with tifffile.TiffWriter(Filename) as tif:
+    with tifffile.TiffWriter(Path) as tif:
         for frame in np.floor(Images).astype(Type):
             tif.save(frame)
 
 
 @validate_path(pos=1)
-def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] = np.uint16) -> None:
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+def save_tiff_stack(Images: str, OutputDirectory: Union[str, pathlib.Path], Type: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a sequence of tiff stacks
 
     :param Images: A numpy array containing a tiff stack [Z x Y x X]
     :type Images: Any
     :param OutputDirectory: A directory to save the sequence of tiff stacks in uint16
-    :type OutputDirectory: str
+    :type OutputDirectory: Union[str, pathlib.Path]
     :param Type: type for saving
     :type Type: Optional[Any]
     :rtype: None
@@ -539,58 +542,57 @@ def save_tiff_stack(Images: str, OutputDirectory: str, Type: Optional[np.dtype] 
 
 
 @validate_path(pos=1)
-def save_raw_binary(Images: np.ndarray, ImageDirectory: str) -> None:
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+@if_dir_append_filename(default_name="video_meta.txt", flag_pos=1)
+@if_dir_join_filename(default_name="binary_video", flag_pos=1)
+@validate_extension(required_extension=".txt", pos=2)
+def save_raw_binary(Images: np.ndarray, Path: Union[str, pathlib.Path], MetaFile: Optional[Union[str, pathlib.Path]]) -> None:
     """
     This function saves a tiff stack as a binary file
 
     :param Images: Images to be saved [Z x Y x X]
     :type Images: np.ndarray
-    :param ImageDirectory: Directory to save images in
-    :type ImageDirectory: str
+    :param Path:  absolute filepath for saving binary video or directory containing a file named binary video
+    :type Path: str
+    :param MetaFile: absolute filepath for saving meta
+    :type MetaFile: str
     :rtype: None
     """
-    print("Saving images as a binary file...")
-    _meta_file = "".join([ImageDirectory, "\\video_meta.txt"])
-    _video_file = "".join([ImageDirectory, "\\binary_video"])
 
     try:
-        with open(_meta_file, 'w') as f:
+        assert(pathlib.Path(Path).parent.exists())
+    except AssertionError:
+        os.makedirs(str(pathlib.Path(Path).parent))
+    finally:
+        with open(MetaFile, 'w') as f:
             f.writelines([str(Images.shape[0]), ",", str(Images.shape[1]), ",",
                           str(Images.shape[2]), ",", str(Images.dtype)])
-    except FileNotFoundError:
-        _meta_path = _meta_file.replace("\\video_meta.txt", "")
-        os.makedirs(_meta_path)
-        with open(_meta_file, 'w') as f:
-            f.writelines([str(Images.shape[0]), ",", str(Images.shape[1]), ",",
-                          str(Images.shape[2]), ",", str(Images.dtype)])
-
-    Images.tofile(_video_file)
+    Images.tofile(Path)
     print("Finished saving images as a binary file.")
 
 
 @validate_path(pos=1)
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+@if_dir_join_filename(default_name="video.mp4", flag_pos=1)
 @validate_extension(required_extension=".mp4", pos=1)
-def save_video(Images: np.ndarray, Filename: str, fps: Union[float, int] = 30) -> None:
+def save_video(Images: np.ndarray, Path: Union[str, pathlib.Path], fps: Union[float, int] = 30) -> None:
     """
     Function writes video to .mp4
 
     :param Images: Images to be written
     :type Images: Any
-    :param Filename: Filename  (Or Complete Filename Path)
-    :type Filename: str
+    :param Path: Filename  (Or Complete Path)
+    :type Path: Union[str, pathlib.Path]
     :param fps: frame rate
     :type fps: Union[float, int]
     :rtype: None
     """
-
-    if "\\" not in Filename:
-        Filename = "".join([os.getcwd(), "\\", Filename])
 
     if Images.dtype.type != np.uint8:
         print("\nForcing to unsigned 8-bit\n")
         Images = Images.astype(np.uint8)
 
     print("\nWriting Images to .mp4...\n")
-    mimwrite(Filename, Images, fps=fps, quality=10, macro_block_size=4)
+    mimwrite(Path, Images, fps=fps, quality=10, macro_block_size=4)
     print("\nFinished writing images to .mp4.\n")
-
+# TODO: I have an incomplete unit test
