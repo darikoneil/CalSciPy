@@ -5,6 +5,30 @@ import string
 from typing import Callable, Tuple
 from ._parsing import parameterize, amend_args
 from ._style import terminal_style
+from os import path
+from os.path import exists
+
+
+@parameterize
+def validate_exists(function: Callable, pos: int = 0) -> Callable:
+    """
+    Decorator for validating existence of paths
+
+    :param function: function to be decorated
+    :type function: Callable
+    :param pos: index of the argument to be validated
+    :type pos: int
+    """
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        string_input = str(args[pos])
+        if not exists(string_input):
+            raise FileNotFoundError(f"{terminal_style.GREEN}Invalid Path: {terminal_style.RESET}"
+                             f"{terminal_style.YELLOW} Could not locate {terminal_style.RESET} "
+                                    f"{terminal_style.BLUE}{string_input}{terminal_style.RESET}")
+        # noinspection PyArgumentList
+        return function(*args, **kwargs)
+    return decorator
 
 
 @parameterize
@@ -79,7 +103,4 @@ def validate_path(function: Callable, pos: int = 0) -> Callable:
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
-
-
-
 

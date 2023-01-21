@@ -5,18 +5,20 @@ import os
 from PIL import Image
 from tqdm.auto import tqdm
 from tqdm import tqdm as tq
-import tifffile
+import tifffile # TODO CAN PROBABLY PHASE OUT AS REQUIREMENT
 from typing import Callable, List, Tuple, Sequence, Optional, Union
 import math
 import pathlib
 from prettytable import PrettyTable
 from imageio import mimwrite
+from collections.abc import Iterable
 
-from ._validation import validate_extension, validate_filename, validate_path
+from ._validation import validate_exists, validate_extension, validate_filename, validate_path
 from ._parsing import convert_optionals, if_dir_append_filename, if_dir_join_filename, require_full_path
 
 
 @validate_path(pos=0)
+@validate_exists(pos=0)
 @convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path)
 def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
@@ -81,6 +83,7 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
 
 
 @validate_path(pos=0)
+@validate_exists(pos=0)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
     """
@@ -118,12 +121,14 @@ def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
 @validate_path(pos=0)
 @if_dir_join_filename(default_name="video_meta.txt", flag_pos=0)
 @validate_extension(required_extension=".txt", pos=0)
-def load_binary_meta(Path: str) -> Tuple[int, int, int, str]:
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
+@validate_exists(pos=0)
+def load_binary_meta(Path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str]:
     """
     Loads meta file for binary video
 
     :param Path: The meta file (.txt ext) or directory containing metafile
-    :type Path: str
+    :type Path: Union[str, pathlib.Path]
     :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]
     :rtype: tuple[int, int, int, str]
     """
@@ -132,7 +137,10 @@ def load_binary_meta(Path: str) -> Tuple[int, int, int, str]:
 
 
 @validate_path(pos=0)
-def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> Union[np.ndarray, Tuple[np.ndarray]]:
+@validate_exists(pos=0)
+@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path, pos=0)
+def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path],
+                                 Channels: Optional[int] = None, Planes: Optional[int] = None) -> Tuple[np.ndarray]:
     """
     Load a sequence of tiff files from a directory.
 
@@ -141,47 +149,32 @@ def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> Union[np.ndar
 
     :param ImageDirectory: Directory containing a sequence of single frame tiff files
     :type ImageDirectory: Union[str, pathlib.Path]
+    :param Channels: channel to load
+    :type Channels: Optional[int]
+    :param Planes: plane to load
+    :type Planes: Optional[int]
     :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
-    :rtype: Any
+    :rtype: Tuple[Any]
      """
 
-    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
-    pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
-
-    def find_files(Tag: Union[str, list[str]]):
-        nonlocal ImageDirectory
-        nonlocal _files
-
-        def check_file_contents(Tag_: str, File_: pathlib.WindowsPath) -> bool:
-            if Tag_ in str(File_).split("_"):
-                return True
-            else:
-                return False
-
-        # reset, rather maintain code as is then make a new temporary variable since this
-        # is basically instant
-        _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
-
-        # now find
-        if isinstance(Tag, list):
-            Tag = "".join([Tag[0], Tag[1]])
-            _files = [_file for _file in _files if Tag in str(_file.stem)]
-        else:
-            _files = [_file for _file in _files if check_file_contents(Tag, _file)]
-
     def load_images():
-        nonlocal _files
+        nonlocal ImageDirectory
+        nonlocal Tag
         nonlocal _frames
         nonlocal _y_pixels
         nonlocal _x_pixels
         nonlocal _tqdm_desc
 
-        def load_image():
+        def load_single_image():
             nonlocal ImageDirectory
             nonlocal _files
             nonlocal _file
             return np.asarray(Image.open(str(_files[_file])))
 
+        Tag = "".join(["*", Tag, "*"])
+        _files = [_file for _file in ImageDirectory.glob("*.tif") if _file.match(Tag)]
+        if len(_files) == 0:
+            return
         # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
         complete_image = np.full((_frames, _y_pixels, _x_pixels), 0, dtype=np.uint16)
         for _file in tqdm(
@@ -190,49 +183,72 @@ def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> Union[np.ndar
                 desc=_tqdm_desc,
                 disable=False,
         ):
-            complete_image[_file, :, :] = load_image()
+            complete_image[_file, :, :] = load_single_image()
 
         return complete_image
 
-    _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
+    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+    pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
-    if _channels == 1 and _planes == 1:
-        _tqdm_desc = "Loading Images..."
-        return load_images()
-    elif _channels > 1 and _planes == 1:
-        images = []
-        for _channel in range(_channels):
-            _tqdm_desc = "".join(["Loading Channel ", str(_channel+1), " Images..."])
-            _tag = "".join(["Ch", str(_channel+1)])
-            find_files(_tag)
-            images.append(load_images())
-        return images
-    elif _channels == 1 and _planes > 1:
-        images = []
-        _base_tag = "00000"
-        for _plane in range(_planes):
-            _tqdm_desc = "".join(["Loading Plane ", str(_plane), " Images..."])
-            _tag = "".join([_base_tag, str(_plane+1), ".ome"])
-            find_files(_tag)
-            images.append(load_images())
-        return images
-    elif _channels > 1 and _planes > 1:
-        images = []
-        _base_tag = "00000"
-        for _channel, _plane in itertools.combinations(range(_channels), range(_planes)):
+    if Channels is None:
+        Channels = range(2)
+    if Planes is None:
+        Planes = range(_planes)
+
+
+    Images = [] # append all channel/plane combos to this list
+
+    # if planes is 1 bruker uses "ChX_XXXXXX" designator channel+frames
+    if _planes == 1:
+        if not isinstance(Channels, Iterable):
+            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
+                                  " Channel ", str(Channels), " Images..."])
+            Tag = "".join(["Ch", str(Channels + 1)])
+            Images.append(load_images())
+            Images = filter(lambda image: image is not None, Images)
+            return tuple(Images)
+        for _channel, _plane in itertools.product(Channels, Planes):
             _tqdm_desc = "".join(["Loading Plane ", str(_plane),
                                   " Channel ", str(_channel), " Images..."])
-            _tag = ["".join(["Ch", str(_channel)]), "".join([_base_tag, str(_plane+1), ".ome"])]
-            find_files(_tag)
-            images.append(load_images())
-        return images
-# FIXME: I am broken on multi-plane/multi-channel images
+            Tag = "".join(["Ch", str(_channel+1)])
+            Images.append(load_images())
+        Images = filter(lambda image: image is not None, Images)
+        return tuple(Images)
+
+    if not isinstance(Planes, Iterable):
+        if not isinstance(Channels, Iterable):
+            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
+                                  " Channel ", str(Channels), " Images..."])
+            Tag = "".join(["Ch", str(Channels + 1), "_00000", str(Planes + 1)])
+            Images.append(load_images())
+            Images = filter(lambda image: image is not None, Images)
+            return tuple(Images)
+        for _channel in Channels:
+            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
+                                  " Channel ", str(_channel), " Images..."])
+            Tag = "".join(["Ch", str(_channel + 1), "_00000", str(Planes + 1)])
+            Images.append(load_images())
+        Images = filter(lambda image: image is not None, Images)
+        return tuple(Images)
+
+
+    # if planes > 1 bruker uses "CycleXXXXX_ChX_XXXXXX" designator for frames+channel+plane
+    for _channel, _plane in itertools.product(Channels, Planes):
+        _tqdm_desc = "".join(["Loading Plane ", str(_plane),
+                              " Channel ", str(_channel), " Images..."])
+        Tag = "".join(["Ch", str(_channel+1), "_00000", str(_plane+1)])
+        Images.append(load_images())
+    Images = filter(lambda image: image is not None, Images)
+    return tuple(Images)
+# TODO: REFACTOR
 
 
 @validate_filename(pos=0)
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
 @if_dir_join_filename(default_name="binary_video", flag_pos=0)
 @validate_path(pos=1)
+@validate_exists(pos=0)
+@validate_exists(pos=1)
 def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) -> np.memmap:
     """
     Loads a raw binary file in the workspace without loading into memory
@@ -259,6 +275,8 @@ def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) ->
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
 @if_dir_join_filename(default_name="binary_video", flag_pos=0)
 @validate_path(pos=1)
+@validate_exists(pos=0)
+@validate_exists(pos=1)
 def load_raw_binary(Path: str, MetaFile: Optional[str]) -> np.ndarray:
     """
     Loads a raw binary file
@@ -282,6 +300,7 @@ def load_raw_binary(Path: str, MetaFile: Optional[str]) -> np.ndarray:
 
 @validate_path(pos=0)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
+@validate_exists(pos=0)
 def load_single_tiff(Filename: Union[str, pathlib.Path], NumFrames: int) -> np.ndarray:
     """
     Load a single tiff file
@@ -346,7 +365,7 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
     :rtype: None
     """
 
-    # code here is pretty rough, needs TLC. Maybe simpler to use a generator to generate chunks
+    # code here is pretty rough, needs TLC. ~horror~
 
     def load_image():
         nonlocal ImageDirectory
@@ -473,6 +492,7 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
             c_idx += 1
         _pbar.close()
     return
+# TODO: REFACTOR
 
 
 @validate_filename(pos=1)
