@@ -3,7 +3,7 @@ import pytest
 from shutil import rmtree
 from src.CalSciPy.io import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
     repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack, \
-    save_video
+    save_video, load_bruker_tiffs
 import numpy as np
 import pathlib
 
@@ -129,6 +129,22 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
 
 
 @DATASET
+def test_load_bruker_tiffs(datafiles):
+    for _dir in datafiles.listdir():
+        # INGEST
+        _input_folder = next(pathlib.Path(_dir).glob("bruker_folder"))
+        _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
+        _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
+        # LOAD COMPARISON
+        _descriptions = read_descriptions(_descriptions)
+        _image1 = load_single_tiff(_input_image, _descriptions[2])
+        # TEST
+        _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
+        np.testing.assert_array_equal(_image1, _image2, err_msg=f"Failed On "
+                                                                                f"{pathlib.Path(_dir).name}")
+
+
+@DATASET
 def test_video_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
         # INGEST
@@ -146,4 +162,3 @@ def test_video_load_and_save(datafiles, tmp_path):
 def test_clean_up_directory(tmp_path):
     _tmp_dir_to_wipe = str(pathlib.Path(tmp_path).parent)
     rmtree(_tmp_dir_to_wipe)
-

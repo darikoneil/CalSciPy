@@ -61,7 +61,7 @@ def convert_optionals(function: Callable, permitted: Tuple, required: Any, pos: 
 @parameterize
 def if_dir_join_filename(function: Callable, default_name: str, flag_pos: int = 0) -> Callable:
     """
-    Decorator that converts a tuple of permitted types to type supported by the decorated method
+    Decorator that joins a default filename if a directory is passed
 
     :param function: function to be decorated
     :type function: Callable
@@ -82,7 +82,7 @@ def if_dir_join_filename(function: Callable, default_name: str, flag_pos: int = 
 @parameterize
 def if_dir_append_filename(function: Callable, default_name: str, flag_pos: int = 0) -> Callable:
     """
-    Decorator that converts a tuple of permitted types to type supported by the decorated method
+     Decorator that generates a default filepath within a passed directory and appends to arguments
 
     :param function: function to be decorated
     :type function: Callable
