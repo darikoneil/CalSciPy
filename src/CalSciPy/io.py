@@ -5,8 +5,8 @@ import os
 from PIL import Image
 from tqdm.auto import tqdm
 from tqdm import tqdm as tq
-import tifffile # TODO CAN PROBABLY PHASE OUT AS REQUIREMENT
-from typing import Callable, List, Tuple, Sequence, Optional, Union
+import tifffile  # TODO CAN PROBABLY PHASE OUT AS REQUIREMENT
+from typing import Tuple, Optional, Union
 import math
 import pathlib
 from prettytable import PrettyTable
@@ -17,33 +17,33 @@ from ._validation import validate_exists, validate_extension, validate_filename,
 from ._parsing import convert_optionals, if_dir_append_filename, if_dir_join_filename, require_full_path
 
 
+@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path)
 @validate_path(pos=0)
 @validate_exists(pos=0)
-@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path)
-def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
+def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
     Function determine contents of the bruker folder
 
-    :param ImageDirectory: Directory containing bruker imaging data
-    :type ImageDirectory: Union[str, pathlib.Path]
-    :returns: Channels, Planes, Frames, Height, Width
+    :param folder: Folder containing bruker imaging data
+    :type folder: Union[str, pathlib.Path]
+    :returns: channels, planes, frames, Height, Width
     :rtype: tuple
     """
 
-    _files = [_file for _file in ImageDirectory.glob("*.tif") if _file.is_file()]
+    _files = [_file for _file in folder.glob("*.tif") if _file.is_file()]
 
-    def parser(Tag_: str, SplitStrs: list) -> str:
-        return [_tag for _tag in SplitStrs if Tag_ in _tag]
+    def parser(tag_: str, split_strs: list) -> str:
+        return [_tag for _tag in split_strs if tag_ in _tag]
 
-    def find_num_unique_strings_given_static_substring(Tag: str) -> int:
+    def find_num_unique_strings_given_static_substring(tag: str) -> int:
         nonlocal _files
-        _hits = [parser(Tag, str(_file).split("_")) for _file in _files]
+        _hits = [parser(tag, str(_file).split("_")) for _file in _files]
         _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
         return list(_hits).__len__()
 
-    def find_num_unique_substring_containing_tag(Tag: str) -> int:
+    def find_num_unique_substring_containing_tag(tag: str) -> int:
         nonlocal _files
-        _hits = [parser(Tag, str(_file).split("_")) for _file in _files]
+        _hits = [parser(tag, str(_file).split("_")) for _file in _files]
         _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
         return list(dict.fromkeys(_hits)).__len__()
 
@@ -72,7 +72,7 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
             return find_num_unique_strings_given_static_substring("Cycle00001")//channels
 
     def find_dimensions() -> Tuple[int, int]:
-        nonlocal ImageDirectory
+        nonlocal folder
         nonlocal _files
         return np.asarray(Image.open("".join(str(_files[0])))).shape
 
@@ -82,97 +82,97 @@ def determine_bruker_folder_contents(ImageDirectory: Union[str, pathlib.Path]) -
     return (channels, find_planes(), find_frames(), *find_dimensions())
 
 
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 @validate_path(pos=0)
 @validate_exists(pos=0)
-@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
-def load_all_tiffs(ImageDirectory: Union[str, pathlib.Path]) -> np.ndarray:
+def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
     """
     Load a sequence of tiff stacks
 
-    :param ImageDirectory: Directory containing a sequence of tiff stacks
-    :type ImageDirectory: Union[str, pathlib.Path]
+    :param folder: Folder containing a sequence of tiff stacks
+    :type folder: Union[str, pathlib.Path]
     :return: complete_image numpy array [Z x Y x X] as uint16
     :rtype: Any
     """
-    if isinstance(ImageDirectory, pathlib.Path):
-        ImageDirectory = str(ImageDirectory)
+    if isinstance(folder, pathlib.Path):
+        folder = str(folder)
 
-    _fnames = [str(_fname.name) for _fname in pathlib.Path(ImageDirectory).glob("*") if ".tif" in _fname.suffix]
-    y_pix, x_pix = tifffile.TiffFile(ImageDirectory + "\\" + _fnames[0]).pages[0].shape
-    _num_frames = [] # initialize
-    [_num_frames.append(len(tifffile.TiffFile(ImageDirectory + "\\" + _fname).pages)) for _fname in _fnames]
+    _filenames = [str(_filename.name) for _filename in pathlib.Path(folder).glob("*") if ".tif" in _filename.suffix]
+    y_pix, x_pix = tifffile.TiffFile(folder + "\\" + _filenames[0]).pages[0].shape
+    _num_frames = []  # initialize
+    [_num_frames.append(len(tifffile.TiffFile(folder + "\\" + _filename).pages)) for _filename in _filenames]
     _total_frames = sum(_num_frames)
     complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.uint16)
     _last_frame = 0
 
-    for _fname in tqdm(
-            range(len(_fnames)),
-            total=len(_fnames),
+    for _filename in tqdm(
+            range(len(_filenames)),
+            total=len(_filenames),
             desc="Loading Images...",
             disable=False,
     ):
-        complete_image[_last_frame:_last_frame+_num_frames[_fname], :, :] = \
-            load_single_tiff(ImageDirectory + "\\" + _fnames[_fname], _num_frames[_fname])
-        _last_frame += _num_frames[_fname]
+        complete_image[_last_frame:_last_frame+_num_frames[_filename], :, :] = \
+            load_single_tiff(folder + "\\" + _filenames[_filename], _num_frames[_filename])
+        _last_frame += _num_frames[_filename]
 
     return complete_image
 
 
+@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 @validate_path(pos=0)
 @if_dir_join_filename(default_name="video_meta.txt", flag_pos=0)
 @validate_extension(required_extension=".txt", pos=0)
-@convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 @validate_exists(pos=0)
-def load_binary_meta(Path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str]:
+def load_binary_meta(path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str]:
     """
     Loads meta file for binary video
 
-    :param Path: The meta file (.txt ext) or directory containing metafile
-    :type Path: Union[str, pathlib.Path]
+    :param path: The meta file (.txt ext) or directory containing metafile
+    :type path: Union[str, pathlib.Path]
     :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]
     :rtype: tuple[int, int, int, str]
     """
-    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(Path, delimiter=",", dtype="str")
+    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(path, delimiter=",", dtype="str")
     return int(_num_frames), int(_y_pixels), int(_x_pixels), str(_type)
 
 
+@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path, pos=0)
 @validate_path(pos=0)
 @validate_exists(pos=0)
-@convert_optionals(permitted=(str, pathlib.Path), required=pathlib.Path, pos=0)
-def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path],
-                                 Channels: Optional[int] = None, Planes: Optional[int] = None) -> Tuple[np.ndarray]:
+def load_bruker_tiffs(folder: Union[str, pathlib.Path],
+                      channels: Optional[int] = None, planes: Optional[int] = None) -> Tuple[np.ndarray]:
     """
     Load a sequence of tiff files from a directory.
 
     Designed to compile the outputs of a certain imaging utility
     that exports recordings such that each frame is saved as a single tiff.
 
-    :param ImageDirectory: Directory containing a sequence of single frame tiff files
-    :type ImageDirectory: Union[str, pathlib.Path]
-    :param Channels: channel to load
-    :type Channels: Optional[int]
-    :param Planes: plane to load
-    :type Planes: Optional[int]
+    :param folder: Folder containing a sequence of single frame tiff files
+    :type folder: Union[str, pathlib.Path]
+    :param channels: channel to load
+    :type channels: Optional[int]
+    :param planes: plane to load
+    :type planes: Optional[int]
     :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
     :rtype: Tuple[Any]
      """
 
     def load_images():
-        nonlocal ImageDirectory
-        nonlocal Tag
+        nonlocal folder
+        nonlocal tag
         nonlocal _frames
         nonlocal _y_pixels
         nonlocal _x_pixels
         nonlocal _tqdm_desc
 
         def load_single_image():
-            nonlocal ImageDirectory
+            nonlocal folder
             nonlocal _files
             nonlocal _file
             return np.asarray(Image.open(str(_files[_file])))
 
-        Tag = "".join(["*", Tag, "*"])
-        _files = [_file for _file in ImageDirectory.glob("*.tif") if _file.match(Tag)]
+        tag = "".join(["*", tag, "*"])
+        _files = [_file for _file in folder.glob("*.tif") if _file.match(tag)]
         if len(_files) == 0:
             return
         # Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)
@@ -187,60 +187,58 @@ def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path],
 
         return complete_image
 
-    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(ImageDirectory)
+    _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(folder)
     pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
-    if Channels is None:
-        Channels = range(2)
-    if Planes is None:
-        Planes = range(_planes)
+    if channels is None:
+        channels = range(2)
+    if planes is None:
+        planes = range(_planes)
 
-
-    Images = [] # append all channel/plane combos to this list
+    images = []  # append all channel/plane combos to this list
 
     # if planes is 1 bruker uses "ChX_XXXXXX" designator channel+frames
     if _planes == 1:
-        if not isinstance(Channels, Iterable):
-            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
-                                  " Channel ", str(Channels), " Images..."])
-            Tag = "".join(["Ch", str(Channels + 1)])
-            Images.append(load_images())
-            Images = filter(lambda image: image is not None, Images)
-            return tuple(Images)
-        for _channel, _plane in itertools.product(Channels, Planes):
+        if not isinstance(channels, Iterable):
+            _tqdm_desc = "".join(["Loading Plane ", str(planes),
+                                  " Channel ", str(channels), " images..."])
+            tag = "".join(["Ch", str(channels + 1)])
+            images.append(load_images())
+            images = filter(lambda image: image is not None, images)
+            return tuple(images)
+        for _channel, _plane in itertools.product(channels, planes):
             _tqdm_desc = "".join(["Loading Plane ", str(_plane),
-                                  " Channel ", str(_channel), " Images..."])
-            Tag = "".join(["Ch", str(_channel+1)])
-            Images.append(load_images())
-        Images = filter(lambda image: image is not None, Images)
-        return tuple(Images)
+                                  " Channel ", str(_channel), " images..."])
+            tag = "".join(["Ch", str(_channel+1)])
+            images.append(load_images())
+        images = filter(lambda image: image is not None, images)
+        return tuple(images)
 
-    if not isinstance(Planes, Iterable):
-        if not isinstance(Channels, Iterable):
-            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
-                                  " Channel ", str(Channels), " Images..."])
-            Tag = "".join(["Ch", str(Channels + 1), "_00000", str(Planes + 1)])
-            Images.append(load_images())
-            Images = filter(lambda image: image is not None, Images)
-            return tuple(Images)
-        for _channel in Channels:
-            _tqdm_desc = "".join(["Loading Plane ", str(Planes),
-                                  " Channel ", str(_channel), " Images..."])
-            Tag = "".join(["Ch", str(_channel + 1), "_00000", str(Planes + 1)])
-            Images.append(load_images())
-        Images = filter(lambda image: image is not None, Images)
-        return tuple(Images)
-
+    if not isinstance(planes, Iterable):
+        if not isinstance(channels, Iterable):
+            _tqdm_desc = "".join(["Loading Plane ", str(planes),
+                                  " Channel ", str(channels), " images..."])
+            tag = "".join(["Ch", str(channels + 1), "_00000", str(planes + 1)])
+            images.append(load_images())
+            images = filter(lambda image: image is not None, images)
+            return tuple(images)
+        for _channel in channels:
+            _tqdm_desc = "".join(["Loading Plane ", str(planes),
+                                  " Channel ", str(_channel), " images..."])
+            tag = "".join(["Ch", str(_channel + 1), "_00000", str(planes + 1)])
+            images.append(load_images())
+        images = filter(lambda image: image is not None, images)
+        return tuple(images)
 
     # if planes > 1 bruker uses "CycleXXXXX_ChX_XXXXXX" designator for frames+channel+plane
-    for _channel, _plane in itertools.product(Channels, Planes):
+    for _channel, _plane in itertools.product(channels, planes):
         _tqdm_desc = "".join(["Loading Plane ", str(_plane),
-                              " Channel ", str(_channel), " Images..."])
-        Tag = "".join(["Ch", str(_channel+1), "_00000", str(_plane+1)])
-        Images.append(load_images())
-    Images = filter(lambda image: image is not None, Images)
-    return tuple(Images)
-# TODO: REFACTOR
+                              " Channel ", str(_channel), " images..."])
+        tag = "".join(["Ch", str(_channel+1), "_00000", str(_plane+1)])
+        images.append(load_images())
+    images = filter(lambda image: image is not None, images)
+    return tuple(images)
+# REFACTOR
 
 
 @validate_filename(pos=0)
@@ -249,16 +247,16 @@ def load_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path],
 @validate_path(pos=1)
 @validate_exists(pos=0)
 @validate_exists(pos=1)
-def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) -> np.memmap:
+def load_mapped_binary(filename: str, meta_filename: Optional[str], **kwargs: str) -> np.memmap:
     """
     Loads a raw binary file in the workspace without loading into memory
 
     Enter the path to autofill (assumes Filename & meta are path + binary_video, video_meta.txt)
 
-    :param Filename: filename for binary video
-    :type Filename: str
-    :param MetaFile: filename for meta file
-    :type MetaFile: str
+    :param filename: filename for binary video
+    :type filename: str
+    :param meta_filename: filename for meta file
+    :type meta_filename: str
     :keyword mode: pass mode to numpy.memmap (str, default = "r")
     :return: memmap(numpy) array [Z x Y x X]
     :rtype: Any
@@ -266,9 +264,10 @@ def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) ->
 
     _mode = kwargs.get("mode", "r")
 
-    _num_frames, _y_pixels, _x_pixels, _type = load_binary_meta(MetaFile)
+    _num_frames, _y_pixels, _x_pixels, _type = load_binary_meta(meta_filename)
 
-    return np.memmap(Filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
+    return np.memmap(filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
+# TODO UNIT TEST FOR EXCEPTIONS
 
 
 @validate_filename(pos=0)
@@ -277,78 +276,80 @@ def load_mapped_binary(Filename: str, MetaFile: Optional[str], **kwargs: str) ->
 @validate_path(pos=1)
 @validate_exists(pos=0)
 @validate_exists(pos=1)
-def load_raw_binary(Path: str, MetaFile: Optional[str]) -> np.ndarray:
+def load_raw_binary(path: str, meta_filename: Optional[str]) -> np.ndarray:
     """
     Loads a raw binary file
 
     Enter the path to autofill (assumes Filename & meta are path + binary_video, video_meta.txt)
 
-    :param Path: absolute filepath for binary video or directory containing a file named binary video
-    :type Path: str
-    :param MetaFile: absolute path to meta file
-    :type MetaFile: Optional[str]
+    :param path: absolute filepath for binary video or directory containing a file named binary video
+    :type path: str
+    :param meta_filename: absolute path to meta file
+    :type meta_filename: Optional[str]
     :return: numpy array [Z x Y x X]
     :rtype: Any
     """
 
-    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(MetaFile, delimiter=",", dtype="str")
+    _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(meta_filename, delimiter=",", dtype="str")
     _num_frames = int(_num_frames)
     _x_pixels = int(_x_pixels)
     _y_pixels = int(_y_pixels)
-    return np.reshape(np.fromfile(Path, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
+    return np.reshape(np.fromfile(path, dtype=_type), (_num_frames, _y_pixels, _x_pixels))
+# TODO UNIT TEST FOR EXCEPTIONS
 
 
-@validate_path(pos=0)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
+@validate_path(pos=0)
 @validate_exists(pos=0)
-def load_single_tiff(Filename: Union[str, pathlib.Path], NumFrames: int) -> np.ndarray:
+def load_single_tiff(filename: Union[str, pathlib.Path], num_frames: int) -> np.ndarray:
     """
     Load a single tiff file
 
-    :param Filename: absolute filename
-    :param NumFrames: number of frames
-    :type Filename: Union[str, pathlib.Path]
-    :type NumFrames: int
+    :param filename: absolute filename
+    :param num_frames: number of frames
+    :type filename: Union[str, pathlib.Path]
+    :type num_frames: int
     :return: numpy array [Z x Y x X]
     :rtype: Any
     """
 
-    return tifffile.imread(Filename, key=range(0, NumFrames, 1))
+    return tifffile.imread(filename, key=range(0, num_frames, 1))
 
 
-def pretty_print_bruker_command(Channels, Planes, Frames, Height, Width) -> None:
+def pretty_print_bruker_command(channels, planes, frames, height, width) -> None:
     """
     Function simply prints the bruker folder contents detected
 
-    :param Channels: Number of Channels
-    :type Channels: int
-    :param Planes: Number of Planes
-    :type Planes: int
-    :param Frames: Number of Frames
-    :type Frames: int
-    :param Height: Height of Image (Y Pixels)
-    :type Height: int
-    :param Width:  Width of Image (X Pixels)
-    :type Width:
+    :param channels: Number of channels
+    :type channels: int
+    :param planes: Number of planes
+    :type planes: int
+    :param frames: Number of frames
+    :type frames: int
+    :param height: Height of Image (Y Pixels)
+    :type height: int
+    :param width:  Width of Image (X Pixels)
+    :type width:
     :rtype: None
     """
     _table = PrettyTable()
     _table.header = False
-    _table.add_row(["Total Images Detected", Channels * Planes * Frames])
-    _table.add_row(["Channels", Channels])
-    _table.add_row(["Planes", Planes])
-    _table.add_row(["Frames", Frames])
-    _table.add_row(["Height", Height])
-    _table.add_row(["Width", Width])
+    _table.add_row(["Total Images Detected", channels * planes * frames])
+    _table.add_row(["channels", channels])
+    _table.add_row(["planes", planes])
+    _table.add_row(["frames", frames])
+    _table.add_row(["Height", height])
+    _table.add_row(["Width", width])
     print("\n")
     print(_table)
 
 
-@validate_path(pos=0)
-@validate_path(pos=1)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
-def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirectory: Union[str, pathlib.Path],
+@validate_path(pos=0)
+@validate_path(pos=1)
+@validate_exists(pos=0)
+def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pathlib.Path],
                            *args: Union[int, tuple[int]]) -> None:
     """
     Repackages a sequence of tiff files within a directory to a smaller sequence
@@ -356,10 +357,10 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
     Designed to compile the outputs of a certain imaging utility
     that exports recordings such that each frame is saved as a single tiff.
 
-    :param ImageDirectory: Directory containing a sequence of single frame tiff files
-    :type ImageDirectory: Union[str, pathlib.Path]
-    :param OutputDirectory: Empty directory where tiff stacks will be saved
-    :type OutputDirectory: Union[str, pathlib.Path]
+    :param input_folder: Directory containing a sequence of single frame tiff files
+    :type input_folder: Union[str, pathlib.Path]
+    :param output_folder: Empty directory where tiff stacks will be saved
+    :type output_folder: Union[str, pathlib.Path]
     :param args: optional argument to indicate the repackaging of a specific channel and/or plane
     :type args: int
     :rtype: None
@@ -368,32 +369,32 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
     # code here is pretty rough, needs TLC. ~horror~
 
     def load_image():
-        nonlocal ImageDirectory
+        nonlocal input_folder
         nonlocal _files
         nonlocal _file
         nonlocal _offset
         return np.asarray(Image.open(str(_files[_file + _offset])))
 
-    def find_files(Tag: Union[str, list[str]]):
-        nonlocal ImageDirectory
+    def find_files(tag: Union[str, list[str]]):
+        nonlocal input_folder
         nonlocal _files
 
-        def check_file_contents(Tag_: str, File_: pathlib.WindowsPath) -> bool:
-            if Tag_ in str(File_.stem).split("_"):
+        def check_file_contents(tag_: str, file_: pathlib.WindowsPath) -> bool:
+            if tag_ in str(file_.stem).split("_"):
                 return True
             else:
                 return False
 
         # reset, rather maintain code as is then make a new temporary variable since this
         # is basically instant
-        _files = [_file for _file in pathlib.Path(ImageDirectory).glob("*.tif")]
+        _files = [_file for _file in pathlib.Path(input_folder).glob("*.tif")]
 
         # now find
-        if isinstance(Tag, list):
-            Tag = "".join([Tag[0], "_", Tag[1]])
-            _files = [_file for _file in _files if Tag in str(_file.stem)]
+        if isinstance(tag, list):
+            tag = "".join([tag[0], "_", tag[1]])
+            _files = [_file for _file in _files if tag in str(_file.stem)]
         else:
-            _files = [_file for _file in _files if check_file_contents(Tag, _file)]
+            _files = [_file for _file in _files if check_file_contents(tag, _file)]
 
     def not_over_4gb() -> bool:
         nonlocal _files
@@ -401,13 +402,13 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
         nonlocal _x
 
         gb = np.full((_files.__len__(), _y, _x), 1, dtype=np.uint16).nbytes
-        if gb <= 3.9: # 3.9 as a safety buffer
+        if gb <= 3.9:  # 3.9 as a safety buffer
             return True
         else:
             return False
 
-    _files = [_file for _file in pathlib.Path(ImageDirectory).rglob("*.tif")]
-    _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(ImageDirectory)
+    _files = [_file for _file in pathlib.Path(input_folder).rglob("*.tif")]
+    _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(input_folder)
     pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
 
     # finding the files for a specific channel/plane here
@@ -456,7 +457,7 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
         _offset = 0
         for _file in range(_frames):
             _images[_file, :, :] = load_image()
-        save_single_tiff(_images, "".join([OutputDirectory, "\\compiledVideo_01_of_1.tif"]))
+        save_single_tiff(_images, "".join([output_folder, "\\compiledVideo_01_of_1.tif"]))
         return
     else:
         # noinspection PyTypeChecker
@@ -486,57 +487,60 @@ def repackage_bruker_tiffs(ImageDirectory: Union[str, pathlib.Path], OutputDirec
                 _pbar.update(1)
 
             if c_idx < 10:
-                save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+                save_single_tiff(image_chunk, output_folder + "\\" + "compiledVideo_0" + str(c_idx) + "_of_" +
+                                 str(_chunks) + ".tif")
             else:
-                save_single_tiff(image_chunk, OutputDirectory + "\\" + "compiledVideo_" + str(c_idx) + "_of_" + str(_chunks) + ".tif")
+                save_single_tiff(image_chunk, output_folder + "\\" + "compiledVideo_" + str(c_idx) + "_of_" +
+                                 str(_chunks) + ".tif")
             c_idx += 1
         _pbar.close()
     return
-# TODO: REFACTOR
+# REFACTOR
 
 
-@validate_filename(pos=1)
-@require_full_path(pos=1)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+@validate_path(pos=1)
+@require_full_path(pos=1)
 @validate_extension(required_extension=".tif", pos=1)
-def save_single_tiff(Images: np.ndarray, Path: Union[str, pathlib.Path], Type: Optional[np.dtype] = np.uint16) -> None:
+def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a single tiff file as type uint16
 
-    :param Images: numpy array [frames, y pixels, x pixels]
-    :type Images: Any
-    :param Path: filename or absolute path
-    :type Path: Union[str, pathlib.Path]
-    :param Type: type for saving
-    :type Type: Optional[Any]
+    :param images: numpy array [frames, y pixels, x pixels]
+    :type images: Any
+    :param path: filename or absolute path
+    :type path: Union[str, pathlib.Path]
+    :param type_: type for saving
+    :type type_: Optional[Any]
     :rtype: None
     """
 
-    if len(Images.shape) == 2:
-        with tifffile.TiffWriter(Path) as tif:
-            tif.save(np.floor(Images).astype(Type))
+    if len(images.shape) == 2:
+        with tifffile.TiffWriter(path) as tif:
+            tif.save(np.floor(images).astype(type_))
         return
 
-    with tifffile.TiffWriter(Path) as tif:
-        for frame in np.floor(Images).astype(Type):
+    with tifffile.TiffWriter(path) as tif:
+        for frame in np.floor(images).astype(type_):
             tif.save(frame)
 
 
-@validate_path(pos=1)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
-def save_tiff_stack(Images: str, OutputDirectory: Union[str, pathlib.Path], Type: Optional[np.dtype] = np.uint16) -> None:
+@validate_path(pos=1)
+def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
+                    type_: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a sequence of tiff stacks
 
-    :param Images: A numpy array containing a tiff stack [Z x Y x X]
-    :type Images: Any
-    :param OutputDirectory: A directory to save the sequence of tiff stacks in uint16
-    :type OutputDirectory: Union[str, pathlib.Path]
-    :param Type: type for saving
-    :type Type: Optional[Any]
+    :param images: A numpy array containing a tiff stack [Z x Y x X]
+    :type images: Any
+    :param output_folder: A directory to save the sequence of tiff stacks in uint16
+    :type output_folder: Union[str, pathlib.Path]
+    :param type_: type for saving
+    :type type_: Optional[Any]
     :rtype: None
     """
-    _num_frames = Images.shape[0]
+    _num_frames = images.shape[0]
 
     _chunks = math.ceil(_num_frames / 7000)
 
@@ -549,70 +553,72 @@ def save_tiff_stack(Images: str, OutputDirectory: Union[str, pathlib.Path], Type
             _end_idx = _num_frames + 1
 
         if c_idx < 10:
-            save_single_tiff(Images[_start_idx:_end_idx, :, :],
-                                    OutputDirectory + "\\" + "Video_0" + str(c_idx) + "_of_" + str(
-                                       _chunks) + ".tif")
+            save_single_tiff(images[_start_idx:_end_idx, :, :],
+                             output_folder + "\\" + "Video_0" + str(c_idx) + "_of_" + str(
+                                       _chunks) + ".tif", type_)
         else:
-            save_single_tiff(Images[_start_idx:_end_idx, :, :],
-                                    OutputDirectory + "\\" + "Video_" + str(c_idx) + "_of_" + str(
-                                       _chunks) + ".tif")
+            save_single_tiff(images[_start_idx:_end_idx, :, :],
+                             output_folder + "\\" + "Video_" + str(c_idx) + "_of_" + str(
+                                       _chunks) + ".tif", type_)
         c_idx += 1
 
     return print("Finished Saving Tiffs")
 
 
-@validate_path(pos=1)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+@validate_path(pos=1)
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=1)
 @if_dir_join_filename(default_name="binary_video", flag_pos=1)
 @validate_extension(required_extension=".txt", pos=2)
-def save_raw_binary(Images: np.ndarray, Path: Union[str, pathlib.Path], MetaFile: Optional[Union[str, pathlib.Path]]) -> None:
+def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
+                    meta_filename: Optional[Union[str, pathlib.Path]]) -> None:
     """
     This function saves a tiff stack as a binary file
 
-    :param Images: Images to be saved [Z x Y x X]
-    :type Images: np.ndarray
-    :param Path:  absolute filepath for saving binary video or directory containing a file named binary video
-    :type Path: str
-    :param MetaFile: absolute filepath for saving meta
-    :type MetaFile: str
+    :param images: Images to be saved [Z x Y x X]
+    :type images: np.ndarray
+    :param path:  absolute filepath for saving binary video or directory containing a file named binary video
+    :type path: str
+    :param meta_filename: absolute filepath for saving meta
+    :type meta_filename: str
     :rtype: None
     """
 
     try:
-        assert(pathlib.Path(Path).parent.exists())
+        assert(pathlib.Path(path).parent.exists())
     except AssertionError:
-        os.makedirs(str(pathlib.Path(Path).parent))
+        os.makedirs(str(pathlib.Path(path).parent))
     finally:
-        with open(MetaFile, 'w') as f:
-            f.writelines([str(Images.shape[0]), ",", str(Images.shape[1]), ",",
-                          str(Images.shape[2]), ",", str(Images.dtype)])
-    Images.tofile(Path)
+        with open(meta_filename, 'w') as f:
+            f.writelines([str(images.shape[0]), ",", str(images.shape[1]), ",",
+                          str(images.shape[2]), ",", str(images.dtype)])
+    images.tofile(path)
     print("Finished saving images as a binary file.")
+# TODO UNIT TEST FOR EXCEPTIONS
 
 
-@validate_path(pos=1)
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=1)
+@validate_path(pos=1)
 @if_dir_join_filename(default_name="video.mp4", flag_pos=1)
 @validate_extension(required_extension=".mp4", pos=1)
-def save_video(Images: np.ndarray, Path: Union[str, pathlib.Path], fps: Union[float, int] = 30) -> None:
+def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: Union[float, int] = 30) -> None:
     """
     Function writes video to .mp4
 
-    :param Images: Images to be written
-    :type Images: Any
-    :param Path: Filename  (Or Complete Path)
-    :type Path: Union[str, pathlib.Path]
+    :param images: Images to be written
+    :type images: Any
+    :param path: Filename  (Or Complete Path)
+    :type path: Union[str, pathlib.Path]
     :param fps: frame rate
     :type fps: Union[float, int]
     :rtype: None
     """
 
-    if Images.dtype.type != np.uint8:
+    if images.dtype.type != np.uint8:
         print("\nForcing to unsigned 8-bit\n")
-        Images = Images.astype(np.uint8)
+        images = images.astype(np.uint8)
 
     print("\nWriting Images to .mp4...\n")
-    mimwrite(Path, Images, fps=fps, quality=10, macro_block_size=4)
+    mimwrite(path, images, fps=fps, quality=10, macro_block_size=4)
     print("\nFinished writing images to .mp4.\n")
-# TODO: I have an incomplete unit test
+# TODO: I have no unit test

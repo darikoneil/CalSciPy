@@ -3,7 +3,7 @@ import pytest
 from shutil import rmtree
 from src.CalSciPy.io import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
     repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack, \
-    save_video, load_bruker_tiffs
+    save_video, load_bruker_tiffs, load_binary_meta
 import numpy as np
 import pathlib
 
@@ -22,7 +22,7 @@ def read_descriptions(file):
 
 
 @DATASET
-def test_determine_bruker_folder_contents(datafiles):
+def test_determine_bruker_folder_contents_passes(datafiles):
     for _dir in datafiles.listdir():
 
         _input_folder = next(pathlib.Path(_dir).glob("bruker_folder"))
@@ -37,6 +37,20 @@ def test_determine_bruker_folder_contents(datafiles):
         return
 
     rmtree(datafiles)
+
+
+def test_determine_bruker_folder_contents_fails():
+    with pytest.raises(ValueError):
+        determine_bruker_folder_contents("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        determine_bruker_folder_contents("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(FileNotFoundError):
+        determine_bruker_folder_contents("C:\\673469346349673496734967349673205-3258-32856-3486")
+        # FAIL VALIDATE PATH NOT FOUND
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        determine_bruker_folder_contents(125.6)
+        # FAIL WRONG TYPE
 
 
 @DATASET
@@ -65,6 +79,30 @@ def test_single_tiff_load_and_save(datafiles, tmp_path):
     rmtree(tmp_path)
 
 
+def test_single_tiff_fails():
+    # LOAD
+    with pytest.raises(ValueError):
+        load_single_tiff("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        load_single_tiff("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(FileNotFoundError):
+        load_single_tiff("C:\\673469346349673496734967349673205-3258-32856-3486")
+        # FAIL VALIDATE PATH NOT FOUND
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_single_tiff(125.6)
+    # SAVE
+    with pytest.raises(ValueError):
+        save_single_tiff([1, 2, 3, 4, 5], "")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        save_single_tiff([1, 2, 3, 4, 5], "C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_single_tiff([1, 2, 3, 4, 5], 125.6)  # FAIL TYPE
+    with pytest.raises(ValueError):
+        save_single_tiff([1, 2, 3, 4, 5], "C:\\file.mp4")  # FAIL EXTENSION
+
+
 @DATASET
 def test_binaries_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
@@ -89,11 +127,28 @@ def test_binaries_load_and_save(datafiles, tmp_path):
     rmtree(tmp_path)
 
 
+def test_binary_load_meta_fails():
+    with pytest.raises(ValueError):
+        load_binary_meta("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        load_binary_meta("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(FileNotFoundError):
+        load_binary_meta("C:\\673469346349673496734967349673205-3258-32856-3486")
+        # FAIL VALIDATE PATH NOT FOUND
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_binary_meta(125.6)
+        # FAIL WRONG TYPE
+    with pytest.raises(FileNotFoundError):
+        load_binary_meta("C:\\file")  # No extension but adds then fails
+    with pytest.raises(ValueError):
+        load_binary_meta("C:\\file.mp4")  # No extension but catches
+
+
 @DATASET
 def test_tiff_stack_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
         # INGEST
-
         _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
         _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
@@ -109,6 +164,29 @@ def test_tiff_stack_load_and_save(datafiles, tmp_path):
         _image2 = load_all_tiffs(_output_folder)
         np.testing.assert_array_equal(_image1, _image2, err_msg=f"Failed On {pathlib.Path(_dir).name} "
                                                                                 f"on first loading")
+
+
+def test_tiff_stacks_fails():
+    # LOAD
+    with pytest.raises(ValueError):
+        load_all_tiffs("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        load_all_tiffs("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(FileNotFoundError):
+        load_all_tiffs("C:\\673469346349673496734967349673205-3258-32856-3486")
+        # FAIL VALIDATE PATH NOT FOUND
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_all_tiffs(125.6)
+        # FAIL WRONG TYPE
+    # SAVE
+    with pytest.raises(ValueError):
+        save_tiff_stack([1, 2, 3, 4, 5], "")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        save_tiff_stack([1, 2, 3, 4, 5], "C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_tiff_stack([1, 2, 3, 4, 5], 125.6)  # FAIL TYPE
 
 
 @DATASET
@@ -128,6 +206,16 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
         assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Failed On {pathlib.Path(_input_folder).name}"
 
 
+def test_repackage_bruker_tiffs_fails():
+    with pytest.raises(ValueError):
+        repackage_bruker_tiffs("C:\\&^6", "C:\\&^6")  # FAIL PATH CHARACTERS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        repackage_bruker_tiffs("C:\\", 125.6)  # FAIL PATH TYPE
+    with pytest.raises(FileNotFoundError):
+        repackage_bruker_tiffs("C:\\1381945328953298532895", "C:\\")  # FAIL PATH EXISTS
+
+
 @DATASET
 def test_load_bruker_tiffs(datafiles):
     for _dir in datafiles.listdir():
@@ -142,6 +230,20 @@ def test_load_bruker_tiffs(datafiles):
         _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
         np.testing.assert_array_equal(_image1, _image2, err_msg=f"Failed On "
                                                                                 f"{pathlib.Path(_dir).name}")
+
+
+def test_load_bruker_tiff_fails():
+    with pytest.raises(ValueError):
+        load_bruker_tiffs("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
+    with pytest.raises(ValueError):
+        load_bruker_tiffs("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(FileNotFoundError):
+        load_bruker_tiffs("C:\\673469346349673496734967349673205-3258-32856-3486")
+        # FAIL VALIDATE PATH NOT FOUND
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_bruker_tiffs(125.6)
+        # FAIL WRONG TYPE
 
 
 @DATASET

@@ -49,7 +49,7 @@ def validate_extension(function: Callable, required_extension: str, pos: int = 0
             args = amend_args(args,  "".join([str(args[pos]), required_extension]), pos)
         if pathlib.Path(args[pos]).suffix != required_extension:
             raise ValueError(f"{terminal_style.GREEN}Input {pos}: {terminal_style.RESET}{terminal_style.YELLOW}"
-                            f"filepath must contain the required extension {terminal_style.RESET}{terminal_style.BLUE}"
+                             f"filepath must contain the required extension {terminal_style.RESET}{terminal_style.BLUE}"
                              f"{required_extension}{terminal_style.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
