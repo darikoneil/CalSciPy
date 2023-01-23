@@ -17,4 +17,4 @@ def merge_traces(traces_as_tensor: np.ndarray) -> np.ndarray:
     _frames = np.concatenate(traces_as_tensor, axis=1)[0, :].shape[0]
     traces_as_matrix = np.full((_neurons, _frames), 0, dtype=traces_as_tensor.dtype)  # pre-allocated
     return traces_as_matrix
-# TODO FINISH REFACTOR
+# TODO FINISH
