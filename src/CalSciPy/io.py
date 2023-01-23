@@ -92,7 +92,7 @@ def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
     :param folder: Folder containing a sequence of tiff stacks
     :type folder: Union[str, pathlib.Path]
     :return: complete_image numpy array [Z x Y x X] as uint16
-    :rtype: Any
+    :rtype: np.ndarray
     """
     if isinstance(folder, pathlib.Path):
         folder = str(folder)
@@ -154,7 +154,7 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
     :param planes: plane to load
     :type planes: Optional[int]
     :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
-    :rtype: Tuple[Any]
+    :rtype: Tuple[np.ndarray]
      """
 
     def load_images():
@@ -259,7 +259,7 @@ def load_mapped_binary(filename: str, meta_filename: Optional[str], **kwargs: st
     :type meta_filename: str
     :keyword mode: pass mode to numpy.memmap (str, default = "r")
     :return: memmap(numpy) array [Z x Y x X]
-    :rtype: Any
+    :rtype: np.memmap
     """
 
     _mode = kwargs.get("mode", "r")
@@ -310,7 +310,7 @@ def load_single_tiff(filename: Union[str, pathlib.Path], num_frames: int) -> np.
     :type filename: Union[str, pathlib.Path]
     :type num_frames: int
     :return: numpy array [Z x Y x X]
-    :rtype: Any
+    :rtype: np.ndarray
     """
 
     return tifffile.imread(filename, key=range(0, num_frames, 1))
