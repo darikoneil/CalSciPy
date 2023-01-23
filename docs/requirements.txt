@@ -9,6 +9,7 @@ pytest-datafiles==2.0.1
 pytest-progress==1.2.5
 tifffile==2021.11.2
 tqdm==4.64.1
+sphinx_autodoc_typehints==1.21.7
 sphinx==5.3.0
 sphinx-rtd-theme==1.1.1
 twine==4.0.2
