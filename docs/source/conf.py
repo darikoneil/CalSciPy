@@ -82,5 +82,3 @@ for module in module_names:
     # print(f"Next Path: {next_path}")
     next_path = "".join([str(parent), "\\src\\CalSciPy\\", module, ".py"])
     sys.path.append(next_path)
-
-import src.CalSciPy.io
