@@ -45,25 +45,30 @@ module_names = (
     "trace_processing"
 )
 
+print(f"Current Path: {os.getcwd()}")
+list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_dir()]
+print(f"Children: {list_subfolders_with_paths}") 
+
+
+
 parent = os.path.abspath('../..')
-print(f"Parent Path: {parent}")
+# print(f"Parent Path: {parent}")
 next_path = "".join([str(parent), "\\src"])
 sys.path.append("".join([str(parent), "\\src"]))
-print(f"Next Path: {next_path}")
+# print(f"Next Path: {next_path}")
 next_path = "".join([str(parent), "\\src\\CalSciPy"])
-print(f"Next Path: {next_path}")
+# print(f"Next Path: {next_path}")
 sys.path.append("".join([str(parent), "\\src\\CalSciPy"]))
 next_path = "".join(["\\CalSciPy"])
-print(f"Next Path: {next_path}")
+# print(f"Next Path: {next_path}")
 sys.path.append("".join(["\\CalSciPy"]))
-print(f"Next Path: {next_path}")
+# print(f"Next Path: {next_path}")
 sys.path.append("".join([str(parent), "\\CalSciPy\\src"]))
-print(f"Next Path: {next_path}")
+# print(f"Next Path: {next_path}")
 sys.path.append("".join([str(parent), "\\CalSciPy\\src\\CalSciPy"]))
 
 for module in module_names:
     next_path = "".join([str(parent), "\\CalSciPy\\src\\CalSciPy\\", module])
-    print(f"Next Path: {next_path}")
+    # print(f"Next Path: {next_path}")
     next_path = "".join([str(parent), "\\src\\CalSciPy\\", module])
-    print(f"Next Path: {next_path}")
-    
+    # print(f"Next Path: {next_path}")
