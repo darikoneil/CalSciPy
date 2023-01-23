@@ -47,9 +47,9 @@ module_names = (
 
 print(f"Current Path: {os.getcwd()}")
 list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_dir()]
-print(f"Children: {list_subfolders_with_paths}") 
-
-
+print(f"Children: {list_subfolders_with_paths}")
+test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
+print(os.path.exists(test_path))
 
 parent = os.path.abspath('../..')
 # print(f"Parent Path: {parent}")
