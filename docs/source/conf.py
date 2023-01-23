@@ -46,6 +46,13 @@ module_names = (
 )
 
 parent = os.path.abspath('../..')
+print(f"Parent Path: {parent}")
+next_path = "".join([str(parent), "\\src"])
 sys.path.append("".join([str(parent), "\\src"]))
+print(f"Next Path: {next_path}")
+next_path = "".join([str(parent), "\\src\\CalSciPy"])
+print(f"Next Path: {next_path}")
 sys.path.append("".join([str(parent), "\\src\\CalSciPy"]))
+next_path = "".join(["\\CalSciPy"])
+print(f"Next Path: {next_path}")
 sys.path.append("".join(["\\CalSciPy"]))
