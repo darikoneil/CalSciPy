@@ -21,6 +21,6 @@ This python packages contains a variety of useful methods for handling, processi
 * Static Visuals
 
 #### Documentation
-[ReadtheDocs](https://calscipy.readthedocs.io/en/latest/index.html#)      
-[PDF](https://github.com/darikoneil/CalSciPy/edit/master/README.md)     
+Hosted at [ReadtheDocs](https://calscipy.readthedocs.io/en/latest/index.html#).
+Available locally as [HTML](https://github.com/darikoneil/CalSciPy/edit/master/README.md), [LATEX](https://github.com/darikoneil/CalSciPy/edit/master/README.md) and [PDF](https://github.com/darikoneil/CalSciPy/edit/master/README.md)
 
