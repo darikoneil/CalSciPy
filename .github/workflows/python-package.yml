@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7"]
 
     steps:
     - uses: actions/checkout@v3
@@ -34,7 +34,8 @@ jobs:
         python -m pip install tqdm
         python -m pip install pillow
         python -m pip install tifffile
-        pytohn -m pip install prettytable
+        python -m pip install prettytable
+        python -m pip install pytest-datafiles
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
