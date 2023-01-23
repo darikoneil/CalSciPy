@@ -1,9 +1,8 @@
 from __future__ import annotations
-
 import os.path
 from typing import Callable, Tuple, Any
 from functools import wraps
-from ._style import terminal_style
+from ._style import TerminalStyle
 from os import getcwd, path
 from os.path import isdir, isabs
 
@@ -49,9 +48,9 @@ def convert_optionals(function: Callable, permitted: Tuple, required: Any, pos: 
         if isinstance(allowed_input, permitted):
             allowed_input = required(allowed_input)
         if not isinstance(allowed_input, required):
-            raise TypeError(f"{terminal_style.GREEN}Input {pos}: {terminal_style.RESET}{terminal_style.YELLOW}"
-                            f"inputs are permitted to be of the following types {terminal_style.RESET}"
-                            f"{terminal_style.BLUE}{permitted}{terminal_style.RESET}")
+            raise TypeError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.RESET}{TerminalStyle.YELLOW}"
+                            f"inputs are permitted to be of the following types {TerminalStyle.RESET}"
+                            f"{TerminalStyle.BLUE}{permitted}{TerminalStyle.RESET}")
         args = amend_args(args, allowed_input, pos)
         # noinspection PyArgumentList
         return function(*args, **kwargs)

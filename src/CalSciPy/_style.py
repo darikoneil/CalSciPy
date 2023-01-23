@@ -1,4 +1,4 @@
-class terminal_style:
+class TerminalStyle:
     """
     font styles for printing to terminal
     """
