@@ -56,7 +56,7 @@ list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_di
 print(f"Children: {list_subfolders_with_paths}")
 test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
 
-parent = os.path.abspath('../..')
+parent = sys.path.insert(0, os.path.abspath('../../src/CalSciPy'))
 sys.path.append(parent)
 # print(f"Parent Path: {parent}")
 next_path = "".join([str(parent), "\\src"])
