@@ -8,4 +8,5 @@ pytest-datafiles==2.0.1
 pytest-progress==1.2.5
 tifffile==2021.11.2
 tqdm==4.64.1
-
+sphinx
+sphinx-rtd-theme
