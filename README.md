@@ -11,8 +11,11 @@ This python packages contains a variety of useful methods for handling, processi
 `pip install CalSciPy` or `pip install CalSciPy-<subpackage>`
 
 #### Subpackages
+* Coloring
+* Event Processing
 * Input/Output (I/O)
 * Image Processing
+* Interactive Visuals
+* Reorganization
 * Signal Processing
-* Event Processing
-* Visuals
+* Static Visuals

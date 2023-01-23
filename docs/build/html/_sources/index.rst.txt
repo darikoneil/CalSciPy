@@ -10,7 +10,11 @@ Welcome to CalSciPy's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   Introduction
+   Sub-Packages
    CalSciPy.io
+   CalSciPy.reorganization
+
 
 
 Indices and tables
