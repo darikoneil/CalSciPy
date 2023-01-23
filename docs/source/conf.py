@@ -19,7 +19,13 @@ release = '0.0.5'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.autosectionlabel']
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.viewcode',
+    'sphinx_autodoc_typehints']
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -49,7 +55,6 @@ print(f"Current Path: {os.getcwd()}")
 list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_dir()]
 print(f"Children: {list_subfolders_with_paths}")
 test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
-print(os.path.exists(test_path))
 
 parent = os.path.abspath('../..')
 # print(f"Parent Path: {parent}")
@@ -69,6 +74,10 @@ sys.path.append("".join([str(parent), "\\CalSciPy\\src\\CalSciPy"]))
 
 for module in module_names:
     next_path = "".join([str(parent), "\\CalSciPy\\src\\CalSciPy\\", module])
+    sys.path.append(next_path)
     # print(f"Next Path: {next_path}")
     next_path = "".join([str(parent), "\\src\\CalSciPy\\", module])
+    sys.path.append(next_path)
     # print(f"Next Path: {next_path}")
+    next_path = "".join([str(parent), "\\src\\CalSciPy\\", module, ".py"])
+    sys.path.append(next_path)
