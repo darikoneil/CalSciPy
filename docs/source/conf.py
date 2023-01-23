@@ -52,9 +52,10 @@ module_names = (
 )
 
 print(f"Current Path: {os.getcwd()}")
+list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_dir()]
+print(f"Children: {list_subfolders_with_paths}")
 test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
-print(f"Test Path is: {os.path.exists(test_path)}")
-sys.path.append(test_path)
+
 parent = os.path.abspath('../..')
 sys.path.append(parent)
 # print(f"Parent Path: {parent}")
@@ -81,4 +82,5 @@ for module in module_names:
     # print(f"Next Path: {next_path}")
     next_path = "".join([str(parent), "\\src\\CalSciPy\\", module, ".py"])
     sys.path.append(next_path)
-    
+
+import src.CalSciPy.io
