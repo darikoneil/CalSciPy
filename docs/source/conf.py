@@ -40,15 +40,38 @@ module_names = (
     "image_processing",
     "interactive_visuals",
     "io",
+    "\\src\\CalSciPy\\reorganization",
+    "src\\CalSciPy\\reorganization",
+    "CalSciPy\\reorganization",
+    "\\CalSciPy\\reorganization",
+    "reorganization"
     "static_visuals",
     "trace_processing"
 )
 
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.append("C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src")
-sys.path.append("C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src\\CalSciPy")
-for _name in module_names:
-    sys.path.append("".join(["C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src\\CalSciPy", _name]))
+parent = os.path.abspath('../..')
+sys.path.insert(0, parent)
+sys.path.append("".join(["\\src"]))
+sys.path.append("".join(["\\src\\CalSciPy"]))
+sys.path.append("".join(["\\CalSciPy"]))
+
+for _module in module_names:
+    print("\n")
+    _import_name_1 = "".join([str(parent), "\\src\\CalSciPy\\", _module])
+    print(_import_name_1)
+    print("\n")
+    _import_name_2 = "".join([str(parent), "\\CalSciPy\\", _module])
+    print(_import_name_2)
+    print("\n")
+    sys.path.append(_import_name_1)
+    sys.path.append(_import_name_2)
+
+# sys.path.append("C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src")
+# sys.path.append("C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src\\CalSciPy")
+# sys.path.append("C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src\\CalSciPy\\reorganization")
+
+# for _name in module_names:
+#    sys.path.append("".join(["C:\\Users\\Darik\\.conda\\envs\\CalSciPy\\src\\CalSciPy", _name]))
 # Parent = pathlib.Path(os.getcwd()).parents[0]
 # sys.path.insert(0, Parent.with_name("src"))
 # sys.path.insert(0, "".join([str(Parent), "\\src\\CalSciPy"]))

@@ -12,6 +12,7 @@ Submodules
    CalSciPy.image_processing
    CalSciPy.interactive_visuals
    CalSciPy.io
+   CalSciPy.reorganization
    CalSciPy.static_visuals
    CalSciPy.trace_processing
 
