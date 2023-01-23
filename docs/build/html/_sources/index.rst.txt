@@ -9,9 +9,12 @@ Welcome to CalSciPy's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   CalSciPy
+
+   Introduction
+   Sub-Packages
    CalSciPy.io
    CalSciPy.reorganization
+
 
 
 Indices and tables
