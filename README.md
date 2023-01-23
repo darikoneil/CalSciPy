@@ -22,5 +22,5 @@ This python packages contains a variety of useful methods for handling, processi
 
 #### Documentation
 Hosted at [ReadtheDocs](https://calscipy.readthedocs.io/en/latest/index.html#).
-Available locally as [HTML](https://github.com/darikoneil/CalSciPy/edit/master/README.md), [LATEX](https://github.com/darikoneil/CalSciPy/edit/master/README.md) and [PDF](https://github.com/darikoneil/CalSciPy/edit/master/README.md)
+Available locally as [HTML](https://github.com/darikoneil/CalSciPy/edit/master/README.md), [LATEX](https://github.com/darikoneil/CalSciPy/edit/master/README.md) and [PDF](https://github.com/darikoneil/CalSciPy/edit/master/README.md).
 
