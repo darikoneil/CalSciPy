@@ -57,7 +57,8 @@ print(f"Children: {list_subfolders_with_paths}")
 test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
 
 parent = sys.path.insert(0, os.path.abspath('../../src/CalSciPy'))
-sys.path.append(parent)
+
+parent = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest"
 # print(f"Parent Path: {parent}")
 next_path = "".join([str(parent), "\\src"])
 sys.path.append("".join([str(parent), "\\src"]))
