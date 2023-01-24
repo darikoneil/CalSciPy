@@ -1,6 +1,6 @@
 Introduction
 ============
-``CalSciPy`` contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
+**CalSciPy** contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
 It's intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software
 packages such as `Caiman <https://github.com/flatironinstitute/CaImAn>`_, `SIMA <https://github.com/losonczylab/sima>`_,
 and `Suite2P <https://github.com/MouseLand/suite2p>`_.

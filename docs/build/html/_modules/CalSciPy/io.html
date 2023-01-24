@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="[en]" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalSciPy.io &mdash; CalSciPy 0.0.5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CalSciPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Sub-Packages.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.html">CalSciPy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.io.html">CalSciPy.io module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DevTools.html">Development Tools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CalSciPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">CalSciPy.io</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for CalSciPy.io</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span> <span class="k">as</span> <span class="n">tq</span>
+<span class="kn">import</span> <span class="nn">tifffile</span>  <span class="c1"># TODO CAN PROBABLY PHASE OUT AS REQUIREMENT</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
+<span class="kn">from</span> <span class="nn">imageio</span> <span class="kn">import</span> <span class="n">mimwrite</span>
+<span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+
+<span class="kn">from</span> <span class="nn">._validation</span> <span class="kn">import</span> <span class="n">validate_exists</span><span class="p">,</span> <span class="n">validate_extension</span><span class="p">,</span> <span class="n">validate_filename</span><span class="p">,</span> <span class="n">validate_path</span>
+<span class="kn">from</span> <span class="nn">._parsing</span> <span class="kn">import</span> <span class="n">convert_optionals</span><span class="p">,</span> <span class="n">if_dir_append_filename</span><span class="p">,</span> <span class="n">if_dir_join_filename</span><span class="p">,</span> <span class="n">require_full_path</span>
+
+
+<div class="viewcode-block" id="determine_bruker_folder_contents"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.determine_bruker_folder_contents">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function determine contents of the bruker folder</span>
+
+<span class="sd">    :param folder: Folder containing bruker imaging data</span>
+<span class="sd">    :type folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :returns: channels, planes, frames, Height, Width</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+
+    <span class="k">def</span> <span class="nf">parser</span><span class="p">(</span><span class="n">tag_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">split_strs</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_tag</span> <span class="k">for</span> <span class="n">_tag</span> <span class="ow">in</span> <span class="n">split_strs</span> <span class="k">if</span> <span class="n">tag_</span> <span class="ow">in</span> <span class="n">_tag</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">find_num_unique_strings_given_static_substring</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+        <span class="n">_hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">_files</span><span class="p">]</span>
+        <span class="n">_hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">_hit</span> <span class="k">for</span> <span class="n">_nested_hit</span> <span class="ow">in</span> <span class="n">_hits</span> <span class="k">for</span> <span class="n">_hit</span> <span class="ow">in</span> <span class="n">_nested_hit</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">_hits</span><span class="p">)</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">find_num_unique_substring_containing_tag</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+        <span class="n">_hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">parser</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_file</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">))</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">_files</span><span class="p">]</span>
+        <span class="n">_hits</span> <span class="o">=</span> <span class="p">[</span><span class="n">_hit</span> <span class="k">for</span> <span class="n">_nested_hit</span> <span class="ow">in</span> <span class="n">_hits</span> <span class="k">for</span> <span class="n">_hit</span> <span class="ow">in</span> <span class="n">_nested_hit</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">_hits</span><span class="p">))</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">find_channels</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">find_num_unique_substring_containing_tag</span><span class="p">(</span><span class="s2">&quot;Ch&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">is_multiplane</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">find_num_unique_substring_containing_tag</span><span class="p">(</span><span class="s2">&quot;Cycle0000&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">find_planes</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">nonlocal</span> <span class="n">channels</span>
+
+        <span class="k">if</span> <span class="n">is_multiplane</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">find_num_unique_strings_given_static_substring</span><span class="p">(</span><span class="s2">&quot;Cycle00001&quot;</span><span class="p">)</span><span class="o">//</span><span class="n">channels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">find_frames</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">nonlocal</span> <span class="n">channels</span>
+        <span class="k">if</span> <span class="n">is_multiplane</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">find_num_unique_strings_given_static_substring</span><span class="p">(</span><span class="s2">&quot;000001.ome&quot;</span><span class="p">)</span><span class="o">//</span><span class="n">channels</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">find_num_unique_strings_given_static_substring</span><span class="p">(</span><span class="s2">&quot;Cycle00001&quot;</span><span class="p">)</span><span class="o">//</span><span class="n">channels</span>
+
+    <span class="k">def</span> <span class="nf">find_dimensions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+        <span class="k">nonlocal</span> <span class="n">folder</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]))))</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">channels</span> <span class="o">=</span> <span class="n">find_channels</span><span class="p">()</span>
+
+    <span class="c1"># noinspection PyTypeChecker</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">find_planes</span><span class="p">(),</span> <span class="n">find_frames</span><span class="p">(),</span> <span class="o">*</span><span class="n">find_dimensions</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="load_all_tiffs"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_all_tiffs">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_all_tiffs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a sequence of tiff stacks</span>
+
+<span class="sd">    :param folder: Folder containing a sequence of tiff stacks</span>
+<span class="sd">    :type folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :return: complete_image numpy array [Z x Y x X] as uint16</span>
+<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+
+    <span class="n">_filenames</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">_filename</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">_filename</span> <span class="ow">in</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;.tif&quot;</span> <span class="ow">in</span> <span class="n">_filename</span><span class="o">.</span><span class="n">suffix</span><span class="p">]</span>
+    <span class="n">y_pix</span><span class="p">,</span> <span class="n">x_pix</span> <span class="o">=</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">TiffFile</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">_num_frames</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># initialize</span>
+    <span class="p">[</span><span class="n">_num_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tifffile</span><span class="o">.</span><span class="n">TiffFile</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">_filename</span><span class="p">)</span><span class="o">.</span><span class="n">pages</span><span class="p">))</span> <span class="k">for</span> <span class="n">_filename</span> <span class="ow">in</span> <span class="n">_filenames</span><span class="p">]</span>
+    <span class="n">_total_frames</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">)</span>
+    <span class="n">complete_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">_total_frames</span><span class="p">,</span> <span class="n">y_pix</span><span class="p">,</span> <span class="n">x_pix</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+    <span class="n">_last_frame</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">_filename</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">_filenames</span><span class="p">)),</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">_filenames</span><span class="p">),</span>
+            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Loading Images...&quot;</span><span class="p">,</span>
+            <span class="n">disable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">complete_image</span><span class="p">[</span><span class="n">_last_frame</span><span class="p">:</span><span class="n">_last_frame</span><span class="o">+</span><span class="n">_num_frames</span><span class="p">[</span><span class="n">_filename</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> \
+            <span class="n">load_single_tiff</span><span class="p">(</span><span class="n">folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">_filenames</span><span class="p">[</span><span class="n">_filename</span><span class="p">],</span> <span class="n">_num_frames</span><span class="p">[</span><span class="n">_filename</span><span class="p">])</span>
+        <span class="n">_last_frame</span> <span class="o">+=</span> <span class="n">_num_frames</span><span class="p">[</span><span class="n">_filename</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">complete_image</span></div>
+
+
+<div class="viewcode-block" id="load_binary_meta"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_binary_meta">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@if_dir_join_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;video_meta.txt&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_binary_meta</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads meta file for binary video</span>
+
+<span class="sd">    :param path: The meta file (.txt ext) or directory containing metafile</span>
+<span class="sd">    :type path: Union[str, pathlib.Path]</span>
+<span class="sd">    :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]</span>
+<span class="sd">    :rtype: tuple[int, int, int, str]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_y_pixels</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">_x_pixels</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">_type</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_bruker_tiffs"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_bruker_tiffs">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_bruker_tiffs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
+                      <span class="n">channels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">planes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a sequence of tiff files from a directory.</span>
+
+<span class="sd">    Designed to compile the outputs of a certain imaging utility</span>
+<span class="sd">    that exports recordings such that each frame is saved as a single tiff.</span>
+
+<span class="sd">    :param folder: Folder containing a sequence of single frame tiff files</span>
+<span class="sd">    :type folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :param channels: channel to load</span>
+<span class="sd">    :type channels: Optional[int]</span>
+<span class="sd">    :param planes: plane to load</span>
+<span class="sd">    :type planes: Optional[int]</span>
+<span class="sd">    :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)</span>
+<span class="sd">    :rtype: Tuple[np.ndarray]</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">load_images</span><span class="p">():</span>
+        <span class="k">nonlocal</span> <span class="n">folder</span>
+        <span class="k">nonlocal</span> <span class="n">tag</span>
+        <span class="k">nonlocal</span> <span class="n">_frames</span>
+        <span class="k">nonlocal</span> <span class="n">_y_pixels</span>
+        <span class="k">nonlocal</span> <span class="n">_x_pixels</span>
+        <span class="k">nonlocal</span> <span class="n">_tqdm_desc</span>
+
+        <span class="k">def</span> <span class="nf">load_single_image</span><span class="p">():</span>
+            <span class="k">nonlocal</span> <span class="n">folder</span>
+            <span class="k">nonlocal</span> <span class="n">_files</span>
+            <span class="k">nonlocal</span> <span class="n">_file</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">_files</span><span class="p">[</span><span class="n">_file</span><span class="p">])))</span>
+
+        <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">])</span>
+        <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">_file</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Bruker is usually saved to .tif in 0-65536 (uint16) even though recording says 8192 (uint13)</span>
+        <span class="n">complete_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+                <span class="nb">range</span><span class="p">(</span><span class="n">_frames</span><span class="p">),</span>
+                <span class="n">total</span><span class="o">=</span><span class="n">_frames</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">_tqdm_desc</span><span class="p">,</span>
+                <span class="n">disable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">complete_image</span><span class="p">[</span><span class="n">_file</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">load_single_image</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">complete_image</span>
+
+    <span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span> <span class="o">=</span> <span class="n">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+    <span class="n">pretty_print_bruker_command</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">channels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">planes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">planes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">_planes</span><span class="p">)</span>
+
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># append all channel/plane combos to this list</span>
+
+    <span class="c1"># if planes is 1 bruker uses &quot;ChX_XXXXXX&quot; designator channel+frames</span>
+    <span class="k">if</span> <span class="n">_planes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">_tqdm_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Loading Plane &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">planes</span><span class="p">),</span>
+                                  <span class="s2">&quot; Channel &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">channels</span><span class="p">),</span> <span class="s2">&quot; images...&quot;</span><span class="p">])</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">channels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">load_images</span><span class="p">())</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_channel</span><span class="p">,</span> <span class="n">_plane</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">planes</span><span class="p">):</span>
+            <span class="n">_tqdm_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Loading Plane &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_plane</span><span class="p">),</span>
+                                  <span class="s2">&quot; Channel &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span><span class="p">),</span> <span class="s2">&quot; images...&quot;</span><span class="p">])</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">load_images</span><span class="p">())</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">planes</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+            <span class="n">_tqdm_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Loading Plane &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">planes</span><span class="p">),</span>
+                                  <span class="s2">&quot; Channel &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">channels</span><span class="p">),</span> <span class="s2">&quot; images...&quot;</span><span class="p">])</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">channels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;_00000&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">planes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">load_images</span><span class="p">())</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_channel</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="n">_tqdm_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Loading Plane &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">planes</span><span class="p">),</span>
+                                  <span class="s2">&quot; Channel &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span><span class="p">),</span> <span class="s2">&quot; images...&quot;</span><span class="p">])</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;_00000&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">planes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span>
+            <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">load_images</span><span class="p">())</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+
+    <span class="c1"># if planes &gt; 1 bruker uses &quot;CycleXXXXX_ChX_XXXXXX&quot; designator for frames+channel+plane</span>
+    <span class="k">for</span> <span class="n">_channel</span><span class="p">,</span> <span class="n">_plane</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">planes</span><span class="p">):</span>
+        <span class="n">_tqdm_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Loading Plane &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_plane</span><span class="p">),</span>
+                              <span class="s2">&quot; Channel &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span><span class="p">),</span> <span class="s2">&quot; images...&quot;</span><span class="p">])</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_channel</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;_00000&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">_plane</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+        <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">load_images</span><span class="p">())</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">image</span><span class="p">:</span> <span class="n">image</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">images</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="p">)</span></div>
+<span class="c1"># REFACTOR</span>
+
+
+<div class="viewcode-block" id="load_mapped_binary"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_mapped_binary">[docs]</a><span class="nd">@validate_filename</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@if_dir_append_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;video_meta.txt&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@if_dir_join_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;binary_video&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_mapped_binary</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a raw binary file in the workspace without loading into memory</span>
+
+<span class="sd">    Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</span>
+
+<span class="sd">    :param filename: filename for binary video</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :param meta_filename: filename for meta file</span>
+<span class="sd">    :type meta_filename: str</span>
+<span class="sd">    :keyword mode: pass mode to numpy.memmap (str, default = &quot;r&quot;)</span>
+<span class="sd">    :return: memmap(numpy) array [Z x Y x X]</span>
+<span class="sd">    :rtype: np.memmap</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+    <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">load_binary_meta</span><span class="p">(</span><span class="n">meta_filename</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_type</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="n">_mode</span><span class="p">)</span></div>
+<span class="c1"># TODO UNIT TEST FOR EXCEPTIONS</span>
+
+
+<div class="viewcode-block" id="load_raw_binary"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_raw_binary">[docs]</a><span class="nd">@validate_filename</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@if_dir_append_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;video_meta.txt&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@if_dir_join_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;binary_video&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_raw_binary</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a raw binary file</span>
+
+<span class="sd">    Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</span>
+
+<span class="sd">    :param path: absolute filepath for binary video or directory containing a file named binary video</span>
+<span class="sd">    :type path: str</span>
+<span class="sd">    :param meta_filename: absolute path to meta file</span>
+<span class="sd">    :type meta_filename: Optional[str]</span>
+<span class="sd">    :return: numpy array [Z x Y x X]</span>
+<span class="sd">    :rtype: Any</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">meta_filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
+    <span class="n">_num_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">)</span>
+    <span class="n">_x_pixels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_x_pixels</span><span class="p">)</span>
+    <span class="n">_y_pixels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_y_pixels</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fromfile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_type</span><span class="p">),</span> <span class="p">(</span><span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">))</span></div>
+<span class="c1"># TODO UNIT TEST FOR EXCEPTIONS</span>
+
+
+<div class="viewcode-block" id="load_single_tiff"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_single_tiff">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_single_tiff</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a single tiff file</span>
+
+<span class="sd">    :param filename: absolute filename</span>
+<span class="sd">    :param num_frames: number of frames</span>
+<span class="sd">    :type filename: Union[str, pathlib.Path]</span>
+<span class="sd">    :type num_frames: int</span>
+<span class="sd">    :return: numpy array [Z x Y x X]</span>
+<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="pretty_print_bruker_command"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.pretty_print_bruker_command">[docs]</a><span class="k">def</span> <span class="nf">pretty_print_bruker_command</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function simply prints the bruker folder contents detected</span>
+
+<span class="sd">    :param channels: Number of channels</span>
+<span class="sd">    :type channels: int</span>
+<span class="sd">    :param planes: Number of planes</span>
+<span class="sd">    :type planes: int</span>
+<span class="sd">    :param frames: Number of frames</span>
+<span class="sd">    :type frames: int</span>
+<span class="sd">    :param height: Height of Image (Y Pixels)</span>
+<span class="sd">    :type height: int</span>
+<span class="sd">    :param width:  Width of Image (X Pixels)</span>
+<span class="sd">    :type width:</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_table</span> <span class="o">=</span> <span class="n">PrettyTable</span><span class="p">()</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Total Images Detected&quot;</span><span class="p">,</span> <span class="n">channels</span> <span class="o">*</span> <span class="n">planes</span> <span class="o">*</span> <span class="n">frames</span><span class="p">])</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;channels&quot;</span><span class="p">,</span> <span class="n">channels</span><span class="p">])</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;planes&quot;</span><span class="p">,</span> <span class="n">planes</span><span class="p">])</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">frames</span><span class="p">])</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Height&quot;</span><span class="p">,</span> <span class="n">height</span><span class="p">])</span>
+    <span class="n">_table</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;Width&quot;</span><span class="p">,</span> <span class="n">width</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_table</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="repackage_bruker_tiffs"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.repackage_bruker_tiffs">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">repackage_bruker_tiffs</span><span class="p">(</span><span class="n">input_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">output_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
+                           <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Repackages a sequence of tiff files within a directory to a smaller sequence</span>
+<span class="sd">    of tiff stacks.</span>
+<span class="sd">    Designed to compile the outputs of a certain imaging utility</span>
+<span class="sd">    that exports recordings such that each frame is saved as a single tiff.</span>
+
+<span class="sd">    :param input_folder: Directory containing a sequence of single frame tiff files</span>
+<span class="sd">    :type input_folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :param output_folder: Empty directory where tiff stacks will be saved</span>
+<span class="sd">    :type output_folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :param args: optional argument to indicate the repackaging of a specific channel and/or plane</span>
+<span class="sd">    :type args: int</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># code here is pretty rough, needs TLC. ~horror~</span>
+
+    <span class="k">def</span> <span class="nf">load_image</span><span class="p">():</span>
+        <span class="k">nonlocal</span> <span class="n">input_folder</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+        <span class="k">nonlocal</span> <span class="n">_file</span>
+        <span class="k">nonlocal</span> <span class="n">_offset</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">_files</span><span class="p">[</span><span class="n">_file</span> <span class="o">+</span> <span class="n">_offset</span><span class="p">])))</span>
+
+    <span class="k">def</span> <span class="nf">find_files</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]):</span>
+        <span class="k">nonlocal</span> <span class="n">input_folder</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+
+        <span class="k">def</span> <span class="nf">check_file_contents</span><span class="p">(</span><span class="n">tag_</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">WindowsPath</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tag_</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">file_</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># reset, rather maintain code as is then make a new temporary variable since this</span>
+        <span class="c1"># is basically instant</span>
+        <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">input_folder</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)]</span>
+
+        <span class="c1"># now find</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">tag</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">tag</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">_files</span> <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">_file</span><span class="o">.</span><span class="n">stem</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">_files</span> <span class="k">if</span> <span class="n">check_file_contents</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">_file</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">not_over_4gb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">nonlocal</span> <span class="n">_files</span>
+        <span class="k">nonlocal</span> <span class="n">_y</span>
+        <span class="k">nonlocal</span> <span class="n">_x</span>
+
+        <span class="n">gb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">_files</span><span class="o">.</span><span class="fm">__len__</span><span class="p">(),</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">nbytes</span>
+        <span class="k">if</span> <span class="n">gb</span> <span class="o">&lt;=</span> <span class="mf">3.9</span><span class="p">:</span>  <span class="c1"># 3.9 as a safety buffer</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">input_folder</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)]</span>
+    <span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span> <span class="o">=</span> <span class="n">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">input_folder</span><span class="p">)</span>
+    <span class="n">pretty_print_bruker_command</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">)</span>
+
+    <span class="c1"># finding the files for a specific channel/plane here</span>
+    <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+        <span class="c1"># unpack if necessary</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">_c</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">_p</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">_c</span><span class="p">,</span> <span class="n">_p</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">_channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_planes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">_base_tag</span> <span class="o">=</span> <span class="s2">&quot;00000&quot;</span>
+            <span class="n">_tag</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_base_tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;.ome&quot;</span><span class="p">])]</span>
+            <span class="n">find_files</span><span class="p">(</span><span class="n">_tag</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_channels</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_planes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_base_tag</span> <span class="o">=</span> <span class="s2">&quot;00000&quot;</span>
+            <span class="n">_tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_base_tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;.ome&quot;</span><span class="p">])</span>
+            <span class="n">find_files</span><span class="p">(</span><span class="n">_tag</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">_files</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_channels</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_planes</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">_base_tag</span> <span class="o">=</span> <span class="s2">&quot;00000&quot;</span>
+            <span class="n">_tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_base_tag</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="s2">&quot;.ome&quot;</span><span class="p">])</span>
+            <span class="n">find_files</span><span class="p">(</span><span class="n">_tag</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_channels</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_planes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">_tag</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;Ch&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">find_files</span><span class="p">(</span><span class="n">_tag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">_channels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Folder contains multiple channels&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">assert</span><span class="p">(</span><span class="n">_planes</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Folder contains multiple planes&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+    <span class="c1"># noinspection PyTypeChecker</span>
+
+    <span class="c1"># Decide whether saving in single stack is possible</span>
+    <span class="k">if</span> <span class="n">not_over_4gb</span><span class="p">():</span>
+        <span class="n">_images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+        <span class="n">_offset</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_frames</span><span class="p">):</span>
+            <span class="n">_images</span><span class="p">[</span><span class="n">_file</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">()</span>
+        <span class="n">save_single_tiff</span><span class="p">(</span><span class="n">_images</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">compiledVideo_01_of_1.tif&quot;</span><span class="p">]))</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># noinspection PyTypeChecker</span>
+        <span class="n">_chunks</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">_frames</span><span class="o">/</span><span class="mi">7000</span><span class="p">)</span>
+        <span class="n">c_idx</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">_offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">()</span>
+
+        <span class="n">_pbar</span> <span class="o">=</span> <span class="n">tq</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">_frames</span><span class="p">)</span>
+        <span class="n">_pbar</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="s2">&quot;Repackaging Bruker Tiffs...&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">_chunk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="mi">7000</span><span class="p">):</span>
+
+            <span class="n">_start_idx</span> <span class="o">=</span> <span class="n">_chunk</span>
+            <span class="n">_offset</span> <span class="o">=</span> <span class="n">_start_idx</span>
+            <span class="n">_end_idx</span> <span class="o">=</span> <span class="n">_chunk</span> <span class="o">+</span> <span class="mi">7000</span>
+            <span class="n">_chunk_frames</span> <span class="o">=</span> <span class="n">_end_idx</span><span class="o">-</span><span class="n">_start_idx</span>
+            <span class="c1"># If this is the last chunk which may not contain a full 7000 frames...</span>
+            <span class="k">if</span> <span class="n">_end_idx</span> <span class="o">&gt;</span> <span class="n">_frames</span><span class="p">:</span>
+                <span class="n">_end_idx</span> <span class="o">=</span> <span class="n">_frames</span>
+                <span class="n">_chunk_frames</span> <span class="o">=</span> <span class="n">_end_idx</span> <span class="o">-</span> <span class="n">_start_idx</span>
+                <span class="n">_end_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">image_chunk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">_chunk_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">_chunk_frames</span><span class="p">):</span>
+                <span class="n">image_chunk</span><span class="p">[</span><span class="n">_file</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">()</span>
+                <span class="n">_pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">c_idx</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">save_single_tiff</span><span class="p">(</span><span class="n">image_chunk</span><span class="p">,</span> <span class="n">output_folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;compiledVideo_0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">c_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_of_&quot;</span> <span class="o">+</span>
+                                 <span class="nb">str</span><span class="p">(</span><span class="n">_chunks</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">save_single_tiff</span><span class="p">(</span><span class="n">image_chunk</span><span class="p">,</span> <span class="n">output_folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;compiledVideo_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">c_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_of_&quot;</span> <span class="o">+</span>
+                                 <span class="nb">str</span><span class="p">(</span><span class="n">_chunks</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
+            <span class="n">c_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">_pbar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span></div>
+<span class="c1"># REFACTOR</span>
+
+
+<div class="viewcode-block" id="save_single_tiff"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.save_single_tiff">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@require_full_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_single_tiff</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">type_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a numpy array to a single tiff file as type uint16</span>
+
+<span class="sd">    :param images: numpy array [frames, y pixels, x pixels]</span>
+<span class="sd">    :type images: Any</span>
+<span class="sd">    :param path: filename or absolute path</span>
+<span class="sd">    :type path: Union[str, pathlib.Path]</span>
+<span class="sd">    :param type_: type for saving</span>
+<span class="sd">    :type type_: Optional[Any]</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">TiffWriter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">tif</span><span class="p">:</span>
+            <span class="n">tif</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">type_</span><span class="p">))</span>
+        <span class="k">return</span>
+
+    <span class="k">with</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">TiffWriter</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">tif</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">images</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">type_</span><span class="p">):</span>
+            <span class="n">tif</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_tiff_stack"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.save_tiff_stack">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_tiff_stack</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
+                    <span class="n">type_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a numpy array to a sequence of tiff stacks</span>
+
+<span class="sd">    :param images: A numpy array containing a tiff stack [Z x Y x X]</span>
+<span class="sd">    :type images: Any</span>
+<span class="sd">    :param output_folder: A directory to save the sequence of tiff stacks in uint16</span>
+<span class="sd">    :type output_folder: Union[str, pathlib.Path]</span>
+<span class="sd">    :param type_: type for saving</span>
+<span class="sd">    :type type_: Optional[Any]</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_num_frames</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">_chunks</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">_num_frames</span> <span class="o">/</span> <span class="mi">7000</span><span class="p">)</span>
+
+    <span class="n">c_idx</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">_chunk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_num_frames</span><span class="p">,</span> <span class="mi">7000</span><span class="p">):</span>
+
+        <span class="n">_start_idx</span> <span class="o">=</span> <span class="n">_chunk</span>
+        <span class="n">_end_idx</span> <span class="o">=</span> <span class="n">_chunk</span> <span class="o">+</span> <span class="mi">7000</span>
+        <span class="k">if</span> <span class="n">_end_idx</span> <span class="o">&gt;</span> <span class="n">_num_frames</span><span class="p">:</span>
+            <span class="n">_end_idx</span> <span class="o">=</span> <span class="n">_num_frames</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">c_idx</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">save_single_tiff</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">_start_idx</span><span class="p">:</span><span class="n">_end_idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+                             <span class="n">output_folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;Video_0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">c_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_of_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                                       <span class="n">_chunks</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">save_single_tiff</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">_start_idx</span><span class="p">:</span><span class="n">_end_idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+                             <span class="n">output_folder</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;Video_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">c_idx</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_of_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                                       <span class="n">_chunks</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span>
+        <span class="n">c_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished Saving Tiffs&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_raw_binary"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.save_raw_binary">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@if_dir_append_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;video_meta.txt&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@if_dir_join_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;binary_video&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_raw_binary</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
+                    <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function saves a tiff stack as a binary file</span>
+
+<span class="sd">    :param images: Images to be saved [Z x Y x X]</span>
+<span class="sd">    :type images: np.ndarray</span>
+<span class="sd">    :param path:  absolute filepath for saving binary video or directory containing a file named binary video</span>
+<span class="sd">    :type path: str</span>
+<span class="sd">    :param meta_filename: absolute filepath for saving meta</span>
+<span class="sd">    :type meta_filename: str</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">meta_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span>
+                          <span class="nb">str</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">dtype</span><span class="p">)])</span>
+    <span class="n">images</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished saving images as a binary file.&quot;</span><span class="p">)</span></div>
+<span class="c1"># TODO UNIT TEST FOR EXCEPTIONS</span>
+
+
+<div class="viewcode-block" id="save_video"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.save_video">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@if_dir_join_filename</span><span class="p">(</span><span class="n">default_name</span><span class="o">=</span><span class="s2">&quot;video.mp4&quot;</span><span class="p">,</span> <span class="n">flag_pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_video</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">fps</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function writes video to .mp4</span>
+
+<span class="sd">    :param images: Images to be written</span>
+<span class="sd">    :type images: Any</span>
+<span class="sd">    :param path: Filename  (Or Complete Path)</span>
+<span class="sd">    :type path: Union[str, pathlib.Path]</span>
+<span class="sd">    :param fps: frame rate</span>
+<span class="sd">    :type fps: Union[float, int]</span>
+<span class="sd">    :rtype: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">images</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Forcing to unsigned 8-bit</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Writing Images to .mp4...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">mimwrite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">macro_block_size</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Finished writing images to .mp4.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+<span class="c1"># TODO: NO UNIT TEST</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
