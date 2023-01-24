@@ -39,11 +39,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Sub-Packages.html">Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.html">CalSciPy package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.io.html">CalSciPy.io module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../DevTools.html">Development Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Development%20Tools.html">Development Tools</a></li>
 </ul>
 
         </div>
@@ -95,12 +94,13 @@
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function determine contents of the bruker folder</span>
+<span class="sd">    This function determines the number of channels and planes within a folder containing .tif files</span>
+<span class="sd">    exported by Bruker&#39;s Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels)</span>
 
-<span class="sd">    :param folder: Folder containing bruker imaging data</span>
+<span class="sd">    :param folder: folder containing bruker imaging data</span>
 <span class="sd">    :type folder: Union[str, pathlib.Path]</span>
-<span class="sd">    :returns: channels, planes, frames, Height, Width</span>
-<span class="sd">    :rtype: tuple</span>
+<span class="sd">    :returns: channels, planes, frames, height, width</span>
+<span class="sd">    :rtype: tuple[int, int, int, int, int]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">_file</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
@@ -160,12 +160,13 @@
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">load_all_tiffs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load a sequence of tiff stacks</span>
+<span class="sd">    Loads all .tif&#39;s within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit exported</span>
+<span class="sd">    by the majority (all?) of imaging software.</span>
 
-<span class="sd">    :param folder: Folder containing a sequence of tiff stacks</span>
+<span class="sd">    :param folder: folder containing a sequence of tiff stacks</span>
 <span class="sd">    :type folder: Union[str, pathlib.Path]</span>
-<span class="sd">    :return: complete_image numpy array [Z x Y x X] as uint16</span>
-<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    :return: a numpy array containing the images (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :rtype: numpy.ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">):</span>
         <span class="n">folder</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
@@ -198,11 +199,11 @@
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">load_binary_meta</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads meta file for binary video</span>
+<span class="sd">    Loads the meta file for an associated binary video</span>
 
-<span class="sd">    :param path: The meta file (.txt ext) or directory containing metafile</span>
+<span class="sd">    :param path: The meta file (.txt ext) or a directory containing metafile</span>
 <span class="sd">    :type path: Union[str, pathlib.Path]</span>
-<span class="sd">    :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]</span>
+<span class="sd">    :return: A tuple where (frames, y-pixels, x-pixels, dtype)</span>
 <span class="sd">    :rtype: tuple[int, int, int, str]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
@@ -215,19 +216,18 @@
 <span class="k">def</span> <span class="nf">load_bruker_tiffs</span><span class="p">(</span><span class="n">folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
                       <span class="n">channels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">planes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load a sequence of tiff files from a directory.</span>
+<span class="sd">    Load a sequence of .tif files from a directory containing .tif files exported by Bruker&#39;s Prairieview software to a</span>
+<span class="sd">    numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a</span>
+<span class="sd">    separate numpy array.</span>
 
-<span class="sd">    Designed to compile the outputs of a certain imaging utility</span>
-<span class="sd">    that exports recordings such that each frame is saved as a single tiff.</span>
-
-<span class="sd">    :param folder: Folder containing a sequence of single frame tiff files</span>
+<span class="sd">    :param folder: folder containing a sequence of single frame tiff files</span>
 <span class="sd">    :type folder: Union[str, pathlib.Path]</span>
-<span class="sd">    :param channels: channel to load</span>
+<span class="sd">    :param channels: specific channel to load from dataset (zero-indexed)</span>
 <span class="sd">    :type channels: Optional[int]</span>
-<span class="sd">    :param planes: plane to load</span>
+<span class="sd">    :param planes: specific plane to load from dataset (zero-indexed)</span>
 <span class="sd">    :type planes: Optional[int]</span>
-<span class="sd">    :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)</span>
-<span class="sd">    :rtype: Tuple[np.ndarray]</span>
+<span class="sd">    :return: All .tif files in the directory loaded to a tuple of numpy arrays (frames, y-pixels, x-pixels, uint16)</span>
+<span class="sd">    :rtype: tuple[numpy.ndarray]</span>
 <span class="sd">     &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">load_images</span><span class="p">():</span>
@@ -261,7 +261,7 @@
         <span class="k">return</span> <span class="n">complete_image</span>
 
     <span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span> <span class="o">=</span> <span class="n">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
-    <span class="n">pretty_print_bruker_command</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">)</span>
+    <span class="n">pretty_print_image_description</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">channels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">channels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -320,26 +320,25 @@
 <span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">load_mapped_binary</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">load_mapped_binary</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads a raw binary file in the workspace without loading into memory</span>
+<span class="sd">    Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the default</span>
+<span class="sd">    filenames (binary_video, video_meta.txt)</span>
 
-<span class="sd">    Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</span>
-
-<span class="sd">    :param filename: filename for binary video</span>
-<span class="sd">    :type filename: str</span>
-<span class="sd">    :param meta_filename: filename for meta file</span>
-<span class="sd">    :type meta_filename: str</span>
-<span class="sd">    :keyword mode: pass mode to numpy.memmap (str, default = &quot;r&quot;)</span>
-<span class="sd">    :return: memmap(numpy) array [Z x Y x X]</span>
-<span class="sd">    :rtype: np.memmap</span>
+<span class="sd">    :param path: absolute filepath for binary video or a folder containing a binary video with the default filename</span>
+<span class="sd">    :type path: str</span>
+<span class="sd">    :param meta_filename: absolute path to meta file</span>
+<span class="sd">    :type meta_filename: Optional[str] = None</span>
+<span class="sd">    :keyword mode: mode used in loading numpy.memmap (str, default = &quot;r&quot;)</span>
+<span class="sd">    :return: memmap (numpy) array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :rtype: numpy.memmap</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_mode</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
 
     <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">load_binary_meta</span><span class="p">(</span><span class="n">meta_filename</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_type</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="n">_mode</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_type</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="n">_mode</span><span class="p">)</span></div>
 <span class="c1"># TODO UNIT TEST FOR EXCEPTIONS</span>
 
 
@@ -351,16 +350,15 @@
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">load_raw_binary</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Loads a raw binary file</span>
-
-<span class="sd">    Enter the path to autofill (assumes Filename &amp; meta are path + binary_video, video_meta.txt)</span>
+<span class="sd">    Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default</span>
+<span class="sd">    filenames (binary_video, video_meta.txt)</span>
 
 <span class="sd">    :param path: absolute filepath for binary video or directory containing a file named binary video</span>
 <span class="sd">    :type path: str</span>
 <span class="sd">    :param meta_filename: absolute path to meta file</span>
-<span class="sd">    :type meta_filename: Optional[str]</span>
-<span class="sd">    :return: numpy array [Z x Y x X]</span>
-<span class="sd">    :rtype: Any</span>
+<span class="sd">    :type meta_filename: Optional[str] = None</span>
+<span class="sd">    :return: numpy array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :rtype: numpy.ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_num_frames</span><span class="p">,</span> <span class="n">_y_pixels</span><span class="p">,</span> <span class="n">_x_pixels</span><span class="p">,</span> <span class="n">_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">meta_filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
@@ -374,34 +372,34 @@
 <div class="viewcode-block" id="load_single_tiff"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.load_single_tiff">[docs]</a><span class="nd">@convert_optionals</span><span class="p">(</span><span class="n">permitted</span><span class="o">=</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">),</span> <span class="n">required</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="nd">@validate_path</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="nd">@validate_exists</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">load_single_tiff</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">load_single_tiff</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">num_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load a single tiff file</span>
+<span class="sd">    Load a single .tif as a numpy array</span>
 
-<span class="sd">    :param filename: absolute filename</span>
-<span class="sd">    :param num_frames: number of frames</span>
-<span class="sd">    :type filename: Union[str, pathlib.Path]</span>
+<span class="sd">    :param path: absolute filename</span>
+<span class="sd">    :param num_frames: number of frames in .tif</span>
+<span class="sd">    :type path: Union[str, pathlib.Path]</span>
 <span class="sd">    :type num_frames: int</span>
-<span class="sd">    :return: numpy array [Z x Y x X]</span>
-<span class="sd">    :rtype: np.ndarray</span>
+<span class="sd">    :return: numpy array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :rtype: numpy.ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">return</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">tifffile</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_frames</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="pretty_print_bruker_command"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.pretty_print_bruker_command">[docs]</a><span class="k">def</span> <span class="nf">pretty_print_bruker_command</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="pretty_print_image_description"><a class="viewcode-back" href="../../CalSciPy.io.html#CalSciPy.io.pretty_print_image_description">[docs]</a><span class="k">def</span> <span class="nf">pretty_print_image_description</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="n">planes</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function simply prints the bruker folder contents detected</span>
+<span class="sd">    Function prints the description of an imaging dataset as a table.</span>
 
-<span class="sd">    :param channels: Number of channels</span>
+<span class="sd">    :param channels: number of channels</span>
 <span class="sd">    :type channels: int</span>
-<span class="sd">    :param planes: Number of planes</span>
+<span class="sd">    :param planes: number of planes</span>
 <span class="sd">    :type planes: int</span>
-<span class="sd">    :param frames: Number of frames</span>
+<span class="sd">    :param frames: number of frames</span>
 <span class="sd">    :type frames: int</span>
-<span class="sd">    :param height: Height of Image (Y Pixels)</span>
+<span class="sd">    :param height: y-pixels</span>
 <span class="sd">    :type height: int</span>
-<span class="sd">    :param width:  Width of Image (X Pixels)</span>
+<span class="sd">    :param width: x-pixels</span>
 <span class="sd">    :type width:</span>
 <span class="sd">    :rtype: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -425,14 +423,12 @@
 <span class="k">def</span> <span class="nf">repackage_bruker_tiffs</span><span class="p">(</span><span class="n">input_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">output_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
                            <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Repackages a sequence of tiff files within a directory to a smaller sequence</span>
-<span class="sd">    of tiff stacks.</span>
-<span class="sd">    Designed to compile the outputs of a certain imaging utility</span>
-<span class="sd">    that exports recordings such that each frame is saved as a single tiff.</span>
+<span class="sd">    Repackages a folder containing .tif files exported by Bruker&#39;s Prairieview software into a sequence of &lt;4 GB .tif</span>
+<span class="sd">    stacks.</span>
 
-<span class="sd">    :param input_folder: Directory containing a sequence of single frame tiff files</span>
+<span class="sd">    :param input_folder: folder containing a sequence of single frame .tif files exported by Bruker&#39;s Prairieview</span>
 <span class="sd">    :type input_folder: Union[str, pathlib.Path]</span>
-<span class="sd">    :param output_folder: Empty directory where tiff stacks will be saved</span>
+<span class="sd">    :param output_folder: empty folder where .tif stacks will be saved</span>
 <span class="sd">    :type output_folder: Union[str, pathlib.Path]</span>
 <span class="sd">    :param args: optional argument to indicate the repackaging of a specific channel and/or plane</span>
 <span class="sd">    :type args: int</span>
@@ -482,7 +478,7 @@
 
     <span class="n">_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">_file</span> <span class="k">for</span> <span class="n">_file</span> <span class="ow">in</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">input_folder</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.tif&quot;</span><span class="p">)]</span>
     <span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span> <span class="o">=</span> <span class="n">determine_bruker_folder_contents</span><span class="p">(</span><span class="n">input_folder</span><span class="p">)</span>
-    <span class="n">pretty_print_bruker_command</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">)</span>
+    <span class="n">pretty_print_image_description</span><span class="p">(</span><span class="n">_channels</span><span class="p">,</span> <span class="n">_planes</span><span class="p">,</span> <span class="n">_frames</span><span class="p">,</span> <span class="n">_y</span><span class="p">,</span> <span class="n">_x</span><span class="p">)</span>
 
     <span class="c1"># finding the files for a specific channel/plane here</span>
     <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
@@ -577,14 +573,14 @@
 <span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">save_single_tiff</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">type_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Save a numpy array to a single tiff file as type uint16</span>
+<span class="sd">    Save a numpy array to a single .tif file. Size must be &lt;4 GB.</span>
 
 <span class="sd">    :param images: numpy array [frames, y pixels, x pixels]</span>
-<span class="sd">    :type images: Any</span>
+<span class="sd">    :type images: numpy.array</span>
 <span class="sd">    :param path: filename or absolute path</span>
 <span class="sd">    :type path: Union[str, pathlib.Path]</span>
 <span class="sd">    :param type_: type for saving</span>
-<span class="sd">    :type type_: Optional[Any]</span>
+<span class="sd">    :type type_: Optional[numpy.dtype] = numpy.uint16</span>
 <span class="sd">    :rtype: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -603,14 +599,14 @@
 <span class="k">def</span> <span class="nf">save_tiff_stack</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
                     <span class="n">type_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Save a numpy array to a sequence of tiff stacks</span>
+<span class="sd">    Save a numpy array to a sequence of .tif stacks</span>
 
-<span class="sd">    :param images: A numpy array containing a tiff stack [Z x Y x X]</span>
-<span class="sd">    :type images: Any</span>
-<span class="sd">    :param output_folder: A directory to save the sequence of tiff stacks in uint16</span>
+<span class="sd">    :param images: numpy array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :type images: numpy.array</span>
+<span class="sd">    :param output_folder: folder to save the sequence of .tif stacks</span>
 <span class="sd">    :type output_folder: Union[str, pathlib.Path]</span>
 <span class="sd">    :param type_: type for saving</span>
-<span class="sd">    :type type_: Optional[Any]</span>
+<span class="sd">    :type type_: Optional[numpy.dtype] = numpy.uint16</span>
 <span class="sd">    :rtype: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_num_frames</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -646,13 +642,13 @@
 <span class="k">def</span> <span class="nf">save_raw_binary</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span>
                     <span class="n">meta_filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This function saves a tiff stack as a binary file</span>
+<span class="sd">    Save a numpy array as a binary file with an associated meta .txt file</span>
 
-<span class="sd">    :param images: Images to be saved [Z x Y x X]</span>
-<span class="sd">    :type images: np.ndarray</span>
-<span class="sd">    :param path:  absolute filepath for saving binary video or directory containing a file named binary video</span>
+<span class="sd">    :param images: numpy array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :type images: numpy.ndarray</span>
+<span class="sd">    :param path:  folder to save in or an absolute filepath for binary video file</span>
 <span class="sd">    :type path: str</span>
-<span class="sd">    :param meta_filename: absolute filepath for saving meta</span>
+<span class="sd">    :param meta_filename: absolute filepath for saving meta .txt file</span>
 <span class="sd">    :type meta_filename: str</span>
 <span class="sd">    :rtype: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -676,14 +672,14 @@
 <span class="nd">@validate_extension</span><span class="p">(</span><span class="n">required_extension</span><span class="o">=</span><span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">save_video</span><span class="p">(</span><span class="n">images</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">],</span> <span class="n">fps</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function writes video to .mp4</span>
+<span class="sd">    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.</span>
 
-<span class="sd">    :param images: Images to be written</span>
-<span class="sd">    :type images: Any</span>
-<span class="sd">    :param path: Filename  (Or Complete Path)</span>
+<span class="sd">    :param images: numpy array (frames, y-pixels, x-pixels)</span>
+<span class="sd">    :type images: numpy.array</span>
+<span class="sd">    :param path: absolute filepath or filename</span>
 <span class="sd">    :type path: Union[str, pathlib.Path]</span>
-<span class="sd">    :param fps: frame rate</span>
-<span class="sd">    :type fps: Union[float, int]</span>
+<span class="sd">    :param fps: frame rate for saved video</span>
+<span class="sd">    :type fps: Union[float, int] = 30</span>
 <span class="sd">    :rtype: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

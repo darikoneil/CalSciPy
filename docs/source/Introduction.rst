@@ -17,7 +17,3 @@ Limitations
 ***********
 The current distribution for the package is incomplete. When each module has its associated unit tests complete, it will
 be pushed.
-
-Installation
-************
-Enter ``pip install CalSciPy`` in your terminal.

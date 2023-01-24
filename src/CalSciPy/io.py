@@ -22,12 +22,13 @@ from ._parsing import convert_optionals, if_dir_append_filename, if_dir_join_fil
 @validate_exists(pos=0)
 def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
-    Function determine contents of the bruker folder
+    This function determines the number of channels and planes within a folder containing .tif files
+    exported by Bruker's Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels)
 
-    :param folder: Folder containing bruker imaging data
+    :param folder: folder containing bruker imaging data
     :type folder: Union[str, pathlib.Path]
-    :returns: channels, planes, frames, Height, Width
-    :rtype: tuple
+    :returns: channels, planes, frames, height, width
+    :rtype: tuple[int, int, int, int, int]
     """
 
     _files = [_file for _file in folder.glob("*.tif") if _file.is_file()]
@@ -87,12 +88,13 @@ def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[
 @validate_exists(pos=0)
 def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
     """
-    Load a sequence of tiff stacks
+    Loads all .tif's within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit exported
+    by the majority (all?) of imaging software.
 
-    :param folder: Folder containing a sequence of tiff stacks
+    :param folder: folder containing a sequence of tiff stacks
     :type folder: Union[str, pathlib.Path]
-    :return: complete_image numpy array [Z x Y x X] as uint16
-    :rtype: np.ndarray
+    :return: a numpy array containing the images (frames, y-pixels, x-pixels)
+    :rtype: numpy.ndarray
     """
     if isinstance(folder, pathlib.Path):
         folder = str(folder)
@@ -125,11 +127,11 @@ def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
 @validate_exists(pos=0)
 def load_binary_meta(path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str]:
     """
-    Loads meta file for binary video
+    Loads the meta file for an associated binary video
 
-    :param path: The meta file (.txt ext) or directory containing metafile
+    :param path: The meta file (.txt ext) or a directory containing metafile
     :type path: Union[str, pathlib.Path]
-    :return: A tuple containing the number of frames, y pixels, and x pixels [Z x Y x X]
+    :return: A tuple where (frames, y-pixels, x-pixels, dtype)
     :rtype: tuple[int, int, int, str]
     """
     _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(path, delimiter=",", dtype="str")
@@ -142,19 +144,18 @@ def load_binary_meta(path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str
 def load_bruker_tiffs(folder: Union[str, pathlib.Path],
                       channels: Optional[int] = None, planes: Optional[int] = None) -> Tuple[np.ndarray]:
     """
-    Load a sequence of tiff files from a directory.
+    Load a sequence of .tif files from a directory containing .tif files exported by Bruker's Prairieview software to a
+    numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
+    separate numpy array.
 
-    Designed to compile the outputs of a certain imaging utility
-    that exports recordings such that each frame is saved as a single tiff.
-
-    :param folder: Folder containing a sequence of single frame tiff files
+    :param folder: folder containing a sequence of single frame tiff files
     :type folder: Union[str, pathlib.Path]
-    :param channels: channel to load
+    :param channels: specific channel to load from dataset (zero-indexed)
     :type channels: Optional[int]
-    :param planes: plane to load
+    :param planes: specific plane to load from dataset (zero-indexed)
     :type planes: Optional[int]
-    :return: complete_image:  All tiff files in the directory compiled into a single array (Z x Y x X, uint16)
-    :rtype: Tuple[np.ndarray]
+    :return: All .tif files in the directory loaded to a tuple of numpy arrays (frames, y-pixels, x-pixels, uint16)
+    :rtype: tuple[numpy.ndarray]
      """
 
     def load_images():
@@ -188,7 +189,7 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
         return complete_image
 
     _channels, _planes, _frames, _y_pixels, _x_pixels = determine_bruker_folder_contents(folder)
-    pretty_print_bruker_command(_channels, _planes, _frames, _y_pixels, _x_pixels)
+    pretty_print_image_description(_channels, _planes, _frames, _y_pixels, _x_pixels)
 
     if channels is None:
         channels = range(2)
@@ -247,26 +248,25 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
 @validate_path(pos=1)
 @validate_exists(pos=0)
 @validate_exists(pos=1)
-def load_mapped_binary(filename: str, meta_filename: Optional[str], **kwargs: str) -> np.memmap:
+def load_mapped_binary(path: str, meta_filename: Optional[str], **kwargs: str) -> np.memmap:
     """
-    Loads a raw binary file in the workspace without loading into memory
+    Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the default
+    filenames (binary_video, video_meta.txt)
 
-    Enter the path to autofill (assumes Filename & meta are path + binary_video, video_meta.txt)
-
-    :param filename: filename for binary video
-    :type filename: str
-    :param meta_filename: filename for meta file
-    :type meta_filename: str
-    :keyword mode: pass mode to numpy.memmap (str, default = "r")
-    :return: memmap(numpy) array [Z x Y x X]
-    :rtype: np.memmap
+    :param path: absolute filepath for binary video or a folder containing a binary video with the default filename
+    :type path: str
+    :param meta_filename: absolute path to meta file
+    :type meta_filename: Optional[str] = None
+    :keyword mode: mode used in loading numpy.memmap (str, default = "r")
+    :return: memmap (numpy) array (frames, y-pixels, x-pixels)
+    :rtype: numpy.memmap
     """
 
     _mode = kwargs.get("mode", "r")
 
     _num_frames, _y_pixels, _x_pixels, _type = load_binary_meta(meta_filename)
 
-    return np.memmap(filename, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
+    return np.memmap(path, dtype=_type, shape=(_num_frames, _y_pixels, _x_pixels), mode=_mode)
 # TODO UNIT TEST FOR EXCEPTIONS
 
 
@@ -278,16 +278,15 @@ def load_mapped_binary(filename: str, meta_filename: Optional[str], **kwargs: st
 @validate_exists(pos=1)
 def load_raw_binary(path: str, meta_filename: Optional[str]) -> np.ndarray:
     """
-    Loads a raw binary file
-
-    Enter the path to autofill (assumes Filename & meta are path + binary_video, video_meta.txt)
+    Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default
+    filenames (binary_video, video_meta.txt)
 
     :param path: absolute filepath for binary video or directory containing a file named binary video
     :type path: str
     :param meta_filename: absolute path to meta file
-    :type meta_filename: Optional[str]
-    :return: numpy array [Z x Y x X]
-    :rtype: Any
+    :type meta_filename: Optional[str] = None
+    :return: numpy array (frames, y-pixels, x-pixels)
+    :rtype: numpy.ndarray
     """
 
     _num_frames, _y_pixels, _x_pixels, _type = np.genfromtxt(meta_filename, delimiter=",", dtype="str")
@@ -301,34 +300,34 @@ def load_raw_binary(path: str, meta_filename: Optional[str]) -> np.ndarray:
 @convert_optionals(permitted=(str, pathlib.Path), required=str, pos=0)
 @validate_path(pos=0)
 @validate_exists(pos=0)
-def load_single_tiff(filename: Union[str, pathlib.Path], num_frames: int) -> np.ndarray:
+def load_single_tiff(path: Union[str, pathlib.Path], num_frames: int) -> np.ndarray:
     """
-    Load a single tiff file
+    Load a single .tif as a numpy array
 
-    :param filename: absolute filename
-    :param num_frames: number of frames
-    :type filename: Union[str, pathlib.Path]
+    :param path: absolute filename
+    :param num_frames: number of frames in .tif
+    :type path: Union[str, pathlib.Path]
     :type num_frames: int
-    :return: numpy array [Z x Y x X]
-    :rtype: np.ndarray
+    :return: numpy array (frames, y-pixels, x-pixels)
+    :rtype: numpy.ndarray
     """
 
-    return tifffile.imread(filename, key=range(0, num_frames, 1))
+    return tifffile.imread(path, key=range(0, num_frames, 1))
 
 
-def pretty_print_bruker_command(channels, planes, frames, height, width) -> None:
+def pretty_print_image_description(channels, planes, frames, height, width) -> None:
     """
-    Function simply prints the bruker folder contents detected
+    Function prints the description of an imaging dataset as a table.
 
-    :param channels: Number of channels
+    :param channels: number of channels
     :type channels: int
-    :param planes: Number of planes
+    :param planes: number of planes
     :type planes: int
-    :param frames: Number of frames
+    :param frames: number of frames
     :type frames: int
-    :param height: Height of Image (Y Pixels)
+    :param height: y-pixels
     :type height: int
-    :param width:  Width of Image (X Pixels)
+    :param width: x-pixels
     :type width:
     :rtype: None
     """
@@ -352,14 +351,12 @@ def pretty_print_bruker_command(channels, planes, frames, height, width) -> None
 def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pathlib.Path],
                            *args: Union[int, tuple[int]]) -> None:
     """
-    Repackages a sequence of tiff files within a directory to a smaller sequence
-    of tiff stacks.
-    Designed to compile the outputs of a certain imaging utility
-    that exports recordings such that each frame is saved as a single tiff.
+    Repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence of <4 GB .tif
+    stacks.
 
-    :param input_folder: Directory containing a sequence of single frame tiff files
+    :param input_folder: folder containing a sequence of single frame .tif files exported by Bruker's Prairieview
     :type input_folder: Union[str, pathlib.Path]
-    :param output_folder: Empty directory where tiff stacks will be saved
+    :param output_folder: empty folder where .tif stacks will be saved
     :type output_folder: Union[str, pathlib.Path]
     :param args: optional argument to indicate the repackaging of a specific channel and/or plane
     :type args: int
@@ -409,7 +406,7 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
 
     _files = [_file for _file in pathlib.Path(input_folder).rglob("*.tif")]
     _channels, _planes, _frames, _y, _x = determine_bruker_folder_contents(input_folder)
-    pretty_print_bruker_command(_channels, _planes, _frames, _y, _x)
+    pretty_print_image_description(_channels, _planes, _frames, _y, _x)
 
     # finding the files for a specific channel/plane here
     if args:
@@ -504,14 +501,14 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
 @validate_extension(required_extension=".tif", pos=1)
 def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
     """
-    Save a numpy array to a single tiff file as type uint16
+    Save a numpy array to a single .tif file. Size must be <4 GB.
 
     :param images: numpy array [frames, y pixels, x pixels]
-    :type images: Any
+    :type images: numpy.array
     :param path: filename or absolute path
     :type path: Union[str, pathlib.Path]
     :param type_: type for saving
-    :type type_: Optional[Any]
+    :type type_: Optional[numpy.dtype] = numpy.uint16
     :rtype: None
     """
 
@@ -530,14 +527,14 @@ def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: 
 def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
                     type_: Optional[np.dtype] = np.uint16) -> None:
     """
-    Save a numpy array to a sequence of tiff stacks
+    Save a numpy array to a sequence of .tif stacks
 
-    :param images: A numpy array containing a tiff stack [Z x Y x X]
-    :type images: Any
-    :param output_folder: A directory to save the sequence of tiff stacks in uint16
+    :param images: numpy array (frames, y-pixels, x-pixels)
+    :type images: numpy.array
+    :param output_folder: folder to save the sequence of .tif stacks
     :type output_folder: Union[str, pathlib.Path]
     :param type_: type for saving
-    :type type_: Optional[Any]
+    :type type_: Optional[numpy.dtype] = numpy.uint16
     :rtype: None
     """
     _num_frames = images.shape[0]
@@ -573,13 +570,13 @@ def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
 def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
                     meta_filename: Optional[Union[str, pathlib.Path]]) -> None:
     """
-    This function saves a tiff stack as a binary file
+    Save a numpy array as a binary file with an associated meta .txt file
 
-    :param images: Images to be saved [Z x Y x X]
-    :type images: np.ndarray
-    :param path:  absolute filepath for saving binary video or directory containing a file named binary video
+    :param images: numpy array (frames, y-pixels, x-pixels)
+    :type images: numpy.ndarray
+    :param path:  folder to save in or an absolute filepath for binary video file
     :type path: str
-    :param meta_filename: absolute filepath for saving meta
+    :param meta_filename: absolute filepath for saving meta .txt file
     :type meta_filename: str
     :rtype: None
     """
@@ -603,14 +600,14 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
 @validate_extension(required_extension=".mp4", pos=1)
 def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: Union[float, int] = 30) -> None:
     """
-    Function writes video to .mp4
+    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
 
-    :param images: Images to be written
-    :type images: Any
-    :param path: Filename  (Or Complete Path)
+    :param images: numpy array (frames, y-pixels, x-pixels)
+    :type images: numpy.array
+    :param path: absolute filepath or filename
     :type path: Union[str, pathlib.Path]
-    :param fps: frame rate
-    :type fps: Union[float, int]
+    :param fps: frame rate for saved video
+    :type fps: Union[float, int] = 30
     :rtype: None
     """
 
