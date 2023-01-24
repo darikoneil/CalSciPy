@@ -14,7 +14,7 @@ Welcome to CalSciPy's documentation!
    Sub-Packages
    CalSciPy.io
    CalSciPy.reorganization
-
+   DevTools
 
 
 Indices and tables
