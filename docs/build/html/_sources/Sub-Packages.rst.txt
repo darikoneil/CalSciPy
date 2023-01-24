@@ -1,5 +1,5 @@
-Modules
-============
+Overview
+========
 * :ref:`Coloring <Coloring Module>`
 * :ref:`Event Processing <Event Processing Module>`
 * :ref:`Input/Output (I/O) <IO Module>`
@@ -13,128 +13,99 @@ Modules
 
 Coloring
 --------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Coloring Methods
+****************
 | Import me
 
 .. _Event Processing Module:
 
 Event Processing
 ----------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Event Processing Methods
+************************
 | Import me
 
 .. _IO Module:
 
 Input/Output (I/O)
 ------------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+.. toctree::
+   :maxdepth: 4
 
-| Import me
+   CalSciPy.io
 
 .. _Image Processing Module:
 
 Image Processing
 ----------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
-
-Methods
-*******
-| Import me
-
 
 .. _Interactive Visuals Module:
 
 Interactive Visuals
 -------------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Interactive Visuals Methods
+***************************
 | Import me
 
 .. _Reorganization Module:
 
 Reorganization
 --------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Reorganization Methods
+**********************
 | Import me
 
 .. _Signal Processing Module:
 
 Signal Processing
 -----------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Signal Processing Methods
+*************************
 | Import me
 
 .. _Static Visuals Module:
 
 Static Visuals
 --------------
-
-Description
-***********
 | Write me
 | Write me
 | Write me
 | Write me
 
-Methods
-*******
+Static Visual Methods
+*********************
 | Import me

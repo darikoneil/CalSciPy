@@ -11,11 +11,10 @@ Welcome to CalSciPy's documentation!
    :caption: Contents:
 
    Introduction
+   Installation
    Sub-Packages
-   CalSciPy
    CalSciPy.io
-   CalSciPy.reorganization
-   DevTools
+   Development Tools
 
 
 Indices and tables
