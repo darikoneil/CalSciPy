@@ -2,6 +2,9 @@ import os
 import sys
 import pathlib
 
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../'))
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -51,35 +54,4 @@ module_names = (
     "trace_processing"
 )
 
-print(f"Current Path: {os.getcwd()}")
-list_subfolders_with_paths = [f.path for f in os.scandir(os.getcwd()) if f.is_dir()]
-print(f"Children: {list_subfolders_with_paths}")
-test_path = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest/src/CalSciPy/io.py"
 
-parent = sys.path.insert(0, os.path.abspath('../../src/CalSciPy'))
-
-parent = "/home/docs/checkouts/readthedocs.org/user_builds/calscipy/checkouts/latest"
-# print(f"Parent Path: {parent}")
-next_path = "".join([str(parent), "\\src"])
-sys.path.append("".join([str(parent), "\\src"]))
-# print(f"Next Path: {next_path}")
-next_path = "".join([str(parent), "\\src\\CalSciPy"])
-# print(f"Next Path: {next_path}")
-sys.path.append("".join([str(parent), "\\src\\CalSciPy"]))
-next_path = "".join([str(parent), "\\CalSciPy"])
-# print(f"Next Path: {next_path}")
-sys.path.append("".join([str(parent), "\\CalSciPy"]))
-# print(f"Next Path: {next_path}")
-sys.path.append("".join([str(parent), "\\CalSciPy\\src"]))
-# print(f"Next Path: {next_path}")
-sys.path.append("".join([str(parent), "\\CalSciPy\\src\\CalSciPy"]))
-
-for module in module_names:
-    next_path = "".join([str(parent), "\\CalSciPy\\src\\CalSciPy\\", module])
-    sys.path.append(next_path)
-    # print(f"Next Path: {next_path}")
-    next_path = "".join([str(parent), "\\src\\CalSciPy\\", module])
-    sys.path.append(next_path)
-    # print(f"Next Path: {next_path}")
-    next_path = "".join([str(parent), "\\src\\CalSciPy\\", module, ".py"])
-    sys.path.append(next_path)
