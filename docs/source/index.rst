@@ -12,6 +12,7 @@ Welcome to CalSciPy's documentation!
 
    Introduction
    Sub-Packages
+   CalSciPy
    CalSciPy.io
    CalSciPy.reorganization
    DevTools

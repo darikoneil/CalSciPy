@@ -91,7 +91,7 @@
 \chapter{Introduction}
 \label{\detokenize{Introduction:introduction}}\label{\detokenize{Introduction::doc}}
 \sphinxAtStartPar
-This \sphinxcode{\sphinxupquote{CalSciPy}} contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
+\sphinxstylestrong{CalSciPy} contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
 It\textquotesingle{}s intended to be a collection of useful, well\sphinxhyphen{}documented functions often used in boilerplate code alongside software
 packages such as \sphinxhref{https://github.com/flatironinstitute/CaImAn}{Caiman}, \sphinxhref{https://github.com/losonczylab/sima}{SIMA},
 and \sphinxhref{https://github.com/MouseLand/suite2p}{Suite2P}.
@@ -102,8 +102,8 @@ and \sphinxhref{https://github.com/MouseLand/suite2p}{Suite2P}.
 \sphinxAtStartPar
 I noticed I was often re\sphinxhyphen{}writing or copy/pasting a lot of code between environments when working with calcium imaging
 data. I started this package so you don\textquotesingle{}t have to. No more wasting time writing 6 lines to simply preview your tiff
-stack, extract a particular channel, or bin spikes. No more vague\sphinxhyphen{}exceptions or incomplete documentation when re\sphinxhyphen{}using a
-hastily made function from 2 months ago. Alongside these time\sphinxhyphen{}savers, I\textquotesingle{}ve also included some more non\sphinxhyphen{}trivial methods
+stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete documentation when re\sphinxhyphen{}using
+a hastily\sphinxhyphen{}made function from 2 months ago. Alongside these time\sphinxhyphen{}savers, I\textquotesingle{}ve also included some more non\sphinxhyphen{}trivial methods
 that are particularly useful.
 
 
@@ -321,13 +321,41 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy}} in your terminal.
 \sphinxstepscope
 
 
-\chapter{CalSciPy.io module}
+\chapter{CalSciPy package}
+\label{\detokenize{CalSciPy:calscipy-package}}\label{\detokenize{CalSciPy::doc}}
+
+\section{Submodules}
+\label{\detokenize{CalSciPy:submodules}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.coloring module}
+\label{\detokenize{CalSciPy.coloring:module-CalSciPy.coloring}}\label{\detokenize{CalSciPy.coloring:calscipy-coloring-module}}\label{\detokenize{CalSciPy.coloring::doc}}\index{module@\spxentry{module}!CalSciPy.coloring@\spxentry{CalSciPy.coloring}}\index{CalSciPy.coloring@\spxentry{CalSciPy.coloring}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.event\_processing module}
+\label{\detokenize{CalSciPy.event_processing:module-CalSciPy.event_processing}}\label{\detokenize{CalSciPy.event_processing:calscipy-event-processing-module}}\label{\detokenize{CalSciPy.event_processing::doc}}\index{module@\spxentry{module}!CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}}\index{CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.image\_processing module}
+\label{\detokenize{CalSciPy.image_processing:module-CalSciPy.image_processing}}\label{\detokenize{CalSciPy.image_processing:calscipy-image-processing-module}}\label{\detokenize{CalSciPy.image_processing::doc}}\index{module@\spxentry{module}!CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}}\index{CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.interactive\_visuals module}
+\label{\detokenize{CalSciPy.interactive_visuals:module-CalSciPy.interactive_visuals}}\label{\detokenize{CalSciPy.interactive_visuals:calscipy-interactive-visuals-module}}\label{\detokenize{CalSciPy.interactive_visuals::doc}}\index{module@\spxentry{module}!CalSciPy.interactive\_visuals@\spxentry{CalSciPy.interactive\_visuals}}\index{CalSciPy.interactive\_visuals@\spxentry{CalSciPy.interactive\_visuals}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.io module}
 \label{\detokenize{CalSciPy.io:module-CalSciPy.io}}\label{\detokenize{CalSciPy.io:calscipy-io-module}}\label{\detokenize{CalSciPy.io::doc}}\index{module@\spxentry{module}!CalSciPy.io@\spxentry{CalSciPy.io}}\index{CalSciPy.io@\spxentry{CalSciPy.io}!module@\spxentry{module}}\index{determine\_bruker\_folder\_contents() (in module CalSciPy.io)@\spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module CalSciPy.io}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.determine_bruker_folder_contents}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{determine\_bruker\_folder\_contents}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{determine\_bruker\_folder\_contents}}}{\emph{\DUrole{n}{folder}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Function determine contents of the bruker folder
@@ -353,7 +381,7 @@ tuple
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_all_tiffs}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_all\_tiffs}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}}{{ $\rightarrow$ ndarray}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_all\_tiffs}}}{\emph{\DUrole{n}{folder}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Load a sequence of tiff stacks
@@ -379,7 +407,7 @@ np.ndarray
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_binary_meta}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_binary\_meta}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{,}\DUrole{w}{  }str\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_binary\_meta}}}{\emph{\DUrole{n}{path}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Loads meta file for binary video
@@ -405,7 +433,7 @@ tuple{[}int, int, int, str{]}
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_bruker_tiffs}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tiffs}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}, \emph{\DUrole{n}{channels}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}int\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{planes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}int\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}ndarray\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tiffs}}}{\emph{\DUrole{n}{folder}}, \emph{\DUrole{n}{channels}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{planes}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Load a sequence of tiff files from a directory.
@@ -446,7 +474,7 @@ Tuple{[}np.ndarray{]}
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_mapped_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_mapped\_binary}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{meta\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}}{{ $\rightarrow$ memmap}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_mapped\_binary}}}{\emph{\DUrole{n}{filename}}, \emph{\DUrole{n}{meta\_filename}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Loads a raw binary file in the workspace without loading into memory
@@ -486,7 +514,7 @@ np.memmap
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_raw_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_raw\_binary}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{str}}, \emph{\DUrole{n}{meta\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}str\DUrole{p}{{]}}}}}{{ $\rightarrow$ ndarray}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_raw\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Loads a raw binary file
@@ -522,7 +550,7 @@ Any
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.load_single_tiff}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_single\_tiff}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}, \emph{\DUrole{n}{num\_frames}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{int}}}{{ $\rightarrow$ ndarray}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{load\_single\_tiff}}}{\emph{\DUrole{n}{filename}}, \emph{\DUrole{n}{num\_frames}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Load a single tiff file
@@ -555,7 +583,7 @@ np.ndarray
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.pretty_print_bruker_command}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{pretty\_print\_bruker\_command}}}{\emph{\DUrole{n}{channels}}, \emph{\DUrole{n}{planes}}, \emph{\DUrole{n}{frames}}, \emph{\DUrole{n}{height}}, \emph{\DUrole{n}{width}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{pretty\_print\_bruker\_command}}}{\emph{\DUrole{n}{channels}}, \emph{\DUrole{n}{planes}}, \emph{\DUrole{n}{frames}}, \emph{\DUrole{n}{height}}, \emph{\DUrole{n}{width}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Function simply prints the bruker folder contents detected
@@ -596,7 +624,7 @@ None
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.repackage_bruker_tiffs}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tiffs}}}{\emph{\DUrole{n}{input\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }pathlib.Path\DUrole{p}{{]}}}}, \emph{\DUrole{n}{output\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }pathlib.Path\DUrole{p}{{]}}}}, \emph{\DUrole{o}{*}\DUrole{n}{args}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}int\DUrole{p}{,}\DUrole{w}{  }tuple\DUrole{p}{{[}}int\DUrole{p}{{]}}\DUrole{p}{{]}}}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tiffs}}}{\emph{\DUrole{n}{input\_folder}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Repackages a sequence of tiff files within a directory to a smaller sequence
@@ -632,7 +660,7 @@ None
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.save_raw_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_raw\_binary}}}{\emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ndarray}}, \emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}, \emph{\DUrole{n}{meta\_filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Optional\DUrole{p}{{[}}Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}\DUrole{p}{{]}}}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_raw\_binary}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 This function saves a tiff stack as a binary file
@@ -665,7 +693,7 @@ None
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.save_single_tiff}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_single\_tiff}}}{\emph{images: \textasciitilde{}numpy.ndarray, path: \textasciitilde{}typing.Union{[}str, \textasciitilde{}pathlib.Path{]}, type\_: \textasciitilde{}typing.Optional{[}\textasciitilde{}numpy.dtype{]} = \textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_single\_tiff}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{type\_=\textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Save a numpy array to a single tiff file as type uint16
@@ -698,7 +726,7 @@ None
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.save_tiff_stack}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_tiff\_stack}}}{\emph{images: str, output\_folder: \textasciitilde{}typing.Union{[}str, \textasciitilde{}pathlib.Path{]}, type\_: \textasciitilde{}typing.Optional{[}\textasciitilde{}numpy.dtype{]} = \textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_tiff\_stack}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{n}{type\_=\textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Save a numpy array to a sequence of tiff stacks
@@ -731,7 +759,7 @@ None
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io:CalSciPy.io.save_video}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_video}}}{\emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ndarray}}, \emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}str\DUrole{p}{,}\DUrole{w}{  }Path\DUrole{p}{{]}}}}, \emph{\DUrole{n}{fps}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Union\DUrole{p}{{[}}float\DUrole{p}{,}\DUrole{w}{  }int\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{30}}}{{ $\rightarrow$ None}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io.}}\sphinxbfcode{\sphinxupquote{save\_video}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{fps}\DUrole{o}{=}\DUrole{default_value}{30}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Function writes video to .mp4
@@ -763,20 +791,20 @@ None
 \sphinxstepscope
 
 
-\chapter{CalSciPy.reorganization module}
+\subsection{CalSciPy.reorganization module}
 \label{\detokenize{CalSciPy.reorganization:module-CalSciPy.reorganization}}\label{\detokenize{CalSciPy.reorganization:calscipy-reorganization-module}}\label{\detokenize{CalSciPy.reorganization::doc}}\index{module@\spxentry{module}!CalSciPy.reorganization@\spxentry{CalSciPy.reorganization}}\index{CalSciPy.reorganization@\spxentry{CalSciPy.reorganization}!module@\spxentry{module}}\index{merge\_traces() (in module CalSciPy.reorganization)@\spxentry{merge\_traces()}\spxextra{in module CalSciPy.reorganization}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.reorganization:CalSciPy.reorganization.merge_traces}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.reorganization.}}\sphinxbfcode{\sphinxupquote{merge\_traces}}}{\emph{\DUrole{n}{traces\_as\_tensor}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ndarray}}}{{ $\rightarrow$ ndarray}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.reorganization.}}\sphinxbfcode{\sphinxupquote{merge\_traces}}}{\emph{\DUrole{n}{traces\_as\_tensor}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Concatenate multiple trials or tiffs into single matrix:
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_tensor}} \sphinxhyphen{}\sphinxhyphen{} 
+\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_tensor}} (\sphinxcode{\sphinxupquote{ndarray}}) \sphinxhyphen{}\sphinxhyphen{} 
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -790,6 +818,101 @@ np.ndarray
 
 \end{fulllineitems}
 
+
+\sphinxstepscope
+
+
+\subsection{CalSciPy.static\_visuals module}
+\label{\detokenize{CalSciPy.static_visuals:module-CalSciPy.static_visuals}}\label{\detokenize{CalSciPy.static_visuals:calscipy-static-visuals-module}}\label{\detokenize{CalSciPy.static_visuals::doc}}\index{module@\spxentry{module}!CalSciPy.static\_visuals@\spxentry{CalSciPy.static\_visuals}}\index{CalSciPy.static\_visuals@\spxentry{CalSciPy.static\_visuals}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.trace\_processing module}
+\label{\detokenize{CalSciPy.trace_processing:module-CalSciPy.trace_processing}}\label{\detokenize{CalSciPy.trace_processing:calscipy-trace-processing-module}}\label{\detokenize{CalSciPy.trace_processing::doc}}\index{module@\spxentry{module}!CalSciPy.trace\_processing@\spxentry{CalSciPy.trace\_processing}}\index{CalSciPy.trace\_processing@\spxentry{CalSciPy.trace\_processing}!module@\spxentry{module}}
+
+\section{Module contents}
+\label{\detokenize{CalSciPy:module-CalSciPy}}\label{\detokenize{CalSciPy:module-contents}}\index{module@\spxentry{module}!CalSciPy@\spxentry{CalSciPy}}\index{CalSciPy@\spxentry{CalSciPy}!module@\spxentry{module}}
+\sphinxstepscope
+
+
+\chapter{Development Tools}
+\label{\detokenize{DevTools:development-tools}}\label{\detokenize{DevTools::doc}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\section{Parameterized Decorators}
+\label{\detokenize{DevTools:parameterized-decorators}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\subsection{Parsing Decorators}
+\label{\detokenize{DevTools:parsing-decorators}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\subsection{Validation Decorators}
+\label{\detokenize{DevTools:validation-decorators}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\subsection{Terminal Style}
+\label{\detokenize{DevTools:terminal-style}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\section{PyTest}
+\label{\detokenize{DevTools:pytest}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\subsection{Sample Datasets}
+\label{\detokenize{DevTools:sample-datasets}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
+
+
+\subsection{Tests}
+\label{\detokenize{DevTools:tests}}
+\begin{DUlineblock}{0em}
+\item[] write me
+\item[] write me
+\item[] write me
+\item[] write me
+\end{DUlineblock}
 
 
 \chapter{Indices and tables}
@@ -813,8 +936,15 @@ np.ndarray
 \begin{sphinxtheindex}
 \let\bigletter\sphinxstyleindexlettergroup
 \bigletter{c}
+\item\relax\sphinxstyleindexentry{CalSciPy}\sphinxstyleindexpageref{CalSciPy:\detokenize{module-CalSciPy}}
+\item\relax\sphinxstyleindexentry{CalSciPy.coloring}\sphinxstyleindexpageref{CalSciPy.coloring:\detokenize{module-CalSciPy.coloring}}
+\item\relax\sphinxstyleindexentry{CalSciPy.event\_processing}\sphinxstyleindexpageref{CalSciPy.event_processing:\detokenize{module-CalSciPy.event_processing}}
+\item\relax\sphinxstyleindexentry{CalSciPy.image\_processing}\sphinxstyleindexpageref{CalSciPy.image_processing:\detokenize{module-CalSciPy.image_processing}}
+\item\relax\sphinxstyleindexentry{CalSciPy.interactive\_visuals}\sphinxstyleindexpageref{CalSciPy.interactive_visuals:\detokenize{module-CalSciPy.interactive_visuals}}
 \item\relax\sphinxstyleindexentry{CalSciPy.io}\sphinxstyleindexpageref{CalSciPy.io:\detokenize{module-CalSciPy.io}}
 \item\relax\sphinxstyleindexentry{CalSciPy.reorganization}\sphinxstyleindexpageref{CalSciPy.reorganization:\detokenize{module-CalSciPy.reorganization}}
+\item\relax\sphinxstyleindexentry{CalSciPy.static\_visuals}\sphinxstyleindexpageref{CalSciPy.static_visuals:\detokenize{module-CalSciPy.static_visuals}}
+\item\relax\sphinxstyleindexentry{CalSciPy.trace\_processing}\sphinxstyleindexpageref{CalSciPy.trace_processing:\detokenize{module-CalSciPy.trace_processing}}
 \end{sphinxtheindex}
 
 \renewcommand{\indexname}{Index}
