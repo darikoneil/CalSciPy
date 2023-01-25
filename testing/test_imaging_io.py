@@ -1,7 +1,7 @@
 import os
 import pytest
 from shutil import rmtree
-from src.CalSciPy.io import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
+from src.CalSciPy.io_tools import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
     repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack, \
     save_video, load_bruker_tiffs, load_binary_meta
 import numpy as np
