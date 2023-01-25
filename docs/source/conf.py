@@ -54,7 +54,7 @@ module_names = (
     "event_processing",
     "image_processing",
     "interactive_visuals",
-    "io",
+    "io_tools",
     "reorganization"
     "static_visuals",
     "trace_processing"
