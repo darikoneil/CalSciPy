@@ -1,7 +1,7 @@
 CalSciPy.io module
 ==================
 
-.. automodule:: CalSciPy.io
+.. automodule:: CalSciPy.io_tools
    :members:
    :undoc-members:
    :show-inheritance:
