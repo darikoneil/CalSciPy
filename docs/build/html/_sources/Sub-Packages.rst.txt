@@ -47,7 +47,7 @@ Input/Output (I/O)
 .. toctree::
    :maxdepth: 4
 
-   CalSciPy.io
+   CalSciPy.io_tools
 
 .. _Image Processing Module:
 

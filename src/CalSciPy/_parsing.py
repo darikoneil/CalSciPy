@@ -48,9 +48,9 @@ def convert_optionals(function: Callable, permitted: Tuple, required: Any, pos: 
         if isinstance(allowed_input, permitted):
             allowed_input = required(allowed_input)
         if not isinstance(allowed_input, required):
-            raise TypeError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.RESET}{TerminalStyle.YELLOW}"
-                            f"inputs are permitted to be of the following types {TerminalStyle.RESET}"
-                            f"{TerminalStyle.BLUE}{permitted}{TerminalStyle.RESET}")
+            raise TypeError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.YELLOW}"
+                            f"inputs are permitted to be of the following types "
+                            f"{TerminalStyle.BLUE}{permitted}")
         args = amend_args(args, allowed_input, pos)
         # noinspection PyArgumentList
         return function(*args, **kwargs)

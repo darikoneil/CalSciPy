@@ -13,7 +13,7 @@ Welcome to CalSciPy's documentation!
    Introduction
    Installation
    Sub-Packages
-   CalSciPy.io
+   CalSciPy.io_tools
    Development Tools
 
 
