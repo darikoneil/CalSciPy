@@ -10,7 +10,7 @@ This python packages contains a variety of useful methods for handling, processi
 #### Highlights
 * Assign unique colormaps to subsets of ROIs to generate rich, informative videos
 * Perona-Malik diffusion for edge-preserving denoising
-* GPU-parallelized multidimensional filtering
+* Fast compilation of Bruker's Prairieview data
 * Interactive visualization
 
 #### Installation
