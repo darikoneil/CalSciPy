@@ -17,6 +17,7 @@ This python packages contains a variety of useful methods for handling, processi
 `pip install CalSciPy` or `pip install CalSciPy-<subpackage>`
 
 #### Subpackages
+* Bruker
 * Coloring
 * Event Processing
 * Input/Output (I/O)
