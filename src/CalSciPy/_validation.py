@@ -25,7 +25,7 @@ def validate_exists(function: Callable, pos: int = 0) -> Callable:
         if not exists(string_input):
             raise FileNotFoundError(f"{TerminalStyle.GREEN}Invalid Path: "
                              f"{TerminalStyle.YELLOW} Could not locate  "
-                                    f"{TerminalStyle.BLUE}{string_input}")
+                                    f"{TerminalStyle.BLUE}{string_input} {TerminalStyle.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
@@ -50,7 +50,7 @@ def validate_extension(function: Callable, required_extension: str, pos: int = 0
         if pathlib.Path(args[pos]).suffix != required_extension:
             raise ValueError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.YELLOW}"
                              f"filepath must contain the required extension {TerminalStyle.BLUE}"
-                             f"{required_extension}")
+                             f"{required_extension} {TerminalStyle.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
@@ -72,7 +72,7 @@ def validate_filename(function: Callable, pos: int = 0) -> Callable:
         if not set(string_input) <= set(string.ascii_letters + string.digits + "." + "_"):
             raise ValueError(f"{TerminalStyle.GREEN}Invalid Filename: "
                              f"{TerminalStyle.YELLOW}Filenames are limited to standard letters and digits only."
-                             f"")
+                             f"{TerminalStyle.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
@@ -94,12 +94,13 @@ def validate_path(function: Callable, pos: int = 0) -> Callable:
         if [_char for _char in list(string_input) if _char is ":"].__len__() != 1:
             raise ValueError(f"{TerminalStyle.GREEN}Invalid Path: "
                              f"{TerminalStyle.YELLOW}No root detected: "
-                             f"{TerminalStyle.GREEN}{string_input}")
+                             f"{TerminalStyle.BLUE}{string_input} "
+                             f"{TerminalStyle.RESET}")
         if not set(string_input) <= set(string.ascii_letters + string.digits + "." + "\\" + ":" + "-" + "_"):
             raise ValueError(f"{TerminalStyle.GREEN}Invalid Path: "
                              f"{TerminalStyle.YELLOW}Filenames are limited to standard letters, digits, backslash, "
                              f"colon, hyphen, and underscore only."
-                             f"")
+                             f"{TerminalStyle.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
@@ -120,7 +121,8 @@ def validate_tensor(function: Callable, pos: int = 0) -> Callable:
         var_input = str(args[pos])
 
         if len(var_input).shape != 3:
-            raise AssertionError(f"{TerminalStyle.GREEN} Input {pos}: {TerminalStyle.YELLOW}requires tensor format")
+            raise AssertionError(f"{TerminalStyle.GREEN} Input {pos}: {TerminalStyle.YELLOW}requires tensor format "
+                                 f"{TerminalStyle.RESET}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator

@@ -64,8 +64,8 @@
 
 
 \title{CalSciPy}
-\date{Jan 25, 2023}
-\release{0.0.6}
+\date{Jan 28, 2023}
+\release{0.0.7}
 \author{Darik A.\@{} O\textquotesingle{}Neil}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -128,14 +128,17 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy}} in your terminal.
 \section{Partial Install}
 \label{\detokenize{Installation:partial-install}}
 \sphinxAtStartPar
-Enter \sphinxcode{\sphinxupquote{pip insta
-ll CalSciPy\sphinxhyphen{}\textless{}subpackage\textgreater{}}} in your terminal.
+Enter \sphinxcode{\sphinxupquote{pip install CalSciPy\sphinxhyphen{}\textless{}subpackage\textgreater{}}} in your terminal.
 
 \sphinxstepscope
 
 
 \chapter{Overview}
 \label{\detokenize{Sub-Packages:overview}}\label{\detokenize{Sub-Packages::doc}}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+{\hyperref[\detokenize{Sub-Packages:bruker-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Bruker}}}}
+
 \item {} 
 \sphinxAtStartPar
 {\hyperref[\detokenize{Sub-Packages:coloring-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Coloring}}}}
@@ -169,6 +172,163 @@ ll CalSciPy\sphinxhyphen{}\textless{}subpackage\textgreater{}}} in your terminal
 {\hyperref[\detokenize{Sub-Packages:static-visuals-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Static Visuals}}}}
 
 \end{itemize}
+
+
+\section{Bruker}
+\label{\detokenize{Sub-Packages:bruker}}\label{\detokenize{Sub-Packages:bruker-module}}
+\begin{DUlineblock}{0em}
+\item[] Write me
+\item[] Write me
+\item[] Write me
+\item[] Write me
+\end{DUlineblock}
+
+\sphinxstepscope
+
+
+\subsection{CalSciPy.bruker module}
+\label{\detokenize{CalSciPy.bruker:module-CalSciPy.bruker}}\label{\detokenize{CalSciPy.bruker:calscipy-bruker-module}}\label{\detokenize{CalSciPy.bruker::doc}}\index{module@\spxentry{module}!CalSciPy.bruker@\spxentry{CalSciPy.bruker}}\index{CalSciPy.bruker@\spxentry{CalSciPy.bruker}!module@\spxentry{module}}\index{determine\_bruker\_folder\_contents() (in module CalSciPy.bruker)@\spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module CalSciPy.bruker}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.determine_bruker_folder_contents}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{determine\_bruker\_folder\_contents}}}{\emph{\DUrole{n}{folder}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+This function determines the number of channels and planes within a folder containing .tif files
+exported by Bruker\textquotesingle{}s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing bruker imaging data
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+channels, planes, frames, height, width
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load\_bruker\_tiffs() (in module CalSciPy.bruker)@\spxentry{load\_bruker\_tiffs()}\spxextra{in module CalSciPy.bruker}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.load_bruker_tiffs}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tiffs}}}{\emph{\DUrole{n}{folder}}, \emph{\DUrole{n}{channels}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{planes}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Load a sequence of .tif files from a directory containing .tif files exported by Bruker\textquotesingle{}s Prairieview software to a
+numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
+separate numpy array.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame tiff files
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+All .tif files in the directory loaded to a tuple of numpy arrays
+(frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, \sphinxcode{\sphinxupquote{np.uint16}})
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{pretty\_print\_image\_description() (in module CalSciPy.bruker)@\spxentry{pretty\_print\_image\_description()}\spxextra{in module CalSciPy.bruker}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.pretty_print_image_description}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{pretty\_print\_image\_description}}}{\emph{\DUrole{n}{channels}}, \emph{\DUrole{n}{planes}}, \emph{\DUrole{n}{frames}}, \emph{\DUrole{n}{height}}, \emph{\DUrole{n}{width}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Function prints the description of an imaging dataset as a table.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of channels
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of planes
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{frames}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of frames
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} y\sphinxhyphen{}pixels
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{width}} \sphinxhyphen{}\sphinxhyphen{} x\sphinxhyphen{}pixels
+
+\end{itemize}
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+None
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{repackage\_bruker\_tiffs() (in module CalSciPy.bruker)@\spxentry{repackage\_bruker\_tiffs()}\spxextra{in module CalSciPy.bruker}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.repackage_bruker_tiffs}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tiffs}}}{\emph{\DUrole{n}{input\_folder}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Repackages a folder containing .tif files exported by Bruker\textquotesingle{}s Prairieview software into a sequence of \textless{}4 GB .tif
+stacks.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame .tif files exported by Bruker\textquotesingle{}s Prairieview
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} empty folder where .tif stacks will be saved
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{args}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} optional argument to indicate the repackaging of a specific channel and/or plane
+
+\end{itemize}
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+None
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 
 \section{Coloring}
@@ -218,34 +378,7 @@ ll CalSciPy\sphinxhyphen{}\textless{}subpackage\textgreater{}}} in your terminal
 
 
 \subsection{CalSciPy.io module}
-\label{\detokenize{CalSciPy.io_tools:module-CalSciPy.io_tools}}\label{\detokenize{CalSciPy.io_tools:calscipy-io-module}}\label{\detokenize{CalSciPy.io_tools::doc}}\index{module@\spxentry{module}!CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}}\index{CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}!module@\spxentry{module}}\index{determine\_bruker\_folder\_contents() (in module CalSciPy.io\_tools)@\spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.determine_bruker_folder_contents}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{determine\_bruker\_folder\_contents}}}{\emph{\DUrole{n}{folder}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker\textquotesingle{}s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing bruker imaging data
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-channels, planes, frames, height, width
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}{]}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_all\_tiffs() (in module CalSciPy.io\_tools)@\spxentry{load\_all\_tiffs()}\spxextra{in module CalSciPy.io\_tools}}
+\label{\detokenize{CalSciPy.io_tools:module-CalSciPy.io_tools}}\label{\detokenize{CalSciPy.io_tools:calscipy-io-module}}\label{\detokenize{CalSciPy.io_tools::doc}}\index{module@\spxentry{module}!CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}}\index{CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}!module@\spxentry{module}}\index{load\_all\_tiffs() (in module CalSciPy.io\_tools)@\spxentry{load\_all\_tiffs()}\spxextra{in module CalSciPy.io\_tools}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_all_tiffs}}
@@ -253,12 +386,12 @@ channels, planes, frames, height, width
 \pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_all\_tiffs}}}{\emph{\DUrole{n}{folder}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Loads all .tif\textquotesingle{}s within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16\sphinxhyphen{}bit exported
-by the majority (all?) of imaging software.
+Loads all .tif\textquotesingle{}s within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16\sphinxhyphen{}bit
+exported by the majority (all?) of imaging software.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of tiff stacks
+\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of tiff stacks
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -284,54 +417,15 @@ Loads the meta file for an associated binary video
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} The meta file (.txt ext) or a directory containing metafile
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} The meta file (.txt ext) or a directory containing metafile
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
-A tuple where (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, dtype)
+A tuple where (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html\#numpy.dtype}{\sphinxcode{\sphinxupquote{numpy.dtype}}})
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}{]}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_bruker\_tiffs() (in module CalSciPy.io\_tools)@\spxentry{load\_bruker\_tiffs()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_bruker_tiffs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tiffs}}}{\emph{\DUrole{n}{folder}}, \emph{\DUrole{n}{channels}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{planes}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Load a sequence of .tif files from a directory containing .tif files exported by Bruker\textquotesingle{}s Prairieview software to a
-numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
-separate numpy array.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame tiff files
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-All .tif files in the directory loaded to a tuple of numpy arrays (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, uint16)
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
 
 \end{description}\end{quote}
 
@@ -342,16 +436,16 @@ All .tif files in the directory loaded to a tuple of numpy arrays (frames, y\sph
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_mapped_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_mapped\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_mapped\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the default
-filenames (binary\_video, video\_meta.txt)
+Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the
+default filenames (binary\_video, video\_meta.txt)
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or a folder containing a binary video with the default filename
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or a folder containing a binary video with the default filename
 
 \item {} 
 \sphinxAtStartPar
@@ -380,7 +474,7 @@ memmap (numpy) array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_raw_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_raw\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_raw\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default
@@ -389,7 +483,7 @@ filenames (binary\_video, video\_meta.txt)
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or directory containing a file named binary video
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or directory containing a file named binary video
 
 \item {} 
 \sphinxAtStartPar
@@ -414,21 +508,14 @@ numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_single_tiff}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_single\_tiff}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{num\_frames}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_single\_tiff}}}{\emph{\DUrole{n}{path}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Load a single .tif as a numpy array
 \begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
+\sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filename
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{num\_frames}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of frames in .tif
-
-\end{itemize}
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filename
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -437,81 +524,6 @@ numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{pretty\_print\_image\_description() (in module CalSciPy.io\_tools)@\spxentry{pretty\_print\_image\_description()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.pretty_print_image_description}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{pretty\_print\_image\_description}}}{\emph{\DUrole{n}{channels}}, \emph{\DUrole{n}{planes}}, \emph{\DUrole{n}{frames}}, \emph{\DUrole{n}{height}}, \emph{\DUrole{n}{width}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Function prints the description of an imaging dataset as a table.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of channels
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of planes
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frames}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of frames
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} y\sphinxhyphen{}pixels
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{width}} \sphinxhyphen{}\sphinxhyphen{} x\sphinxhyphen{}pixels
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{repackage\_bruker\_tiffs() (in module CalSciPy.io\_tools)@\spxentry{repackage\_bruker\_tiffs()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.repackage_bruker_tiffs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tiffs}}}{\emph{\DUrole{n}{input\_folder}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Repackages a folder containing .tif files exported by Bruker\textquotesingle{}s Prairieview software into a sequence of \textless{}4 GB .tif
-stacks.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame .tif files exported by Bruker\textquotesingle{}s Prairieview
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} empty folder where .tif stacks will be saved
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{args}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} optional argument to indicate the repackaging of a specific channel and/or plane
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
 
 \end{description}\end{quote}
 
@@ -563,11 +575,11 @@ Save a numpy array to a single .tif file. Size must be \textless{}4 GB.
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.array}}) \sphinxhyphen{}\sphinxhyphen{} numpy array {[}frames, y pixels, x pixels{]}
+\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} numpy array {[}frames, y pixels, x pixels{]}
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} filename or absolute path
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} filename or absolute path
 
 \item {} 
 \sphinxAtStartPar
@@ -596,11 +608,11 @@ Save a numpy array to a sequence of .tif stacks
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.array}}) \sphinxhyphen{}\sphinxhyphen{} numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} folder to save the sequence of .tif stacks
+\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder to save the sequence of .tif stacks
 
 \item {} 
 \sphinxAtStartPar
@@ -633,11 +645,11 @@ Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath or filename
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath or filename
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{fps}} (\sphinxstyleliteralemphasis{\sphinxupquote{Union}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= 30}}) \sphinxhyphen{}\sphinxhyphen{} frame rate for saved video
+\sphinxstyleliteralstrong{\sphinxupquote{fps}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxstyleliteralemphasis{\sphinxupquote{int = 30}}) \sphinxhyphen{}\sphinxhyphen{} frame rate for saved video
 
 \end{itemize}
 
@@ -832,6 +844,7 @@ None
 \begin{sphinxtheindex}
 \let\bigletter\sphinxstyleindexlettergroup
 \bigletter{c}
+\item\relax\sphinxstyleindexentry{CalSciPy.bruker}\sphinxstyleindexpageref{CalSciPy.bruker:\detokenize{module-CalSciPy.bruker}}
 \item\relax\sphinxstyleindexentry{CalSciPy.io\_tools}\sphinxstyleindexpageref{CalSciPy.io_tools:\detokenize{module-CalSciPy.io_tools}}
 \end{sphinxtheindex}
 

@@ -14,6 +14,7 @@ Welcome to CalSciPy's documentation!
    Installation
    Sub-Packages
    CalSciPy.io_tools
+   CalSciPy.bruker
    Development Tools
 
 

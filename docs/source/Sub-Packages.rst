@@ -1,5 +1,6 @@
 Overview
 ========
+* :ref:`Bruker <Bruker Module>`
 * :ref:`Coloring <Coloring Module>`
 * :ref:`Event Processing <Event Processing Module>`
 * :ref:`Input/Output (I/O) <IO Module>`
@@ -8,6 +9,22 @@ Overview
 * :ref:`Reorganization <Reorganization Module>`
 * :ref:`Signal Processing <Signal Processing Module>`
 * :ref:`Static Visuals <Static Visuals Module>`
+
+
+.. _Bruker Module:
+
+Bruker
+------
+| Write me
+| Write me
+| Write me
+| Write me
+
+.. toctree::
+   :maxdepth: 4
+
+   CalSciPy.bruker
+
 
 .. _Coloring Module:
 
