@@ -10,9 +10,9 @@ import pathlib
 from prettytable import PrettyTable
 from collections.abc import Iterable
 
-from .io_tools import save_single_tiff
-from ._validation import validate_exists, validate_path
-from ._parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
+from src.CalSciPy.io_tools import save_single_tiff
+from src.CalSciPy._validation import validate_exists, validate_path
+from src.CalSciPy._parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
     find_num_unique_files_containing_tag
 
 
@@ -353,3 +353,8 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
         _pbar.close()
     return
 # REFACTOR
+
+
+if __name__ == "__main__":
+    repackage_bruker_tiffs("C:\\Users\\YUSTE\\Desktop\\TestData_4p_1c_256h_256w_6609f_26436t", "C:\\Users\\YUSTE\\Desktop\\TestOut", (0, 0))
+
