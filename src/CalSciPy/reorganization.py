@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import List
 import numpy as np
-from ._validation import validate_tensor
+from ._validation import validate_numpy_type, validate_tensor
 
 
 def generate_raster(spike_times: List[List[int]], total_frames: int):
@@ -9,7 +9,7 @@ def generate_raster(spike_times: List[List[int]], total_frames: int):
     Generate raster from lists of spike times
 
     :param spike_times: list of spike times
-    :type spike_times: List[List[int]]
+    :type spike_times: list[list[int]]
     :param total_frames: total number of frames
     :type total_frames: int
     :return: spike matrix
@@ -42,7 +42,7 @@ def merge_tensor(traces_as_tensor: np.ndarray) -> np.ndarray:
 
 
 @validate_numpy_type(required_dtype="object", pos=0)
-def merge_factorized_tensors(factorized_traces: np.ndarray(dtype=object), component: int = 0) -> np.ndarray:
+def merge_factorized_tensors(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:
     """
     Concatenate a neuron x chunk or trial array in which each element is a component x frame factorization of the
     original trace:
@@ -52,6 +52,7 @@ def merge_factorized_tensors(factorized_traces: np.ndarray(dtype=object), compon
     into several components
     :type factorized_traces: np.ndarray
     :param component: specific component to extract
+    :type component: int
     :return: traces of specific component in matrix form
     :rtype: np.ndarray
     """

@@ -354,8 +354,3 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
         _pbar.close()
     return
 # REFACTOR at some point
-
-
-if __name__ == "__main__":
-    repackage_bruker_tiffs("C:\\Users\\YUSTE\\Desktop\\TestData_4p_1c_256h_256w_6609f_26436t", "C:\\Users\\YUSTE\\Desktop\\TestOut", (0, 0))
-
