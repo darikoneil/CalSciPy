@@ -1,6 +1,6 @@
 from __future__ import annotations
 import os.path
-from typing import Callable, Tuple, Any
+from typing import Callable, Tuple, Any, List
 from functools import wraps
 from ._style import TerminalStyle
 from os import getcwd, path
@@ -29,7 +29,7 @@ def parameterize(decorator: Callable) -> Callable:
 
 
 @parameterize
-def convert_optionals(function: Callable, permitted: Tuple, required: Any, pos: int = 0) -> Callable:
+def convert_permitted_types_to_required(function: Callable, permitted: Tuple, required: Any, pos: int = 0) -> Callable:
     """
     Decorator that converts a tuple of permitted types to type supported by the decorated method
 
@@ -50,7 +50,7 @@ def convert_optionals(function: Callable, permitted: Tuple, required: Any, pos: 
         if not isinstance(allowed_input, required):
             raise TypeError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.YELLOW}"
                             f"inputs are permitted to be of the following types "
-                            f"{TerminalStyle.BLUE}{permitted}")
+                            f"{TerminalStyle.BLUE}{permitted} {TerminalStyle.RESET}")
         args = amend_args(args, allowed_input, pos)
         # noinspection PyArgumentList
         return function(*args, **kwargs)
@@ -152,3 +152,22 @@ def append_args(arguments: Tuple, value: Any) -> Tuple:
     arguments = list(arguments)
     arguments.append(value)
     return tuple(arguments)
+
+
+def check_split_strings(tag_: str, str_to_split: str) -> str:
+    return [_tag for _tag in str_to_split.split("_") if tag_ in _tag]
+# REFACTOR
+
+
+def find_num_unique_files_given_static_substring(tag: str, files: List[pathlib.Path]) -> int:
+    _hits = [check_split_strings(tag, str(_file)) for _file in files]
+    _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+    return list(_hits).__len__()
+# REFACTOR
+
+
+def find_num_unique_files_containing_tag(tag: str, files: List[pathlib.Path]) -> int:
+    _hits = [check_split_strings(tag, str(_file)) for _file in files]
+    _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+    return list(dict.fromkeys(_hits)).__len__()
+# REFACTOR

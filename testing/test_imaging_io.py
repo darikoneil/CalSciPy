@@ -1,11 +1,13 @@
 import os
 import pytest
 from shutil import rmtree
-from src.CalSciPy.io_tools import determine_bruker_folder_contents, load_all_tiffs, load_single_tiff, \
-    repackage_bruker_tiffs, save_raw_binary, load_raw_binary, save_single_tiff, save_tiff_stack, \
-    save_video, load_bruker_tiffs, load_binary_meta
+from src.CalSciPy.io_tools import load_all_tiffs, load_single_tiff, save_raw_binary, load_raw_binary, \
+    save_single_tiff, save_tiff_stack, save_video, load_binary_meta
+from src.CalSciPy.bruker import determine_bruker_folder_contents, repackage_bruker_tiffs, load_bruker_tiffs
 import numpy as np
 import pathlib
+# noinspection PyProtectedMember
+from src.CalSciPy._style import TerminalStyle
 
 
 FIXTURE_DIR = "".join([os.path.abspath(os.path.join(os.getcwd(), os.pardir)), "\\testing_data"])
@@ -32,8 +34,12 @@ def test_determine_bruker_folder_contents_passes(datafiles):
         _contents = determine_bruker_folder_contents(_input_folder)
 
         for _test in enumerate(["Channel", "Plane", "Frame", "Height", "Width"]):
-            assert _contents[_test[0]] == _descriptions[_test[0]], f"Failed On {pathlib.Path(_dir).name}: " \
-                                                           f"{_test[1]} Detection"
+            assert _contents[_test[0]] == _descriptions[_test[0]], f"{TerminalStyle.GREEN}Description Mismatch: " \
+                                                                   f"{TerminalStyle.YELLOW} failed on dataset " \
+                                                                   f"{TerminalStyle.BLUE}{pathlib.Path(_dir).name}: " \
+                                                                   f"{TerminalStyle.ORANGE}{_test[1]}" \
+                                                                   f"{TerminalStyle.YELLOW} detection " \
+                                                                   f"{TerminalStyle.RESET}"
         return
 
     rmtree(datafiles)
@@ -66,15 +72,23 @@ def test_single_tiff_load_and_save(datafiles, tmp_path):
         # GET COMPARISON DESCRIPTIONS
         _descriptions = read_descriptions(_descriptions)
         # TEST
-        _image = load_single_tiff(_input_image, 1)
-        np.testing.assert_array_equal(_image.shape, _descriptions[3:5], err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name} "
-                                                                                f"on first loading")
+        _image = load_single_tiff(_input_image)
+        np.testing.assert_array_equal(_image.shape, [1, *_descriptions[3:5]], err_msg=f"{TerminalStyle.GREEN}"
+                                                                                      f"Image Mismatch: "
+                                                                                      f"{TerminalStyle.YELLOW}"
+                                                                                      f"failed on dataset " 
+                                                                                      f"{TerminalStyle.BLUE}"
+                                                                                      f"{pathlib.Path(_dir).name}"
+                                                                                      f"{TerminalStyle.YELLOW}"
+                                                                                      f" during first loading"
+                                                                                      f"{TerminalStyle.RESET}")
         save_single_tiff(_image, _output_file)
-        _image2 = load_single_tiff(_output_file, 1)
-        np.testing.assert_array_equal(_image, _image2, err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name} "
-                                                                                f"on second loading")
+        _image2 = load_single_tiff(_output_file)
+        np.testing.assert_array_equal(_image, _image2, err_msg=f"{TerminalStyle.GREEN}Image Mismatch: "
+                                                               f"{TerminalStyle.YELLOW}failed on dataset " 
+                                                               f"{TerminalStyle.BLUE}{pathlib.Path(_dir).name}" 
+                                                               f"{TerminalStyle.YELLOW} during second loading"
+                                                               f"{TerminalStyle.RESET}")
 
     rmtree(tmp_path)
 
@@ -115,14 +129,23 @@ def test_binaries_load_and_save(datafiles, tmp_path):
         # GET COMPARISON
         _descriptions = read_descriptions(_descriptions)
         # TEST
-        _images1 = load_single_tiff(_input_image, _descriptions[2])
-        np.testing.assert_array_equal(_images1.shape, _descriptions[2:5], err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name} "
-                                                                                f"on first loading")
+        _images1 = load_single_tiff(_input_image)
+        np.testing.assert_array_equal(_images1.shape, _descriptions[2:5], err_msg=f"{TerminalStyle.GREEN} "
+                                                                                  f"Image Mismatch: "
+                                                                                  f"{TerminalStyle.YELLOW}"
+                                                                                  f"failed on dataset "
+                                                                                  f"{TerminalStyle.BLUE}"
+                                                                                  f"{pathlib.Path(_dir).name} "
+                                                                                  f"{TerminalStyle.YELLOW}"
+                                                                                  f"during first loading"
+                                                                                  f"{TerminalStyle.RESET}")
         save_raw_binary(_images1, _output_folder)
         _images2 = load_raw_binary(_output_folder)
-        np.testing.assert_array_equal(_images1, _images2, err_msg=f"Failed On {pathlib.Path(_dir).name} "
-                                                                                f"on second loading")
+        np.testing.assert_array_equal(_images1, _images2, err_msg=f"{TerminalStyle.GREEN}Image Mismatch: "
+                                                                  f"{TerminalStyle.YELLOW}failed on dataset "
+                                                                  f"{TerminalStyle.BLUE}{pathlib.Path(_dir).name} "
+                                                                  f"{TerminalStyle.YELLOW} during second loading "
+                                                                  f"{TerminalStyle.RESET}")
 
     rmtree(tmp_path)
 
@@ -156,14 +179,27 @@ def test_tiff_stack_load_and_save(datafiles, tmp_path):
         # GET COMPARISON DESCRIPTIONS
         _descriptions = read_descriptions(_descriptions)
         # TEST
-        _image1 = load_single_tiff(_input_image, _descriptions[2])
-        np.testing.assert_array_equal(_image1.shape, _descriptions[2:5], err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name} "
-                                                                                f"on first loading")
+        _image1 = load_single_tiff(_input_image)
+        np.testing.assert_array_equal(_image1.shape, _descriptions[2:5], err_msg=f"{TerminalStyle.GREEN}"
+                                                                                 f"Image Mismatch: "
+                                                                                 f"{TerminalStyle.YELLOW}"
+                                                                                 f"failed on dataset "
+                                                                                 f"{TerminalStyle.BLUE}"
+                                                                                 f"{pathlib.Path(_dir).name} "
+                                                                                 f"{TerminalStyle.YELLOW}"
+                                                                                 f"during first loading "
+                                                                                 f"{TerminalStyle.RESET}")
         save_tiff_stack(_image1, _output_folder)
         _image2 = load_all_tiffs(_output_folder)
-        np.testing.assert_array_equal(_image1, _image2, err_msg=f"Failed On {pathlib.Path(_dir).name} "
-                                                                                f"on first loading")
+        np.testing.assert_array_equal(_image1, _image2, err_msg=f"{TerminalStyle.GREEN}"
+                                                                f"Image Mismatch: "
+                                                                f"{TerminalStyle.YELLOW}"
+                                                                f"failed on dataset "
+                                                                f"{TerminalStyle.BLUE}"
+                                                                f"{pathlib.Path(_dir).name} "
+                                                                f"{TerminalStyle.YELLOW}"
+                                                                f"during second loading "
+                                                                f"{TerminalStyle.RESET}")
 
 
 def test_tiff_stacks_fails():
@@ -203,7 +239,11 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
         # TEST
         _descriptions = read_descriptions(_descriptions)
         _contents = load_all_tiffs(_output_folder)
-        assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Failed On {pathlib.Path(_input_folder).name}"
+        assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"{TerminalStyle.GREEN}Image Mismatch: " \
+                                                                       f"{TerminalStyle.YELLOW}failed on dataset" \
+                                                                       f"{TerminalStyle.BLUE} " \
+                                                                       f"{pathlib.Path(_input_folder).name} " \
+                                                                       f"{TerminalStyle.RESET}"
 
 
 def test_repackage_bruker_tiffs_fails():
@@ -225,11 +265,14 @@ def test_load_bruker_tiffs(datafiles):
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
         # LOAD COMPARISON
         _descriptions = read_descriptions(_descriptions)
-        _image1 = load_single_tiff(_input_image, _descriptions[2])
+        _image1 = load_single_tiff(_input_image)
         # TEST
         _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
-        np.testing.assert_array_equal(_image1, _image2, err_msg=f"Failed On "
-                                                                                f"{pathlib.Path(_dir).name}")
+        np.testing.assert_array_equal(_image1, _image2, err_msg=f"{TerminalStyle.GREEN}Image Mismatch: "
+                                                                f"{TerminalStyle.YELLOW}failed on dataset"
+                                                                f"{TerminalStyle.BLUE} "
+                                                                f"{pathlib.Path(_input_folder).name} "
+                                                                f"{TerminalStyle.RESET}")
 
 
 def test_load_bruker_tiff_fails():
@@ -256,7 +299,7 @@ def test_video_load_and_save(datafiles, tmp_path):
         _descriptions = read_descriptions(_descriptions)
         # MAKE OUTPUT FOLDER
         os.mkdir(_output_folder)
-        _image = load_single_tiff(_input_file, _descriptions[2])
+        _image = load_single_tiff(_input_file)
         save_video(_image, _output_folder)
     rmtree(tmp_path)
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.io module &mdash; CalSciPy 0.0.6 documentation</title>
+  <title>CalSciPy.io module &mdash; CalSciPy 0.0.7 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Development Tools" href="Development%20Tools.html" />
-    <link rel="prev" title="Overview" href="Sub-Packages.html" /> 
+    <link rel="prev" title="CalSciPy.bruker module" href="CalSciPy.bruker.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,21 +45,18 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.io module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.determine_bruker_folder_contents"><code class="docutils literal notranslate"><span class="pre">determine_bruker_folder_contents()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_all_tiffs"><code class="docutils literal notranslate"><span class="pre">load_all_tiffs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_binary_meta"><code class="docutils literal notranslate"><span class="pre">load_binary_meta()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tiffs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_mapped_binary"><code class="docutils literal notranslate"><span class="pre">load_mapped_binary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_raw_binary"><code class="docutils literal notranslate"><span class="pre">load_raw_binary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_single_tiff"><code class="docutils literal notranslate"><span class="pre">load_single_tiff()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.pretty_print_image_description"><code class="docutils literal notranslate"><span class="pre">pretty_print_image_description()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.repackage_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tiffs()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_raw_binary"><code class="docutils literal notranslate"><span class="pre">save_raw_binary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_single_tiff"><code class="docutils literal notranslate"><span class="pre">save_single_tiff()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_tiff_stack"><code class="docutils literal notranslate"><span class="pre">save_tiff_stack()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_video"><code class="docutils literal notranslate"><span class="pre">save_video()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Development%20Tools.html">Development Tools</a></li>
 </ul>
 
@@ -91,31 +88,13 @@
   <section id="module-CalSciPy.io_tools">
 <span id="calscipy-io-module"></span><h1>CalSciPy.io module<a class="headerlink" href="#module-CalSciPy.io_tools" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.io_tools.determine_bruker_folder_contents">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">determine_bruker_folder_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#determine_bruker_folder_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.determine_bruker_folder_contents" title="Permalink to this definition"></a></dt>
-<dd><p>This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker's Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- folder containing bruker imaging data</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>channels, planes, frames, height, width</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="CalSciPy.io_tools.load_all_tiffs">
 <span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_all_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_all_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_all_tiffs" title="Permalink to this definition"></a></dt>
-<dd><p>Loads all .tif's within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit exported
-by the majority (all?) of imaging software.</p>
+<dd><p>Loads all .tif's within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit
+exported by the majority (all?) of imaging software.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- folder containing a sequence of tiff stacks</p>
+<dd class="field-odd"><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder containing a sequence of tiff stacks</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>a numpy array containing the images (frames, y-pixels, x-pixels)</p>
@@ -132,10 +111,10 @@ by the majority (all?) of imaging software.</p>
 <dd><p>Loads the meta file for an associated binary video</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>path</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- The meta file (.txt ext) or a directory containing metafile</p>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- The meta file (.txt ext) or a directory containing metafile</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A tuple where (frames, y-pixels, x-pixels, dtype)</p>
+<dd class="field-even"><p>A tuple where (frames, y-pixels, x-pixels, <a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
@@ -144,37 +123,14 @@ by the majority (all?) of imaging software.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.io_tools.load_bruker_tiffs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_bruker_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_bruker_tiffs" title="Permalink to this definition"></a></dt>
-<dd><p>Load a sequence of .tif files from a directory containing .tif files exported by Bruker's Prairieview software to a
-numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
-separate numpy array.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- folder containing a sequence of single frame tiff files</p></li>
-<li><p><strong>channels</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) -- specific channel to load from dataset (zero-indexed)</p></li>
-<li><p><strong>planes</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) -- specific plane to load from dataset (zero-indexed)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>All .tif files in the directory loaded to a tuple of numpy arrays (frames, y-pixels, x-pixels, uint16)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="CalSciPy.io_tools.load_mapped_binary">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_mapped_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_mapped_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_mapped_binary" title="Permalink to this definition"></a></dt>
-<dd><p>Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the default
-filenames (binary_video, video_meta.txt)</p>
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_mapped_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_mapped_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_mapped_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the
+default filenames (binary_video, video_meta.txt)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- absolute filepath for binary video or a folder containing a binary video with the default filename</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath for binary video or a folder containing a binary video with the default filename</p></li>
 <li><p><strong>meta_filename</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>] </em><em>= None</em>) -- absolute path to meta file</p></li>
 <li><p><strong>mode</strong> -- mode used in loading numpy.memmap (str, default = &quot;r&quot;)</p></li>
 </ul>
@@ -190,13 +146,13 @@ filenames (binary_video, video_meta.txt)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="CalSciPy.io_tools.load_raw_binary">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_raw_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_raw_binary" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_raw_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_raw_binary" title="Permalink to this definition"></a></dt>
 <dd><p>Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default
 filenames (binary_video, video_meta.txt)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- absolute filepath for binary video or directory containing a file named binary video</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath for binary video or directory containing a file named binary video</p></li>
 <li><p><strong>meta_filename</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>] </em><em>= None</em>) -- absolute path to meta file</p></li>
 </ul>
 </dd>
@@ -211,59 +167,17 @@ filenames (binary_video, video_meta.txt)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="CalSciPy.io_tools.load_single_tiff">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_single_tiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_single_tiff" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_single_tiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_single_tiff" title="Permalink to this definition"></a></dt>
 <dd><p>Load a single .tif as a numpy array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- absolute filename</p></li>
-<li><p><strong>num_frames</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of frames in .tif</p></li>
-</ul>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filename</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>numpy array (frames, y-pixels, x-pixels)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.io_tools.pretty_print_image_description">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">pretty_print_image_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#pretty_print_image_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.pretty_print_image_description" title="Permalink to this definition"></a></dt>
-<dd><p>Function prints the description of an imaging dataset as a table.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of channels</p></li>
-<li><p><strong>planes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of planes</p></li>
-<li><p><strong>frames</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of frames</p></li>
-<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- y-pixels</p></li>
-<li><p><strong>width</strong> -- x-pixels</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.io_tools.repackage_bruker_tiffs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">repackage_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#repackage_bruker_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.repackage_bruker_tiffs" title="Permalink to this definition"></a></dt>
-<dd><p>Repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence of &lt;4 GB .tif
-stacks.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- folder containing a sequence of single frame .tif files exported by Bruker's Prairieview</p></li>
-<li><p><strong>output_folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- empty folder where .tif stacks will be saved</p></li>
-<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- optional argument to indicate the repackaging of a specific channel and/or plane</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -293,8 +207,8 @@ stacks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> (<em>numpy.array</em>) -- numpy array [frames, y pixels, x pixels]</p></li>
-<li><p><strong>path</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- filename or absolute path</p></li>
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- numpy array [frames, y pixels, x pixels]</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- filename or absolute path</p></li>
 <li><p><strong>type</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><em>numpy.dtype</em></a><em>] </em><em>= numpy.uint16</em>) -- type for saving</p></li>
 </ul>
 </dd>
@@ -311,8 +225,8 @@ stacks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> (<em>numpy.array</em>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
-<li><p><strong>output_folder</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- folder to save the sequence of .tif stacks</p></li>
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
+<li><p><strong>output_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder to save the sequence of .tif stacks</p></li>
 <li><p><strong>type</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><em>numpy.dtype</em></a><em>] </em><em>= numpy.uint16</em>) -- type for saving</p></li>
 </ul>
 </dd>
@@ -330,8 +244,8 @@ stacks.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>images</strong> (<em>numpy.array</em>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
-<li><p><strong>path</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a><em>]</em>) -- absolute filepath or filename</p></li>
-<li><p><strong>fps</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>] </em><em>= 30</em>) -- frame rate for saved video</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath or filename</p></li>
+<li><p><strong>fps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><em>int = 30</em>) -- frame rate for saved video</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -346,7 +260,7 @@ stacks.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Sub-Packages.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CalSciPy.bruker.html" class="btn btn-neutral float-left" title="CalSciPy.bruker module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Development%20Tools.html" class="btn btn-neutral float-right" title="Development Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
