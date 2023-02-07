@@ -68,7 +68,7 @@ def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[
 
     # noinspection PyTypeChecker
     return (channels, find_planes(), find_frames(), *find_dimensions())
-# REFACTOR the function string parsing calls for simplicity\extensibility
+# REFACTOR at some point the function string parsing calls for simplicity\extensibility
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=pathlib.Path, pos=0)
@@ -173,7 +173,7 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
         images.append(load_images())
     images = filter(lambda image: image is not None, images)
     return tuple(images)
-# REFACTOR
+# REFACTOR at some point
 
 
 def pretty_print_image_description(channels, planes, frames, height, width) -> None:
@@ -353,7 +353,7 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
             c_idx += 1
         _pbar.close()
     return
-# REFACTOR
+# REFACTOR at some point
 
 
 if __name__ == "__main__":

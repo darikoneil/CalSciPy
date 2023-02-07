@@ -212,7 +212,7 @@ def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
         c_idx += 1
 
     return print("Finished Saving Tiffs")
-# REFACTOR CHUNKING
+# REFACTOR at some point the CHUNKING
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
