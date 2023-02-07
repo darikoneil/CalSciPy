@@ -189,7 +189,7 @@ def pretty_print_image_description(channels, planes, frames, height, width) -> N
     :param height: y-pixels
     :type height: int
     :param width: x-pixels
-    :type width:
+    :type width: int
     :rtype: None
     """
     _table = PrettyTable()
