@@ -1,3 +1,4 @@
+# noinspection DuplicatedCode
 from __future__ import annotations
 import itertools
 import numpy as np
@@ -10,9 +11,9 @@ import pathlib
 from prettytable import PrettyTable
 from collections.abc import Iterable
 
-from src.CalSciPy.io_tools import save_single_tiff
-from src.CalSciPy._validation import validate_exists, validate_path
-from src.CalSciPy._parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
+from .io_tools import save_single_tiff
+from ._validation import validate_exists, validate_path
+from ._parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
     find_num_unique_files_containing_tag
 
 

@@ -79,6 +79,29 @@ def validate_filename(function: Callable, pos: int = 0) -> Callable:
 
 
 @parameterize
+def validate_numpy_type(function: Callable, required_dtype: str, pos: int = 0) -> Callable:
+    """
+    Decorator for validating numpy types
+
+    :param function: function to be decorated
+    :type function: Callable
+    :param required_dtype: required numpy type
+    :type required_dtype: str
+    :param pos: index of the argument to be validated
+    :type pos: int
+    """
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        if args[pos].dtype != required_dtype:
+            raise TypeError(f"{TerminalStyle.GREEN}Input {pos} Invalid Type: "
+                        f"{TerminalStyle.YELLOW}required type is "
+                        f"{TerminalStyle.BLUE}{required_dtype}{TerminalStyle.RESET}")
+        # noinspection PyArgumentList
+        return function(*args, **kwargs)
+    return decorator
+
+
+@parameterize
 def validate_path(function: Callable, pos: int = 0) -> Callable:
     """
     Decorator for validating paths
