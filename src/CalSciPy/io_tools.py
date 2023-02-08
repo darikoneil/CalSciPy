@@ -9,8 +9,8 @@ import math
 import pathlib
 from imageio import mimwrite
 
-from ._validation import validate_exists, validate_extension, validate_filename, validate_path
-from ._parsing import convert_permitted_types_to_required, if_dir_append_filename, if_dir_join_filename, \
+from .validation import validate_exists, validate_extension, validate_filename, validate_path
+from .parsing import convert_permitted_types_to_required, if_dir_append_filename, if_dir_join_filename, \
     require_full_path, find_num_unique_files_given_static_substring, find_num_unique_files_containing_tag
 
 

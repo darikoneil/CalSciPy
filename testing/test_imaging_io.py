@@ -7,7 +7,7 @@ from src.CalSciPy.bruker import determine_bruker_folder_contents, repackage_bruk
 import numpy as np
 import pathlib
 # noinspection PyProtectedMember
-from src.CalSciPy._style import TerminalStyle
+from src.CalSciPy.style import TerminalStyle
 
 
 FIXTURE_DIR = "".join([os.path.abspath(os.path.join(os.getcwd(), os.pardir)), "\\testing_data"])
