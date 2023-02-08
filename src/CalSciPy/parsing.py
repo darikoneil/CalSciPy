@@ -2,7 +2,7 @@ from __future__ import annotations
 import os.path
 from typing import Callable, Tuple, Any, List
 from functools import wraps
-from ._style import TerminalStyle
+from .style import TerminalStyle
 from os import getcwd, path
 from os.path import isdir, isabs
 

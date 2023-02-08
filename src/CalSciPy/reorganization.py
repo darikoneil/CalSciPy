@@ -1,29 +1,42 @@
 from __future__ import annotations
 from typing import List
 import numpy as np
-from ._validation import validate_numpy_type, validate_tensor
+from .validation import validate_numpy_type, validate_tensor
 
 
-def generate_raster(spike_times: List[List[int]], total_frames: int):
+def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] = None):
     """
-    Generate raster from lists of spike times
+    Generate raster from lists of frames containing an event (e.g., spikes)
 
-    :param spike_times: list of spike times
-    :type spike_times: list[list[int]]
+    :param event_frames: list of event frames (e.g., spike frames)
+    :type event_frames: list[list[int]]
     :param total_frames: total number of frames
-    :type total_frames: int
-    :return: spike matrix
+    :type total_frames: Optional[int] = None
+    :return: event matrix of neurons x total frames
     :rtype: np.ndarray
     """
-    _neurons = spike_times.shape[0]
-    spike_matrix = np.full((_num_neurons, total_frames), 0, dtype=np.int32)
+    # if total frames not provided we estimate by finding the very last event
+    if not total_frames:
+        total_frames = np.max([event for events in event_frames for event in events])+1  # + 1 to account for 0-index
+    _neurons = len(event_frames)
+    event_matrix = np.full((_neurons, total_frames), 0, dtype=np.int32)
 
     # Merge Here - could be done more efficiently but not priority
     for _neuron in range(_neurons):
-        for _spike in spike_times[_neuron]:
-            spike_matrix[_neuron, _spike] = 1
-    return spike_matrix
-# TODO TEST-ME
+        for _event in event_frames[_neuron]:
+            event_matrix[_neuron, _event] = 1
+    return event_matrix
+
+
+def generate_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray:
+    """
+
+
+    :param traces_as_matrix:
+    :param chunk_size:
+    :return:
+    """
+    return
 
 
 @validate_tensor(pos=0)
@@ -32,13 +45,12 @@ def merge_tensor(traces_as_tensor: np.ndarray) -> np.ndarray:
     Concatenate multiple trials or tiffs into single matrix:
 
 
-    :param traces_as_tensor: neurons x frames x chunk (trial, tiff, etc)
+    :param traces_as_tensor: chunk (trial, tiff, etc) x neurons x frames
     :type traces_as_tensor: np.ndarray
     :return: traces in matrix form
     :rtype: np.ndarray
     """
     return np.hstack(traces_as_tensor)
-# TODO TEST-ME
 
 
 @validate_numpy_type(required_dtype="object", pos=0)

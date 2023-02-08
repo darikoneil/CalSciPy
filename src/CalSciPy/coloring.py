@@ -1,7 +1,6 @@
 import os
 from typing import Tuple, Optional, List, Union
 import matplotlib
-matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np

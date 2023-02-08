@@ -50,6 +50,7 @@ html_theme = 'sphinx_rtd_theme'
 # IMPORTS
 
 module_names = (
+    "bruker",
     "coloring",
     "event_processing",
     "image_processing",

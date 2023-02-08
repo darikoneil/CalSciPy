@@ -3,8 +3,8 @@ import pathlib
 from functools import wraps
 import string
 from typing import Callable
-from ._parsing import parameterize, amend_args
-from ._style import TerminalStyle
+from .parsing import parameterize, amend_args
+from .style import TerminalStyle
 from os import path
 from os.path import exists
 
@@ -141,9 +141,8 @@ def validate_tensor(function: Callable, pos: int = 0) -> Callable:
     """
     @wraps(function)
     def decorator(*args, **kwargs):
-        var_input = str(args[pos])
-
-        if len(var_input).shape != 3:
+        var_input = args[pos]
+        if len(var_input.shape) != 3:
             raise AssertionError(f"{TerminalStyle.GREEN} Input {pos}: {TerminalStyle.YELLOW}requires tensor format "
                                  f"{TerminalStyle.RESET}")
         # noinspection PyArgumentList
