@@ -26,7 +26,17 @@ def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] =
         for _event in event_frames[_neuron]:
             event_matrix[_neuron, _event] = 1
     return event_matrix
-# TODO TEST-ME
+
+
+def generate_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray:
+    """
+
+
+    :param traces_as_matrix:
+    :param chunk_size:
+    :return:
+    """
+    return
 
 
 @validate_tensor(pos=0)
@@ -41,7 +51,6 @@ def merge_tensor(traces_as_tensor: np.ndarray) -> np.ndarray:
     :rtype: np.ndarray
     """
     return np.hstack(traces_as_tensor)
-# TODO TEST-ME
 
 
 @validate_numpy_type(required_dtype="object", pos=0)
