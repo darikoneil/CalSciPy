@@ -99,7 +99,10 @@ Reorganization
 
 Reorganization Methods
 **********************
-| Import me
+.. toctree::
+   :maxdepth: 4
+
+   CalSciPy.reorganization
 
 .. _Signal Processing Module:
 

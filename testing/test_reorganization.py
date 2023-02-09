@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import os
 
-from src.CalSciPy.style import TerminalStyle
+from PPVD.style import TerminalStyle
 from src.CalSciPy.reorganization import generate_raster, generate_tensor, merge_factorized_matrices, merge_tensor
 
 
