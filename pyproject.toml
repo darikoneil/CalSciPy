@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.1.1"
+version = "0.1.2"
 description = "A collection"
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -28,6 +28,25 @@ dependencies = [
     "pillow",
     "PPVD",
     "prettytable",
+    "scipy",
+    "skimage",
     "tifffile",
     "tqdm"
+]
+
+[project.optional-dependencies]
+
+development = [
+    "build",
+    "pytest",
+    "pytest-datafiles",
+    "pytest-progress",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinx_autodoc_typehints",
+    "twine"
+]
+
+gpu = [
+    "cupy"
 ]
