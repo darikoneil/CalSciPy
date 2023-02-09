@@ -69,6 +69,8 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
             _remainder = _remainder_new.copy()
 
     return images
+# REFACTOR + OPTIMIZE, MAKE OUTPUT CUPY.NDARRAY
+# TODO UNIT TEST
 
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
@@ -95,6 +97,7 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
         _frames -= artifact_length
         _crop_idx = _num_frames % stack_sizes
         return images[artifact_length + _crop_idx:, :, :]
+# TODO UNIT TEST
 
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
@@ -115,6 +118,7 @@ def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))
     :rtype: cupy.ndarray
     """
     return cupyx.scipy.ndimage.median_filter(cupy.asarray(images), footprint=mask)
+# TODO UNIT TEST
 
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
@@ -135,6 +139,7 @@ def filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> 
     :rtype: np.ndarray
     """
     return scipy.ndimage.median_filter(images, mask=mask)
+# TODO UNIT TEST
 
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
@@ -157,3 +162,4 @@ def grouped_z_project(images: np.ndarray, bin_size: Union[Tuple[int, int, int], 
     return skimage.measure.block_reduce(images, block_size=bin_size,
                                                      func=function).astype(images.dtype)
     # cast back down from float64
+# TODO UNIT TEST
