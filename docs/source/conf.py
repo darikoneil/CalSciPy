@@ -17,7 +17,7 @@ project = 'CalSciPy'
 # noinspection PyShadowingBuiltins
 copyright = "2023, Darik A. O'Neil"
 author = "Darik A. O'Neil"
-release = '0.1.0'
+release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -37,8 +37,12 @@ exclude_patterns = []
 language = '[en]'
 
 intersphinx_mapping = {
+    'cupy': ('https://docs.cupy.dev/en/stable/', None),
     'python': ('https://docs.python.org/3', None),
     'numpy': ('https://numpy.org/doc/1.24/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/', None),
+    'skimage': ('https://scikit-image.org/docs/stable/', None)
+
 }
 
 # -- Options for HTML output -------------------------------------------------

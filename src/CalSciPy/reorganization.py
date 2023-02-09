@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Optional
 import numpy as np
-from .validation import validate_numpy_type, validate_tensor
+from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_numpy_type, validate_tensor
 
 
 def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] = None):
@@ -28,15 +28,18 @@ def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] =
     return event_matrix
 
 
+@validate_matrix(pos=0)
+@validate_evenly_divisible(numerator=0, denominator=1, axis=1)
 def generate_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray:
     """
-
-
-    :param traces_as_matrix:
-    :param chunk_size:
+    Generates a tensor given chunk / trial indices
+    :param traces_as_matrix: traces in matrix form (neurons x frames)
+    :type traces_as_matrix: np.ndarray
+    :param chunk_size: size of each chunk
+    :type chunk_size: int
     :return:
     """
-    return
+    return np.stack(np.hsplit(traces_as_matrix, traces_as_matrix.shape[1]//chunk_size), axis=0)
 
 
 @validate_tensor(pos=0)
@@ -54,7 +57,7 @@ def merge_tensor(traces_as_tensor: np.ndarray) -> np.ndarray:
 
 
 @validate_numpy_type(required_dtype="object", pos=0)
-def merge_factorized_tensors(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:
+def merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:
     """
     Concatenate a neuron x chunk or trial array in which each element is a component x frame factorization of the
     original trace:
@@ -74,7 +77,6 @@ def merge_factorized_tensors(factorized_traces: np.ndarray, component: int = 0) 
 
     # Merge Here - could be done more efficiently but not priority
     for _neuron in range(_neurons):
-        traces_as_matrix[_neuron, :] = np.concatenate(factorized_traces[_neuron], axis=1)[_component, :]
+        traces_as_matrix[_neuron, :] = np.concatenate(factorized_traces[_neuron], axis=1)[component, :]
 
     return traces_as_matrix
-# TODO TEST-ME

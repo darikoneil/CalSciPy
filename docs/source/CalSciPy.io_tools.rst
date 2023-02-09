@@ -1,5 +1,5 @@
-CalSciPy.io module
-==================
+CalSciPy.io\_tools module
+=========================
 
 .. automodule:: CalSciPy.io_tools
    :members:
