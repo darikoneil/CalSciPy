@@ -279,7 +279,7 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
 
         if _channels > 1 and _planes > 1 and len(args) >= 2:
             _base_tag = "00000"
-            _tag = ["".join(["Ch", str(args[0])+1]), "".join([_base_tag, str(args[1]+1), ".ome"])]
+            _tag = ["".join(["Ch", str(args[0]+1)]), "".join([_base_tag, str(args[1]+1), ".ome"])]
             find_files(_tag)
         elif _channels == 1 and _planes > 1 and len(args) == 1:
             _base_tag = "00000"
