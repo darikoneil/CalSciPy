@@ -46,7 +46,7 @@ rfc3986==2.0.0
 rich==13.2.0
 scipy
 seaborn
-skimage
+scikit-image
 six==1.16.0
 snowballstemmer==2.2.0
 Sphinx==5.3.0
