@@ -18,7 +18,7 @@ def bin_events(matrix: np.ndarray, bin_length: int) -> np.ndarray:
     """
     _features, _frames = matrix.shape
     _bins = pd.interval_range(0, _frames, freq=bin_length)
-    binned_matrix = np.zeros_like(matrix, dtype=np.float64)
+    binned_matrix = np.empty_like(matrix, dtype=np.float64)
     for _feature, _bin in product(_features, _bins):
         binned_matrix[_feature, _bin] = \
             np.sum(matrix[_feature, int(_bins.values[_bin].left):int(_bins.values[_bin].right)])
@@ -39,12 +39,14 @@ def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: flo
     :return: firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event
     :rtype: np.ndarray
     """
-    if not in_place:
-        firing_matrix = spike_probability_matrix.copy() * frame_rate
-        return firing_matrix
+    if in_place:
+        firing_matrix = spike_probability_matrix
+    else:
+        firing_matrix = spike_probability_matrix.copy()
 
-    spike_probability_matrix *= frame_rate
-    return spike_probability_matrix
+    firing_matrix *= frame_rate
+
+    return firing_matrix
 # TODO UNIT TEST
 
 
@@ -95,12 +97,12 @@ def normalize_firing_rates(firing_matrix: np.ndarray, in_place: bool = False) ->
     :return: normalized firing rate matrix of n neurons x m samples
     :rtype: np.ndarray
     """
-    if not in_place:
-        normalized_matrix = firing_matrix / np.max(firing_matrix, axis=0)
-        normalized_matrix[normalized_matrix <= 0] = 0
-        return normalized_matrix
+    if in_place:
+        normalized_matrix = firing_matrix
+    else:
+        normalized_matrix = firing_matrix.copy()
 
-    firing_matrix /= np.max(firing_matrix, axis=0)
-    firing_matrix[firing_matrix <= 0] = 0
-    return firing_matrix
+    normalized_matrix /= np.max(normalized_matrix, axis=0)
+    normalized_matrix[normalized_matrix <= 0] = 0
+    return normalized_matrix
 # TODO UNIT TEST

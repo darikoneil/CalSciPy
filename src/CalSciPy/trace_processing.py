@@ -1,11 +1,63 @@
 from __future__ import annotations
 import numpy as np
 from numba import jit
+from scipy.signal import firwin, filtfilt
 
 
-def calculate_dfof(traces: np.ndarray) -> np.ndarray:
-    return
-# TODO PASTE ME, DOCUMENT, UNIT TEST
+def calculate_dfof(traces: np.ndarray, frame_rate: float = 30, in_place: bool = False,
+                   offset: float = 0.0, raw: Optional[np.ndarray] = None) \
+        -> np.ndarray:
+    """
+    Calculates Δf/f0 (fold fluorescence over baseline). Baseline is defined as the 5th percentile of the signal
+    after a 1Hz low-pass filter using a Hamming window.
+
+    :param traces: matrix of traces in the form of neurons x frames
+    :type traces: numpy.ndarray
+    :param frame_rate: frame rate of dataset
+    :type frame_rate: float = 30
+    :param in_place: boolean indicating whether to perform calculation in-place
+    :type in_place: bool = False
+    :param offset: offset added to baseline; useful if traces are non-negative
+    :type offset: float
+    :param raw: raw dataset used to calculate baseline; useful if traces have been factorized
+    :type raw: numpy.ndarray or None
+    :return: Δf/f0 matrix of n neurons x m samples
+    :rtype: numpy.ndarray
+    """
+    if in_place:
+        dfof = traces
+    else:
+        dfof = traces.copy()
+
+    taps = 30 # More taps mean higher frequency resolution, which in turn means narrower filters and/or steeper
+    # roll‐offs.
+    filter_frequency = 1 # (Hz)
+    baseline_percentile = 5
+    neurons, samples = dfof.shape
+
+    # if for some reason sample is less than 90 frames we'll reduce the number of taps
+    # we'll also make sure it's odd so we always have type I linear phase
+    taps = min(taps, int(max(taps, samples/3)))
+    if taps % 2 == 0:
+        taps -= 1
+
+    # determine padding length
+    padding = 3 * taps
+
+    # hamming window
+    filter_window = firwin(taps, cutoff=filter_frequency, fs=frame_rate)
+
+    for neuron in range(neurons):
+        # filter
+        filtered_trace = filtfilt(filter_window, [1.0], dfof[neuron, :], axis=0, padlen=padding)
+        # calculate baseline
+        baseline = np.percentile(filtered_trace, baseline_percentile, axis=0, keepdims=True)
+        # calculate dfof
+        dfof[neuron, :] = (dfof[neuron, :] - baseline) / baseline
+    # TODO probably can do without loop, check scipy
+
+    return dfof
+# TODO DOCUMENT, UNIT TEST, IMPLEMENT RAW
 
 
 @jit
@@ -43,17 +95,15 @@ def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray
     [_neurons, _samples] = traces.shape
     _samples_vector = np.arange(_samples)
 
-    if not in_place:
+    if in_place:
+        detrended_matrix = traces
+    else:
         detrended_matrix = traces.copy()
-        for _neuron in range(_neurons):
-            _fit = np.polyval(np.polyfit(_samples_vector, detrended_matrix[_neuron, :], deg=4), _samples_vector)
-            detrended_matrix[_neuron] -= _fit
-        return detrended_matrix
 
     for _neuron in range(_neurons):
-        _fit = np.polyval(np.polyfit(_samples_vector, traces[_neuron, :], deg=4), _samples_vector)
-        traces[_neuron] -= _fit
-    return traces
+        _fit = np.polyval(np.polyfit(_samples_vector, detrended_matrix[_neuron, :], deg=4), _samples_vector)
+        detrended_matrix[_neuron] -= _fit
+    return detrended_matrix
 # TODO UNIT TEST
 
 
