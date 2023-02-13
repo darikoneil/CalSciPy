@@ -1,6 +1,9 @@
+from __future__ import annotations
 from PPVD.parsing import parameterize
 from PPVD.style import TerminalStyle
 from typing import Callable, Tuple
+from functools import wraps
+
 
 @parameterize
 def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int = 0) -> Callable:
@@ -36,7 +39,7 @@ def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int
 
 
 @parameterize
-def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] = tuple(0), pos: int = 0) -> Callable:
+def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] = tuple([0]), pos: int = 0) -> Callable:
     """
     Decorator for validating numpy dimension is odd
 

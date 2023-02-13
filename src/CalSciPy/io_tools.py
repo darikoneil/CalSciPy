@@ -251,7 +251,7 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
 @validate_path(pos=1)
 @if_dir_join_filename(default_name="video.mp4", flag_pos=1)
 @validate_extension(required_extension=".mp4", pos=1)
-def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: Union[float, int] = 30) -> None:
+def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: float = 30.0) -> None:
     """
     Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
 
@@ -260,7 +260,7 @@ def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: Union[fl
     :param path: absolute filepath or filename
     :type path: str or pathlib.Path
     :param fps: frame rate for saved video
-    :type fps: float or int = 30
+    :type fps: float = 30.0
     :rtype: None
     """
 
