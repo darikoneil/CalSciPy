@@ -25,6 +25,7 @@ mdurl==0.1.2
 more-itertools==9.0.0
 numpy==1.21.6
 packaging==23.0
+pandas
 Pillow==9.4.0
 pkginfo==1.9.6
 pluggy==1.0.0
