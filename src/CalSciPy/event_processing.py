@@ -1,11 +1,29 @@
 from __future__ import annotations
 import numpy as np
+import pandas as pd
 from scipy.ndimage import gaussian_filter1d
+from itertools import product
 
 
-def bin_data():
-    return
-# TODO PASTE, DOCUMENT, UNIT TEST
+def bin_events(matrix: np.ndarray, bin_length: int) -> np.ndarray:
+    """
+    Bin events (e.g., spikes) using specified bin length
+
+    :param matrix: matrix of n features x m samples
+    :type matrix: np.ndarray
+    :param bin_length: length of bin
+    :type bin_length: int
+    :return: binned_matrix of n features x m bins
+    :rtype: np.ndarray
+    """
+    _features, _frames = matrix.shape
+    _bins = pd.interval_range(0, _frames, freq=bin_length)
+    binned_matrix = np.zeros_like(matrix, dtype=np.float64)
+    for _feature, _bin in product(_features, _bins):
+        binned_matrix[_feature, _bin] = \
+            np.sum(matrix[_feature, int(_bins.values[_bin].left):int(_bins.values[_bin].right)])
+    return binned_matrix
+# TODO UNIT TEST
 
 
 def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: float = 30, in_place: bool = False) \
@@ -18,7 +36,7 @@ def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: flo
     :type frame_rate: float = 30
     :param in_place: boolean indicating whether to perform calculation in-place
     :type in_place: bool = False
-    :return: matrix of firing rates
+    :return: firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event
     :rtype: np.ndarray
     """
     if not in_place:
