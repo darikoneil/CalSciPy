@@ -30,22 +30,30 @@ def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, fr
 
 
 @jit
-def detrend_polynomial(traces: np.ndarray) -> np.ndarray:
+def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray:
     """
     Detrend traces using a fourth-order polynomial
 
     :param traces: matrix of traces in the form of neurons x frames
     :type traces: np.ndarray
+    :param in_place: boolean indicating whether to perform calculation in-place
+    :type in_place: bool = False
     :return: detrended traces
     :rtype: np.ndarray
     """
     [_neurons, _samples] = traces.shape
     _samples_vector = np.arange(_samples)
 
+    if not in_place:
+        detrended_matrix = traces.copy()
+        for _neuron in range(_neurons):
+            _fit = np.polyval(np.polyfit(_samples_vector, detrended_matrix[_neuron, :], deg=4), _samples_vector)
+            detrended_matrix[_neuron] -= fit
+        return detrended_matrix
+
     for _neuron in range(_neurons):
         _fit = np.polyval(np.polyfit(_samples_vector, traces[_neuron, :], deg=4), _samples_vector)
-        traces[_neuron] -= fit  # TODO AM I IN-PLACE? NEVER MATTERED BUT COULD. TEST ME
-
+        traces[_neuron] -= fit
     return traces
 # TODO UNIT TEST
 
