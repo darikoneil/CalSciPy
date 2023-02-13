@@ -17,7 +17,9 @@ module_names = (
     "io_tools",
     "reorganization"
     "static_visuals",
-    "trace_processing"
+    "trace_processing",
+    "validators",
+    "version"
 )
 
 parent = str(pathlib.Path(os.getcwd()).parents[1])
@@ -26,11 +28,13 @@ sys.path.append("".join([parent, "\\src"]))
 for _module in module_names:
     sys.path.append("".join([parent, "\\src\\CalSciPy\\", _module]))
 
+from src.CalSciPy.version import version
+
 project = 'CalSciPy'
 # noinspection PyShadowingBuiltins
 copyright = "2023, Darik A. O'Neil"
 author = "Darik A. O'Neil"
-release = CalSciPy.version
+release = version
 
 
 extensions = [
@@ -51,7 +55,6 @@ intersphinx_mapping = {
     'cupy': ('https://docs.cupy.dev/en/stable/', None),
     'pandas': ('https://pandas.pydata.org/docs/', None),
     'python': ('https://docs.python.org/3', None),
-    'numba': ('https://numba.pydata.org/', None),
     'numpy': ('https://numpy.org/doc/1.24/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/', None),
     'scikit-image': ('https://scikit-image.org/docs/stable/', None)

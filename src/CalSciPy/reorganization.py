@@ -15,8 +15,8 @@ def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] =
     :return: event matrix of neurons x total frames
     :rtype: numpy.ndarray
     """
-    # if total frames not provided we estimate by finding the very last event
-    if not total_frames:
+
+    if not total_frames:  # if total frames not provided we estimate by finding the very last event
         total_frames = np.max([event for events in event_frames for event in events])+1  # + 1 to account for 0-index
     _neurons = len(event_frames)
     event_matrix = np.full((_neurons, total_frames), 0, dtype=np.int32)
