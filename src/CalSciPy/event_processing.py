@@ -10,11 +10,11 @@ def bin_events(matrix: np.ndarray, bin_length: int) -> np.ndarray:
     Bin events (e.g., spikes) using specified bin length
 
     :param matrix: matrix of n features x m samples
-    :type matrix: np.ndarray
+    :type matrix: numpy.ndarray
     :param bin_length: length of bin
     :type bin_length: int
     :return: binned_matrix of n features x m bins
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     _features, _frames = matrix.shape
     _bins = pd.interval_range(0, _frames, freq=bin_length)
@@ -31,13 +31,13 @@ def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: flo
     """
 
     :param spike_probability_matrix: matrix of n neuron x m samples where each element is the probability of a spike
-    :type spike_probability_matrix: np.ndarray
+    :type spike_probability_matrix: numpy.ndarray
     :param frame_rate: frame rate of dataset
     :type frame_rate: float = 30
     :param in_place: boolean indicating whether to perform calculation in-place
     :type in_place: bool = False
     :return: firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     if in_place:
         firing_matrix = spike_probability_matrix
@@ -56,9 +56,9 @@ def calculate_mean_firing_rates(firing_matrix: np.ndarray) -> np.ndarray:
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
     instantaneous firing rate
-    :type firing_matrix: np.ndarray
+    :type firing_matrix: numpy.ndarray
     :return: 1-D vector of mean firing rates
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     return np.nanmean(firing_matrix, axis=1)
 # TODO UNIT TEST
@@ -70,13 +70,13 @@ def gaussian_smooth_firing_rates(firing_matrix: np.ndarray, sigma: float, in_pla
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
     instantaneous firing rate
-    :type firing_matrix: np.ndarray
+    :type firing_matrix: numpy.ndarray
     :param sigma: standard deviation of gaussian kernel
     :type sigma: float
     :param in_place: boolean indicating whether to perform calculation in-place
     :type in_place: bool = False
     :return: gaussian-smoothed firing rate matrix of n neurons x m samples
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     if not in_place:
         return gaussian_filter1d(firing_matrix, sigma, axis=1)
@@ -91,11 +91,11 @@ def normalize_firing_rates(firing_matrix: np.ndarray, in_place: bool = False) ->
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
     instantaneous firing rate
-    :type firing_matrix: np.ndarray
+    :type firing_matrix: numpy.ndarray
     :param in_place: boolean indicating whether to perform calculation in-place
     :type in_place: bool = False
     :return: normalized firing rate matrix of n neurons x m samples
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     if in_place:
         normalized_matrix = firing_matrix

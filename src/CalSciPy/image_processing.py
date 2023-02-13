@@ -6,7 +6,7 @@ import scipy.ndimage
 import skimage.measure
 import math
 
-from .temp_fun import validate_longest_numpy_dimension, validate_numpy_dimension_odd
+from .validators import validate_longest_numpy_dimension, validate_numpy_dimension_odd
 
 try:
     import cupy
@@ -29,15 +29,15 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
     Requires :ref:`cupy`
 
     :param images: images stack to be filtered
-    :type images: np.ndarray
+    :type images: numpy.ndarray
     :param mask: mask of the median filter
-    :type mask: np.ndarray = np.ones((3, 3, 3))
+    :type mask: numpy.ndarray = np.ones((3, 3, 3))
     :param block_size: the size of each block. Must fit within memory
     :type block_size: int = 21000
     :param block_buffer: the size of the overlapping region between block
     :type block_buffer: int = 500
-    :return: images: numpy array [Z x Y x X]
-    :rtype: np.ndarray
+    :return: images: numpy array (frames, y pixels, x pixels)
+    :rtype: numpy.ndarray
     """
     _total_frames = images.shape[0]
     _blocks = range(0, _total_frames, block_size)
@@ -81,13 +81,13 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
     is evenly divisible by the desired stack size
 
     :param images: images array with shape Z x Y x X
-    :type images: np.ndarray
+    :type images: numpy.ndarray
     :param artifact_length: number of frames considered artifact
     :type artifact_length: int = 1000
     :param stack_sizes: number of frames per stack
     :type stack_sizes: int = 7000
     :return: images
-    :rtype: np.ndarray
+    :rtype: numpy.ndarray
     """
     _frames = images.shape[0]
     _crop_idx = _frames % stack_sizes
@@ -106,15 +106,15 @@ def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))
     """
     GPU-parallelized multidimensional median filter
 
-    mask is of the form np.ones((Z pixels, Y pixels, X pixels)) with the origin in the center
+    mask is of the form np.ones((frames, y pixels, x pixels)) with the origin in the center
 
     Requires CuPy
 
-    :param images: image stack to be filtered [Z x Y x X]
-    :type images: np.ndarray
+    :param images: image stack to be filtered (frames, y pixels, x pixels)
+    :type images: numpy.ndarray
     :param mask: Mask of the median filter
-    :type mask: np.ndarray = np.ones((3, 3, 3))
-    :return: filtered_image [Z x Y x X]
+    :type mask: numpy.ndarray = np.ones((3, 3, 3))
+    :return: filtered_image (frames, y pixels, x pixels)
     :rtype: cupy.ndarray
     """
     return cupyx.scipy.ndimage.median_filter(cupy.asarray(images), footprint=mask)
@@ -129,14 +129,14 @@ def filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> 
 
     This function simply calls :ref:`scipy.ndimage.median_filter`
 
-    mask is of the form np.ones((Z pixels, Y pixels, X pixels)) with the origin in the center
+    mask is of the form np.ones((frames, y pixels, x pixels) with the origin in the center
 
-    :param images: images stack to be filtered [Z x Y x X]
-    :type images: np.ndarray
+    :param images: images stack to be filtered (frames, y pixels, x pixels)
+    :type images: numpy.ndarray
     :param mask: mask of the median filter
-    :type mask: np.ndarray = np.ones((3, 3, 3))
-    :return: filtered images [Z x Y x X]
-    :rtype: np.ndarray
+    :type mask: numpy.ndarray = np.ones((3, 3, 3))
+    :return: filtered images (frames, y pixels, x pixels)
+    :rtype: numpy.ndarray
     """
     return scipy.ndimage.median_filter(images, mask=mask)
 # TODO UNIT TEST
@@ -150,14 +150,14 @@ def grouped_z_project(images: np.ndarray, bin_size: Union[Tuple[int, int, int], 
 
     Downsample example function -> np.mean
 
-    :param images: A numpy array containing a tiff stack [Z x Y x X]
-    :type images: np.ndarray
+    :param images: A numpy array containing a tiff stack (frames, y pixels, x pixels)
+    :type images: numpy.ndarray
     :param bin_size:  size of each bin passed to downsampling function
     :type bin_size: tuple[int, int, int] or tuple[int]
     :param function: group-z projecting function
     :type function: Callable = np.mean
-    :return: downsampled image [Z x Y x X]
-    :rtype: np.ndarray
+    :return: downsampled image (frames, y pixels, x pixels)
+    :rtype: numpy.ndarray
     """
     return skimage.measure.block_reduce(images, block_size=bin_size,
                                                      func=function).astype(images.dtype)
