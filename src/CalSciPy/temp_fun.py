@@ -2,6 +2,7 @@ from PPVD.parsing import parameterize
 from PPVD.style import TerminalStyle
 from typing import Callable, Tuple
 
+
 @parameterize
 def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int = 0) -> Callable:
     """

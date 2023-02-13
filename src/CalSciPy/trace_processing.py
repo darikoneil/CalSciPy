@@ -1,7 +1,6 @@
 from __future__ import annotations
 import numpy as np
 from numba import jit
-from obspy.signal.detrend import polynomial
 
 
 def calculate_dfof(traces: np.ndarray) -> np.ndarray:
@@ -48,12 +47,12 @@ def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray
         detrended_matrix = traces.copy()
         for _neuron in range(_neurons):
             _fit = np.polyval(np.polyfit(_samples_vector, detrended_matrix[_neuron, :], deg=4), _samples_vector)
-            detrended_matrix[_neuron] -= fit
+            detrended_matrix[_neuron] -= _fit
         return detrended_matrix
 
     for _neuron in range(_neurons):
         _fit = np.polyval(np.polyfit(_samples_vector, traces[_neuron, :], deg=4), _samples_vector)
-        traces[_neuron] -= fit
+        traces[_neuron] -= _fit
     return traces
 # TODO UNIT TEST
 
