@@ -14,8 +14,11 @@ Welcome to CalSciPy's documentation!
    Installation
    Sub-Packages
    CalSciPy.bruker
+   CalSciPy.event_processing
+   CalSciPy.image_processing
    CalSciPy.io_tools
    CalSciPy.reorganization
+   CalSciPy.trace_processing
 
 
 Indices and tables
