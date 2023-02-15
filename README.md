@@ -5,7 +5,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/CalSciPy)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023)
 ![Coveralls branch](https://img.shields.io/coverallsCoverage/github/darikoneil/CalSciPy?branch=master)
-[![Documentation Status](https://readthedocs.org/projects/CalSciPy/badge/?version=latest)](https://CalSciPy.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/calscipy/badge/?version=latest)](https://calscipy.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/CalSciPy?)
 ![PyPI - Status](https://img.shields.io/pypi/status/CalSciPy)
 ![GitHub](https://img.shields.io/github/license/darikoneil/CalSciPy)
