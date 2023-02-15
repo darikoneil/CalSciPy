@@ -7,7 +7,7 @@ Overview
 * :ref:`Image Processing <Image Processing Module>`
 * :ref:`Interactive Visuals <Interactive Visuals Module>`
 * :ref:`Reorganization <Reorganization Module>`
-* :ref:`Signal Processing <Signal Processing Module>`
+* :ref:`Trace Processing <Trace Processing Module>`
 * :ref:`Static Visuals <Static Visuals Module>`
 
 
@@ -24,7 +24,6 @@ Bruker
    :maxdepth: 4
 
    CalSciPy.bruker
-
 
 .. _Coloring Module:
 
@@ -48,9 +47,10 @@ Event Processing
 | Write me
 | Write me
 
-Event Processing Methods
-************************
-| Import me
+.. toctree::
+   :maxdepth: 4
+
+   CalSciPy.event_processing
 
 .. _IO Module:
 
@@ -74,6 +74,11 @@ Image Processing
 | Write me
 | Write me
 | Write me
+
+.. toctree::
+   :maxdepth: 4
+
+   CalSciPy.image_processing
 
 .. _Interactive Visuals Module:
 
@@ -104,18 +109,19 @@ Reorganization Methods
 
    CalSciPy.reorganization
 
-.. _Signal Processing Module:
+.. _Trace Processing Module:
 
-Signal Processing
+Trace Processing
 -----------------
 | Write me
 | Write me
 | Write me
 | Write me
 
-Signal Processing Methods
-*************************
-| Import me
+.. toctree::
+   :maxdepth: 4
+
+   CalSciPy.trace_processing
 
 .. _Static Visuals Module:
 
