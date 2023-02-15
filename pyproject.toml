@@ -24,16 +24,23 @@ classifiers = [
 dependencies = [
     "imageio",
     "imageio[ffmpeg]",
+    "matplotlib",
+    "numba",
     "numpy",
     "pandas",
     "pillow",
     "PPVD",
     "prettytable",
+    "seaborn",
     "scipy",
     "scikit-image",
     "tifffile",
     "tqdm"
 ]
+[project.urls]
+documentation = "https://calscipy.readthedocs.io/en/latest/?badge=latest"
+repository = "https://github.com/darikoneil/CalSciPy"
+
 
 [project.optional-dependencies]
 
@@ -50,4 +57,9 @@ development = [
 
 gpu = [
     "cupy"
+]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
 ]

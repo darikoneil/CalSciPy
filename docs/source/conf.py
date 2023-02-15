@@ -28,13 +28,11 @@ sys.path.append("".join([parent, "\\src"]))
 for _module in module_names:
     sys.path.append("".join([parent, "\\src\\CalSciPy\\", _module]))
 
-from src.CalSciPy.version import version
-
 project = 'CalSciPy'
 # noinspection PyShadowingBuiltins
 copyright = "2023, Darik A. O'Neil"
 author = "Darik A. O'Neil"
-release = version
+release = "0.1.5"
 
 
 extensions = [

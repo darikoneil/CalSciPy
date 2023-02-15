@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 from PPVD.style import TerminalStyle
-from src.CalSciPy.reorganization import generate_raster, generate_tensor, merge_factorized_matrices, merge_tensor
+from CalSciPy.reorganization import generate_raster, generate_tensor, merge_factorized_matrices, merge_tensor
 
 
 # arguments for tests
@@ -42,7 +42,6 @@ def test_generate_tensor_fails():
     # validate not evenly divisible
     with pytest.raises(AssertionError):
         generate_tensor(np.full((5, 90), 1), 25)
-
 
 
 @pytest.mark.parametrize(("event_frames", "total_frames"), [sample_event_lists[0], sample_event_lists[1]])
