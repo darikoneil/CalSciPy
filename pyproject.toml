@@ -62,4 +62,9 @@ gpu = [
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
+    "-s",
+    "--color=yes",
+    "--show-progress",
 ]
+testpaths = "tests"
+console_output_style = "progress"

@@ -11,7 +11,7 @@ sample_event_lists = (
     [([[1, 2, 3], [5, 6, 7], [0, 10, 20]], None),
      ([[1, 2, 3], [5, 6, 7], [0, 10, 20]], 21)]
 )
-sample_factorized_matrix = np.load("".join([os.path.abspath(os.path.join(os.getcwd(), os.pardir)),
+sample_factorized_matrix = np.load("".join([os.getcwd(),
                                             "\\testing_data\\sample_variables\\sample_factorized_matrices.npy"]),
                                    allow_pickle=True)
 
