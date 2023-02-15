@@ -32,12 +32,12 @@ Hosted at [ReadtheDocs](https://calscipy.readthedocs.io/en/latest/index.html#).
 Available locally as [HTML](https://github.com/darikoneil/CalSciPy/tree/master/docs/build/html), [LATEX](https://github.com/darikoneil/CalSciPy/tree/master/docs/build/latex) and [PDF](https://github.com/darikoneil/CalSciPy/blob/master/docs/build/pdf/calscipy.pdf).
 
 #### Roadmap
-TODO - UNDOCUMENTED / OFFLINE
-DEV - UNTESTED / IN DEV BRANCH
-MAIN - COMPLETE /  IN MAIN BRANCH
+TODO - UNDOCUMENTED / OFFLINE     
+DEV - UNTESTED / IN DEV BRANCH      
+MAIN - COMPLETE /  IN MAIN BRANCH     
 
-Generally completing each module before the next.
-Exceptions done last: 
+Generally completing each module before the next.     
+Exceptions done last:       
 * Bruker's Prairiview XML
 * Bruker's Prairieview ENV parsing
 * Trace Processing's Diffusion
