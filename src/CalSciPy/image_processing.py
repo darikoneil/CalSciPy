@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Callable, List, Tuple, Sequence, Optional, Union
+from typing import Callable, List, Tuple, Sequence, Optional, Union, Any
 import numpy as np
 from tqdm.auto import tqdm
 import scipy.ndimage
@@ -24,9 +24,7 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
 
     Designed for use on arrays larger than the available memory capacity.
 
-    Footprint is of the form np.ones((Z pixels, Y pixels, X pixels)) with the origin in the center
-
-    Requires :ref:`cupy`
+    Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the cente
 
     :param images: images stack to be filtered
     :type images: numpy.ndarray
@@ -80,7 +78,7 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
     Function to remove initial imaging frames such that any shutter artifact is removing and the resulting tensor
     is evenly divisible by the desired stack size
 
-    :param images: images array with shape Z x Y x X
+    :param images: images array (frames, y pixels, x pixels)
     :type images: numpy.ndarray
     :param artifact_length: number of frames considered artifact
     :type artifact_length: int = 1000
@@ -102,7 +100,7 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
 @validate_numpy_dimension_odd(odd_dimensions=(0, 1, 2), pos=1)
-def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> cupy.ndarray:
+def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> Any:
     """
     GPU-parallelized multidimensional median filter
 
@@ -115,7 +113,7 @@ def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))
     :param mask: Mask of the median filter
     :type mask: numpy.ndarray = np.ones((3, 3, 3))
     :return: filtered_image (frames, y pixels, x pixels)
-    :rtype: cupy.ndarray
+    :rtype: Any
     """
     return cupyx.scipy.ndimage.median_filter(cupy.asarray(images), footprint=mask)
 # TODO UNIT TEST
@@ -127,7 +125,7 @@ def filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> 
     """
     Denoise a tiff stack using a multidimensional median filter
 
-    This function simply calls :ref:`scipy.ndimage.median_filter`
+    This function simply calls
 
     mask is of the form np.ones((frames, y pixels, x pixels) with the origin in the center
 

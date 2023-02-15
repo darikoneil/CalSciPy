@@ -33,6 +33,7 @@ def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] =
 def generate_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray:
     """
     Generates a tensor given chunk / trial indices
+
     :param traces_as_matrix: traces in matrix form (neurons x frames)
     :type traces_as_matrix: numpy.ndarray
     :param chunk_size: size of each chunk
@@ -65,7 +66,7 @@ def merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0)
 
 
     :param factorized_traces: neurons x chunks (trial, tiff, etc) containing the neuron's trace factorized
-    into several components
+        into several components
     :type factorized_traces: numpy.ndarray
     :param component: specific component to extract
     :type component: int
