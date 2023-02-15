@@ -18,8 +18,8 @@ def bin_events(matrix: np.ndarray, bin_length: int) -> np.ndarray:
     """
     _features, _frames = matrix.shape
     _bins = pd.interval_range(0, _frames, freq=bin_length)
-    binned_matrix = np.empty_like(matrix, dtype=np.float64)
-    for _feature, _bin in product(_features, _bins):
+    binned_matrix = np.empty((_features, _frames // bin_length), dtype = np.float64)
+    for _feature, _bin in product(range(_features), range(len(_bins))):
         binned_matrix[_feature, _bin] = \
             np.sum(matrix[_feature, int(_bins.values[_bin].left):int(_bins.values[_bin].right)])
     return binned_matrix
