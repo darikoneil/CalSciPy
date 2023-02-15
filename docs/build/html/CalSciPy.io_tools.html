@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="[en]" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalSciPy.io_tools module &mdash; CalSciPy 0.1.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CalSciPy.reorganization module" href="CalSciPy.reorganization.html" />
+    <link rel="prev" title="CalSciPy.bruker module" href="CalSciPy.bruker.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CalSciPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.io_tools module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_all_tiffs"><code class="docutils literal notranslate"><span class="pre">load_all_tiffs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_binary_meta"><code class="docutils literal notranslate"><span class="pre">load_binary_meta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_mapped_binary"><code class="docutils literal notranslate"><span class="pre">load_mapped_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_raw_binary"><code class="docutils literal notranslate"><span class="pre">load_raw_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.load_single_tiff"><code class="docutils literal notranslate"><span class="pre">load_single_tiff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_raw_binary"><code class="docutils literal notranslate"><span class="pre">save_raw_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_single_tiff"><code class="docutils literal notranslate"><span class="pre">save_single_tiff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_tiff_stack"><code class="docutils literal notranslate"><span class="pre">save_tiff_stack()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.io_tools.save_video"><code class="docutils literal notranslate"><span class="pre">save_video()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CalSciPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="Sub-Packages.html">Overview</a></li>
+      <li class="breadcrumb-item active">CalSciPy.io_tools module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CalSciPy.io_tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-CalSciPy.io_tools">
+<span id="calscipy-io-tools-module"></span><h1>CalSciPy.io_tools module<a class="headerlink" href="#module-CalSciPy.io_tools" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.load_all_tiffs">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_all_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_all_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_all_tiffs" title="Permalink to this definition"></a></dt>
+<dd><p>Loads all .tif's within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit
+exported by the majority (all?) of imaging software.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder containing a sequence of tiff stacks</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a numpy array containing the images (frames, y-pixels, x-pixels)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.load_binary_meta">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_binary_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_binary_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_binary_meta" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the meta file for an associated binary video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- The meta file (.txt ext) or a directory containing metafile</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple where (frames, y-pixels, x-pixels, <a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.load_mapped_binary">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_mapped_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_mapped_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_mapped_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the
+default filenames (binary_video, video_meta.txt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath for binary video or a folder containing a binary video with the default filename</p></li>
+<li><p><strong>meta_filename</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>] </em><em>= None</em>) -- absolute path to meta file</p></li>
+<li><p><strong>mode</strong> -- mode used in loading numpy.memmap (str, default = &quot;r&quot;)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>memmap (numpy) array (frames, y-pixels, x-pixels)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.memmap.html#numpy.memmap" title="(in NumPy v1.24)">numpy.memmap</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.load_raw_binary">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_raw_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_raw_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default
+filenames (binary_video, video_meta.txt)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath for binary video or directory containing a file named binary video</p></li>
+<li><p><strong>meta_filename</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>] </em><em>= None</em>) -- absolute path to meta file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array (frames, y-pixels, x-pixels)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.load_single_tiff">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">load_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#load_single_tiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.load_single_tiff" title="Permalink to this definition"></a></dt>
+<dd><p>Load a single .tif as a numpy array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filename</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>numpy array (frames, y-pixels, x-pixels)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.save_raw_binary">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">save_raw_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#save_raw_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.save_raw_binary" title="Permalink to this definition"></a></dt>
+<dd><p>Save a numpy array as a binary file with an associated meta .txt file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- folder to save in or an absolute filepath for binary video file</p></li>
+<li><p><strong>meta_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) -- absolute filepath for saving meta .txt file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.save_single_tiff">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">save_single_tiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_=&lt;class</span> <span class="pre">'numpy.uint16'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#save_single_tiff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.save_single_tiff" title="Permalink to this definition"></a></dt>
+<dd><p>Save a numpy array to a single .tif file. Size must be &lt;4 GB.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- numpy array [frames, y pixels, x pixels]</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- filename or absolute path</p></li>
+<li><p><strong>type</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><em>numpy.dtype</em></a><em>] </em><em>= numpy.uint16</em>) -- type for saving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.save_tiff_stack">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">save_tiff_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_=&lt;class</span> <span class="pre">'numpy.uint16'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#save_tiff_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.save_tiff_stack" title="Permalink to this definition"></a></dt>
+<dd><p>Save a numpy array to a sequence of .tif stacks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
+<li><p><strong>output_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder to save the sequence of .tif stacks</p></li>
+<li><p><strong>type</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.24)"><em>numpy.dtype</em></a><em>] </em><em>= numpy.uint16</em>) -- type for saving</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.io_tools.save_video">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.io_tools.</span></span><span class="sig-name descname"><span class="pre">save_video</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">images</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/io_tools.html#save_video"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.io_tools.save_video" title="Permalink to this definition"></a></dt>
+<dd><p>Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> (<em>numpy.array</em>) -- numpy array (frames, y-pixels, x-pixels)</p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- absolute filepath or filename</p></li>
+<li><p><strong>fps</strong> (<em>float = 30.0</em>) -- frame rate for saved video</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CalSciPy.bruker.html" class="btn btn-neutral float-left" title="CalSciPy.bruker module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CalSciPy.reorganization.html" class="btn btn-neutral float-right" title="CalSciPy.reorganization module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

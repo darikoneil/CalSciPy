@@ -18,17 +18,17 @@ def bin_events(matrix: np.ndarray, bin_length: int) -> np.ndarray:
     """
     _features, _frames = matrix.shape
     _bins = pd.interval_range(0, _frames, freq=bin_length)
-    binned_matrix = np.empty_like(matrix, dtype=np.float64)
-    for _feature, _bin in product(_features, _bins):
+    binned_matrix = np.empty((_features, _frames // bin_length), dtype = np.float64)
+    for _feature, _bin in product(range(_features), range(len(_bins))):
         binned_matrix[_feature, _bin] = \
             np.sum(matrix[_feature, int(_bins.values[_bin].left):int(_bins.values[_bin].right)])
     return binned_matrix
-# TODO UNIT TEST
 
 
 def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: float = 30, in_place: bool = False) \
         -> np.ndarray:
     """
+    Calculate firing rates
 
     :param spike_probability_matrix: matrix of n neuron x m samples where each element is the probability of a spike
     :type spike_probability_matrix: numpy.ndarray
@@ -55,7 +55,7 @@ def calculate_mean_firing_rates(firing_matrix: np.ndarray) -> np.ndarray:
     Calculate mean firing rate
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
-    instantaneous firing rate
+        instantaneous firing rate
     :type firing_matrix: numpy.ndarray
     :return: 1-D vector of mean firing rates
     :rtype: numpy.ndarray
@@ -66,10 +66,10 @@ def calculate_mean_firing_rates(firing_matrix: np.ndarray) -> np.ndarray:
 
 def gaussian_smooth_firing_rates(firing_matrix: np.ndarray, sigma: float, in_place: bool = False) -> np.ndarray:
     """
-    Normalize firing rates using a 1-D gaussian filter (simple calls :ref:`scipy.ndimage.gaussian_filter1d`
+    Normalize firing rates using a 1-D gaussian filter
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
-    instantaneous firing rate
+        instantaneous firing rate
     :type firing_matrix: numpy.ndarray
     :param sigma: standard deviation of gaussian kernel
     :type sigma: float
@@ -90,7 +90,7 @@ def normalize_firing_rates(firing_matrix: np.ndarray, in_place: bool = False) ->
     Normalize firing rates by scaling to a max of 1.0. Non-negativity constrained.
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
-    instantaneous firing rate
+        instantaneous firing rate
     :type firing_matrix: numpy.ndarray
     :param in_place: boolean indicating whether to perform calculation in-place
     :type in_place: bool = False

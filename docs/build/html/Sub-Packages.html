@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="[en]" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &mdash; CalSciPy 0.1.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CalSciPy.bruker module" href="CalSciPy.bruker.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CalSciPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bruker">Bruker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#coloring">Coloring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#coloring-methods">Coloring Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#event-processing">Event Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#event-processing-methods">Event Processing Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#input-output-i-o">Input/Output (I/O)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#image-processing">Image Processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-visuals">Interactive Visuals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interactive-visuals-methods">Interactive Visuals Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reorganization">Reorganization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reorganization-methods">Reorganization Methods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#signal-processing">Signal Processing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#signal-processing-methods">Signal Processing Methods</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#static-visuals">Static Visuals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#static-visual-methods">Static Visual Methods</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CalSciPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Sub-Packages.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="#bruker-module"><span class="std std-ref">Bruker</span></a></p></li>
+<li><p><a class="reference internal" href="#coloring-module"><span class="std std-ref">Coloring</span></a></p></li>
+<li><p><a class="reference internal" href="#event-processing-module"><span class="std std-ref">Event Processing</span></a></p></li>
+<li><p><a class="reference internal" href="#io-module"><span class="std std-ref">Input/Output (I/O)</span></a></p></li>
+<li><p><a class="reference internal" href="#image-processing-module"><span class="std std-ref">Image Processing</span></a></p></li>
+<li><p><a class="reference internal" href="#interactive-visuals-module"><span class="std std-ref">Interactive Visuals</span></a></p></li>
+<li><p><a class="reference internal" href="#reorganization-module"><span class="std std-ref">Reorganization</span></a></p></li>
+<li><p><a class="reference internal" href="#signal-processing-module"><span class="std std-ref">Signal Processing</span></a></p></li>
+<li><p><a class="reference internal" href="#static-visuals-module"><span class="std std-ref">Static Visuals</span></a></p></li>
+</ul>
+<section id="bruker">
+<span id="bruker-module"></span><h2>Bruker<a class="headerlink" href="#bruker" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.determine_bruker_folder_contents"><code class="docutils literal notranslate"><span class="pre">determine_bruker_folder_contents()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.load_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tiffs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.pretty_print_image_description"><code class="docutils literal notranslate"><span class="pre">pretty_print_image_description()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.repackage_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tiffs()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="coloring">
+<span id="coloring-module"></span><h2>Coloring<a class="headerlink" href="#coloring" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="coloring-methods">
+<h3>Coloring Methods<a class="headerlink" href="#coloring-methods" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Import me</div>
+</div>
+</section>
+</section>
+<section id="event-processing">
+<span id="event-processing-module"></span><h2>Event Processing<a class="headerlink" href="#event-processing" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="event-processing-methods">
+<h3>Event Processing Methods<a class="headerlink" href="#event-processing-methods" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Import me</div>
+</div>
+</section>
+</section>
+<section id="input-output-i-o">
+<span id="io-module"></span><h2>Input/Output (I/O)<a class="headerlink" href="#input-output-i-o" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_all_tiffs"><code class="docutils literal notranslate"><span class="pre">load_all_tiffs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_binary_meta"><code class="docutils literal notranslate"><span class="pre">load_binary_meta()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_mapped_binary"><code class="docutils literal notranslate"><span class="pre">load_mapped_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_raw_binary"><code class="docutils literal notranslate"><span class="pre">load_raw_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_single_tiff"><code class="docutils literal notranslate"><span class="pre">load_single_tiff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_raw_binary"><code class="docutils literal notranslate"><span class="pre">save_raw_binary()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_single_tiff"><code class="docutils literal notranslate"><span class="pre">save_single_tiff()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_tiff_stack"><code class="docutils literal notranslate"><span class="pre">save_tiff_stack()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_video"><code class="docutils literal notranslate"><span class="pre">save_video()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="image-processing">
+<span id="image-processing-module"></span><h2>Image Processing<a class="headerlink" href="#image-processing" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+</section>
+<section id="interactive-visuals">
+<span id="interactive-visuals-module"></span><h2>Interactive Visuals<a class="headerlink" href="#interactive-visuals" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="interactive-visuals-methods">
+<h3>Interactive Visuals Methods<a class="headerlink" href="#interactive-visuals-methods" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Import me</div>
+</div>
+</section>
+</section>
+<section id="reorganization">
+<span id="reorganization-module"></span><h2>Reorganization<a class="headerlink" href="#reorganization" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="reorganization-methods">
+<h3>Reorganization Methods<a class="headerlink" href="#reorganization-methods" title="Permalink to this heading"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.reorganization.html#CalSciPy.reorganization.generate_raster"><code class="docutils literal notranslate"><span class="pre">generate_raster()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.reorganization.html#CalSciPy.reorganization.generate_tensor"><code class="docutils literal notranslate"><span class="pre">generate_tensor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.reorganization.html#CalSciPy.reorganization.merge_factorized_matrices"><code class="docutils literal notranslate"><span class="pre">merge_factorized_matrices()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.reorganization.html#CalSciPy.reorganization.merge_tensor"><code class="docutils literal notranslate"><span class="pre">merge_tensor()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="signal-processing">
+<span id="signal-processing-module"></span><h2>Signal Processing<a class="headerlink" href="#signal-processing" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="signal-processing-methods">
+<h3>Signal Processing Methods<a class="headerlink" href="#signal-processing-methods" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Import me</div>
+</div>
+</section>
+</section>
+<section id="static-visuals">
+<span id="static-visuals-module"></span><h2>Static Visuals<a class="headerlink" href="#static-visuals" title="Permalink to this heading"></a></h2>
+<div class="line-block">
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+<div class="line">Write me</div>
+</div>
+<section id="static-visual-methods">
+<h3>Static Visual Methods<a class="headerlink" href="#static-visual-methods" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Import me</div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CalSciPy.bruker.html" class="btn btn-neutral float-right" title="CalSciPy.bruker module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

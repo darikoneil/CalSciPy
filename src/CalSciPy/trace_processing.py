@@ -2,7 +2,7 @@ from __future__ import annotations
 import numpy as np
 from numba import jit
 from scipy.signal import firwin, filtfilt
-
+from typing import Optional
 
 def calculate_dfof(traces: np.ndarray, frame_rate: float = 30, in_place: bool = False,
                    offset: float = 0.0, raw: Optional[np.ndarray] = None) \
