@@ -16,7 +16,8 @@ def retrieve_details(path):
 
 
 pyproject_file = "".join([os.getcwd(), "\\pyproject.toml"])
-
+print(f"{os.getcwd()}\n")
+print(f"{sys.path}\n")
 
 package_name, package_version, package_dependencies = retrieve_details(pyproject_file)
 
