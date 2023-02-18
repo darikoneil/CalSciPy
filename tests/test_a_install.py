@@ -15,12 +15,7 @@ def retrieve_details(path):
     return name, version, dependencies
     
 
-pyproject_file = "".join([os.getcwd(), "\\pyproject.toml"])
-if not os.path.exists(pyproject_file):
-    pyproject_file = "".join([os.getcwd(), "/pyproject.toml"])
-print(f"{os.path.exists(pyproject_file)}\n") 
-print(f"{os.getcwd()}\n")
-print(f"{sys.path}\n")
+pyproject_file = os.path.join(os.getcwd(), "pyproject.toml")
 
 package_name, package_version, package_dependencies = retrieve_details(pyproject_file)
 
