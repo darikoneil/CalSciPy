@@ -37,34 +37,34 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
     :return: images: numpy array (frames, y pixels, x pixels)
     :rtype: numpy.ndarray
     """
-    _total_frames = images.shape[0]
-    _blocks = range(0, _total_frames, block_size)
-    _num_blocks = len(_blocks)
-    _remainder = np.full((block_buffer, images.shape[1], images.shape[2]), 0, dtype=np.int16)
+    frames = images.shape[0]
+    blocks = range(0, frames, block_size)
+    num_blocks = len(blocks)
+    remainder = np.full((block_buffer, images.shape[1], images.shape[2]), 0, dtype=np.int16)
 
     for _block in tqdm(
-            range(_num_blocks),
-            total=_num_blocks,
+            range(num_blocks),
+            total=num_blocks,
             desc="Filtering images...",
             disable=False,
     ):
-        if _block == 0:
-            _remainder = images[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
-            images[0:_blocks[_block + 1], :, :] = cupy.asnumpy(fast_filter_images(cupy.asarray(
-                images[0:_blocks[_block + 1], :, :]), Footprint))
-        elif _block == _num_blocks - 1:
+        if block == 0:
+            remainder = images[blocks[_block + 1] - 500:blocks[_block + 1], :, :].copy()
+            images[0:blocks[_block + 1], :, :] = cupy.asnumpy(fast_filter_images(cupy.asarray(
+                images[0:blocks[_block + 1], :, :]), mask))
+        elif _block == num_blocks - 1:
 
-            images[_blocks[_block]:_total_frames, :, :] = \
+            images[blocks[_block]:frames, :, :] = \
                 cupy.asnumpy(fast_filter_images(
-                    cupy.asarray(np.append(_remainder, images[_blocks[_block]:_total_frames, :, :],
-                                           axis=0)), Footprint))[block_buffer:, :, :]
+                    cupy.asarray(np.append(remainder, images[blocks[_block]:frames, :, :],
+                                           axis=0)), mask))[block_buffer:, :, :]
         else:
-            _remainder_new = images[_blocks[_block + 1] - 500:_blocks[_block + 1], :, :].copy()
-            images[_blocks[_block]:_blocks[_block + 1], :, :] = \
+            remainder_new = images[blocks[_block + 1] - 500:blocks[_block + 1], :, :].copy()
+            images[blocks[_block]:_blocks[_block + 1], :, :] = \
                 cupy.asnumpy(fast_filter_images(
-                    cupy.asarray(np.append(_remainder, images[_blocks[_block]:_blocks[_block + 1], :, :],
-                                           axis=0)), Footprint))[block_buffer:block_size+block_buffer, :, :]
-            _remainder = _remainder_new.copy()
+                    cupy.asarray(np.append(remainder, images[blocks[_block]:blocks[_block + 1], :, :],
+                                           axis=0)), mask))[block_buffer:block_size+block_buffer, :, :]
+            remainder = remainder_new.copy()
 
     return images
 # REFACTOR + OPTIMIZE, MAKE OUTPUT CUPY.NDARRAY
@@ -87,14 +87,14 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
     :return: images
     :rtype: numpy.ndarray
     """
-    _frames = images.shape[0]
-    _crop_idx = _frames % stack_sizes
-    if _crop_idx >= artifact_length:
-        return images[_crop_idx:, :, :]
+    frames = images.shape[0]
+    crop_idx = frames % stack_sizes
+    if crop_idx >= artifact_length:
+        return images[crop_idx:, :, :]
     else:
-        _frames -= artifact_length
-        _crop_idx = _num_frames % stack_sizes
-        return images[artifact_length + _crop_idx:, :, :]
+        frames -= artifact_length
+        crop_idx = frames % stack_sizes
+        return images[artifact_length + crop_idx:, :, :]
 # TODO UNIT TEST
 
 

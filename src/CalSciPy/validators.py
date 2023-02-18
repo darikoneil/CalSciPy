@@ -5,6 +5,9 @@ from typing import Callable, Tuple
 from functools import wraps
 
 
+# TODO remove these when numpy validate added to PPVD
+
+
 @parameterize
 def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int = 0) -> Callable:
     """
@@ -28,7 +31,7 @@ def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int
 
         for _axis in axes_list:
             if _axis > long_axis:
-                raise AssertionError(f"{TerminaLStyle.GREEN}Input {pos} Improper Format: "
+                raise AssertionError(f"{TerminalStyle.GREEN}Input {pos} Improper Format: "
                                      f"{TerminalStyle.YELLOW} axis {TerminalStyle.BLUE}{axis}"
                                      f"{TerminalStyle.YELLOW} ought to be larger than axis "
                                      f"{TerminalStyle.BLUE}{_axis}{TerminalStyle.RESET}")
