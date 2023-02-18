@@ -10,10 +10,10 @@ import pathlib
 from PPVD.style import TerminalStyle
 
 # noinspection DuplicatedCode
-FIXTURE_DIR = "".join([os.getcwd(), "\\testing_data"])
+FIXTURE_DIR = os.path.join(os.getcwd(), "testing_data")
 
 DATASET = pytest.mark.datafiles(
-    "".join([FIXTURE_DIR, "\\sample_datasets"]),
+    os.path.join(FIXTURE_DIR, "sample_datasets"),
     keep_top_dir=False,
     on_duplicate="ignore",
 )
@@ -29,10 +29,10 @@ def test_single_tiff_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
         _input_image = next(pathlib.Path(_dir).glob("single.tif"))
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _output_folder = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output")
         # MAKE OUTPUT FOLDER
         os.mkdir(_output_folder)
-        _output_file = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output\\single.tif"])
+        _output_file = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output", "single.tif")
         # GET COMPARISON DESCRIPTIONS
         _descriptions = read_descriptions(_descriptions)
         # TEST
@@ -79,6 +79,7 @@ def test_single_tiff_fails():
         save_single_tiff([1, 2, 3, 4, 5], 125.6)  # FAIL TYPE
     with pytest.raises(ValueError):
         save_single_tiff([1, 2, 3, 4, 5], "C:\\file.mp4")  # FAIL EXTENSION
+    # TODO FORGOT LINUX
 
 
 @DATASET
@@ -87,7 +88,7 @@ def test_binaries_load_and_save(datafiles, tmp_path):
         # INGEST
         _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _output_folder = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output")
         # MAKE OUTPUT FOLDER
         os.mkdir(_output_folder)
         # GET COMPARISON
@@ -130,6 +131,7 @@ def test_binary_load_meta_fails():
         load_binary_meta("C:\\file")  # No extension but adds then fails
     with pytest.raises(ValueError):
         load_binary_meta("C:\\file.mp4")  # No extension but catches
+    # TODO FORGOT LINUX
 
 
 @DATASET
@@ -138,7 +140,7 @@ def test_tiff_stack_load_and_save(datafiles, tmp_path):
         # INGEST
         _input_image = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _output_folder = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output")
         os.mkdir(_output_folder)
         # GET COMPARISON DESCRIPTIONS
         _descriptions = read_descriptions(_descriptions)
@@ -187,6 +189,7 @@ def test_tiff_stacks_fails():
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
         save_tiff_stack([1, 2, 3, 4, 5], 125.6)  # FAIL TYPE
+    # TODO FORGOT LINUX
 
 
 @DATASET
@@ -194,7 +197,7 @@ def test_video_load_and_save(datafiles, tmp_path):
     for _dir in datafiles.listdir():
         # INGEST
         _input_file = next(pathlib.Path(_dir).glob("Video_01_of_1.tif"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _output_folder = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output")
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
         _descriptions = read_descriptions(_descriptions)
         # MAKE OUTPUT FOLDER

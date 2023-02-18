@@ -11,9 +11,10 @@ sample_event_lists = (
     [([[1, 2, 3], [5, 6, 7], [0, 10, 20]], None),
      ([[1, 2, 3], [5, 6, 7], [0, 10, 20]], 21)]
 )
-sample_factorized_matrix = np.load("".join([os.getcwd(),
-                                            "\\testing_data\\sample_variables\\sample_factorized_matrices.npy"]),
-                                   allow_pickle=True)
+saample_factorized_matrix = np.load(os.path.join(
+    os.getcwd(), "testing_data", "sample_variables", "sample_factorized_matrices.npy"
+), allow_pickle=True)
+
 
 sample_matrix = np.full((5, 100), 1)
 sample_matrix[0, :] = np.arange(100)

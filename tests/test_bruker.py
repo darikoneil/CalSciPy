@@ -10,10 +10,11 @@ import pathlib
 from PPVD.style import TerminalStyle
 
 # noinspection DuplicatedCode
-FIXTURE_DIR = "".join([os.getcwd(), "\\testing_data"])
+FIXTURE_DIR = os.path.join(os.getcwd(), "testing_data")
+
 
 DATASET = pytest.mark.datafiles(
-    "".join([FIXTURE_DIR, "\\sample_datasets"]),
+    os.path.join(FIXTURE_DIR, "sample_datasets"),
     keep_top_dir=False,
     on_duplicate="ignore",
 )
@@ -57,6 +58,7 @@ def test_determine_bruker_folder_contents_fails():
         # noinspection PyTypeChecker
         determine_bruker_folder_contents(125.6)
         # FAIL WRONG TYPE
+    # TODO forgot about linux
 
 
 @DATASET
@@ -65,7 +67,7 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
         # INGEST
         _input_folder = next(pathlib.Path(_dir).glob("bruker_folder"))
         _descriptions = next(pathlib.Path(_dir).glob("description.txt"))
-        _output_folder = "".join([str(tmp_path), "\\", str(pathlib.Path(_dir).stem), "_output"])
+        _output_folder = os.path.join(str(tmp_path), str(pathlib.Path(_dir).stem) + "_output")
         # MAKE OUTPUT FOLDER
         os.mkdir(_output_folder)
         # RUN FUNCTION
@@ -88,6 +90,7 @@ def test_repackage_bruker_tiffs_fails():
         repackage_bruker_tiffs("C:\\", 125.6)  # FAIL PATH TYPE
     with pytest.raises(FileNotFoundError):
         repackage_bruker_tiffs("C:\\1381945328953298532895", "C:\\")  # FAIL PATH EXISTS
+    # TODO FORGOT LINUX
 
 
 @DATASET
@@ -121,3 +124,4 @@ def test_load_bruker_tiff_fails():
         # noinspection PyTypeChecker
         load_bruker_tiffs(125.6)
         # FAIL WRONG TYPE
+    # TODO FORGOT LINUX

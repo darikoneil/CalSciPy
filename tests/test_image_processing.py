@@ -6,11 +6,11 @@ from CalSciPy.image_processing import blockwise_fast_filter_tiff, clean_image_st
 
 
 # noinspection Duplicatedcode
-FIXTURE_DIR = "". join([os.getcwd(), "\\testing_data"])
+FIXTURE_DIR = os.path.join(os.getcwd(), "testing_data")
 
 
 DATASET = pytest.mark.datafiles(
-    "". join( [FIXTURE_DIR, "\\sample_datasets"]),
+    os.path.join(FIXTURE_DIR, "sample_datasets"), 
     keep_top_dir=False,
     on_duplicate="ignore")
 
