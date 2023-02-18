@@ -48,7 +48,7 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
             desc="Filtering images...",
             disable=False,
     ):
-        if block == 0:
+        if _block == 0:
             remainder = images[blocks[_block + 1] - 500:blocks[_block + 1], :, :].copy()
             images[0:blocks[_block + 1], :, :] = cupy.asnumpy(fast_filter_images(cupy.asarray(
                 images[0:blocks[_block + 1], :, :]), mask))
