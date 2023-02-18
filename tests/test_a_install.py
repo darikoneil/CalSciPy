@@ -8,18 +8,17 @@ import importlib
 
 
 def retrieve_details(path):
-    try:
-        details = toml.load(path).get("project")
-    except FileNotFoundError:
-        return "name", "version", "dependencies"
-    else:
-        name = details.get("name")
-        version = details.get("version")
-        dependencies = details.get("dependencies")
-        return name, version, dependencies
+    details = toml.load(path).get("project")
+    name = details.get("name")
+    version = details.get("version")
+    dependencies = details.get("dependencies")
+    return name, version, dependencies
     
 
 pyproject_file = "".join([os.getcwd(), "\\pyproject.toml"])
+if not os,path,exists(pyproject_file):
+    pyproject_file = "".join([os.getcwd(), "/pyproject.toml"])
+print(f"{os.path.exists(pyproject_file)}\n") 
 print(f"{os.getcwd()}\n")
 print(f"{sys.path}\n")
 
