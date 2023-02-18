@@ -19,10 +19,10 @@ pyproject_file = os.path.join(os.getcwd(), "pyproject.toml")
 
 package_name, package_version, package_dependencies = retrieve_details(pyproject_file)
 
-print(f"\n\n{TerminalStyle.ORANGE}Testing...{TerminalStyle.RESET}\n")
-print(f"{TerminalStyle.YELLOW}Package: {TerminalStyle.BLUE}{package_name}{TerminalStyle.RESET}\n")
-print(f"{TerminalStyle.YELLOW}Version: {TerminalStyle.BLUE}{package_version}{TerminalStyle.RESET}\n")
-print(f"{TerminalStyle.YELLOW}Dependencies: {TerminalStyle.BLUE}{package_dependencies}{TerminalStyle.RESET}\n")
+print(f"\n\n{TerminalStyle.ORANGE}Testing...{TerminalStyle.RESET}")
+print(f"{TerminalStyle.YELLOW}Package: {TerminalStyle.BLUE}{package_name}{TerminalStyle.RESET}")
+print(f"{TerminalStyle.YELLOW}Version: {TerminalStyle.BLUE}{package_version}{TerminalStyle.RESET}")
+print(f"{TerminalStyle.YELLOW}Dependencies: {TerminalStyle.BLUE}{package_dependencies}{TerminalStyle.RESET}")
 
 
 @pytest.mark.parametrize("path", [pyproject_file])
