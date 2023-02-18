@@ -60,7 +60,7 @@ def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3
                                            axis=0)), mask))[block_buffer:, :, :]
         else:
             remainder_new = images[blocks[_block + 1] - 500:blocks[_block + 1], :, :].copy()
-            images[blocks[_block]:_blocks[_block + 1], :, :] = \
+            images[blocks[_block]:blocks[_block + 1], :, :] = \
                 cupy.asnumpy(fast_filter_images(
                     cupy.asarray(np.append(remainder, images[blocks[_block]:blocks[_block + 1], :, :],
                                            axis=0)), mask))[block_buffer:block_size+block_buffer, :, :]

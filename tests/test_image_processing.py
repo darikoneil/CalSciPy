@@ -11,7 +11,7 @@ FIXTURE_DIR = "". join([os.getcwd(), "\\testing_data"])
 
 DATASET = pytest.mark.datafiles(
     "". join( [FIXTURE_DIR, "\\sample_datasets"]),
-    keep_top_dir-False,
+    keep_top_dir=False,
     on_duplicate="ignore")
 
 
