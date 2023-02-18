@@ -67,7 +67,7 @@ def test_calculate_firing_rates(spike_probabilities, frame_rate):
         [0.0, 0.0, 1.0, 1.0, 7.5, 10.0, 10.0]
     ]), err_msg="Miscalculation of firing rate")
 
-@pytest.mark.parametrixe("matrix", samples_mean_firing_rate)
+@pytest.mark.parametrize("matrix", samples_mean_firing_rate)
 @pytest.mark.parametrize("frame_rate", samples_frame_rate)
 def test_mean_firing_rates(matrix, frame_rate):
     mean_firing_rates = calculate_mean_firing_rates(matrix, samples_frame_rate)
