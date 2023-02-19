@@ -1,6 +1,7 @@
 import pytest
 import numpy as np
 import os
+import pathlib
 
 from PPVD.style import TerminalStyle
 from CalSciPy.reorganization import generate_raster, generate_tensor, merge_factorized_matrices, merge_tensor
@@ -11,6 +12,8 @@ sample_event_lists = (
     [([[1, 2, 3], [5, 6, 7], [0, 10, 20]], None),
      ([[1, 2, 3], [5, 6, 7], [0, 10, 20]], 21)]
 )
+
+
 sample_factorized_matrix = np.load(os.path.join(
     os.getcwd(), "testing_data", "sample_variables", "sample_factorized_matrices.npy"
 ), allow_pickle=True)
