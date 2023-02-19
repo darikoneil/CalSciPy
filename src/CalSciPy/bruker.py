@@ -18,7 +18,6 @@ from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_fi
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=pathlib.Path)
-@validate_path(pos=0)
 @validate_exists(pos=0)
 def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[int, int, int, int, int]:
     """
@@ -72,7 +71,6 @@ def determine_bruker_folder_contents(folder: Union[str, pathlib.Path]) -> Tuple[
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=pathlib.Path, pos=0)
-@validate_path(pos=0)
 @validate_exists(pos=0)
 def load_bruker_tiffs(folder: Union[str, pathlib.Path],
                       channels: Optional[int] = None, planes: Optional[int] = None) -> Tuple[np.ndarray]:
@@ -206,8 +204,6 @@ def pretty_print_image_description(channels, planes, frames, height, width) -> N
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=0)
-@validate_path(pos=1)
 @validate_exists(pos=0)
 def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pathlib.Path],
                            *args: Union[int, tuple[int]]) -> None:
