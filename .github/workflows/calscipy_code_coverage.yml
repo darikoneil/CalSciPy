@@ -2,9 +2,9 @@ name: CalSciPy Code Coverage
 
 on:
   push:
-    branches: [ "main", "staging"]
+    branches: [ "master", "staging"]
   pull_request:
-    branches: [ "main", "development", "staging"]
+    branches: [ "master", "development", "staging"]
 
 jobs:
   build:
