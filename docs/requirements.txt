@@ -29,7 +29,7 @@ pandas
 Pillow==9.4.0
 pkginfo==1.9.6
 pluggy==1.0.0
-PPVD==0.0.2
+PPVD==0.0.3
 prettytable==3.6.0
 psutil==5.9.4
 py==1.11.0
