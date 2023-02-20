@@ -1,14 +1,20 @@
-from . import bruker
-from . import coloring
-from . import event_processing
-from . import image_processing
-from . import interactive_visuals
-from . import io_tools
-from . import reorganization
-from . import static_visuals
-from . import trace_processing
-from . import validators
-from .version import version
+__all__ = [
+    "bruker",
+    "coloring",
+    "event_processing",
+    "imaging_processing",
+    "interactive_visuals",
+    "io_tools",
+    "reorganization",
+    "static_visuals",
+    "trace_processing",
+    "validators",
+    "version"
+]
 
+from .version import author, name, maintainer, version
 
-name = "CalSciPy"
+author = author
+name = name
+maintainer = maintainer
+version = version

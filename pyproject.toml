@@ -53,6 +53,9 @@ repository = "https://github.com/darikoneil/CalSciPy"
 
 development = [
     "build",
+    "coverage[toml]",
+    "coveralls",
+    "flake8",
     "pytest",
     "pytest-datafiles",
     "pytest-progress",
@@ -71,7 +74,26 @@ addopts = [
     "--import-mode=importlib",
     "-s",
     "--color=yes",
-    "--show-progress",
+    "-vv",
+    "--diff-width=120"
 ]
 testpaths = "tests"
 console_output_style = "progress"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning"
+]
+
+[tool.coverage.run]
+branch = true
+command_line = "-m pytest"
+
+[tool.coverage.report]
+fail_under = 75
+
+[tool.coverage.json]
+pretty_print = true
+
+[tool.coverage.lcov]
+output = "C:/coverage.lcov"
+

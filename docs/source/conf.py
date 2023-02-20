@@ -1,38 +1,22 @@
 import os
 import sys
-import pathlib
+import tomli
+from datetime import date
 
 # IMPORTS ps I can be done not so dumbly
+sys.path.insert(0, os.path.dirname(os.path.dirname(os. getcwd())))
 
-sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../'))
-sys.path.insert(0, os.path.abspath('../../'))
+# get package details directly from pyproject
+pyproject_file = os.path.join(os.path.dirname(os.path.dirname(os. getcwd())), "pyproject.toml")
+package_details = tomli.load(pyproject_file).get("project")
 
-module_names = (
-    "bruker",
-    "coloring",
-    "event_processing",
-    "image_processing",
-    "interactive_visuals",
-    "io_tools",
-    "reorganization"
-    "static_visuals",
-    "trace_processing",
-    "validators",
-    "version"
-)
+# get date for copyright
+today = date.today().year
 
-parent = str(pathlib.Path(os.getcwd()).parents[1])
-sys.path.append("".join([parent, "\\src\\CalSciPy"]))
-sys.path.append("".join([parent, "\\src"]))
-for _module in module_names:
-    sys.path.append("".join([parent, "\\src\\CalSciPy\\", _module]))
-
-project = 'CalSciPy'
-# noinspection PyShadowingBuiltins
-copyright = "2023, Darik A. O'Neil"
-author = "Darik A. O'Neil"
-release = "0.1.5"
+project = package_details.get("name")
+copyright = "".join([today, f" {package_details.authors}"])
+author = f"{package_details.authors}"  # f-string because maybe weird sphinx stuff if it gets list, not sure
+release = package_details.get("version")
 
 
 extensions = [
@@ -44,10 +28,10 @@ extensions = [
     'sphinx_autodoc_typehints']
 
 typehints_defaults = 'comma'
-templates_path = ['_templates']
-exclude_patterns = []
 
-language = '[en]'
+source_suffix = ".rst"
+
+language = "en"
 
 intersphinx_mapping = {
     'cupy': ('https://docs.cupy.dev/en/stable/', None),
@@ -56,7 +40,12 @@ intersphinx_mapping = {
     'numpy': ('https://numpy.org/doc/1.24/', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/', None),
     'scikit-image': ('https://scikit-image.org/docs/stable/', None)
-
 }
 
 html_theme = 'sphinx_rtd_theme'
+
+pygments_style = "sphinx"
+
+latex_engine = "pdflatex"
+
+todo_include_todos = True

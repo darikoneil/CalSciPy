@@ -2,7 +2,6 @@ from __future__ import annotations
 import numpy as np
 import os
 from tqdm.auto import tqdm
-from tqdm import tqdm as tq
 import tifffile
 from typing import Tuple, Optional, Union
 import math
@@ -11,7 +10,7 @@ from imageio import mimwrite
 
 from PPVD.validation import validate_exists, validate_extension, validate_filename, validate_path
 from PPVD.parsing import convert_permitted_types_to_required, if_dir_append_filename, if_dir_join_filename, \
-    require_full_path, find_num_unique_files_given_static_substring, find_num_unique_files_containing_tag
+    require_full_path
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
@@ -235,7 +234,7 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
     """
 
     try:
-        assert(pathlib.Path(path).parent.exists())
+        pathlib.Path(path).parent.exists()
     except AssertionError:
         os.makedirs(str(pathlib.Path(path).parent))
     finally:

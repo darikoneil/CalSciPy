@@ -1,30 +1,31 @@
 from __future__ import annotations
-from typing import Callable, List, Tuple, Sequence, Optional, Union, Any
+from typing import Callable, Tuple, Union, Any
 import numpy as np
 from tqdm.auto import tqdm
 import scipy.ndimage
 import skimage.measure
-import math
 
 from .validators import validate_longest_numpy_dimension, validate_numpy_dimension_odd
 
 try:
     import cupy
     import cupyx.scipy.ndimage
-except ModuleNotFoundError or ImportError:
+except ModuleNotFoundError:
     pass
+
+DEFAULT_MASK = np.ones((3, 3, 3))
 
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
 @validate_numpy_dimension_odd(odd_dimensions=(0, 1, 2), pos=1)
-def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3)), 
+def blockwise_fast_filter_tiff(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK,
                                block_size: int = 21000, block_buffer: int = 500) -> np.ndarray:
     """
     GPU-parallelized multidimensional median filter performed in overlapping blocks.
 
     Designed for use on arrays larger than the available memory capacity.
 
-    Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the cente
+    Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the center
 
     :param images: images stack to be filtered
     :type images: numpy.ndarray
@@ -100,7 +101,7 @@ def clean_image_stack(images: np.ndarray, artifact_length: int = 1000, stack_siz
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
 @validate_numpy_dimension_odd(odd_dimensions=(0, 1, 2), pos=1)
-def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> Any:
+def fast_filter_images(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK) -> Any:
     """
     GPU-parallelized multidimensional median filter
 
@@ -121,7 +122,7 @@ def fast_filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))
 
 @validate_longest_numpy_dimension(axis=0, pos=0)
 @validate_numpy_dimension_odd(odd_dimensions=(0, 1, 2), pos=1)
-def filter_images(images: np.ndarray, mask: np.ndarray = np.ones((3, 3, 3))) -> np.ndarray:
+def filter_images(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK) -> np.ndarray:
     """
     Denoise a tiff stack using a multidimensional median filter
 
@@ -157,7 +158,6 @@ def grouped_z_project(images: np.ndarray, bin_size: Union[Tuple[int, int, int], 
     :return: downsampled image (frames, y pixels, x pixels)
     :rtype: numpy.ndarray
     """
-    return skimage.measure.block_reduce(images, block_size=bin_size,
-                                                     func=function).astype(images.dtype)
+    return skimage.measure.block_reduce(images, block_size=bin_size, func=function).astype(images.dtype)
     # cast back down from float64
 # TODO UNIT TEST

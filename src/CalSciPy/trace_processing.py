@@ -4,6 +4,7 @@ from numba import jit
 from scipy.signal import firwin, filtfilt
 from typing import Optional
 
+
 def calculate_dfof(traces: np.ndarray, frame_rate: float = 30, in_place: bool = False,
                    offset: float = 0.0, raw: Optional[np.ndarray] = None) \
         -> np.ndarray:
@@ -29,9 +30,9 @@ def calculate_dfof(traces: np.ndarray, frame_rate: float = 30, in_place: bool = 
     else:
         dfof = traces.copy()
 
-    taps = 30 # More taps mean higher frequency resolution, which in turn means narrower filters and/or steeper
+    taps = 30  # More taps mean higher frequency resolution, which in turn means narrower filters and/or steeper
     # roll‐offs.
-    filter_frequency = 1 # (Hz)
+    filter_frequency = 1  # (Hz)
     baseline_percentile = 5
     neurons, samples = dfof.shape
 

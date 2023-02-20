@@ -1,7 +1,6 @@
 import pytest
 import numpy as np
-from CalSciPy.event_processing import bin_events, calculate_firing_rates, calculate_mean_firing_rates, \
-    gaussian_smooth_firing_rates, normalize_firing_rates
+from CalSciPy.event_processing import calculate_firing_rates, calculate_mean_firing_rates
 
 
 # most of these are a bit trivial for tests but we'll make tests to check when/if refactoring
@@ -72,4 +71,3 @@ def test_mean_firing_rates(matrix):
     np.testing.assert_equal(mean_firing_rates, np.array([
         3.0, 3.0, 1.5
     ]), err_msg="Miscalculation of mean firing rates")
-

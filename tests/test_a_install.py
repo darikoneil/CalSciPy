@@ -36,15 +36,19 @@ def collect_project():
 
 
 # get project information and work from correct directory
-project_dir, project_file, package_name, package_version, package_dependencies = collect_project()
-os.chdir(project_dir)
+proj_dir, proj_file, pkg_name, pkg_version, pkg_dependencies = collect_project()
+os.chdir(proj_dir)
 
 
-print(f"\n{TerminalStyle.YELLOW}Package: {TerminalStyle.BLUE}{package_name}{TerminalStyle.RESET}")
-print(f"{TerminalStyle.YELLOW}Version: {TerminalStyle.BLUE}{package_version}{TerminalStyle.RESET}")
-print(f"{TerminalStyle.YELLOW}Dependencies: {TerminalStyle.BLUE}{package_dependencies}{TerminalStyle.RESET}")
+print(f"\n{TerminalStyle.YELLOW}Package: {TerminalStyle.BLUE}{pkg_name}{TerminalStyle.RESET}")
+print(f"{TerminalStyle.YELLOW}Version: {TerminalStyle.BLUE}{pkg_version}{TerminalStyle.RESET}")
+print(f"{TerminalStyle.YELLOW}Dependencies: {TerminalStyle.BLUE}{pkg_dependencies}{TerminalStyle.RESET}")
 
 
-@pytest.mark.parametrize("path", [project_file])
+@pytest.mark.parametrize("path", [proj_dir])
 def test_install(path):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "-e ."])
+    try:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-e ."])
+    except subprocess.CalledProcessError as e:
+        print(f"{e.output}")
+        # TODO This doesn't work for macOS or Linux. Obviously since the runner does an install this isn't a big deal

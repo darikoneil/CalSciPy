@@ -57,10 +57,7 @@ def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] 
     def decorator(*args, **kwargs):
         for _dim in odd_dimensions:
             if args[pos].shape[_dim] % 2 != 0:
-                raise TypeError(f"{TerminalStyle.GREEN}Input {pos} Improper Format"
-                            f"{TerminalStyle.YELLOW}the dimension "
-                            f"{TerminalStyle.BLUE}{_dim}{TerminalStyle.YELLOW}"
-                            f" must be odd{TerminalStyle.RESET}")
+                raise TypeError(f"Input {pos} Improper Format the dimension {_dim} must be odd")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator

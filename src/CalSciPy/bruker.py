@@ -296,18 +296,10 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
         else:
             pass
     else:
-        try:
-            assert(_channels == 1)
-        except AssertionError:
-            print("Folder contains multiple channels")
-            return
-        try:
-            assert(_planes == 1)
-        except AssertionError:
-            print("Folder contains multiple planes")
-            return
-
-    # noinspection PyTypeChecker
+        if not _channels == 1:
+            raise AssertionError("Folder contains multiple channels")
+        if not _planes == 1:
+            raise AssertionError("Folder contains multiple planes")
 
     # Decide whether saving in single stack is possible
     if not_over_4gb():

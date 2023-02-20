@@ -3,7 +3,6 @@ import pytest
 from shutil import rmtree
 from CalSciPy.io_tools import load_all_tiffs, load_single_tiff, save_raw_binary, load_raw_binary, \
     save_single_tiff, save_tiff_stack, save_video, load_binary_meta
-from CalSciPy.bruker import determine_bruker_folder_contents, repackage_bruker_tiffs, load_bruker_tiffs
 import numpy as np
 import pathlib
 # noinspection PyProtectedMember
@@ -37,22 +36,13 @@ def test_single_tiff_load_and_save(datafiles, tmp_path):
         _descriptions = read_descriptions(_descriptions)
         # TEST
         _image = load_single_tiff(_input_image)
-        np.testing.assert_array_equal(_image.shape, [1, *_descriptions[3:5]], err_msg=f"{TerminalStyle.GREEN}"
-                                                                                      f"Image Mismatch: "
-                                                                                      f"{TerminalStyle.YELLOW}"
-                                                                                      f"failed on dataset " 
-                                                                                      f"{TerminalStyle.BLUE}"
-                                                                                      f"{pathlib.Path(_dir).name}"
-                                                                                      f"{TerminalStyle.YELLOW}"
-                                                                                      f" during first loading"
-                                                                                      f"{TerminalStyle.RESET}")
+        np.testing.assert_array_equal(_image.shape, [1, *_descriptions[3:5]], err_msg=f"Mismatch: failed on dataset"
+                                                                                      f" {pathlib.Path(_dir).name}"
+                                                                                      f" during first loading")
         save_single_tiff(_image, _output_file)
         _image2 = load_single_tiff(_output_file)
-        np.testing.assert_array_equal(_image, _image2, err_msg=f"{TerminalStyle.GREEN}Image Mismatch: "
-                                                               f"{TerminalStyle.YELLOW}failed on dataset " 
-                                                               f"{TerminalStyle.BLUE}{pathlib.Path(_dir).name}" 
-                                                               f"{TerminalStyle.YELLOW} during second loading"
-                                                               f"{TerminalStyle.RESET}")
+        np.testing.assert_array_equal(_image, _image2, err_msg=f"Image Mismatch: failed on dataset"
+                                                               f" {pathlib.Path(_dir).name} during second loading")
 
     rmtree(tmp_path)
 
