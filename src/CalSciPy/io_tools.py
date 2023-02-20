@@ -15,7 +15,6 @@ from PPVD.parsing import convert_permitted_types_to_required, if_dir_append_file
 
 #
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
-@validate_path(pos=0)
 @validate_exists(pos=0)
 def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
     """
@@ -52,7 +51,6 @@ def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
-@validate_path(pos=0)
 @if_dir_join_filename(default_name="video_meta.txt", flag_pos=0)
 @validate_extension(required_extension=".txt", pos=0)
 @validate_exists(pos=0)
@@ -73,7 +71,6 @@ def load_binary_meta(path: Union[str, pathlib.Path]) -> Tuple[int, int, int, str
 @validate_filename(pos=0)
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
 @if_dir_join_filename(default_name="binary_video", flag_pos=0)
-@validate_path(pos=1)
 @validate_exists(pos=0)
 @validate_exists(pos=1)
 def load_mapped_binary(path: Union[str, pathlib.Path], meta_filename: Optional[str] = None, **kwargs: str) -> np.memmap:
@@ -102,7 +99,6 @@ def load_mapped_binary(path: Union[str, pathlib.Path], meta_filename: Optional[s
 @validate_filename(pos=0)
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=0)
 @if_dir_join_filename(default_name="binary_video", flag_pos=0)
-@validate_path(pos=1)
 @validate_exists(pos=0)
 @validate_exists(pos=1)
 def load_raw_binary(path: Union[str, pathlib.Path], meta_filename: Optional[str] = None) -> np.ndarray:
@@ -127,7 +123,6 @@ def load_raw_binary(path: Union[str, pathlib.Path], meta_filename: Optional[str]
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
-@validate_path(pos=0)
 @validate_exists(pos=0)
 def load_single_tiff(path: Union[str, pathlib.Path]) -> np.ndarray:
     """
@@ -147,7 +142,6 @@ def load_single_tiff(path: Union[str, pathlib.Path]) -> np.ndarray:
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
 @require_full_path(pos=1)
 @validate_extension(required_extension=".tif", pos=1)
 def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
@@ -175,7 +169,7 @@ def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: 
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
+
 def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
                     type_: Optional[np.dtype] = np.uint16) -> None:
     """
@@ -216,7 +210,6 @@ def save_tiff_stack(images: str, output_folder: Union[str, pathlib.Path],
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
 @if_dir_append_filename(default_name="video_meta.txt", flag_pos=1)
 @if_dir_join_filename(default_name="binary_video", flag_pos=1)
 @validate_extension(required_extension=".txt", pos=2)
@@ -248,7 +241,6 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
 
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
 @if_dir_join_filename(default_name="video.mp4", flag_pos=1)
 @validate_extension(required_extension=".mp4", pos=1)
 def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: float = 30.0) -> None:
