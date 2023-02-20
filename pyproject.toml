@@ -56,12 +56,16 @@ development = [
     "coverage[toml]",
     "coveralls",
     "flake8",
+    "flake8-bugbear",
     "pytest",
     "pytest-datafiles",
-    "pytest-progress",
+    "pytest-sugar",
+    "pytest-clarity",
     "sphinx",
     "sphinx-rtd-theme",
     "sphinx_autodoc_typehints",
+    "toml",
+    "tomli",
     "twine"
 ]
 
