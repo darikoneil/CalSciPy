@@ -15,8 +15,8 @@ idna==3.4
 imageio==2.24.0
 imageio-ffmpeg==0.4.8
 imagesize==1.4.1
-importlib-metadata==6.0.0
-importlib-resources==5.10.2
+importlib-metadata>5
+importlib-resources
 iniconfig==2.0.0
 jaraco.classes==3.2.3
 Jinja2==3.1.2
