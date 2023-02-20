@@ -2,7 +2,7 @@ import subprocess
 import sys
 from PPVD.style import TerminalStyle
 import pytest
-from .helper_scripts import collect_project
+from tests.helper_scripts import collect_project
 import os
 
 # get project information and work from correct directory
