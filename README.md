@@ -4,13 +4,13 @@
 ![PyPI](https://img.shields.io/pypi/v/CalSciPy)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/CalSciPy)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023)
-![Coveralls branch](https://img.shields.io/coverallsCoverage/github/darikoneil/CalSciPy?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/darikoneil/CalSciPy/badge.svg?branch=master)](https://coveralls.io/github/darikoneil/CalSciPy?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/calscipy/badge/?version=latest)](https://calscipy.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/CalSciPy?)
 ![PyPI - Status](https://img.shields.io/pypi/status/CalSciPy)
 ![GitHub](https://img.shields.io/github/license/darikoneil/CalSciPy)
 [![Contributors](https://img.shields.io/github/contributors-anon/darikoneil/CalSciPy)](https://github.com/darikoneil/CalSciPy/graphs/contributors)
-[![CalSciPy](https://github.com/darikoneil/CalSciPy/actions/workflows/calscipy_lint_test_action.yml/badge.svg)](https://github.com/darikoneil/CalSciPy/actions/workflows/calscipy_lint_test_action.yml)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/darikoneil/CalSciPy/calscipy_lint_test_action.yml)
 
 BETA STATUS: This python packages contains a variety of useful methods for handling, processing, and visualizing calcium imaging data. It's intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software packages such as [Caiman](https://github.com/flatironinstitute/CaImAn), [SIMA](https://github.com/losonczylab/sima), and [Suite2P](https://github.com/MouseLand/suite2p).
 
