@@ -39,9 +39,11 @@ psutil==5.9.4
 py==1.11.0
 Pygments==2.14.0
 pyproject_hooks==1.0.0
+pyproject-flake8
 pytest==7.2.1
 pytest-datafiles==2.0.1
-pytest-progress==1.2.5
+pytest-sugar
+pytest-clarity
 pytz==2022.7.1
 pywin32-ctypes==0.2.0
 readme-renderer==37.3
