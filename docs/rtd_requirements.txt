@@ -3,15 +3,11 @@ attrs==22.2.0
 Babel==2.11.0
 bleach==5.0.1
 build==0.10.0
-CalSciPy
 certifi==2022.12.7
 charset-normalizer==3.0.1
 colorama==0.4.6
-coverage[toml]
-coveralls
 docutils==0.17.1
 exceptiongroup==1.1.0
-flake8==3.9.2
 idna==3.4
 imageio==2.24.0
 imageio-ffmpeg==0.4.8
@@ -39,7 +35,6 @@ psutil==5.9.4
 py==1.11.0
 Pygments==2.14.0
 pyproject_hooks==1.0.0
-pyproject-flake8
 pytest==7.2.1
 pytest-datafiles==2.0.1
 pytest-sugar
