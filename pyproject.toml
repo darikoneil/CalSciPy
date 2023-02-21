@@ -91,6 +91,7 @@ filterwarnings = [
 [tool.coverage.run]
 branch = true
 command_line = "-m pytest"
+omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests"]
 
 [tool.coverage.report]
 fail_under = 10
