@@ -1,0 +1,33 @@
+[flake8]
+max-line-length = 127
+max-complexity = 10
+count = False
+color = always
+show_source = False
+statistics = False
+format = html
+ignore =
+    ANN101,
+    ANN204,
+    ANN401,
+    ANN002,
+    ANN003,
+    W503
+htmldir = flake_report
+unused-arguments-ignore-stub-functions = True
+unused-arguments-ignore-dunder = True
+exclude =
+    .git,
+    .github,
+    .pytest_cache,
+    htmlcov,
+    __pycache__,
+    docs/source/conf.py,
+    old,
+    build,
+    dist,
+    scratchpad,
+    tests,
+    testing_data,
+    hardware,
+    reference_old
