@@ -12,7 +12,8 @@ ignore =
     ANN401,
     ANN002,
     ANN003,
-    W503
+    W503,
+    W605
 htmldir = flake_report
 unused-arguments-ignore-stub-functions = True
 unused-arguments-ignore-dunder = True
