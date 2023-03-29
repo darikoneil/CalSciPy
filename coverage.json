@@ -1,7 +1,7 @@
 {
     "meta": {
         "version": "7.1.0",
-        "timestamp": "2023-03-29T13:16:34.834984",
+        "timestamp": "2023-03-29T17:12:16.646757",
         "branch_coverage": true,
         "show_contexts": false
     },
@@ -1050,6 +1050,124 @@
             ],
             "missing_branches": []
         },
+        "src\\CalSciPy\\trace_processing.py": {
+            "executed_lines": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                8,
+                29,
+                30,
+                32,
+                34,
+                36,
+                37,
+                38,
+                42,
+                43,
+                44,
+                47,
+                48,
+                49,
+                50,
+                53,
+                55,
+                56,
+                58,
+                60,
+                63,
+                65,
+                68,
+                70,
+                73,
+                88,
+                91,
+                102,
+                103,
+                105,
+                106,
+                108,
+                110,
+                111,
+                112,
+                113
+            ],
+            "summary": {
+                "covered_lines": 41,
+                "num_statements": 41,
+                "percent_covered": 100.0,
+                "percent_covered_display": "100",
+                "missing_lines": 0,
+                "excluded_lines": 0,
+                "num_branches": 14,
+                "num_partial_branches": 0,
+                "covered_branches": 14,
+                "missing_branches": 0
+            },
+            "missing_lines": [],
+            "excluded_lines": [],
+            "executed_branches": [
+                [
+                    29,
+                    30
+                ],
+                [
+                    29,
+                    32
+                ],
+                [
+                    43,
+                    44
+                ],
+                [
+                    43,
+                    47
+                ],
+                [
+                    48,
+                    49
+                ],
+                [
+                    48,
+                    53
+                ],
+                [
+                    55,
+                    56
+                ],
+                [
+                    55,
+                    70
+                ],
+                [
+                    56,
+                    58
+                ],
+                [
+                    56,
+                    63
+                ],
+                [
+                    105,
+                    106
+                ],
+                [
+                    105,
+                    108
+                ],
+                [
+                    110,
+                    111
+                ],
+                [
+                    110,
+                    113
+                ]
+            ],
+            "missing_branches": []
+        },
         "src\\CalSciPy\\version.py": {
             "executed_lines": [
                 1,
@@ -1078,15 +1196,15 @@
         }
     },
     "totals": {
-        "covered_lines": 263,
-        "num_statements": 355,
-        "percent_covered": 69.57403651115618,
-        "percent_covered_display": "70",
+        "covered_lines": 304,
+        "num_statements": 396,
+        "percent_covered": 72.62773722627738,
+        "percent_covered_display": "73",
         "missing_lines": 92,
         "excluded_lines": 0,
-        "num_branches": 138,
+        "num_branches": 152,
         "num_partial_branches": 18,
-        "covered_branches": 80,
+        "covered_branches": 94,
         "missing_branches": 58
     }
 }

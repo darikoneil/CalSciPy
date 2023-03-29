@@ -67,3 +67,29 @@ def dfof_ext_sample_traces(request):
 @pytest.fixture(scope="function")
 def dfof_frame_rate_sample_traces(request):
     return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_frame_rate_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_small_sample_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_small_sample_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_even_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_even_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def std_noise_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("std_noise_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def std_noise_frame_rate_halved_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("std_noise_frame_rate_halved_sample_traces.npy"),
+                   allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def detrended_dfof_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("detrended_dfof_sample_traces.npy"), allow_pickle=True)
