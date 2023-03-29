@@ -1,15 +1,15 @@
 from __future__ import annotations
-from typing import List, Optional
+from typing import List, Optional, Iterable
 import numpy as np
 from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_numpy_type, validate_tensor
 
 
-def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] = None) -> np.ndarray:
+def generate_raster(event_frames: Iterable[Iterable[int]], total_frames: Optional[int] = None) -> np.ndarray:
     """
-    Generate raster from lists of frames containing an event (e.g., spikes)
+    Generate raster from an iterable of iterables containing the spike or event times for each neuron
 
-    :param event_frames: list of event frames (e.g., spike frames)
-    :type event_frames: list[list[int]]
+    :param event_frames: iterable containing an iterable identifying the event frames for each neuron
+    :type event_frames: Iterable[Iterable[int]]
     :param total_frames: total number of frames
     :type total_frames: Optional[int] = None
     :return: event matrix of neurons x total frames
@@ -17,7 +17,7 @@ def generate_raster(event_frames: List[List[int]], total_frames: Optional[int] =
     """
 
     if not total_frames:  # if total frames not provided we estimate by finding the very last event
-        total_frames = np.max([event for events in event_frames for event in events])+1  # + 1 to account for 0-index
+        total_frames = np.max([event for events in event_frames for event in events]) + 1  # + 1 to account for 0-index
     _neurons = len(event_frames)
     event_matrix = np.full((_neurons, total_frames), 0, dtype=np.int32)
 
@@ -41,7 +41,7 @@ def generate_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray
     :return: traces_as_tensor
     :rtype: numpy.ndarray
     """
-    return np.stack(np.hsplit(traces_as_matrix, traces_as_matrix.shape[1]//chunk_size), axis=0)
+    return np.stack(np.hsplit(traces_as_matrix, traces_as_matrix.shape[1] // chunk_size), axis=0)
 
 
 @validate_tensor(pos=0)

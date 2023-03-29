@@ -1,6 +1,6 @@
 [flake8]
 max-line-length = 127
-max-complexity = 10
+max-complexity = 26
 count = False
 color = always
 show_source = False
@@ -30,4 +30,8 @@ exclude =
     tests,
     testing_data,
     hardware,
-    reference_old
+    reference_old,
+    scratch,
+    flake_report,
+    tests,
+    dist

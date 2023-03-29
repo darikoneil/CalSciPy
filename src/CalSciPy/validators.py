@@ -24,7 +24,7 @@ def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int
 
     @wraps(function)
     def decorator(*args, **kwargs):
-        arg_shape = args[pos]
+        arg_shape = args[pos].shape
         long_axis = arg_shape[axis]
         axes_list = list(arg_shape)
         axes_list.pop(axis)
@@ -56,7 +56,7 @@ def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] 
     @wraps(function)
     def decorator(*args, **kwargs):
         for _dim in odd_dimensions:
-            if args[pos].shape[_dim] % 2 != 0:
+            if args[pos].shape[_dim] % 2 == 0:
                 raise TypeError(f"Input {pos} Improper Format the dimension {_dim} must be odd")
         # noinspection PyArgumentList
         return function(*args, **kwargs)

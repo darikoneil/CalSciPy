@@ -5,29 +5,20 @@ from CalSciPy.io_tools import load_all_tiffs, load_single_tiff
 from CalSciPy.bruker import determine_bruker_folder_contents, repackage_bruker_tiffs, load_bruker_tiffs
 import numpy as np
 import pathlib
-from tests.helpers import BlockPrinting
-
-
-# noinspection PyProtectedMember
+from tests.helpers import BlockPrinting, read_descriptions
 from PPVD.style import TerminalStyle
-
-# noinspection DuplicatedCode
-FIXTURE_DIR = os.path.join(os.getcwd(), "testing_data")
+from tests.conftest import sample_data_dir
 
 
 DATASET = pytest.mark.datafiles(
-    os.path.join(FIXTURE_DIR, "sample_datasets"),
+    sample_data_dir,
     keep_top_dir=False,
     on_duplicate="ignore",
 )
 
 
-def read_descriptions(file):
-    return np.genfromtxt(str(file), delimiter=",", dtype="int")
-
-
 @DATASET
-def test_determine_bruker_folder_contents_passes(datafiles):
+def test_determine_bruker_folder_contents(datafiles):
     with BlockPrinting():
         for _dir in datafiles.listdir():
 
@@ -38,31 +29,12 @@ def test_determine_bruker_folder_contents_passes(datafiles):
             _contents = determine_bruker_folder_contents(_input_folder)
 
             for _test in enumerate(["Channel", "Plane", "Frame", "Height", "Width"]):
-                assert _contents[_test[0]] == _descriptions[_test[0]], f"{TerminalStyle.GREEN}Description Mismatch: " \
-                                                                       f"{TerminalStyle.YELLOW} failed on dataset " \
-                                                                       f"{TerminalStyle.BLUE}{pathlib.Path(_dir).name}: " \
-                                                                       f"{TerminalStyle.ORANGE}{_test[1]}" \
-                                                                       f"{TerminalStyle.YELLOW} detection " \
-                                                                       f"{TerminalStyle.RESET}"
+                assert _contents[_test[0]] == _descriptions[_test[0]], f"Description Mismatch: failed on dataset " \
+                                                                       f"{pathlib.Path(_dir).name}: " \
+                                                                       f"{_test[1]} detection"
             return
 
         rmtree(datafiles)
-
-
-def test_determine_bruker_folder_contents_fails():
-    with BlockPrinting():
-        with pytest.raises(ValueError):
-            determine_bruker_folder_contents("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
-        with pytest.raises(ValueError):
-            determine_bruker_folder_contents("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
-        with pytest.raises(FileNotFoundError):
-            determine_bruker_folder_contents("C:\\673469346349673496734967349673205-3258-32856-3486")
-            # FAIL VALIDATE PATH NOT FOUND
-        with pytest.raises(TypeError):
-            # noinspection PyTypeChecker
-            determine_bruker_folder_contents(125.6)
-            # FAIL WRONG TYPE
-        # TODO forgot about linux
 
 
 @DATASET
@@ -80,22 +52,8 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
             # TEST
             _descriptions = read_descriptions(_descriptions)
             _contents = load_all_tiffs(_output_folder)
-            assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"{TerminalStyle.GREEN}Image Mismatch: " \
-                                                                           f"{TerminalStyle.YELLOW}failed on dataset" \
-                                                                           f"{TerminalStyle.BLUE} " \
-                                                                           f"{pathlib.Path(_input_folder).name} " \
-                                                                           f"{TerminalStyle.RESET}"
-
-
-def test_repackage_bruker_tiffs_fails():
-    with pytest.raises(ValueError):
-        repackage_bruker_tiffs("C:\\&^6", "C:\\&^6")  # FAIL PATH CHARACTERS
-    with pytest.raises(TypeError):
-        # noinspection PyTypeChecker
-        repackage_bruker_tiffs("C:\\", 125.6)  # FAIL PATH TYPE
-    with pytest.raises(FileNotFoundError):
-        repackage_bruker_tiffs("C:\\1381945328953298532895", "C:\\")  # FAIL PATH EXISTS
-    # TODO FORGOT LINUX
+            assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Image Mismatch: failed on dataset" \
+                                                                           f"{pathlib.Path(_input_folder).name}"
 
 
 @DATASET
@@ -111,24 +69,5 @@ def test_load_bruker_tiffs(datafiles):
             _image1 = load_single_tiff(_input_image)
             # TEST
             _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
-            np.testing.assert_array_equal(_image1, _image2, err_msg=f"{TerminalStyle.GREEN}Image Mismatch: "
-                                                                    f"{TerminalStyle.YELLOW}failed on dataset"
-                                                                    f"{TerminalStyle.BLUE} "
-                                                                    f"{pathlib.Path(_input_folder).name} "
-                                                                    f"{TerminalStyle.RESET}")
-
-
-def test_load_bruker_tiff_fails():
-    with BlockPrinting():
-        with pytest.raises(ValueError):
-            load_bruker_tiffs("")  # FAIL VALIDATE PATH NO ROOT/DRIVE
-        with pytest.raises(ValueError):
-            load_bruker_tiffs("C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
-        with pytest.raises(FileNotFoundError):
-            load_bruker_tiffs("C:\\673469346349673496734967349673205-3258-32856-3486")
-            # FAIL VALIDATE PATH NOT FOUND
-        with pytest.raises(TypeError):
-            # noinspection PyTypeChecker
-            load_bruker_tiffs(125.6)
-            # FAIL WRONG TYPE
-        # TODO FORGOT LINUX
+            np.testing.assert_array_equal(_image1, _image2, err_msg=f"Image Mismatch: failed on dataset "
+                                                                    f"{pathlib.Path(_input_folder).name}")

@@ -3,6 +3,7 @@ from typing import Any
 import sys
 from sys import float_info
 from os import devnull
+import numpy as np
 
 
 class BlockPrinting:
@@ -13,3 +14,7 @@ class BlockPrinting:
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
         sys.stdout.close()
         sys.stdout = self._stdout
+
+
+def read_descriptions(file):
+    return np.genfromtxt(str(file), delimiter=",", dtype="int")
