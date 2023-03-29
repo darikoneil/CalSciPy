@@ -135,7 +135,7 @@ def filter_images(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK) -> np.nda
 # TODO UNIT TEST
 
 
-@validate_longest_numpy_dimension(axis=0, pos=0)
+# @validate_longest_numpy_dimension(axis=0, pos=0)
 def grouped_z_project(images: np.ndarray, bin_size: Union[Tuple[int, int, int], int],
                       function: Callable = np.mean) -> np.ndarray:
     """
