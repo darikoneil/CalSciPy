@@ -65,11 +65,10 @@ def calculate_dfof(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool 
         dfof[neuron, :] = (dfof[neuron, :] - baseline) / baseline
 
     return dfof
-# TODO UNIT TEST
 
 
 @jit
-def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, frame_rate: float = 30) -> np.ndarray:
+def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, frame_rate: float = 30.0) -> np.ndarray:
     """
     Calculates a frame-rate independent standardized noise as defined as:
         | :math:`v = \\frac{\sigma \\frac{\Delta F}F}\sqrt{f}`
