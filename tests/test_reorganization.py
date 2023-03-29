@@ -37,7 +37,7 @@ def test_generate_raster(sample, expected):
     (lazy_fixture("tensor"), False),
     (lazy_fixture("spike_times"), False)
 ])
-def test_generate_tensor_passes(sample, expected):
+def test_generate_tensor(sample, expected):
     if expected:
         tensor = generate_tensor(sample, 25)
         if tensor.shape != (4, 5, 25):
@@ -47,6 +47,9 @@ def test_generate_tensor_passes(sample, expected):
             np.testing.assert_array_equal(tensor[_chunk, 0, :], np.arange(25)+(_chunk*25), f"Chunk {_chunk}: Generating"
                                                                                            f" tensor did not maintain"
                                                                                            f" correct order")
+        # make sure fails when not evenly divisible
+        with pytest.raises(AssertionError):
+            generate_tensor(sample, 24)
     else:
         with pytest.raises((AssertionError, AttributeError, IndexError)):
             generate_tensor(sample)
@@ -58,7 +61,7 @@ def test_generate_tensor_passes(sample, expected):
     (lazy_fixture("matrix"), False),
     (lazy_fixture("spike_times"), False)
 ])
-def test_merge_tensor_passes(sample, expected):
+def test_merge_tensor(sample, expected):
     if expected:
         traces_as_matrix = merge_tensor(sample)
         if traces_as_matrix.shape != (4, 15):

@@ -39,3 +39,31 @@ def factorized_matrix(request):
     return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("sample_factorized_matrices.npy"), allow_pickle=True)
 
 
+@pytest.fixture(scope="function")
+def sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def extended_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("extended_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_offset_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_offset_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_ext_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_ext_sample_traces.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def dfof_frame_rate_sample_traces(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("dfof_frame_rate_sample_traces.npy"), allow_pickle=True)
