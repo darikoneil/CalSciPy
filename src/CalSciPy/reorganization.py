@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Optional, Iterable
+from typing import Optional, Iterable
 import numpy as np
 from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_numpy_type, validate_tensor
 
