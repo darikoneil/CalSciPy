@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.1.6"
+version = "0.1.7"
 description = "A collection"
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -55,10 +55,16 @@ development = [
     "coverage[toml]",
     "coveralls",
     "flake8",
+    "flake8-annotations",
     "flake8-bugbear",
+    "flake8-class-attributes-order",
+    "flake8-comprehensions",
+    "flake8-html",
+    "flake8-unused-arguments",
     "pyproject-flake8",
     "pytest",
     "pytest-datafiles",
+    "pytest-lazy-fixture",
     "pytest-sugar",
     "pytest-clarity",
     "sphinx",
@@ -92,6 +98,8 @@ filterwarnings = [
 branch = true
 command_line = "-m pytest"
 omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests"]
+dynamic_context = "test_function"
+
 
 [tool.coverage.report]
 fail_under = 10
@@ -99,6 +107,7 @@ fail_under = 10
 [tool.coverage.json]
 pretty_print = true
 
-[tool.coverage.lcov]
-output = "C:/coverage.lcov"
+[tool.coverage.html]
+show_contexts = true
+
 

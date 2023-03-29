@@ -1,6 +1,5 @@
 from __future__ import annotations
 from PPVD.parsing import parameterize
-from PPVD.style import TerminalStyle
 from typing import Callable, Tuple
 from functools import wraps
 
@@ -23,18 +22,15 @@ def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int
     """
 
     @wraps(function)
-    def decorator(*args, **kwargs):
-        arg_shape = args[pos]
+    def decorator(*args, **kwargs) -> Callable:
+        arg_shape = args[pos].shape
         long_axis = arg_shape[axis]
         axes_list = list(arg_shape)
         axes_list.pop(axis)
 
         for _axis in axes_list:
             if _axis > long_axis:
-                raise AssertionError(f"{TerminalStyle.GREEN}Input {pos} Improper Format: "
-                                     f"{TerminalStyle.YELLOW} axis {TerminalStyle.BLUE}{axis}"
-                                     f"{TerminalStyle.YELLOW} ought to be larger than axis "
-                                     f"{TerminalStyle.BLUE}{_axis}{TerminalStyle.RESET}")
+                raise AssertionError(f"Input {pos} Improper Format: axis {axis} ought to be larger than axis {_axis}")
         # noinspection PyArgumentList
         return function(*args, **kwargs)
 
@@ -42,7 +38,7 @@ def validate_longest_numpy_dimension(function: Callable, axis: int = 0, pos: int
 
 
 @parameterize
-def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] = tuple([0]), pos: int = 0) -> Callable:
+def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] = (0, ), pos: int = 0) -> Callable:
     """
     Decorator for validating numpy dimension is odd
 
@@ -54,9 +50,9 @@ def validate_numpy_dimension_odd(function: Callable, odd_dimensions: Tuple[int] 
     :type pos: int
     """
     @wraps(function)
-    def decorator(*args, **kwargs):
+    def decorator(*args, **kwargs) -> Callable:
         for _dim in odd_dimensions:
-            if args[pos].shape[_dim] % 2 != 0:
+            if args[pos].shape[_dim] % 2 == 0:
                 raise TypeError(f"Input {pos} Improper Format the dimension {_dim} must be odd")
         # noinspection PyArgumentList
         return function(*args, **kwargs)

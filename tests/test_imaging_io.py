@@ -7,12 +7,11 @@ import numpy as np
 import pathlib
 # noinspection PyProtectedMember
 from PPVD.style import TerminalStyle
+from tests.conftest import sample_data_dir
 
-# noinspection DuplicatedCode
-FIXTURE_DIR = os.path.join(os.getcwd(), "testing_data")
 
 DATASET = pytest.mark.datafiles(
-    os.path.join(FIXTURE_DIR, "sample_datasets"),
+    sample_data_dir,
     keep_top_dir=False,
     on_duplicate="ignore",
 )
