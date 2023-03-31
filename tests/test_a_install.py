@@ -1,10 +1,10 @@
 import subprocess
 import sys
-from PPVD.style import TerminalStyle
 import pytest
-import os
+from os import chdir
 from pathlib import Path
 import toml
+from PPVD.style import TerminalStyle
 
 
 def retrieve_details(path):
@@ -20,10 +20,10 @@ def retrieve_project_directory(path):
 
 
 def retrieve_project_file():
-    project_file = os.path.join(os.getcwd(), "pyproject.toml")
-    if not os.path.exists(project_file):
-        project_file = os.path.join(Path(os.getcwd()).parent, "pyproject.toml")
-    if not os.path.exists(project_file):
+    project_file = Path.cwd().joinpath("pyproject.toml")
+    if not Path.exists(project_file):
+        project_file = Path.cwd().parent.joinpath("pyproject.toml")
+    if not Path.exists(project_file):
         raise FileNotFoundError("Can't find project file")
     return project_file
 
@@ -37,7 +37,7 @@ def collect_project():
 
 # get project information and work from correct directory
 proj_dir, proj_file, pkg_name, pkg_version, pkg_dependencies = collect_project()
-os.chdir(proj_dir)
+chdir(proj_dir)
 
 
 print(f"\n{TerminalStyle.YELLOW}Package: {TerminalStyle.BLUE}{pkg_name}{TerminalStyle.RESET}")

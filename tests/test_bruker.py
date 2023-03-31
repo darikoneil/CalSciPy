@@ -19,7 +19,6 @@ DATASET = pytest.mark.datafiles(
 def test_determine_imaging_content(datafiles):
     with BlockPrinting():
         for _dir in datafiles.listdir():
-
             _input_folder = next(Path(_dir).glob("bruker_folder"))
             _descriptions = next(Path(_dir).glob("description.txt"))
             _descriptions = read_descriptions(_descriptions)
