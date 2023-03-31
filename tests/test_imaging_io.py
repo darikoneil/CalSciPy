@@ -7,11 +7,11 @@ import numpy as np
 import pathlib
 # noinspection PyProtectedMember
 from PPVD.style import TerminalStyle
-from tests.conftest import sample_data_dir
+from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 
 
 DATASET = pytest.mark.datafiles(
-    sample_data_dir,
+    SAMPLES_DATASETS_DIRECTORY,
     keep_top_dir=False,
     on_duplicate="ignore",
 )
