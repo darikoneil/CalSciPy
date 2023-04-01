@@ -1,3 +1,0 @@
-cupy
-cudatoolkit==11.7
-cutensor
