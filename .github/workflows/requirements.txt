@@ -9,7 +9,7 @@ flake8-comprehensions
 flake8-html
 flake8-unused-arguments
 pytest
-pytest-datafiles
+pytest-datafiles==2.0.1
 pytest-lazy-fixture
 pytest-sugar
 pytest-clarity
