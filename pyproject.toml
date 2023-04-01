@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.1.7"
+version = "0.2.0"
 description = "A collection"
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -29,20 +29,15 @@ classifiers = [
 ]
 
 dependencies = [
-    "imageio[ffmpeg]",
-    "matplotlib",
-    "numba",
     "numpy",
     "pandas",
     "pillow",
     "PPVD",
     "prettytable",
-    "seaborn",
     "scipy",
-    "scikit-image",
-    "tifffile",
     "tqdm"
 ]
+
 [project.urls]
 documentation = "https://calscipy.readthedocs.io/en/latest/?badge=latest"
 repository = "https://github.com/darikoneil/CalSciPy"
