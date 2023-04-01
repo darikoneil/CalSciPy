@@ -4,7 +4,7 @@ from pathlib import Path
 from shutil import rmtree
 from tests.helpers import BlockPrinting, read_descriptions
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
-from CalSciPy._io_tools import load_all_tiffs, load_single_tiff
+from CalSciPy.io_tools import load_images
 from CalSciPy.bruker import determine_imaging_content, load_bruker_tiffs, repackage_bruker_tiffs
 
 
@@ -48,7 +48,7 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
             repackage_bruker_tiffs(_input_folder, _output_folder, (0, 0))
             # TEST
             _descriptions = read_descriptions(_descriptions)
-            _contents = load_all_tiffs(_output_folder)
+            _contents = load_images(_output_folder)
             assert _contents.shape[0] == np.cumprod(_descriptions[2])[-1], f"Image Mismatch: failed on dataset" \
                                                                            f"{_input_folder.name}"
 
@@ -63,7 +63,7 @@ def test_load_bruker_tiffs(datafiles):
             _descriptions = next(Path(_dir).glob("description.txt"))
             # LOAD COMPARISON
             _descriptions = read_descriptions(_descriptions)
-            _image1 = load_single_tiff(_input_image)
+            _image1 = load_images(_input_image)
             # TEST
             _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
             np.testing.assert_array_equal(_image1, _image2, err_msg=f"Image Mismatch: failed on dataset "
