@@ -105,5 +105,3 @@ pretty_print = true
 
 [tool.coverage.html]
 show_contexts = true
-
-

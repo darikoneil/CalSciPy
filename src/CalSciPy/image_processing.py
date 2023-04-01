@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Callable, Tuple, Union, Any
 import numpy as np
 from tqdm.auto import tqdm
-import scipy.ndimage
 import skimage.measure
 
 from CalSciPy.misc import generate_blocks
