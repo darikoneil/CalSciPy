@@ -1,11 +1,6 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Union, Any
 import numpy as np
-from tqdm.auto import tqdm
-import scipy.ndimage
-import skimage.measure
-
-from CalSciPy.misc import generate_blocks
+from .misc import generate_blocks
 
 try:
     import cupy
@@ -17,7 +12,7 @@ except ModuleNotFoundError:
 DEFAULT_MASK = np.ones((3, 3, 3))
 
 
-def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_size: int = 21000,
+def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_size: int = None,
                  block_buffer: int = 0, in_place: bool = False) -> np.ndarray:
     """
     GPU-parallelized multidimensional median filter. Optional arguments for in-place calculation. Can be calculated
@@ -57,24 +52,3 @@ def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_siz
         filtered_images = cupyx.scipy.ndimage.median_filter(filtered_images, footprint=mask)
 
     return filtered_images.get()
-
-
-def grouped_z_project(images: np.ndarray, bin_size: Union[Tuple[int, int, int], int],
-                      function: Callable = np.mean) -> np.ndarray:
-    """
-    Utilize grouped z-project to downsample data
-
-    Downsample example function -> np.mean
-
-    :param images: A numpy array containing a tiff stack (frames, y pixels, x pixels)
-    :type images: numpy.ndarray
-    :param bin_size:  size of each bin passed to downsampling function
-    :type bin_size: tuple[int, int, int] or tuple[int]
-    :param function: group-z projecting function
-    :type function: Callable = np.mean
-    :return: downsampled image (frames, y pixels, x pixels)
-    :rtype: numpy.ndarray
-    """
-    return skimage.measure.block_reduce(images, block_size=bin_size, func=function).astype(images.dtype)
-    # cast back down from float64
-# TODO UNIT TEST
