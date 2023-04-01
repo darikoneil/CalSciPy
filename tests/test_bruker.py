@@ -4,7 +4,7 @@ from pathlib import Path
 from shutil import rmtree
 from tests.helpers import BlockPrinting, read_descriptions
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
-from CalSciPy.io_tools import load_all_tiffs, load_single_tiff
+from CalSciPy._io_tools import load_all_tiffs, load_single_tiff
 from CalSciPy.bruker import determine_imaging_content, load_bruker_tiffs, repackage_bruker_tiffs
 
 
