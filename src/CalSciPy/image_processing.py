@@ -13,7 +13,7 @@ DEFAULT_MASK = np.ones((3, 3, 3))
 
 
 def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_size: int = None,
-                 block_buffer: int = 0, in_place: bool = False) -> np.ndarray:
+                  block_buffer: int = 0, in_place: bool = False) -> np.ndarray:
     """
     GPU-parallelized multidimensional median filter. Optional arguments for in-place calculation. Can be calculated
     blockwise with overlapping or non-overlapping blocks.

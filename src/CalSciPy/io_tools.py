@@ -149,7 +149,7 @@ def load_single_tiff(path: Union[str, pathlib.Path]) -> np.ndarray:
 @validate_path(pos=1)
 @require_full_path(pos=1)
 @validate_extension(required_extension=".tif", pos=1)
-def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
+def save_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a single .tif file. Size must be <4 GB.
 
@@ -244,30 +244,3 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
     images.tofile(path)
     print("Finished saving images as a binary file.")
 # TODO UNIT TEST FOR EXCEPTIONS
-
-
-@convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
-@if_dir_join_filename(default_name="video.mp4", flag_pos=1)
-@validate_extension(required_extension=".mp4", pos=1)
-def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: float = 30.0) -> None:
-    """
-    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
-
-    :param images: numpy array (frames, y-pixels, x-pixels)
-    :type images: numpy.array
-    :param path: absolute filepath or filename
-    :type path: str or pathlib.Path
-    :param fps: frame rate for saved video
-    :type fps: float = 30.0
-    :rtype: None
-    """
-
-    if images.dtype.type != np.uint8:
-        print("\nForcing to unsigned 8-bit\n")
-        images = images.astype(np.uint8)
-
-    print("\nWriting Images to .mp4...\n")
-    mimwrite(path, images, fps=fps, quality=10, macro_block_size=4)
-    print("\nFinished writing images to .mp4.\n")
-# TODO: NO UNIT TEST
