@@ -15,43 +15,6 @@ from PPVD.parsing import convert_permitted_types_to_required, if_dir_append_file
 
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
 @validate_path(pos=0)
-@validate_exists(pos=0)
-def load_all_tiffs(folder: Union[str, pathlib.Path]) -> np.ndarray:
-    """
-    Loads all .tif's within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16-bit
-    exported by the majority (all?) of imaging software.
-
-    :param folder: folder containing a sequence of tiff stacks
-    :type folder: str or pathlib.Path
-    :return: a numpy array containing the images (frames, y-pixels, x-pixels)
-    :rtype: numpy.ndarray
-    """
-    if isinstance(folder, pathlib.Path):
-        folder = str(folder)
-
-    _filenames = [str(_filename.name) for _filename in pathlib.Path(folder).glob("*") if ".tif" in _filename.suffix]
-    y_pix, x_pix = tifffile.TiffFile(folder + "\\" + _filenames[0]).pages[0].shape
-    _num_frames = []  # initialize
-    [_num_frames.append(len(tifffile.TiffFile(folder + "\\" + _filename).pages)) for _filename in _filenames]
-    _total_frames = sum(_num_frames)
-    complete_image = np.full((_total_frames, y_pix, x_pix), 0, dtype=np.uint16)
-    _last_frame = 0
-
-    for _filename in tqdm(
-            range(len(_filenames)),
-            total=len(_filenames),
-            desc="Loading Images...",
-            disable=False,
-    ):
-        complete_image[_last_frame:_last_frame+_num_frames[_filename], :, :] = \
-            load_single_tiff(folder + "\\" + _filenames[_filename])
-        _last_frame += _num_frames[_filename]
-
-    return complete_image
-
-
-@convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
-@validate_path(pos=0)
 @if_dir_join_filename(default_name="video_meta.txt", flag_pos=0)
 @validate_extension(required_extension=".txt", pos=0)
 @validate_exists(pos=0)
@@ -125,31 +88,11 @@ def load_raw_binary(path: Union[str, pathlib.Path], meta_filename: Optional[str]
 # TODO UNIT TEST FOR EXCEPTIONS
 
 
-@convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=0)
-@validate_path(pos=0)
-@validate_exists(pos=0)
-def load_single_tiff(path: Union[str, pathlib.Path]) -> np.ndarray:
-    """
-    Load a single .tif as a numpy array
-
-    :param path: absolute filename
-    :type path: str or pathlib.Path
-    :return: numpy array (frames, y-pixels, x-pixels)
-    :rtype: numpy.ndarray
-    """
-    image = []
-    with tifffile.TiffFile(path) as _file:
-        for _frame in _file.pages:
-            image.append(_frame.asarray())
-
-    return np.array(image)
-
-
 @convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
 @validate_path(pos=1)
 @require_full_path(pos=1)
 @validate_extension(required_extension=".tif", pos=1)
-def save_single_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
+def save_tiff(images: np.ndarray, path: Union[str, pathlib.Path], type_: Optional[np.dtype] = np.uint16) -> None:
     """
     Save a numpy array to a single .tif file. Size must be <4 GB.
 
@@ -244,30 +187,3 @@ def save_raw_binary(images: np.ndarray, path: Union[str, pathlib.Path],
     images.tofile(path)
     print("Finished saving images as a binary file.")
 # TODO UNIT TEST FOR EXCEPTIONS
-
-
-@convert_permitted_types_to_required(permitted=(str, pathlib.Path), required=str, pos=1)
-@validate_path(pos=1)
-@if_dir_join_filename(default_name="video.mp4", flag_pos=1)
-@validate_extension(required_extension=".mp4", pos=1)
-def save_video(images: np.ndarray, path: Union[str, pathlib.Path], fps: float = 30.0) -> None:
-    """
-    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
-
-    :param images: numpy array (frames, y-pixels, x-pixels)
-    :type images: numpy.array
-    :param path: absolute filepath or filename
-    :type path: str or pathlib.Path
-    :param fps: frame rate for saved video
-    :type fps: float = 30.0
-    :rtype: None
-    """
-
-    if images.dtype.type != np.uint8:
-        print("\nForcing to unsigned 8-bit\n")
-        images = images.astype(np.uint8)
-
-    print("\nWriting Images to .mp4...\n")
-    mimwrite(path, images, fps=fps, quality=10, macro_block_size=4)
-    print("\nFinished writing images to .mp4.\n")
-# TODO: NO UNIT TEST
