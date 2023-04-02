@@ -1,9 +1,10 @@
 from __future__ import annotations
 from typing import Union
 from pathlib import Path
+from math import floor
 from json_tricks import load, dump
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageSequence
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 from CalSciPy.misc import generate_blocks
@@ -123,16 +124,23 @@ def save_images(path: Union[str, Path], images: np.ndarray) -> int:
 @validate_extension(required_extension=".tif", pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
-    images = Image.fromarray(images)
-    images.save(path)
+    # if single page save direct
+    if len(images.shape) == 2:
+        images = Image.fromarray(images)
+        images.save(path)
+    # if multi page iterate
+    else:
+        images_to_save = []
+        for single_image in range(images.shape[0]):
+            images_to_save.append(Image.fromarray(images[single_image, :, :]))
+        images_to_save[0].save(path, format="TIFF", save_all=True, append_images=images_to_save[1:])
     return 0
 
 
 @validate_extension(required_extension=".tif", pos=0)
 def _save_many_tif(path: Union[str, Path], images: np.ndarray) -> int:
-    file_size = images.nbytes
-    single_frame_size = images[0].nbytes
-    frames_per_file = file_size / 3.9
+    single_frame_size = images[0, :, :].nbytes * 1e-9
+    frames_per_file = floor(3.9 / single_frame_size)
     frames = list(range(images.shape[0]))
     blocks = generate_blocks(frames, frames_per_file, 0)
     idx = 0
@@ -165,7 +173,19 @@ def _load_single_tif(file: Union[str, Path]) -> np.ndarray:
     :return: numpy array (frames, y-pixels, x-pixels)
     :rtype: numpy.ndarray
     """
-    return np.array(Image.open(file))
+    # open the image
+    image = Image.open(file)
+
+    # if it's a single frame just return it
+    if image.n_frames == 1:
+        return np.array(image)
+
+    # if it's multiple frames then compile & stack
+    image_sequence = []
+    for single_image in ImageSequence.Iterator(image):
+        image_sequence.append(single_image)
+    return np.stack(image_sequence)
+
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -182,6 +202,8 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     images = [_load_single_tif(file) for file in files]
 
     for image in images:
+        print(f"{image.shape=}")
+        print(f"{images[0].shape=}")
         assert (image.shape[1:] == images[0].shape[1:]), "Images don't maintain consistent shape"
 
     for image in images:
