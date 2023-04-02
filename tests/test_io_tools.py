@@ -134,7 +134,8 @@ def test_many_tifs(datafiles, tmp_path, matrix):
         imaging_folder = Path(directory).joinpath("many_tif")
 
         # output folder
-        output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output"]))
+        output_folder_0 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
+        output_folder_1 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_1"]))
 
         # test single image loading
         image_abstracted_method = load_images(imaging_folder)
@@ -151,10 +152,10 @@ def test_many_tifs(datafiles, tmp_path, matrix):
                                               f"implementation and"
                                               f"abstracted methods")
         # test single image saving
-        save_images(output_folder, image_abstracted_method)
-        _save_many_tif(output_folder, image_abstracted_method)
-        image_abstracted_method_reloaded = load_images(output_folder)
-        image_implement_method_reloaded = load_images(output_folder)
+        save_images(output_folder_0, image_abstracted_method, size_cap=0.06)
+        _save_many_tif(output_folder_1, image_abstracted_method, size_cap=0.06)
+        image_abstracted_method_reloaded = load_images(output_folder_0)
+        image_implement_method_reloaded = load_images(output_folder_1)
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
                                       err_msg=f"Image Mismatch between loading with implementation "
                                               f"and abstracted methods")

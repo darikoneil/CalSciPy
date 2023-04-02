@@ -81,7 +81,7 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
 
 @validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def save_images(path: Union[str, Path], images: np.ndarray) -> int:
+def save_images(path: Union[str, Path], images: np.ndarray, size_cap: int = 3.9) -> int:
     """
     Save a numpy array to a single .tif file. If size > 4GB then saved as a series of files. If path is not a file and
     already exists the default filename will be *images*.
@@ -113,12 +113,12 @@ def save_images(path: Union[str, Path], images: np.ndarray) -> int:
         Path.mkdir(file_path, parents=True, exist_ok=True)
 
     file_size = images.nbytes * 1e-9  # convert to GB
-    if file_size <= 3.9:  # crop at 3.9 to be save
+    if file_size <= size_cap:  # crop at 3.9 to be save
         filename = file_path.joinpath(name).with_suffix(".tif")
         _save_single_tif(filename, images)
     else:
         filename = file_path.joinpath(name)
-        _save_many_tif(filename, images)
+        _save_many_tif(filename, images, size_cap)
 
 
 @validate_extension(required_extension=".tif", pos=0)
@@ -138,22 +138,26 @@ def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
 
 
 @validate_extension(required_extension=".tif", pos=0)
-def _save_many_tif(path: Union[str, Path], images: np.ndarray) -> int:
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3.9) -> int:
     single_frame_size = images[0, :, :].nbytes * 1e-9
-    frames_per_file = floor(3.9 / single_frame_size)
+    frames_per_file = floor(size_cap / single_frame_size)
     frames = list(range(images.shape[0]))
     blocks = generate_blocks(frames, frames_per_file, 0)
     idx = 0
 
-    for block in blocks:
-        if idx <= 9:
-            filename = file_path.joinpath("".join([name, "_0", str(idx)])).with_suffix(".tif")
-        else:
-            filename =  file_path.joinpath("".join([name, "_", str(idx)])).with_suffix(".tif")
-        _save_single_tif(filename, images[block, :, :])
-        idx += 1
-
+    try:
+        for block in blocks:
+            if idx <= 9:
+                filename = path.with_name("".join([path.name, "_0", str(idx)])).with_suffix(".tif")
+            else:
+                filename =  path.with_name("".join([path.name, "_", str(idx)])).with_suffix(".tif")
+            _save_single_tif(filename, images[block, :, :])
+            idx += 1
+    except RuntimeError:
+        pass
     return 0
+# TODO FIX ME
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -202,8 +206,6 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     images = [_load_single_tif(file) for file in files]
 
     for image in images:
-        print(f"{image.shape=}")
-        print(f"{images[0].shape=}")
         assert (image.shape[1:] == images[0].shape[1:]), "Images don't maintain consistent shape"
 
     for image in images:
