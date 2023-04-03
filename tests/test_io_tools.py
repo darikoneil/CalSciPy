@@ -2,7 +2,6 @@ import pytest
 from shutil import rmtree
 from pathlib import Path
 import numpy as np
-
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 from tests.helpers import read_descriptions
 # noinspection PyProtectedMember
@@ -21,11 +20,11 @@ DATASET = pytest.mark.datafiles(
 def test_single_page_tifs(datafiles, tmp_path, matrix):
     for directory in datafiles.listdir():
         # Description of Expected
-        descriptions = next(Path(directory).glob("description.txt"))
+        descriptions = Path(directory).joinpath("description.txt")
         descriptions = read_descriptions(descriptions)
 
         # single image
-        single_image_file = next(Path(directory).glob("single.tif"))
+        single_image_file = Path(directory).joinpath("single_page", "images.tif")
 
         # output folder
         output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output"]))
@@ -33,10 +32,10 @@ def test_single_page_tifs(datafiles, tmp_path, matrix):
         # test single image loading
         image_abstracted_method = load_images(single_image_file)
         image_implement_method = _load_single_tif(single_image_file)
-        np.testing.assert_array_equal(image_abstracted_method.shape, descriptions[3:5],
+        np.testing.assert_array_equal(image_abstracted_method.shape, [1, *descriptions[3:5]],
                                       err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
                                               f"during first loading using abstracted")
-        np.testing.assert_array_equal(image_implement_method.shape, descriptions[3:5],
+        np.testing.assert_array_equal(image_implement_method.shape, [1, *descriptions[3:5]],
                                       err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
                                               f"during first loading using implementation")
         np.testing.assert_array_equal(image_implement_method, image_abstracted_method, err_msg=f"Image Mismatch: failed"
@@ -74,11 +73,11 @@ def test_single_page_tifs(datafiles, tmp_path, matrix):
 def test_multi_page_tifs(datafiles, tmp_path, matrix):
     for directory in datafiles.listdir():
         # Description of Expected
-        descriptions = next(Path(directory).glob("description.txt"))
+        descriptions = Path(directory).joinpath("description.txt")
         descriptions = read_descriptions(descriptions)
 
         # single image
-        imaging_file = next(Path(directory).glob("Video_01_of_1.tif"))
+        imaging_file = Path(directory).joinpath("multi_page", "images.tif")
 
         # output folder
         output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output"]))
@@ -127,15 +126,17 @@ def test_multi_page_tifs(datafiles, tmp_path, matrix):
 def test_many_tifs(datafiles, tmp_path, matrix):
     for directory in datafiles.listdir():
         # Description of Expected
-        descriptions = next(Path(directory).glob("description.txt"))
+        descriptions = Path(directory).joinpath("description.txt")
         descriptions = read_descriptions(descriptions)
 
         # single image
-        imaging_folder = Path(directory).joinpath("many_tif")
+        imaging_folder = Path(directory).joinpath("many")
 
         # output folder
         output_folder_0 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
+        Path.mkdir(output_folder_0, parents=True, exist_ok=True)
         output_folder_1 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_1"]))
+        Path.mkdir(output_folder_1, parents=True, exist_ok=True)
 
         # test single image loading
         image_abstracted_method = load_images(imaging_folder)
@@ -152,8 +153,8 @@ def test_many_tifs(datafiles, tmp_path, matrix):
                                               f"implementation and"
                                               f"abstracted methods")
         # test single image saving
-        save_images(output_folder_0, image_abstracted_method, size_cap=0.06)
-        _save_many_tif(output_folder_1, image_abstracted_method, size_cap=0.06)
+        save_images(output_folder_0, image_abstracted_method, size_cap=0.01)
+        _save_many_tif(output_folder_1.joinpath("images"), image_abstracted_method, size_cap=0.01)
         image_abstracted_method_reloaded = load_images(output_folder_0)
         image_implement_method_reloaded = load_images(output_folder_1)
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
@@ -182,11 +183,11 @@ def test_many_tifs(datafiles, tmp_path, matrix):
 def test_binary(datafiles, tmp_path, matrix):
     for directory in datafiles.listdir():
         # Description of Expected
-        descriptions = next(Path(directory).glob("description.txt"))
+        descriptions = Path(directory).joinpath("description.txt")
         descriptions = read_descriptions(descriptions)
 
         # single image
-        imaging_folder = Path(directory)
+        imaging_folder = Path(directory).joinpath("binary")
 
         # output folder
         output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
@@ -205,7 +206,7 @@ def test_binary(datafiles, tmp_path, matrix):
                                       err_msg=f"Mismatch: failed matching original and reloaded dataset")
 
         # make sure memory map loads
-        image_memory_mapped = load_binary(output_folder, map=True)
+        image_memory_mapped = load_binary(output_folder, mapped=True)
 
     # test exceptions
     with pytest.raises(ValueError):

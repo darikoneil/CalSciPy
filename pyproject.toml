@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.1.7"
+version = "0.2.0"
 description = "A collection"
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -30,6 +30,7 @@ classifiers = [
 
 dependencies = [
     "numpy",
+    "opencv-python",
     "pillow",
     "PPVD",
     "prettytable",
@@ -55,7 +56,7 @@ development = [
     "flake8-html",
     "flake8-unused-arguments",
     "pytest",
-    "pytest-datafiles",
+    "pytest-datafiles==2.0.1",
     "pytest-lazy-fixture",
     "pytest-sugar",
     "pytest-clarity",
@@ -86,7 +87,8 @@ filterwarnings = [
 [tool.coverage.run]
 branch = true
 command_line = "-m pytest"
-omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests"]
+omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests", "scratch", "htmlcov", "flake_report", "docs",
+"dist", "lib", ".pytest_cache", ".idea", ".github"]
 dynamic_context = "test_function"
 
 

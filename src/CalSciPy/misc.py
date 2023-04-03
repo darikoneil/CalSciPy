@@ -33,10 +33,11 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
     while True:
         try:
             yield tuple(block)
-            for idx in range(block_size - block_buffer):
+            for idx in range(block_size - block_buffer):  # noqa: B007
                 block.append(next(iterable))
 
         except StopIteration:
+            # noinspection PyUnboundLocalVariable
             idx += block_buffer
             if idx != block_size:
                 yield tuple(block)[-idx:]

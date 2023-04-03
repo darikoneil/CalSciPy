@@ -19,8 +19,8 @@ DATASET = pytest.mark.datafiles(
 def test_determine_imaging_content(datafiles):
     with BlockPrinting():
         for _dir in datafiles.listdir():
-            _input_folder = next(Path(_dir).glob("bruker_folder"))
-            _descriptions = next(Path(_dir).glob("description.txt"))
+            _input_folder = Path(_dir).joinpath("bruker_folder")
+            _descriptions = Path(_dir).joinpath("description.txt")
             _descriptions = read_descriptions(_descriptions)
 
             _contents = determine_imaging_content(_input_folder)
@@ -39,8 +39,8 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
     with BlockPrinting():
         for _dir in datafiles.listdir():
             # INGEST
-            _input_folder = next(Path(_dir).glob("bruker_folder"))
-            _descriptions = next(Path(_dir).glob("description.txt"))
+            _input_folder = Path(_dir).joinpath("bruker_folder")
+            _descriptions = Path(_dir).joinpath("description.txt")
             _output_folder = Path(tmp_path).joinpath("".join([Path(_dir).stem, "_output"]))
             # MAKE OUTPUT FOLDER
             _output_folder.mkdir(parents=True, exist_ok=True)
@@ -58,15 +58,14 @@ def test_load_bruker_tiffs(datafiles):
     with BlockPrinting():
         for _dir in datafiles.listdir():
             # INGEST
-            _input_folder = next(Path(_dir).glob("bruker_folder"))
-            _input_image = next(Path(_dir).glob("Video_01_of_1.tif"))
-            _descriptions = next(Path(_dir).glob("description.txt"))
+            _input_folder = Path(_dir).joinpath("bruker_folder")
+            _input_image = Path(_dir).joinpath("multi_page", "images.tif")
+            _descriptions = Path(_dir).joinpath("description.txt")
             # LOAD COMPARISON
             _descriptions = read_descriptions(_descriptions)
             _image1 = load_images(_input_image)
             # TEST
             _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
-            np.testing.assert_array_equal(_image1[0, :, :], _image2[-1, :, :],
+            np.testing.assert_array_equal(_image1[0, :, :], _image2[0, :, :],
                                           err_msg=f"Image Mismatch: failed on dataset "
                                                   f"{_input_folder.name}")
-            # TODO THIS IS BEING LOADED BACKWARDS
