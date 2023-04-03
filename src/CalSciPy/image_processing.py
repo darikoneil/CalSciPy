@@ -30,6 +30,8 @@ def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_siz
     :type block_size: int = None
     :param block_buffer: the size of the overlapping region between block
     :type block_buffer: int = 0
+    :param in_place: whether to calculate in-place
+    :type in_place: bool = False
     :return: images: numpy array (frames, y pixels, x pixels)
     :rtype: numpy.ndarray
     """
