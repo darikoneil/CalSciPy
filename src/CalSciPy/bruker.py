@@ -6,6 +6,7 @@ import pathlib
 from collections.abc import Iterable
 from prettytable import PrettyTable
 from PIL import Image
+import cv2
 from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
     find_num_unique_files_containing_tag
 from tqdm.auto import tqdm
@@ -103,7 +104,7 @@ def determine_imaging_content(folder: Union[str, pathlib.Path]) -> Tuple[int, in
     def find_dimensions() -> Tuple[int, int]:
         nonlocal folder
         nonlocal _files
-        return np.asarray(Image.open("".join(str(_files[0])))).shape
+        return cv2.imread("".join(str(_files[0])), flags=-1).shape
 
     channels = find_channels()
 
@@ -144,7 +145,7 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
             nonlocal folder
             nonlocal _files
             nonlocal _file
-            return np.asarray(Image.open(str(_files[_file])))
+            return cv2.imread(str(_files[_file]), flags=-1)
 
         tag = "".join(["*", tag, "*"])
         _files = [_file for _file in folder.glob("*.tif") if _file.match(tag)]
@@ -238,7 +239,7 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
         nonlocal _files
         nonlocal _file
         nonlocal _offset
-        return np.asarray(Image.open(str(_files[_file + _offset])))
+        return cv2.imread(str(_files[_file + _offset]), flags=-1)
 
     def save_image(images_: np.ndarray, path_: str, type_: np.dtype = np.uint16) -> None:
         if len(images_.shape) == 2:
