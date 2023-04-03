@@ -34,13 +34,16 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
         try:
             yield tuple(block)
             for idx in range(block_size - block_buffer):  # noqa: B007
-                block.append(next(iterable))
+                block.append(next(iterable))  # we subtract the block buffer to make space for overlap
 
         except StopIteration:
             # noinspection PyUnboundLocalVariable
-            idx += block_buffer
-            if idx != block_size:
-                yield tuple(block)[-idx:]
+            idx += block_buffer  # make sure that we always have at least the overlap
+            if idx == 0:
+                pass  # if we managed a perfect segmentation, then pass to stop iteration
+            elif idx == block_buffer:
+                pass  # if all we have left is overlap then it is a perfect segmentation
             else:
-                yield tuple(block)
+                yield tuple(block)[-idx:]  # if we don't have a full block, we must ensure the number of repeats is
+                # equal to block buffer
             raise StopIteration

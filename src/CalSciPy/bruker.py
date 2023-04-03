@@ -5,7 +5,6 @@ import numpy as np
 import pathlib
 from collections.abc import Iterable
 from prettytable import PrettyTable
-from PIL import Image
 import cv2
 from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
     find_num_unique_files_containing_tag

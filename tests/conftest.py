@@ -35,6 +35,11 @@ def tensor(request):
 
 
 @pytest.fixture(scope="function")
+def long_tensor(request):
+    return np.random.random((10, 5, 5))
+
+
+@pytest.fixture(scope="function")
 def factorized_matrix(request):
     return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("sample_factorized_matrices.npy"), allow_pickle=True)
 
