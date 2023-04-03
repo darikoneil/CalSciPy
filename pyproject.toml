@@ -31,7 +31,6 @@ classifiers = [
 dependencies = [
     "numpy",
     "opencv-python",
-    "pillow",
     "PPVD",
     "prettytable",
     "scipy",
@@ -76,13 +75,14 @@ addopts = [
     "-s",
     "--color=yes",
     "-vv",
-    "--diff-width=120"
+    "--diff-width=120",
+    "--disable-warnings"
 ]
 testpaths = "tests"
 console_output_style = "progress"
 filterwarnings = [
     "ignore::DeprecationWarning",
-    "ignore::FutureWarning"
+    "ignore::FutureWarning",
 ]
 
 [tool.coverage.run]
