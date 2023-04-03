@@ -37,6 +37,7 @@ dependencies = [
     "scipy",
     "tqdm"
 ]
+
 [project.urls]
 documentation = "https://calscipy.readthedocs.io/en/latest/?badge=latest"
 repository = "https://github.com/darikoneil/CalSciPy"
