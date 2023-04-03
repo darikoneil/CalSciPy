@@ -207,7 +207,6 @@ def test_binary(datafiles, tmp_path, matrix):
         # make sure memory map loads
         image_memory_mapped = load_binary(output_folder, map=True)
 
-
     # test exceptions
     with pytest.raises(ValueError):
         load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
