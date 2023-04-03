@@ -12,6 +12,9 @@ from CalSciPy.misc import generate_blocks
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def load_binary(path: Union[str, Path], map: bool = False) -> Union[np.ndarray, np.memmap]:
+    if not path.is_file():
+        path = path.joinpath("binary_video")
+
     metadata = _load_binary_meta(path)
     filename = path.with_suffix(".bin")
 
@@ -60,12 +63,15 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
     :rtype: int
     """
     # parse the desired path
-    if not Path.exists(path):
+    if path.is_file():
         name = Path.name
-        file_path = path.parents
+        file_path = Path(path.parents)
     else:
         name = "binary_video"
         file_path = path
+
+    if not file_path.exists():
+        file_path.mkdir(parents=True, exist_ok=True)
 
     # add extensions
     imaging_filename = file_path.joinpath(name).with_suffix(".bin")
@@ -73,10 +79,10 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
 
     # save metadata
     metadata = _Metadata(images)
-    dump(metadata, metadata_filename)
+    dump(metadata, str(metadata_filename))
 
     # save images
-    images.tofile(imaging_filename)
+    images.tofile(str(imaging_filename))
 
 
 @validate_filename(pos=0)
@@ -163,7 +169,7 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def _load_binary_meta(path: Union[str, Path]) -> _Metadata:
     path = path.with_suffix(".json")
-    return load(path)
+    return load(str(path))
 
 
 @validate_extension(required_extension=".tif", pos=0)
@@ -223,4 +229,4 @@ class _Metadata:
         :type images: numpy.ndarray
         """
         self.frames, self.y, self.x = images.shape
-        self.dtype = images.dtype
+        self.dtype = str(images.dtype)

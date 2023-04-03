@@ -7,7 +7,7 @@ from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 from tests.helpers import read_descriptions
 # noinspection PyProtectedMember
 from CalSciPy.io_tools import load_images, _load_single_tif, _load_many_tif, save_images, _save_single_tif, \
-    _save_many_tif
+    _save_many_tif, load_binary, save_binary
 
 
 DATASET = pytest.mark.datafiles(
@@ -177,3 +177,46 @@ def test_many_tifs(datafiles, tmp_path, matrix):
 
     rmtree(tmp_path)
 
+
+@DATASET
+def test_binary(datafiles, tmp_path, matrix):
+    for directory in datafiles.listdir():
+        # Description of Expected
+        descriptions = next(Path(directory).glob("description.txt"))
+        descriptions = read_descriptions(descriptions)
+
+        # single image
+        imaging_folder = Path(directory)
+
+        # output folder
+        output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
+
+        images = load_binary(imaging_folder)
+
+        np.testing.assert_array_equal(images.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using abstracted")
+
+        save_binary(output_folder, images)
+
+        images_reloaded = load_binary(output_folder)
+
+        np.testing.assert_array_equal(images, images_reloaded,
+                                      err_msg=f"Mismatch: failed matching original and reloaded dataset")
+
+        # make sure memory map loads
+        image_memory_mapped = load_binary(output_folder, map=True)
+
+
+    # test exceptions
+    with pytest.raises(ValueError):
+        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_images(125.6)  # fail with bad type so we don't do anything unexpected
+    with pytest.raises(ValueError):
+        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+    # the rest of failures are fine being trial by forgiveness
