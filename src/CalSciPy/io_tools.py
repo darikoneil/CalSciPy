@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Union
+from typing import Union, Optional
 from pathlib import Path
 from math import floor
 import cv2
 import numpy as np
-from json_tricks import load, dump
+from json import load, dump
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
-from CalSciPy.misc import generate_blocks
+from .misc import generate_blocks
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -15,13 +15,17 @@ def load_binary(path: Union[str, Path], mapped: bool = False) -> Union[np.ndarra
     if not path.is_file():
         path = path.joinpath("binary_video")
 
-    metadata = _load_binary_meta(path)
-    filename = path.with_suffix(".bin")
+    # add extensions
+    meta_filename = path.with_suffix(".json")
+    imaging_filename = path.with_suffix(".bin")
+
+    metadata = _Metadata.decode(meta_filename)
 
     if mapped:
-        return np.memmap(filename, mode="r+", dtype=metadata.dtype, shape=(metadata.frames, metadata.y, metadata.x))
+        return np.memmap(imaging_filename, mode="r+", dtype=metadata.dtype, shape=(metadata.frames, metadata.y,
+                                                                                   metadata.x))
     else:
-        images = np.fromfile(filename, dtype=metadata.dtype)
+        images = np.fromfile(imaging_filename, dtype=metadata.dtype)
         images = np.reshape(images, (metadata.frames, metadata.y, metadata.x))
         return images
 
@@ -79,10 +83,10 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
 
     # save metadata
     metadata = _Metadata(images)
-    dump(metadata, str(metadata_filename))
+    metadata.encode(metadata_filename)
 
     # save images
-    images.tofile(str(imaging_filename))
+    images.tofile(imaging_filename)
 
 
 @validate_filename(pos=0)
@@ -127,12 +131,6 @@ def save_images(path: Union[str, Path], images: np.ndarray, size_cap: float = 3.
     else:
         filename = file_path.joinpath(name)
         _save_many_tif(filename, images, size_cap)
-
-
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def _load_binary_meta(path: Union[str, Path]) -> _Metadata:
-    path = path.with_suffix(".json")
-    return load(str(path))
 
 
 @validate_extension(required_extension=".tif", pos=0)
@@ -203,12 +201,48 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
 
 
 class _Metadata:
-    def __init__(self, images: np.ndarray):
+    def __init__(self, images: Optional[np.ndarray] = None):
         """
         Metadata object using for saving/loading binary images
 
         :param images: images in numpy array (frames, y-pixels, x-pixels)
         :type images: numpy.ndarray
         """
-        self.frames, self.y, self.x = images.shape
-        self.dtype = str(images.dtype)
+        self.frames, self.y, self.x, self.dtype = None, None, None, None
+
+        if images is not None:
+            self.frames, self.y, self.x = images.shape
+            self.dtype = str(images.dtype)
+
+    @classmethod
+    def decode(cls: _Metadata, filename: Path) -> _Metadata:
+
+        with open(str(filename), "r+") as file:
+            attrs = load(file)
+
+        metadata = _Metadata()
+        for key, value in attrs.items():
+            setattr(metadata, key, value)
+
+        if "dtype" not in attrs:
+            raise AttributeError("dtype not found")
+
+        missing_keys = []
+        for key in ["frames", "y", "x"]:
+            if key not in attrs:
+                missing_keys.append(key)
+
+        if len(missing_keys) > 1:
+            raise AttributeError("Require at least 2/3 shape keys")
+
+        if len(missing_keys) == 1:
+            setattr(metadata, missing_keys[0], -1)
+            # set to negative one to let numpy figure it out
+
+        return metadata
+
+    def encode(self, filename: Path) -> int:
+        meta = vars(self)
+        with open(str(filename), "w+") as file:
+            dump(meta, file)
+        return 0
