@@ -20,6 +20,8 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
         raise ValueError("Block size must be > 1")
     if block_buffer >= block_size:
         raise AssertionError("Block buffer must be smaller than the size of the block.")
+    if block_size >= len(sequence):
+        raise AssertionError("Block must be smaller than iterable sequence")
 
     block = deque(maxlen=block_size)
     iterable = iter(sequence)
@@ -31,10 +33,14 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
     while True:
         try:
             yield tuple(block)
-
-            for _ in range(block_size - block_buffer):
+            for idx in range(block_size - block_buffer):  # noqa: B007
                 block.append(next(iterable))
 
         except StopIteration:
-            if block_buffer > 0:
-                return tuple(block)[-block_buffer:]
+            # noinspection PyUnboundLocalVariable
+            idx += block_buffer
+            if idx != block_size:
+                yield tuple(block)[-idx:]
+            else:
+                yield tuple(block)
+            raise StopIteration

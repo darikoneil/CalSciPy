@@ -2,54 +2,221 @@ import pytest
 from shutil import rmtree
 from pathlib import Path
 import numpy as np
-
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 from tests.helpers import read_descriptions
-from CalSciPy.io_tools import load_single_tiff, save_single_tiff
+# noinspection PyProtectedMember
+from CalSciPy.io_tools import load_images, _load_single_tif, _load_many_tif, save_images, _save_single_tif, \
+    _save_many_tif, load_binary, save_binary
+
 
 DATASET = pytest.mark.datafiles(
     SAMPLES_DATASETS_DIRECTORY,
-    keep_top_dir=False,
+    keep_topdirectory=False,
     on_duplicate="ignore",
 )
 
 
 @DATASET
-def test_single_tiff(datafiles, tmp_path):
-    for _dir in datafiles.listdir():
-        _input_image = next(Path(_dir).glob("single.tif"))
-        _descriptions = next(Path(_dir).glob("description.txt"))
-        _output_folder = Path(tmp_path).joinpath("".join([Path(_dir).stem, "_output"]))
-        # MAKE OUTPUT FOLDER
-        Path.mkdir(_output_folder, parents=True, exist_ok=True)
-        _output_file = _output_folder.joinpath("single.tif")
-        # GET COMPARISON DESCRIPTIONS
-        _descriptions = read_descriptions(_descriptions)
-        # TEST
-        _image = load_single_tiff(_input_image)
-        np.testing.assert_array_equal(_image.shape, [1, *_descriptions[3:5]], err_msg=f"Mismatch: failed on dataset"
-                                                                                      f" {Path(_dir).name}"
-                                                                                      f" during first loading")
-        save_single_tiff(_image, _output_file)
-        _image2 = load_single_tiff(_output_file)
-        np.testing.assert_array_equal(_image, _image2, err_msg=f"Image Mismatch: failed on dataset"
-                                                               f" {Path(_dir).name} during second loading")
+def test_single_page_tifs(datafiles, tmp_path, matrix):
+    for directory in datafiles.listdir():
+        # Description of Expected
+        descriptions = Path(directory).joinpath("description.txt")
+        descriptions = read_descriptions(descriptions)
+
+        # single image
+        single_image_file = Path(directory).joinpath("single_page", "images.tif")
+
+        # output folder
+        output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output"]))
+
+        # test single image loading
+        image_abstracted_method = load_images(single_image_file)
+        image_implement_method = _load_single_tif(single_image_file)
+        np.testing.assert_array_equal(image_abstracted_method.shape, [1, *descriptions[3:5]],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using abstracted")
+        np.testing.assert_array_equal(image_implement_method.shape, [1, *descriptions[3:5]],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using implementation")
+        np.testing.assert_array_equal(image_implement_method, image_abstracted_method, err_msg=f"Image Mismatch: failed"
+                                                                                               f"match between"
+                                                                                               f"implementation and"
+                                                                                               f"abstracted methods")
+        # test single image saving
+        save_images(output_folder, image_abstracted_method)
+        _save_single_tif(output_folder, image_abstracted_method)
+        image_abstracted_method_reloaded = load_images(output_folder)
+        image_implement_method_reloaded = load_images(output_folder)
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
+                                      err_msg=f"Image Mismatch between loading with implementation "
+                                              f"and abstracted methods")
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
+                                      err_msg=f"Image mismatch between saved and loaded image")
 
     # test exceptions
     with pytest.raises(ValueError):
-        load_single_tiff("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
-    with pytest.raises(FileNotFoundError):
-        load_single_tiff("C:\\file_not_exists")  # fail file not exists
+        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
-        load_single_tiff(125.6)  # fail with bad type so we don't do anything unexpected
+        load_images(125.6)  # fail with bad type so we don't do anything unexpected
     with pytest.raises(ValueError):
-        save_single_tiff([1, 2, 3, 4, 5], "C:\\&^6*")  # FAIL VALIDATE PATH PERMITTED CHARS
+        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
-        save_single_tiff([1, 2, 3, 4, 5], 125.6)  # fail with bad type so we don't do anything unexpected
-    with pytest.raises(ValueError):
-        save_single_tiff([1, 2, 3, 4, 5], "C:\\file.mp4")  # FAIL EXTENSION
+        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
     # the rest of failures are fine being trial by forgiveness
 
     rmtree(tmp_path)
+
+
+@DATASET
+def test_multi_page_tifs(datafiles, tmp_path, matrix):
+    for directory in datafiles.listdir():
+        # Description of Expected
+        descriptions = Path(directory).joinpath("description.txt")
+        descriptions = read_descriptions(descriptions)
+
+        # single image
+        imaging_file = Path(directory).joinpath("multi_page", "images.tif")
+
+        # output folder
+        output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output"]))
+
+        # test single image loading
+        image_abstracted_method = load_images(imaging_file)
+        image_implement_method = _load_single_tif(imaging_file)
+        np.testing.assert_array_equal(image_abstracted_method.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using abstracted")
+        np.testing.assert_array_equal(image_implement_method.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using implementation")
+        np.testing.assert_array_equal(image_implement_method, image_abstracted_method, err_msg=f"Image Mismatch: failed"
+                                                                                               f"match between"
+                                                                                               f"implementation and"
+                                                                                               f"abstracted methods")
+        # test single image saving
+        save_images(output_folder, image_abstracted_method)
+        _save_single_tif(output_folder, image_abstracted_method)
+        image_abstracted_method_reloaded = load_images(output_folder)
+        image_implement_method_reloaded = load_images(output_folder)
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
+                                      err_msg=f"Image Mismatch between loading with implementation "
+                                              f"and abstracted methods")
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
+                                      err_msg=f"Image mismatch between saved and loaded image")
+
+    # test exceptions
+    with pytest.raises(ValueError):
+        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_images(125.6)  # fail with bad type so we don't do anything unexpected
+    with pytest.raises(ValueError):
+        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+    # the rest of failures are fine being trial by forgiveness
+
+    rmtree(tmp_path)
+
+
+@DATASET
+def test_many_tifs(datafiles, tmp_path, matrix):
+    for directory in datafiles.listdir():
+        # Description of Expected
+        descriptions = Path(directory).joinpath("description.txt")
+        descriptions = read_descriptions(descriptions)
+
+        # single image
+        imaging_folder = Path(directory).joinpath("many")
+
+        # output folder
+        output_folder_0 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
+        Path.mkdir(output_folder_0, parents=True, exist_ok=True)
+        output_folder_1 = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_1"]))
+        Path.mkdir(output_folder_1, parents=True, exist_ok=True)
+
+        # test single image loading
+        image_abstracted_method = load_images(imaging_folder)
+        image_implement_method = _load_many_tif(imaging_folder)
+        np.testing.assert_array_equal(image_abstracted_method.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using abstracted")
+        np.testing.assert_array_equal(image_implement_method.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using implementation")
+        np.testing.assert_array_equal(image_implement_method, image_abstracted_method,
+                                      err_msg=f"Image Mismatch: failed"
+                                              f"match between"
+                                              f"implementation and"
+                                              f"abstracted methods")
+        # test single image saving
+        save_images(output_folder_0, image_abstracted_method, size_cap=0.01)
+        _save_many_tif(output_folder_1.joinpath("images"), image_abstracted_method, size_cap=0.01)
+        image_abstracted_method_reloaded = load_images(output_folder_0)
+        image_implement_method_reloaded = load_images(output_folder_1)
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
+                                      err_msg=f"Image Mismatch between loading with implementation "
+                                              f"and abstracted methods")
+        np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
+                                      err_msg=f"Image mismatch between saved and loaded image")
+
+    # test exceptions
+    with pytest.raises(ValueError):
+        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_images(125.6)  # fail with bad type so we don't do anything unexpected
+    with pytest.raises(ValueError):
+        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+    # the rest of failures are fine being trial by forgiveness
+
+    rmtree(tmp_path)
+
+
+@DATASET
+def test_binary(datafiles, tmp_path, matrix):
+    for directory in datafiles.listdir():
+        # Description of Expected
+        descriptions = Path(directory).joinpath("description.txt")
+        descriptions = read_descriptions(descriptions)
+
+        # single image
+        imaging_folder = Path(directory).joinpath("binary")
+
+        # output folder
+        output_folder = Path(tmp_path).joinpath("".join([Path(directory).stem, "_output_0"]))
+
+        images = load_binary(imaging_folder)
+
+        np.testing.assert_array_equal(images.shape[1:], descriptions[3:5],
+                                      err_msg=f"Mismatch: failed on dataset {Path(directory).name} "
+                                              f"during first loading using abstracted")
+
+        save_binary(output_folder, images)
+
+        images_reloaded = load_binary(output_folder)
+
+        np.testing.assert_array_equal(images, images_reloaded,
+                                      err_msg=f"Mismatch: failed matching original and reloaded dataset")
+
+        # make sure memory map loads
+        image_memory_mapped = load_binary(output_folder, mapped=True)
+
+    # test exceptions
+    with pytest.raises(ValueError):
+        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        load_images(125.6)  # fail with bad type so we don't do anything unexpected
+    with pytest.raises(ValueError):
+        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
+    with pytest.raises(TypeError):
+        # noinspection PyTypeChecker
+        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+    # the rest of failures are fine being trial by forgiveness
