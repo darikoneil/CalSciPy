@@ -50,7 +50,7 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
 
 
 class PatternMatching:
-    def __init__(self, value: Any):
+    def __init__(self, value: Any, comparison_expressions: Iterable[Any]):
         """
         Manual implementation of pattern matching for python < 3.10
 
@@ -58,6 +58,7 @@ class PatternMatching:
         :type value: Any
         """
         self.value = value
+        self.comparison_expressions = comparison_expressions
 
     def __enter__(self):
         return self
@@ -65,5 +66,9 @@ class PatternMatching:
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
         return False
 
-    def __call__(self, *values: Any):
-        return self.value in values
+    def __call__(self, cases: Any):
+        match = True
+        for value, comparator, case in zip(self.value, self.comparison_expressions, cases):
+            if not comparator(value, case):
+                return False
+        return match
