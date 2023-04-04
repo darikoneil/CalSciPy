@@ -363,3 +363,4 @@ def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder
         _pbar.close()
     return
 # TODO REFACTOR THIS SPAGHETTI
+

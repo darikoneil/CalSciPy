@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Any
 from collections import deque
 
 
@@ -47,3 +47,23 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
                 yield tuple(block)[-idx:]  # if we don't have a full block, we must ensure the number of repeats is
                 # equal to block buffer
             raise StopIteration
+
+
+class PatternMatching:
+    def __init__(self, value: Any):
+        """
+        Manual implementation of pattern matching for python < 3.10
+
+        :param value: value or iterator of values of interest
+        :type value: Any
+        """
+        self.value = value
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
+        return False
+
+    def __call__(self, *values: Any):
+        return self.value in values
