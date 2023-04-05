@@ -1,6 +1,12 @@
 from __future__ import annotations
 from typing import Iterable, Iterator, Any
 from collections import deque
+import numpy as np
+
+
+def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: float = 3.9) -> int:
+    single_frame_size = np.ones((y_pixels, x_pixels), dtype=bit_depth).nbytes * 1e-9
+    return size_cap // single_frame_size
 
 
 def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) -> Iterator:
@@ -49,6 +55,16 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
             raise StopIteration
 
 
+def generate_padded_filename(output_folder, index: int, base: str = "images",
+                             digits: int = 2, ext: str = ".tif")  -> str:
+    index = str(index)
+    digits = str(digits)
+
+    while len(index) < len(digits):
+        index = "".join(["0", index])
+
+    return output_folder.joinpath("".join([base, "_", index, ext]))
+
 class PatternMatching:
     def __init__(self, value: Any, comparison_expressions: Iterable[Any]):
         """
@@ -67,8 +83,7 @@ class PatternMatching:
         return False
 
     def __call__(self, cases: Any):
-        match = True
         for value, comparator, case in zip(self.value, self.comparison_expressions, cases):
             if not comparator(value, case):
                 return False
-        return match
+        return True

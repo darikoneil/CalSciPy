@@ -10,12 +10,11 @@ from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_fi
     find_num_unique_files_containing_tag
 from tqdm.auto import tqdm
 from tqdm import tqdm as tq
-# from tifffile import TiffWriter
 import math
 from itertools import product
-from .misc import PatternMatching
+from .misc import PatternMatching, calculate_frames_per_file, generate_blocks, generate_padded_filename
 from operator import eq
-
+from .io_tools import _load_single_tif, _save_single_tif
 
 """
 These functions have been incorporated into pyPrairieView and will be deprecated in the future
@@ -52,13 +51,13 @@ def generate_bruker_naming_convention(channel: int = 0, plane: int = 0, num_chan
         num_planes = 2
     with PatternMatching([num_channels, num_planes], [eq, eq]) as case:
         if case([1, 1]):
-            return ".ome"
+            return "*.ome.tif"
         elif case([2, 1]):
-            return "".join(["Ch", str(channel + 1)])
+            return "".join(["*Ch", str(channel + 1), "*"])
         elif case([1, 2]):
-            return "".join(["00000", str(plane + 1), ".ome"])
+            return "".join(["*00000", str(plane + 1), ".ome.tif"])
         elif case([2, 2]):
-            return "".join(["Ch", str(channel + 1), "00000", str(plane + 1), ".ome"])
+            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
 
 
 def _pretty_print_image_description(channels: int, planes: int, frames: int, height: int, width: int) -> None:
@@ -257,156 +256,7 @@ def load_bruker_tiffs(folder: Union[str, pathlib.Path],
 # TODO REFACTOR THIS SPAGHETTI
 
 
-def repackage_bruker_tiffs(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pathlib.Path],
-                           *args: Union[int, tuple[int]]) -> None:  # noqa: C901
-    """
-    Repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence of <4 GB .tif
-    stacks.
-
-    :param input_folder: folder containing a sequence of single frame .tif files exported by Bruker's Prairieview
-    :type input_folder: str or pathlib.Path
-    :param output_folder: empty folder where .tif stacks will be saved
-    :type output_folder: str or pathlib.Path
-    :param args: optional argument to indicate the repackaging of a specific channel and/or plane
-    :type args: int
-    :rtype: None
-    """
-
-    # code here is pretty rough, needs TLC. ~horror~
-    # noqa: C901
-    def load_image() -> np.ndarray:
-        nonlocal input_folder
-        nonlocal _files
-        nonlocal _file
-        nonlocal _offset
-        return cv2.imread(str(_files[_file + _offset]), flags=-1)
-
-    def save_image(images_: np.ndarray, path_: str, type_: np.dtype = np.uint16) -> None:
-        if len(images_.shape) == 2:
-            with TiffWriter(path_) as tif:
-                tif.write(np.floor(images_).astype(type_))
-            return
-
-        with TiffWriter(path_) as tif:
-            for frame in np.floor(images_).astype(type_):
-                tif.write(frame)
-
-    def find_files(tag: Union[str, list[str]]) -> list:
-        nonlocal input_folder
-        nonlocal _files
-
-        def check_file_contents(tag_: str, file_: pathlib.WindowsPath) -> bool:
-            if tag_ in str(file_.stem).split("_"):
-                return True
-            else:
-                return False
-
-        # reset, rather maintain code as is then make a new temporary variable since this
-        # is basically instant
-        _files = [_file for _file in pathlib.Path(input_folder).glob("*.tif")]  # noqa: C416
-
-        # now find
-        if isinstance(tag, list):
-            tag = "".join([tag[0], "_", tag[1]])
-            _files = [_file for _file in _files if tag in str(_file.stem)]
-        else:
-            _files = [_file for _file in _files if check_file_contents(tag, _file)]  # noqa: C416
-
-    def not_over_4gb() -> bool:
-        nonlocal _files
-        nonlocal _y
-        nonlocal _x
-
-        gb = np.full((_files.__len__(), _y, _x), 1, dtype=np.uint16).nbytes
-        if gb <= 3.9:  # 3.9 as a safety buffer
-            return True
-        else:
-            return False
-
-    _files = [_file for _file in pathlib.Path(input_folder).rglob("*.tif")]  # noqa: C416
-    _channels, _planes, _frames, _y, _x = determine_imaging_content(input_folder)
-    _pretty_print_image_description(_channels, _planes, _frames, _y, _x)
-
-    # finding the files for a specific channel/plane here
-    if args:
-        # unpack if necessary
-        if isinstance(args[0], tuple):
-            _c = args[0][0]
-            _p = args[0][1]
-            args = (_c, _p)
-
-        if _channels > 1 and _planes > 1 and len(args) >= 2:
-            _base_tag = "00000"
-            _tag = ["".join(["Ch", str(args[0] + 1)]), "".join([_base_tag, str(args[1] + 1), ".ome"])]
-            find_files(_tag)
-        elif _channels == 1 and _planes > 1 and len(args) == 1:
-            _base_tag = "00000"
-            _tag = "".join([_base_tag, str(args[0] + 1), ".ome"])
-            find_files(_tag)
-            print(_files)
-        elif _channels == 1 and _planes > 1 and len(args) >= 2:
-            _base_tag = "00000"
-            _tag = "".join([_base_tag, str(args[1] + 1), ".ome"])
-            find_files(_tag)
-        elif _channels > 1 and _planes == 1:
-            _tag = "".join(["Ch", str(args[0] + 1)])
-            find_files(_tag)
-        else:
-            pass
-    else:
-        if not _channels == 1:
-            raise AssertionError("Folder contains multiple channels")
-        if not _planes == 1:
-            raise AssertionError("Folder contains multiple planes")
-
-    # Decide whether saving in single stack is possible
-    if not_over_4gb():
-        _images = np.full((_frames, _y, _x), 0, dtype=np.uint16)
-        _offset = 0
-        for _file in range(_frames):
-            _images[_file, :, :] = load_image()
-        save_image(_images, os.path.join(output_folder, "compiled_video_0_of_0.tif"))
-        return
-    else:
-        # noinspection PyTypeChecker
-        _chunks = math.ceil(_frames / 7000)
-        c_idx = 1
-        _offset = int()
-
-        _pbar = tq(total=_frames)
-        _pbar.set_description("Repackaging Bruker Tiffs...")
-
-        for _chunk in range(0, _frames, 7000):
-
-            _start_idx = _chunk
-            _offset = _start_idx
-            _end_idx = _chunk + 7000
-            _chunk_frames = _end_idx - _start_idx
-            # If this is the last chunk which may not contain a full 7000 frames...
-            if _end_idx > _frames:
-                _end_idx = _frames
-                _chunk_frames = _end_idx - _start_idx
-                _end_idx += 1
-
-            image_chunk = np.full((_chunk_frames, _y, _x), 0, dtype=np.uint16)
-
-            for _file in range(_chunk_frames):
-                image_chunk[_file, :, :] = load_image()
-                _pbar.update(1)
-
-            if c_idx < 10:
-                save_image(image_chunk, os.path.join(output_folder, "".join([
-                    "compiled_video_0", str(c_idx), "_of_", str(_chunks), ".tif"])))
-            else:
-                save_image(image_chunk, os.path.join(output_folder, "".join([
-                    "compiled_video_", str(c_idx), "_of_", str(_chunks), ".tif"])))
-            c_idx += 1
-        _pbar.close()
-    return
-# TODO REFACTOR THIS SPAGHETTI
-
-
-def rpg_22(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pathlib.Path],
+def repackage_bruker_tiffs(input_folder: Union[str, Path], output_folder: Union[str, Path],
            channel: int = 0, plane: int = 0) -> None:  # noqa: C901
     """
     Repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence of <4 GB .tif
@@ -426,7 +276,40 @@ def rpg_22(input_folder: Union[str, pathlib.Path], output_folder: Union[str, pat
     _pretty_print_image_description(num_channels, num_planes, num_frames, y, x)
 
     naming_convention = generate_bruker_naming_convention(channel, plane, num_channels, num_planes)
-    tag = "".join(["*", naming_convention])
-    files = list(input_folder.glob(tag))
-    print(f"{files=}")
 
+    files = list(input_folder.glob(naming_convention))
+
+    pbar = tq(total=num_frames)
+    pbar.set_description("Repackaging...")
+
+
+    block_size = calculate_frames_per_file(y, x)
+
+    if num_frames > block_size:
+
+        block_buffer = 0
+        frame_index = list(range(num_frames))
+        blocks = generate_blocks(frame_index, block_size, block_buffer)
+        stack_index = 0
+
+        for block in blocks:
+            images = []
+            for frame in block:
+                images.append(_verbose_load_single_tif(files[frame], pbar))
+
+            filename = _generate_repackaging_filename(output_folder, stack_index)
+            _save_single_tif(filename, np.concatenate(images, axis=0))
+
+            stack_index += 1
+    else:
+        images = [_verbose_load_single_tif(file, pbar) for file in files]
+        images = np.concatenate(images, axis=0)
+        _save_single_tif(output_folder.joinpath("images.tif"), images)
+
+    pbar.close()
+
+
+def _verbose_load_single_tif(file, pbar):
+    image = _load_single_tif(file)
+    pbar.update(1)
+    return image
