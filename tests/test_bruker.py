@@ -5,7 +5,7 @@ from shutil import rmtree
 from tests.helpers import BlockPrinting, read_descriptions
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 from CalSciPy.io_tools import load_images
-from CalSciPy.bruker import determine_imaging_content, load_bruker_tiffs, repackage_bruker_tiffs
+from CalSciPy.bruker import determine_imaging_content, load_bruker_tifs, repackage_bruker_tifs
 
 
 DATASET = pytest.mark.datafiles(
@@ -45,7 +45,7 @@ def test_repackage_bruker_tiffs(datafiles, tmp_path):
             # MAKE OUTPUT FOLDER
             _output_folder.mkdir(parents=True, exist_ok=True)
             # RUN FUNCTION
-            repackage_bruker_tiffs(_input_folder, _output_folder, (0, 0))
+            repackage_bruker_tifs(_input_folder, _output_folder, (0, 0))
             # TEST
             _descriptions = read_descriptions(_descriptions)
             _contents = load_images(_output_folder)
@@ -65,7 +65,7 @@ def test_load_bruker_tiffs(datafiles):
             _descriptions = read_descriptions(_descriptions)
             _image1 = load_images(_input_image)
             # TEST
-            _image2 = load_bruker_tiffs(_input_folder, 1, 0)[0]
+            _image2 = load_bruker_tifs(_input_folder, 1, 0)[0]
             np.testing.assert_array_equal(_image1[0, :, :], _image2[0, :, :],
                                           err_msg=f"Image Mismatch: failed on dataset "
                                                   f"{_input_folder.name}")

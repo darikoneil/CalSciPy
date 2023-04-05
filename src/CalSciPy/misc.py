@@ -2,9 +2,25 @@ from __future__ import annotations
 from typing import Iterable, Iterator, Any
 from collections import deque
 import numpy as np
+from pathlib import Path
 
 
-def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: float = 3.9) -> int:
+def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: float = 3.9) \
+        -> int:
+    """
+    Estimates the number of image frames to allocate to each file given some maximum size.
+
+    :param y_pixels: number of y_pixels in image
+    :type y_pixels: int
+    :param x_pixels: number of x_pixels in image
+    :type x_pixels: int
+    :param bit_depth: bit-depth / type of image elements
+    :type bit_depth: numpy.dtype = numpy.uint16
+    :param size_cap: maximum file size
+    :type size_cap: float = 3.9
+    :return: the maximum number of frames to allocate for each file
+    :rtype: int
+    """
     single_frame_size = np.ones((y_pixels, x_pixels), dtype=bit_depth).nbytes * 1e-9
     return size_cap // single_frame_size
 
@@ -28,6 +44,8 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
         raise AssertionError("Block buffer must be smaller than the size of the block.")
     if block_size >= len(sequence):
         raise AssertionError("Block must be smaller than iterable sequence")
+
+    block_size = int(block_size)  # coerce in case float
 
     block = deque(maxlen=block_size)
     iterable = iter(sequence)
@@ -55,20 +73,44 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
             raise StopIteration
 
 
-def generate_padded_filename(output_folder, index: int, base: str = "images",
-                             digits: int = 2, ext: str = ".tif")  -> str:
-    index = str(index)
-    digits = str(digits)
+def generate_padded_filename(output_folder: Path, index: int, base: str = "images", digits: int = 2,
+                             ext: str = ".tif") -> Path:
+    """
+    Generates a pathlib Path whose name is defined as '{base}_{index}{ext}' where index is zero-padded if it
+    is not equal to the number of digits
 
-    while len(index) < len(digits):
+    :param output_folder: folder that will contain file
+    :type output_folder: pathlib.Path
+    :param index: index of file
+    :type index: int
+    :param base: base tag of file
+    :type base: str = "images"
+    :param digits: number of digits for representing index
+    :type digits: int
+    :param ext: file extension
+    :type ext: str
+    :return: generated filename
+    :rtype: pathlib.Path
+    """
+    index = str(index)
+
+    if len(index) > digits:
+        raise ValueError("Index is larger than allocated number of digits in representation")
+
+    while len(index) < digits:
         index = "".join(["0", index])
 
     return output_folder.joinpath("".join([base, "_", index, ext]))
+
 
 class PatternMatching:
     def __init__(self, value: Any, comparison_expressions: Iterable[Any]):
         """
         Manual implementation of pattern matching for python < 3.10
+
+        Not the most extensible or robust right now, but she works well for the
+        current implementations.
+
 
         :param value: value or iterator of values of interest
         :type value: Any
@@ -83,6 +125,14 @@ class PatternMatching:
         return False
 
     def __call__(self, cases: Any):
+        """
+        Magic call for comparing some case with some value using some comparison operator
+
+        :param cases: case/s for comparison
+        :type: Any
+        :return: whether the case/s are matched by the value/s
+        :rtype: bool
+        """
         for value, comparator, case in zip(self.value, self.comparison_expressions, cases):
             if not comparator(value, case):
                 return False
