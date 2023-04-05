@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import Union, Optional
 from pathlib import Path
-from math import floor
 import cv2
 import numpy as np
 from json import load, dump
