@@ -57,8 +57,8 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
     datatype. The datatype is almost always unsigned 16-bit for all modern imaging systems--even if they are collected
     at 12 or 13-bit.
 
-    :param path: path to save images to. The path stem is considered the filename if it doesn't exist. If no filename is
-        provided then the default filename is *binary_video*.
+    :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension.
+    If no filename is provided then the default filename is *binary_video*.
     :type path: str or pathlib.Path
     :param images: images to save (frames, y-pixels, x-pixels)
     :type images: numpy.ndarray
