@@ -7,7 +7,7 @@ import numpy as np
 from json import load, dump
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
-from .misc import generate_blocks
+from .misc import generate_blocks, calculate_frames_per_file
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -178,8 +178,7 @@ def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
 @validate_extension(required_extension=".tif", pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3.9) -> int:
-    single_frame_size = images[0, :, :].nbytes * 1e-9
-    frames_per_file = floor(size_cap / single_frame_size)
+    frames_per_file = calculate_frames_per_file(*images.shape[1:], size_cap=size_cap)
     frames = list(range(images.shape[0]))
     blocks = generate_blocks(frames, frames_per_file, 0)
     idx = 0
