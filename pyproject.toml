@@ -29,10 +29,13 @@ classifiers = [
 ]
 
 dependencies = [
+    "matplotlib",
     "numpy",
     "opencv-python",
     "PPVD",
     "prettytable",
+    "pyside2",
+    "seaborn",
     "scipy",
     "tqdm"
 ]
