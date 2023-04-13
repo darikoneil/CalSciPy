@@ -30,15 +30,16 @@ def color_images(images: np.ndarray, rois: np.ndarray):
     pass
 
 
-def rescale_images(images: np.ndarray, new_range: Tuple[float, float] = (0.0, 255.0), cutoffs: Tuple[float, float] = (0.0, 100.0)) -> np.ndarray:
+def cutoff_images(images: np.ndarray, cutoffs: Tuple[float, float] = (0.0, 100.0), in_place: bool = True) -> np.ndarray:
 
     low_cut, high_cut = cutoffs
 
-    assert(0.0 <= low_cut <= high_cut <= 100.0)
+    assert(0.0 <= low_cut <= high_cut <= 100.0)  # percentiles are constrained to 0 - 100
 
-    original_shape = images.shape
-
-    image_vector = images.ravel()
+    if in_place:
+        image_vector = images.ravel()  # doesn't make a copy and more performant in general
+    else:
+        image_vector = images.flatten()  # makes a copy
 
     low_val = np.percentile(image_vector, low_cut)
     high_val = np.percentile(image_vector, high_cut)
@@ -46,15 +47,25 @@ def rescale_images(images: np.ndarray, new_range: Tuple[float, float] = (0.0, 25
     image_vector[image_vector <= low_val] = low_val
     image_vector[image_vector >= high_val] = high_val
 
+    return np.reshape(image_vector, images.shape)
+
+
+def rescale_images(images: np.ndarray, new_range: Tuple[float, float] = (0.0, 255.0), in_place: bool = True) -> np.ndarray:
+
+    if in_place:
+        image_vector = images.ravel()  # doesn't make a copy and more performant in general
+    else:
+        image_vector = images.flatten()  # makes a copy
+
     old_min = np.min(image_vector)
     old_max = np.max(image_vector)
 
     new_min, new_max = new_range
 
-    image_vector = low_cut + ((image_vector - old_min) * (new_max - new_min)) / (old_max - old_min)
+    image_vector = new_min + ((image_vector - old_min) * (new_max - new_min)) / (old_max - old_min)
 
-    return np.reshape(image_vector, original_shape)
-# TODO BREAK ME INTO TWO
+    return np.reshape(image_vector, images.shape)
+
 
 def generate_background_images(images: np.ndarray, style: int = 0) -> np.ndarray:
     """

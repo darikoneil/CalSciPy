@@ -144,3 +144,18 @@ def simple_matrix(request):
         [500, 1500, 5500, 10500],
         [1000, 2000, 6000, 11000]
     ])
+
+
+@pytest.fixture(scope="function")
+def sample_image(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("sample_image.npy"))
+
+
+@pytest.fixture(scope="function")
+def cutoff_reference(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("cutoff_reference.npy"))
+
+
+@pytest.fixture(scope="function")
+def rescale_reference(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("rescale_reference.npy"))
