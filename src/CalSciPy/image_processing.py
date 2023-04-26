@@ -47,9 +47,12 @@ def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_siz
 
     if block_size:
         block_gen = generate_blocks(range(frames), block_size, block_buffer)
-        for block in block_gen:
-            filtered_images[block, :, :] = cupyx.scipy.ndimage.median_filter(filtered_images[block, :, :],
-                                                                             footprint=mask)
+        try:
+            for block in block_gen:
+                filtered_images[block, :, :] = cupyx.scipy.ndimage.median_filter(filtered_images[block, :, :],
+                                                                                 footprint=mask)
+        except (RuntimeError, StopIteration):
+            pass
     else:
         filtered_images = cupyx.scipy.ndimage.median_filter(filtered_images, footprint=mask)
 

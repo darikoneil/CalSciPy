@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Union, Optional
 from pathlib import Path
 import cv2
+from PIL import Image
 import numpy as np
 from json import load, dump
 from PPVD.validation import validate_extension, validate_filename
@@ -171,7 +172,17 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
 @validate_extension(required_extension=".tif", pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
-    cv2.imwritemulti(path, images)
+    # if single page save direct
+    if len(images.shape) == 2:
+        images = Image.fromarray(images)
+        images.save(path)
+    # if multi page iterate
+    else:
+        images_to_save = []
+        for single_image in range(images.shape[0]):
+            images_to_save.append(Image.fromarray(images[single_image, :, :]))
+        images_to_save[0].save(path, format="TIFF", save_all=True, append_images=images_to_save[1:])
+    return 0
 
 
 @validate_extension(required_extension=".tif", pos=0)
@@ -193,7 +204,7 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
                 filename = filename.with_suffix(".tif")
             _save_single_tif(filename, images[block, :, :])
             idx += 1
-    except RuntimeError:
+    except (RuntimeError, StopIteration):
         pass
     return 0
 
