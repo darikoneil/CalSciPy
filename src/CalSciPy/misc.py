@@ -1,11 +1,19 @@
 from __future__ import annotations
-from typing import Iterable, Iterator, Any
+from typing import Iterable, Iterator, Any, Callable
 from collections import deque
-import numpy as np
 from pathlib import Path
+from numbers import Number
+from functools import wraps
+
+import numpy as np
+
+try:
+    import cupy
+except ModuleNotFoundError:
+    pass
 
 
-def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: float = 3.9) \
+def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: Number = 3.9) \
         -> int:
     """
     Estimates the number of image frames to allocate to each file given some maximum size.
@@ -101,6 +109,25 @@ def generate_padded_filename(output_folder: Path, index: int, base: str = "image
         index = "".join(["0", index])
 
     return output_folder.joinpath("".join([base, "_", index, ext]))
+
+
+def wrap_cupy_block(cupy_function: Callable) -> Callable:
+    """
+    Wraps a cupy function such that incoming numpy arrays are converting to cupy arrays and swapped back on return
+
+    :param cupy_function: any cupy function that accepts numpy arrays
+    :type cupy_function: Callable
+    :return: wrapped function
+    :rtype: Callable
+    """
+    @wraps(cupy_function)
+    def decorator(*args, **kwargs) -> Callable:
+        args = list(args)
+        if isinstance(args[0], np.ndarray):
+            args[0] = cupy.asarray(args[0])
+        args = tuple(args)
+        return cupy_function(*args, **kwargs).get()
+    return decorator
 
 
 class PatternMatching:
