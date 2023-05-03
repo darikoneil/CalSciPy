@@ -81,6 +81,46 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
             raise StopIteration
 
 
+def generate_overlapping_blocks(sequence: Iterable, block_size: int, block_buffer: int) -> Iterator:
+    if block_size <= 1:
+        raise ValueError("Block size must be > 1")
+    if block_buffer >= block_size:
+        raise AssertionError("Block buffer must be smaller than the size of the block.")
+    if block_size >= len(sequence):
+        raise AssertionError("Block must be smaller than iterable sequence")
+
+    block_size = int(block_size)  # coerce in case float
+
+    block = deque(maxlen=block_size + 2 * block_buffer)
+    iterable = iter(sequence)
+
+    # make nil block
+    for _ in range(block_size + 2 * block_buffer):
+        block.append(0)
+
+    # make first block
+    for _ in range(block_size + block_buffer):
+        block.append(next(iterable))
+
+    while True:
+        try:
+            yield tuple(block)
+            for idx in range(block_size):  # noqa: B007
+                block.append(next(iterable))  # we subtract the block buffer to make space for overlap
+
+        except StopIteration:
+            # noinspection PyUnboundLocalVariable
+            idx += block_buffer  # make sure that we always have at least the overlap
+            if idx == 0:
+                pass  # if we managed a perfect segmentation, then pass to stop iteration
+            elif idx == block_buffer:
+                pass  # if all we have left is overlap then it is a perfect segmentation
+            else:
+                yield tuple(block)[-idx:]  # if we don't have a full block, we must ensure the number of repeats is
+                # equal to block buffer
+            raise StopIteration
+
+
 def generate_padded_filename(output_folder: Path, index: int, base: str = "images", digits: int = 2,
                              ext: str = ".tif") -> Path:
     """

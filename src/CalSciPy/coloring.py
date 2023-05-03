@@ -3,6 +3,8 @@ import numpy as np
 from functools import cached_property
 
 
+# TODO PASTE AND DOCUMENT ME
+
 class BackgroundImage:
     def __init__(self, images: np.ndarray, style: int = 0, cutoffs: Tuple[float, float] = (0.0, 100.0)):
         self.images = images
