@@ -135,3 +135,27 @@ def normalized_firing_rates(request):
         [1.00000, 1.00000, 1.00000, 1.00000, 0.66667, 0.25000, 0.11364],
         [0.00000, 0.00000, 0.13333, 0.20000, 1.00000, 1.00000, 0.45455]
     ])
+
+
+@pytest.fixture(scope="function")
+def simple_matrix(request):
+    return np.array([
+        [0, 1000, 5000, 10000],
+        [500, 1500, 5500, 10500],
+        [1000, 2000, 6000, 11000]
+    ])
+
+
+@pytest.fixture(scope="function")
+def sample_image(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("sample_image.npy"))
+
+
+@pytest.fixture(scope="function")
+def cutoff_reference(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("cutoff_reference.npy"))
+
+
+@pytest.fixture(scope="function")
+def rescale_reference(request):
+    return np.load(SAMPLES_VARIABLES_DIRECTORY.joinpath("rescale_reference.npy"))

@@ -52,6 +52,10 @@ def test_single_page_tifs(datafiles, tmp_path, matrix):
                                               f"and abstracted methods")
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
                                       err_msg=f"Image mismatch between saved and loaded image")
+        # test exact filename
+        output_file = Path(tmp_path).joinpath("exact_filename.tif")
+        save_images(output_file, image_abstracted_method)
+        image_reloaded = load_images(output_file)
 
     # test exceptions
     with pytest.raises(ValueError):
@@ -105,6 +109,11 @@ def test_multi_page_tifs(datafiles, tmp_path, matrix):
                                               f"and abstracted methods")
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
                                       err_msg=f"Image mismatch between saved and loaded image")
+
+        # test exact filename
+        output_file = Path(tmp_path).joinpath("exact_filename.tif")
+        save_images(output_file, image_abstracted_method)
+        image_reloaded = load_images(output_file)
 
     # test exceptions
     with pytest.raises(ValueError):
@@ -163,6 +172,10 @@ def test_many_tifs(datafiles, tmp_path, matrix):
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
                                       err_msg=f"Image mismatch between saved and loaded image")
 
+        # test exact filename
+        output_file = Path(tmp_path).joinpath("exact_filename.tif")
+        save_images(output_file, image_abstracted_method)
+
     # test exceptions
     with pytest.raises(ValueError):
         load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
@@ -207,6 +220,11 @@ def test_binary(datafiles, tmp_path, matrix):
 
         # make sure memory map loads
         image_memory_mapped = load_binary(output_folder, mapped=True)
+
+        # make sure we can save & load a non-default filename
+        output_file = Path(tmp_path).joinpath("exact_filename.bin")
+        save_binary(output_file, images)
+        images_reloaded_exact_filename = load_binary(output_file)
 
     # test exceptions
     with pytest.raises(ValueError):
