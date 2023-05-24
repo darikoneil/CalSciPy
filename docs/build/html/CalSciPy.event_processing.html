@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="[en]" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.event_processing module &mdash; CalSciPy 0.1.5 documentation</title>
+  <title>CalSciPy.event_processing module &mdash; CalSciPy 0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> CalSciPy
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CalSciPy
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -46,11 +48,16 @@
 <li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.event_processing module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.bin_events"><code class="docutils literal notranslate"><span class="pre">bin_events()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.calculate_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_firing_rates()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.calculate_mean_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_mean_firing_rates()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.gaussian_smooth_firing_rates"><code class="docutils literal notranslate"><span class="pre">gaussian_smooth_firing_rates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.collect_waveforms"><code class="docutils literal notranslate"><span class="pre">collect_waveforms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.convert_tau"><code class="docutils literal notranslate"><span class="pre">convert_tau()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.get_event_onset_intensities"><code class="docutils literal notranslate"><span class="pre">get_event_onset_intensities()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.get_inter_event_intervals"><code class="docutils literal notranslate"><span class="pre">get_inter_event_intervals()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.get_num_events"><code class="docutils literal notranslate"><span class="pre">get_num_events()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.identify_events"><code class="docutils literal notranslate"><span class="pre">identify_events()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.normalize_firing_rates"><code class="docutils literal notranslate"><span class="pre">normalize_firing_rates()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.event_processing.scale_waveforms"><code class="docutils literal notranslate"><span class="pre">scale_waveforms()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a></li>
@@ -72,7 +79,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="Sub-Packages.html">Overview</a></li>
       <li class="breadcrumb-item active">CalSciPy.event_processing module</li>
       <li class="wy-breadcrumbs-aside">
@@ -87,41 +94,21 @@
   <section id="module-CalSciPy.event_processing">
 <span id="calscipy-event-processing-module"></span><h1>CalSciPy.event_processing module<a class="headerlink" href="#module-CalSciPy.event_processing" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.event_processing.bin_events">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">bin_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin_length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#bin_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.bin_events" title="Permalink to this definition"></a></dt>
-<dd><p>Bin events (e.g., spikes) using specified bin length</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- matrix of n features x m samples</p></li>
-<li><p><strong>bin_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- length of bin</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>binned_matrix of n features x m bins</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="CalSciPy.event_processing.calculate_firing_rates">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">calculate_firing_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spike_probability_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#calculate_firing_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.calculate_firing_rates" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">calculate_firing_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spike_probability_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#calculate_firing_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.calculate_firing_rates" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate firing rates</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>spike_probability_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- matrix of n neuron x m samples where each element is the probability of a spike</p></li>
-<li><p><strong>frame_rate</strong> (<em>float = 30</em>) -- frame rate of dataset</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) -- boolean indicating whether to perform calculation in-place</p></li>
+<li><p><strong>spike_probability_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of n neuron x m samples where each element is the probability of a spike</p></li>
+<li><p><strong>frame_rate</strong> (<em>float = 30</em>) – frame rate of dataset</p></li>
+<li><p><strong>in_place</strong> (<em>bool = False</em>) – boolean indicating whether to perform calculation in-place</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
@@ -132,37 +119,138 @@
 <span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">calculate_mean_firing_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">firing_matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#calculate_mean_firing_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.calculate_mean_firing_rates" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate mean firing rate</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>firing_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- matrix of n neuron x m samples where each element is either a spike or an
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>firing_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of n neuron x m samples where each element is either a spike or an
 instantaneous firing rate</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>1-D vector of mean firing rates</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.event_processing.gaussian_smooth_firing_rates">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">gaussian_smooth_firing_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">firing_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#gaussian_smooth_firing_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.gaussian_smooth_firing_rates" title="Permalink to this definition"></a></dt>
-<dd><p>Normalize firing rates using a 1-D gaussian filter</p>
+<dt class="sig sig-object py" id="CalSciPy.event_processing.collect_waveforms">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">collect_waveforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">150</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">post</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">450</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#collect_waveforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.collect_waveforms" title="Permalink to this definition"></a></dt>
+<dd><p>Collect waveforms for each event</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>firing_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- matrix of n neuron x m samples where each element is either a spike or an
-instantaneous firing rate</p></li>
-<li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) -- standard deviation of gaussian kernel</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) -- boolean indicating whether to perform calculation in-place</p></li>
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – a matrix of M neurons x N samples</p></li>
+<li><p><strong>event_indices</strong> (<em>Iterable</em><em>[</em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – a list of events</p></li>
+<li><p><strong>pre</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of pre-event frames</p></li>
+<li><p><strong>post</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – number of post-event frames</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>gaussian-smoothed firing rate matrix of n neurons x m samples</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a matrix of M events x N samples</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.convert_tau">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">convert_tau</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#convert_tau"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.convert_tau" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a discrete tau to a continuous tau</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tau</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – decay constant</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – time step (s)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>continuous tau (s)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.get_event_onset_intensities">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">get_event_onset_intensities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#get_event_onset_intensities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.get_event_onset_intensities" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve the signal intensity at event onset for each neuron in the event indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – An M neuron by N sample matrix</p></li>
+<li><p><strong>event_indices</strong> (<em>Iterable</em><em>[</em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – An iterable of length M containing a sequence with a duration for each event</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An iterable of length M neurons containing the onset intensities for each event in the sequence</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.get_inter_event_intervals">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">get_inter_event_intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#get_inter_event_intervals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.get_inter_event_intervals" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the inter event intervals for each neuron in the event indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event_indices</strong> (<em>Iterable</em><em>[</em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – An iterable of length M containing a sequence with a duration for each event</p></li>
+<li><p><strong>frame_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – frame_rate for trace matrix</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An iterable of length M neurons containing the inter-event intervals for each event in the sequence</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.get_num_events">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">get_num_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_indices</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#get_num_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.get_num_events" title="Permalink to this definition"></a></dt>
+<dd><p>Determines the number of events for each neuron in the event indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event_indices</strong> (<em>Iterable</em><em>[</em><em>Iterable</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>]</em>) – An iterable of length M neurons containing a sequence with a duration for each event</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 1-D vector of length M neurons containing the number of events for each neuron</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.identify_events">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">identify_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_nonneg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#identify_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.identify_events" title="Permalink to this definition"></a></dt>
+<dd><p>Identify event onset for each neuron using the smoothed, non-negative first-time derivative. The threshold for noise
+is considered 1/2th the standard deviation of the derivative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – An M neuron by N sample matrix</p></li>
+<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – timeout distance for peak finding (frames)</p></li>
+<li><p><strong>frame_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – frame rate / time step for trace matrix</p></li>
+<li><p><strong>smooth</strong> (<em>bool = True</em>) – boolean indicating whether to smooth first-time derivative</p></li>
+<li><p><strong>force_nonneg</strong> (<em>bool = True</em>) – boolean indicating whether to enforce non-negativity constraint on first-time derivative</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An iterable where each element contains a sequence of frames identified as event onsets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[List[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -172,18 +260,38 @@ instantaneous firing rate</p></li>
 <span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">normalize_firing_rates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">firing_matrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#normalize_firing_rates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.normalize_firing_rates" title="Permalink to this definition"></a></dt>
 <dd><p>Normalize firing rates by scaling to a max of 1.0. Non-negativity constrained.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>firing_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) -- matrix of n neuron x m samples where each element is either a spike or an
+<li><p><strong>firing_matrix</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of n neuron x m samples where each element is either a spike or an
 instantaneous firing rate</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) -- boolean indicating whether to perform calculation in-place</p></li>
+<li><p><strong>in_place</strong> (<em>bool = False</em>) – boolean indicating whether to perform calculation in-place</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>normalized firing rate matrix of n neurons x m samples</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.event_processing.scale_waveforms">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.event_processing.</span></span><span class="sig-name descname"><span class="pre">scale_waveforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">waveforms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaler=&lt;class</span> <span class="pre">'sklearn.preprocessing._data.StandardScaler'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/event_processing.html#scale_waveforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.event_processing.scale_waveforms" title="Permalink to this definition"></a></dt>
+<dd><p>Scale waveforms for cross-neuron comparisons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>waveforms</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – An Iterable of M events by N samples matrices of waveforms</p></li>
+<li><p><strong>scaler</strong> (<em>Callable</em>) – sklearn preprocessing object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An Iterable of M event by N samples scaled matrices of waveforms</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Iterable[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -201,7 +309,7 @@ instantaneous firing rate</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+    <p>&#169; Copyright 2023Darik A. O&#39;Neil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

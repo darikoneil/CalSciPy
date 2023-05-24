@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="[en]" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; CalSciPy 0.1.5 documentation</title>
+  <title>Introduction &mdash; CalSciPy 0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Installation" href="Installation.html" />
-    <link rel="prev" title="Welcome to CalSciPy&#39;s documentation!" href="index.html" /> 
+    <link rel="prev" title="Welcome to CalSciPy’s documentation!" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> CalSciPy
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CalSciPy
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -69,7 +71,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Introduction</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Introduction.rst.txt" rel="nofollow"> View page source</a>
@@ -83,21 +85,20 @@
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
 <p><strong>CalSciPy</strong> contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
-It's intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software
+It’s intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software
 packages such as <a class="reference external" href="https://github.com/flatironinstitute/CaImAn">Caiman</a>, <a class="reference external" href="https://github.com/losonczylab/sima">SIMA</a>,
 and <a class="reference external" href="https://github.com/MouseLand/suite2p">Suite2P</a>.</p>
 <section id="motivation">
 <h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h2>
 <p>I noticed I was often re-writing or copy/pasting a lot of code between environments when working with calcium imaging
-data. I started this package so you don't have to. No more wasting time writing 6 lines to simply preview your tiff
-stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete documentation when re-using
-a hastily-made function from 2 months ago. Alongside these time-savers, I've also included some more non-trivial methods
-that are particularly useful.</p>
+data. I started this package ~so I don’t have to~ so you don’t have to. No more wasting time writing 6 lines to simply
+preview your tiff stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete
+documentation when re-using a hastily-made function from 2 months ago. Alongside these time-savers, I’ve also included
+some more non-trivial methods that are particularly useful.</p>
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h2>
-<p>The current distribution for the package is incomplete. When each module has its associated unit tests complete, it will
-be pushed.</p>
+<p>The current distribution for the package is incomplete and partially tested</p>
 </section>
 </section>
 
@@ -105,14 +106,14 @@ be pushed.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to CalSciPy&#39;s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to CalSciPy’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+    <p>&#169; Copyright 2023Darik A. O&#39;Neil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,9 +1,14 @@
 from __future__ import annotations
 import numpy as np
+from typing import Tuple
 from functools import cached_property
+import matplotlib
+matplotlib.use("Qt5Agg")
+from matplotlib import pyplot as plt  # noqa: E402
 
 
 # TODO PASTE AND DOCUMENT ME
+
 
 class BackgroundImage:
     def __init__(self, images: np.ndarray, style: int = 0, cutoffs: Tuple[float, float] = (0.0, 100.0)):
@@ -12,23 +17,23 @@ class BackgroundImage:
         self.cutoffs = cutoffs
 
     @cached_property
-    def get(self):
+    def get(self) -> np.ndarray:
         return
 
-    def cast(self):
+    def cast(self) -> np.ndarray:
         pass
 
-    def convert(self):
+    def convert(self) -> np.ndarray:
         pass
 
-    def rescale(self):
+    def rescale(self) -> np.ndarray:
         pass
 
-    def stylize(self):
+    def stylize(self) -> np.ndarray:
         pass
 
 
-def color_images(images: np.ndarray, rois: np.ndarray):
+def color_images(images: np.ndarray, rois: np.ndarray) -> np.ndarray:
     pass
 
 
@@ -36,7 +41,7 @@ def cutoff_images(images: np.ndarray, cutoffs: Tuple[float, float] = (0.0, 100.0
 
     low_cut, high_cut = cutoffs
 
-    assert(0.0 <= low_cut <= high_cut <= 100.0)  # percentiles are constrained to 0 - 100
+    assert (0.0 <= low_cut <= high_cut <= 100.0)  # percentiles are constrained to 0 - 100
 
     if in_place:
         image_vector = images.ravel()  # doesn't make a copy and more performant in general

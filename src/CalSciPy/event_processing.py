@@ -81,60 +81,6 @@ def convert_tau(tau: float, dt: float) -> float:
     return -1 / ctau
 
 
-def estimate_event_durations(traces: np.ndarray, event_indices: Iterable[Iterable[int]], tau: Iterable[float],
-                             share_peaks: bool = False, noise_threshold: Iterable[float] = None) -> Tuple[List[float]]:
-    """
-    Estimate the duration of an event by calculating the decay from the peak to noise threshold
-
-    using the decay to the noise_threshold
-
-    :param traces: An M neuron by N sample matrix
-    :type traces: numpy.ndarray
-    :param event_indices: An Iterable of length M neurons containing sequences of frames identified as event onsets
-    :type event_indices: Iterable[Iterable[int]]
-    :param tau: An Iterable containing the continuous tau value for each neuron
-    :type tau: Iterable[float]
-    :param share_peaks: whether to constrain peak calculation such that the peak for any two events cannot be shared.
-    :type share_peaks: bool = False
-    :param noise_threshold: value of traces considered noise
-    :type noise_threshold: float = None
-    :return: An iterable of length M containing a sequence with a duration for each event
-    :rtype: Tuple[List[float]]
-    """
-    num_neurons, num_frames = traces.shape
-
-    event_durations = []  # this is fine, don't optimize yet
-
-    if not noise_threshold:  # calculate noise if not provided
-        noise_threshold = 2 * np.std(traces, axis=-1)
-
-    for neuron in range(num_neurons):
-        events = event_indices[neuron]  # get events for this neuron
-        durations = []  # this is durations for this single neuron
-        for event in events:
-            if event >= frames - 2:
-                break  # too close to the edge!
-            pointer = event + 1
-            last_value = traces[neuron, event].copy()
-            current_value = traces[neuron, pointer].copy()
-            while current_value > last_value:
-                if not share_peaks and pointer in events:
-                    last_value = current_value.copy()
-                    break
-                elif pointer == frames - 1:
-                    last_value = current_value.copy()
-                    pointer += 1
-                    break
-                else:
-                    pointer += 1
-                    last_value = current_value.copy()
-                    current_value = traces[neuron, :].copy()
-            if pointer < frames:
-                durations.append(_estimate_event_duration(last_value, tau, noise_threshold[neuron]))
-        event_durations.append(durations)
-    return tuple(event_durations)
-
-
 def get_num_events(event_indices: Iterable[Iterable[int]]) -> np.ndarray:
     """
     Determines the number of events for each neuron in the event indices
@@ -161,7 +107,7 @@ def get_inter_event_intervals(event_indices: Iterable[Iterable[int]], frame_rate
     return tuple([np.diff(events) / frame_rate for events in event_indices])
 
 
-def get_event_onset_intensities(traces: np.ndarray, event_indices: Iterable[Iterable[int]]):
+def get_event_onset_intensities(traces: np.ndarray, event_indices: Iterable[Iterable[int]]) -> Tuple[np.ndarray]:
     """
     Retrieve the signal intensity at event onset for each neuron in the event indices
 
@@ -180,7 +126,7 @@ def get_event_onset_intensities(traces: np.ndarray, event_indices: Iterable[Iter
 
 def identify_events(traces: np.ndarray, timeout: int = 15, frame_rate: float = 30.0, smooth: bool = True,
                     force_nonneg: bool = True) \
-        -> Tuple[List[Int]]:
+        -> Tuple[List[int]]:
     """
     Identify event onset for each neuron using the smoothed, non-negative first-time derivative. The threshold for noise
     is considered 1/2th the standard deviation of the derivative.
@@ -207,7 +153,7 @@ def identify_events(traces: np.ndarray, timeout: int = 15, frame_rate: float = 3
     if force_nonneg:
         delta[delta[..., :] <= 0] = 0
 
-    noise_threshold = np.std(delta, axis=-1) / 2
+    noise_threshold = np.nanstd(delta, axis=-1) / 2
 
     if delta.ndim == 1:
         return find_peaks(delta, prominence=noise_threshold, distance=timeout)[0].tolist()
@@ -233,7 +179,7 @@ def normalize_firing_rates(firing_matrix: np.ndarray, in_place: bool = False) ->
     else:
         normalized_matrix = firing_matrix.copy()
 
-    normalized_matrix /= np.max(normalized_matrix, axis=0)
+    normalized_matrix /= np.nanmax(normalized_matrix, axis=0)
     normalized_matrix[normalized_matrix <= 0] = 0
     return normalized_matrix
 
@@ -273,30 +219,14 @@ def _collect_waveforms(trace: np.ndarray, event_index: Iterable[int], pre: int =
     for event in event_index:
         if event - pre < 0:
             wv = trace[0: post + 1]
-            wv = np.pad(wv, pad_width=(frames_in_waveform - wv.shape[0], 0), mode="constant")
-        elif event + post > total_frames:
+            wv = np.pad(wv, pad_width=(frames_in_waveform - wv.shape[0], 0), mode="constant", constant_values=np.nan)
+        elif event + post >= total_frames:
             wv = trace[event - pre:]
-            wv = np.pad(wv, pad_width=(0, frames_in_waveform - wv.shape[0]), mode="constant")
+            wv = np.pad(wv, pad_width=(0, frames_in_waveform - wv.shape[0]), mode="constant", constant_values=np.nan)
         else:
             wv = trace[event - pre: event + post + 1]
         waveforms.append(wv)
     return np.vstack(waveforms)
-
-
-def _estimate_event_duration(initial_value: float, tau: float, noise_threshold: float) -> float:
-    """
-    Estimate the duration of an event using the decay to the noise_threshold
-
-    :param initial_value: starting value
-    :type initial_value: float
-    :param tau: decay constant (s)
-    :type tau: float
-    :param noise_threshold: target value
-    :type noise_threshold: float
-    :return: estimated duration of event
-    :rtype: float
-    """
-    return -1 * tau * np.log(noise_threshold/initial_value)
 
 
 def _scale_waveforms(waveforms: np.ndarray, scaler: Callable) -> np.ndarray:
@@ -316,4 +246,3 @@ def _scale_waveforms(waveforms: np.ndarray, scaler: Callable) -> np.ndarray:
         x = np.reshape(waveforms[wave, :], (-1, 1))
         waves.append(scaling.fit_transform(x))
     return np.transpose(np.hstack(waves))
-    

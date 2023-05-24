@@ -10,7 +10,6 @@ try:
 except ModuleNotFoundError:
     pass
 
-
 DEFAULT_MASK = np.ones((3, 3, 3))
 
 
@@ -55,8 +54,8 @@ def gaussian_filter(images: np.ndarray, sigma: Union[Number, np.ndarry] = 1.0, b
         filtered_images = _gaussian_filter(filtered_images, sigma=sigma)
 
     return filtered_images
-    
-    
+
+
 def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_size: int = None,
                   block_buffer: int = 0, in_place: bool = False) -> np.ndarray:
     """
@@ -105,7 +104,7 @@ def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_siz
 def _gaussian_filter(images: cupy.ndarray, sigma: Union[Number, np.ndarray]) -> np.ndarray:
     """
     Implementation function of gaussian filter
-    
+
     :param images: images to be filtered
     :type images: cupy.ndarray
     :param sigma: sigma for filter
@@ -114,7 +113,7 @@ def _gaussian_filter(images: cupy.ndarray, sigma: Union[Number, np.ndarray]) -> 
     :rtype: numpy.ndarray
     """
     return cupyx.scipy.ndimage.gaussian_filter(images, sigma=sigma)
-    
+
 
 @wrap_cupy_block
 def _median_filter(images: cupy.ndarray, mask: np.ndarray) -> np.ndarray:

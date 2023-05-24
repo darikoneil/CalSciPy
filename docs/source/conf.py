@@ -2,20 +2,21 @@ import os
 import sys
 import tomli
 from datetime import date
-
+from pathlib import Path
 # IMPORTS ps I can be done not so dumbly
 sys.path.insert(0, os.path.dirname(os.path.dirname(os. getcwd())))
 
 # get package details directly from pyproject
-pyproject_file = os.path.join(os.path.dirname(os.path.dirname(os. getcwd())), "pyproject.toml")
-package_details = tomli.load(pyproject_file).get("project")
+pyproject_file = Path.cwd().parents[1].joinpath("pyproject.toml")
+with open(pyproject_file, "rb") as file:
+    package_details = tomli.load(file).get("project")
 
 # get date for copyright
-today = date.today().year
-
+today = f"{date.today().year}"
+authors = package_details.get("authors")[0].get("name")
+author = f"{authors}"  # f-string because maybe weird sphinx stuff if it gets list, not sure
 project = package_details.get("name")
-copyright = "".join([today, f" {package_details.authors}"])
-author = f"{package_details.authors}"  # f-string because maybe weird sphinx stuff if it gets list, not sure
+copyright = "".join([today, author])
 release = package_details.get("version")
 
 
