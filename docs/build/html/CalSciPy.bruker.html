@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="[en]" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.bruker module &mdash; CalSciPy 0.1.5 documentation</title>
+  <title>CalSciPy.bruker module &mdash; CalSciPy 0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> CalSciPy
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CalSciPy
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -45,10 +47,10 @@
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.bruker module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.determine_bruker_folder_contents"><code class="docutils literal notranslate"><span class="pre">determine_bruker_folder_contents()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.load_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tiffs()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.pretty_print_image_description"><code class="docutils literal notranslate"><span class="pre">pretty_print_image_description()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.repackage_bruker_tiffs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tiffs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.determine_imaging_content"><code class="docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.generate_bruker_naming_convention"><code class="docutils literal notranslate"><span class="pre">generate_bruker_naming_convention()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.load_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tifs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.repackage_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tifs()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
@@ -71,7 +73,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="Sub-Packages.html">Overview</a></li>
       <li class="breadcrumb-item active">CalSciPy.bruker module</li>
       <li class="wy-breadcrumbs-aside">
@@ -86,81 +88,90 @@
   <section id="module-CalSciPy.bruker">
 <span id="calscipy-bruker-module"></span><h1>CalSciPy.bruker module<a class="headerlink" href="#module-CalSciPy.bruker" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.determine_bruker_folder_contents">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">determine_bruker_folder_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#determine_bruker_folder_contents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.determine_bruker_folder_contents" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="CalSciPy.bruker.determine_imaging_content">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">determine_imaging_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#determine_imaging_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.determine_imaging_content" title="Permalink to this definition"></a></dt>
 <dd><p>This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker's Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels)</p>
+exported by Bruker’s Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels).
+It’s a quick / fast alternative to parsing its respective xml. Dependent on the naming conventions of PrairieView.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder containing bruker imaging data</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – folder containing bruker imaging data</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>channels, planes, frames, height, width</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.load_bruker_tiffs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">load_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#load_bruker_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.load_bruker_tiffs" title="Permalink to this definition"></a></dt>
-<dd><p>Load a sequence of .tif files from a directory containing .tif files exported by Bruker's Prairieview software to a
-numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
-separate numpy array.</p>
+<dt class="sig sig-object py" id="CalSciPy.bruker.generate_bruker_naming_convention">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">generate_bruker_naming_convention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_planes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#generate_bruker_naming_convention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.generate_bruker_naming_convention" title="Permalink to this definition"></a></dt>
+<dd><p>Generates the expected bruker naming convention for images collected with an arbitrary number of cycles &amp; channels</p>
+<p>This function expects that the naming convention is {experiment_name}_Cycle00000_Ch0_000000.ome.tiff
+where the channel is one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and
+the 6-digit tag represents the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.
+Channel and plane are <em>zero-indexed</em>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder containing a sequence of single frame tiff files</p></li>
-<li><p><strong>channels</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>] </em><em>= None</em>) -- specific channel to load from dataset (zero-indexed)</p></li>
-<li><p><strong>planes</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>] </em><em>= None</em>) -- specific plane to load from dataset (zero-indexed)</p></li>
+<li><p><strong>channel</strong> (<em>int = 0</em>) – channel to produce name for</p></li>
+<li><p><strong>plane</strong> (<em>int = 0</em>) – plane to produce name for</p></li>
+<li><p><strong>num_channels</strong> (<em>int = 1</em>) – number of channels</p></li>
+<li><p><strong>num_planes</strong> (<em>int = 1</em>) – number of planes</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CalSciPy.bruker.load_bruker_tifs">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">load_bruker_tifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#load_bruker_tifs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.load_bruker_tifs" title="Permalink to this definition"></a></dt>
+<dd><p>Load images collected and exported to .tif by Bruker’s Prairieview software to a tuple of numpy arrays.
+If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
+numpy array. Identification of multiple channels / planes is dependent on <a class="reference internal" href="#CalSciPy.bruker.determine_imaging_content" title="CalSciPy.bruker.determine_imaging_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a>.
+Images are loaded as unsigned 16-bit, though note that raw bruker files are natively 12 or 13-bit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – folder containing a sequence of single frame tiff files</p></li>
+<li><p><strong>channel</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>] </em><em>= None</em>) – specific channel to load from dataset (zero-indexed)</p></li>
+<li><p><strong>plane</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>] </em><em>= None</em>) – specific plane to load from dataset (zero-indexed)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>All .tif files in the directory loaded to a tuple of numpy arrays
 (frames, y-pixels, x-pixels, <code class="xref py py-class docutils literal notranslate"><span class="pre">np.uint16</span></code>)</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a>]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.pretty_print_image_description">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">pretty_print_image_description</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#pretty_print_image_description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.pretty_print_image_description" title="Permalink to this definition"></a></dt>
-<dd><p>Function prints the description of an imaging dataset as a table.</p>
+<dt class="sig sig-object py" id="CalSciPy.bruker.repackage_bruker_tifs">
+<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">repackage_bruker_tifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#repackage_bruker_tifs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.repackage_bruker_tifs" title="Permalink to this definition"></a></dt>
+<dd><p>Repackages a folder containing .tif files exported by Bruker’s Prairieview software into a sequence of &lt;4 GB .tif
+stacks. Channels are planes are <strong>zero-indexed</strong>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of channels</p></li>
-<li><p><strong>planes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of planes</p></li>
-<li><p><strong>frames</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- number of frames</p></li>
-<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- y-pixels</p></li>
-<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- x-pixels</p></li>
+<li><p><strong>input_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – folder containing a sequence of single frame .tif files exported by Bruker’s Prairieview</p></li>
+<li><p><strong>output_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) – empty folder where .tif stacks will be saved</p></li>
+<li><p><strong>channel</strong> (<em>int = 0</em>) – optional input specifying channel</p></li>
+<li><p><strong>plane</strong> (<em>int = 0</em>) – optional input specifying plane</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.repackage_bruker_tiffs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">repackage_bruker_tiffs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CalSciPy/bruker.html#repackage_bruker_tiffs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.repackage_bruker_tiffs" title="Permalink to this definition"></a></dt>
-<dd><p>Repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence of &lt;4 GB .tif
-stacks.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- folder containing a sequence of single frame .tif files exported by Bruker's Prairieview</p></li>
-<li><p><strong>output_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><em>pathlib.Path</em></a>) -- empty folder where .tif stacks will be saved</p></li>
-<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) -- optional argument to indicate the repackaging of a specific channel and/or plane</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -179,7 +190,7 @@ stacks.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Darik A. O&#39;Neil.</p>
+    <p>&#169; Copyright 2023Darik A. O&#39;Neil.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -3,12 +3,13 @@ Overview
 * :ref:`Bruker <Bruker Module>`
 * :ref:`Coloring <Coloring Module>`
 * :ref:`Event Processing <Event Processing Module>`
-* :ref:`Input/Output (I/O) <IO Module>`
+* :ref:`Input/Output Tools (I/O) <IO Module>`
 * :ref:`Image Processing <Image Processing Module>`
 * :ref:`Interactive Visuals <Interactive Visuals Module>`
+* :ref:`Miscellaneous <Miscellaneous Module>`
 * :ref:`Reorganization <Reorganization Module>`
 * :ref:`Trace Processing <Trace Processing Module>`
-* :ref:`Static Visuals <Static Visuals Module>`
+* :ref:`Version <Version Module>`
 
 
 .. _Bruker Module:
@@ -93,6 +94,19 @@ Interactive Visuals Methods
 ***************************
 | Import me
 
+.. _Miscellaneous Module:
+
+Miscellaneous
+_____________
+| Write me
+| Write me
+| Write me
+| Write me
+
+Miscellaneous Methods
+*********************
+| Import me
+
 .. _Reorganization Module:
 
 Reorganization
@@ -123,15 +137,16 @@ Trace Processing
 
    CalSciPy.trace_processing
 
-.. _Static Visuals Module:
+.. _Version Module:
 
-Static Visuals
---------------
+Version
+_______
 | Write me
 | Write me
 | Write me
 | Write me
 
-Static Visual Methods
-*********************
-| Import me
+Version Methods
+***************
+
+| Import Me

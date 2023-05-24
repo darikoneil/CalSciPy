@@ -14,16 +14,3 @@ def test_cutoff_images(sample_image, cutoff_reference, in_place):
         np.testing.assert_equal(changed, sample_image)
     else:
         assert not np.array_equal(changed, sample_image)
-
-
-@pytest.mark.parametrize("in_place", [True, False])
-def test_rescale_images(sample_image, rescale_reference, in_place):
-
-    changed = rescale_images(sample_image, in_place=in_place)
-
-    np.testing.assert_equal(changed, rescale_reference)
-
-    if in_place:
-        np.testing.assert_equal(changed, sample_image)
-    else:
-        assert not np.array_equal(changed, sample_image)

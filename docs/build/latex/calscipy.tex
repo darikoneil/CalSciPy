@@ -10,6 +10,8 @@
 %% let collapsible pdf bookmarks panel have high depth per default
 \PassOptionsToPackage{bookmarksdepth=5}{hyperref}
 
+\PassOptionsToPackage{booktabs}{sphinx}
+\PassOptionsToPackage{colorrows}{sphinx}
 
 \PassOptionsToPackage{warn}{textcomp}
 \usepackage[utf8]{inputenc}
@@ -40,9 +42,7 @@
 
 
 
-\usepackage[Sonny]{fncychap}
-\ChNameVar{\Large\normalfont\sffamily}
-\ChTitleVar{\Large\normalfont\sffamily}
+\usepackage[Bjarne]{fncychap}
 \usepackage{sphinx}
 
 \fvset{fontsize=auto}
@@ -64,8 +64,8 @@
 
 
 \title{CalSciPy}
-\date{Feb 15, 2023}
-\release{0.1.5}
+\date{2023}
+\release{0.3.0}
 \author{Darik A.\@{} O\textquotesingle{}Neil}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -92,7 +92,7 @@
 \label{\detokenize{Introduction:introduction}}\label{\detokenize{Introduction::doc}}
 \sphinxAtStartPar
 \sphinxstylestrong{CalSciPy} contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
-It\textquotesingle{}s intended to be a collection of useful, well\sphinxhyphen{}documented functions often used in boilerplate code alongside software
+It’s intended to be a collection of useful, well\sphinxhyphen{}documented functions often used in boilerplate code alongside software
 packages such as \sphinxhref{https://github.com/flatironinstitute/CaImAn}{Caiman}, \sphinxhref{https://github.com/losonczylab/sima}{SIMA},
 and \sphinxhref{https://github.com/MouseLand/suite2p}{Suite2P}.
 
@@ -101,17 +101,16 @@ and \sphinxhref{https://github.com/MouseLand/suite2p}{Suite2P}.
 \label{\detokenize{Introduction:motivation}}
 \sphinxAtStartPar
 I noticed I was often re\sphinxhyphen{}writing or copy/pasting a lot of code between environments when working with calcium imaging
-data. I started this package so you don\textquotesingle{}t have to. No more wasting time writing 6 lines to simply preview your tiff
-stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete documentation when re\sphinxhyphen{}using
-a hastily\sphinxhyphen{}made function from 2 months ago. Alongside these time\sphinxhyphen{}savers, I\textquotesingle{}ve also included some more non\sphinxhyphen{}trivial methods
-that are particularly useful.
+data. I started this package \textasciitilde{}so I don’t have to\textasciitilde{} so you don’t have to. No more wasting time writing 6 lines to simply
+preview your tiff stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete
+documentation when re\sphinxhyphen{}using a hastily\sphinxhyphen{}made function from 2 months ago. Alongside these time\sphinxhyphen{}savers, I’ve also included
+some more non\sphinxhyphen{}trivial methods that are particularly useful.
 
 
 \section{Limitations}
 \label{\detokenize{Introduction:limitations}}
 \sphinxAtStartPar
-The current distribution for the package is incomplete. When each module has its associated unit tests complete, it will
-be pushed.
+The current distribution for the package is incomplete and partially tested
 
 \sphinxstepscope
 
@@ -149,7 +148,7 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy\sphinxhyphen{}\textless{}s
 
 \item {} 
 \sphinxAtStartPar
-{\hyperref[\detokenize{Sub-Packages:io-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Input/Output (I/O)}}}}
+{\hyperref[\detokenize{Sub-Packages:io-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Input/Output Tools (I/O)}}}}
 
 \item {} 
 \sphinxAtStartPar
@@ -161,6 +160,10 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy\sphinxhyphen{}\textless{}s
 
 \item {} 
 \sphinxAtStartPar
+{\hyperref[\detokenize{Sub-Packages:miscellaneous-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Miscellaneous}}}}
+
+\item {} 
+\sphinxAtStartPar
 {\hyperref[\detokenize{Sub-Packages:reorganization-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Reorganization}}}}
 
 \item {} 
@@ -169,7 +172,7 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy\sphinxhyphen{}\textless{}s
 
 \item {} 
 \sphinxAtStartPar
-{\hyperref[\detokenize{Sub-Packages:static-visuals-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Static Visuals}}}}
+{\hyperref[\detokenize{Sub-Packages:version-module}]{\sphinxcrossref{\DUrole{std,std-ref}{Version}}}}
 
 \end{itemize}
 
@@ -187,20 +190,21 @@ Enter \sphinxcode{\sphinxupquote{pip install CalSciPy\sphinxhyphen{}\textless{}s
 
 
 \subsection{CalSciPy.bruker module}
-\label{\detokenize{CalSciPy.bruker:module-CalSciPy.bruker}}\label{\detokenize{CalSciPy.bruker:calscipy-bruker-module}}\label{\detokenize{CalSciPy.bruker::doc}}\index{module@\spxentry{module}!CalSciPy.bruker@\spxentry{CalSciPy.bruker}}\index{CalSciPy.bruker@\spxentry{CalSciPy.bruker}!module@\spxentry{module}}\index{determine\_bruker\_folder\_contents() (in module CalSciPy.bruker)@\spxentry{determine\_bruker\_folder\_contents()}\spxextra{in module CalSciPy.bruker}}
+\label{\detokenize{CalSciPy.bruker:module-CalSciPy.bruker}}\label{\detokenize{CalSciPy.bruker:calscipy-bruker-module}}\label{\detokenize{CalSciPy.bruker::doc}}\index{module@\spxentry{module}!CalSciPy.bruker@\spxentry{CalSciPy.bruker}}\index{CalSciPy.bruker@\spxentry{CalSciPy.bruker}!module@\spxentry{module}}\index{determine\_imaging\_content() (in module CalSciPy.bruker)@\spxentry{determine\_imaging\_content()}\spxextra{in module CalSciPy.bruker}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.determine_bruker_folder_contents}}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.determine_imaging_content}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{determine\_bruker\_folder\_contents}}}{\emph{\DUrole{n}{folder}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{determine\_imaging\_content}}}{\emph{\DUrole{n}{folder}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker\textquotesingle{}s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+exported by Bruker’s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels).
+It’s a quick / fast alternative to parsing its respective xml. Dependent on the naming conventions of PrairieView.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing bruker imaging data
+\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} folder containing bruker imaging data
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -214,30 +218,78 @@ channels, planes, frames, height, width
 
 \end{fulllineitems}
 
-\index{load\_bruker\_tiffs() (in module CalSciPy.bruker)@\spxentry{load\_bruker\_tiffs()}\spxextra{in module CalSciPy.bruker}}
+\index{generate\_bruker\_naming\_convention() (in module CalSciPy.bruker)@\spxentry{generate\_bruker\_naming\_convention()}\spxextra{in module CalSciPy.bruker}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.load_bruker_tiffs}}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.generate_bruker_naming_convention}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tiffs}}}{\emph{\DUrole{n}{folder}}, \emph{\DUrole{n}{channels}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{planes}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{generate\_bruker\_naming\_convention}}}{\emph{\DUrole{n}{channel}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{plane}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{num\_channels}\DUrole{o}{=}\DUrole{default_value}{1}}, \emph{\DUrole{n}{num\_planes}\DUrole{o}{=}\DUrole{default_value}{1}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Load a sequence of .tif files from a directory containing .tif files exported by Bruker\textquotesingle{}s Prairieview software to a
-numpy array. If multiple channels or multiple planes exist, each channel and plane combination is loaded to a
-separate numpy array.
+Generates the expected bruker naming convention for images collected with an arbitrary number of cycles \& channels
+
+\sphinxAtStartPar
+This function expects that the naming convention is \{experiment\_name\}\_Cycle00000\_Ch0\_000000.ome.tiff
+where the channel is one\sphinxhyphen{}indexed. The 5\sphinxhyphen{}digit cycle id represents the frame if using multiplane imaging and
+the 6\sphinxhyphen{}digit tag represents the plane. Otherwise, the 5\sphinxhyphen{}digit tag is static and the 6\sphinxhyphen{}digit tag represents the frame.
+Channel and plane are \sphinxstyleemphasis{zero\sphinxhyphen{}indexed}.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame tiff files
+\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} channel to produce name for
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
+\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} plane to produce name for
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
+\sphinxstyleliteralstrong{\sphinxupquote{num\_channels}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 1}}) \textendash{} number of channels
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{num\_planes}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 1}}) \textendash{} number of planes
+
+\end{itemize}
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load\_bruker\_tifs() (in module CalSciPy.bruker)@\spxentry{load\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.load_bruker_tifs}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tifs}}}{\emph{\DUrole{n}{folder}}, \emph{\DUrole{n}{channel}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{plane}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Load images collected and exported to .tif by Bruker’s Prairieview software to a tuple of numpy arrays.
+If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
+numpy array. Identification of multiple channels / planes is dependent on {\hyperref[\detokenize{CalSciPy.bruker:CalSciPy.bruker.determine_imaging_content}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{determine\_imaging\_content()}}}}}.
+Images are loaded as unsigned 16\sphinxhyphen{}bit, though note that raw bruker files are natively 12 or 13\sphinxhyphen{}bit.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} folder containing a sequence of single frame tiff files
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \textendash{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \textendash{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
 
 \end{itemize}
 
@@ -254,70 +306,33 @@ All .tif files in the directory loaded to a tuple of numpy arrays
 
 \end{fulllineitems}
 
-\index{pretty\_print\_image\_description() (in module CalSciPy.bruker)@\spxentry{pretty\_print\_image\_description()}\spxextra{in module CalSciPy.bruker}}
+\index{repackage\_bruker\_tifs() (in module CalSciPy.bruker)@\spxentry{repackage\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.pretty_print_image_description}}
+\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.repackage_bruker_tifs}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{pretty\_print\_image\_description}}}{\emph{\DUrole{n}{channels}}, \emph{\DUrole{n}{planes}}, \emph{\DUrole{n}{frames}}, \emph{\DUrole{n}{height}}, \emph{\DUrole{n}{width}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tifs}}}{\emph{\DUrole{n}{input\_folder}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{n}{channel}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{plane}\DUrole{o}{=}\DUrole{default_value}{0}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Function prints the description of an imaging dataset as a table.
+Repackages a folder containing .tif files exported by Bruker’s Prairieview software into a sequence of \textless{}4 GB .tif
+stacks. Channels are planes are \sphinxstylestrong{zero\sphinxhyphen{}indexed}.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channels}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of channels
+\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} folder containing a sequence of single frame .tif files exported by Bruker’s Prairieview
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{planes}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of planes
+\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} empty folder where .tif stacks will be saved
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frames}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} number of frames
+\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} optional input specifying channel
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} y\sphinxhyphen{}pixels
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{width}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} x\sphinxhyphen{}pixels
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{repackage\_bruker\_tiffs() (in module CalSciPy.bruker)@\spxentry{repackage\_bruker\_tiffs()}\spxextra{in module CalSciPy.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker:CalSciPy.bruker.repackage_bruker_tiffs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tiffs}}}{\emph{\DUrole{n}{input\_folder}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Repackages a folder containing .tif files exported by Bruker\textquotesingle{}s Prairieview software into a sequence of \textless{}4 GB .tif
-stacks.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of single frame .tif files exported by Bruker\textquotesingle{}s Prairieview
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} empty folder where .tif stacks will be saved
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{args}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} optional argument to indicate the repackaging of a specific channel and/or plane
+\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} optional input specifying plane
 
 \end{itemize}
 
@@ -361,45 +376,12 @@ None
 
 
 \subsection{CalSciPy.event\_processing module}
-\label{\detokenize{CalSciPy.event_processing:module-CalSciPy.event_processing}}\label{\detokenize{CalSciPy.event_processing:calscipy-event-processing-module}}\label{\detokenize{CalSciPy.event_processing::doc}}\index{module@\spxentry{module}!CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}}\index{CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}!module@\spxentry{module}}\index{bin\_events() (in module CalSciPy.event\_processing)@\spxentry{bin\_events()}\spxextra{in module CalSciPy.event\_processing}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.bin_events}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{bin\_events}}}{\emph{\DUrole{n}{matrix}}, \emph{\DUrole{n}{bin\_length}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bin events (e.g., spikes) using specified bin length
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of n features x m samples
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{bin\_length}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} length of bin
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-binned\_matrix of n features x m bins
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{calculate\_firing\_rates() (in module CalSciPy.event\_processing)@\spxentry{calculate\_firing\_rates()}\spxextra{in module CalSciPy.event\_processing}}
+\label{\detokenize{CalSciPy.event_processing:module-CalSciPy.event_processing}}\label{\detokenize{CalSciPy.event_processing:calscipy-event-processing-module}}\label{\detokenize{CalSciPy.event_processing::doc}}\index{module@\spxentry{module}!CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}}\index{CalSciPy.event\_processing@\spxentry{CalSciPy.event\_processing}!module@\spxentry{module}}\index{calculate\_firing\_rates() (in module CalSciPy.event\_processing)@\spxentry{calculate\_firing\_rates()}\spxextra{in module CalSciPy.event\_processing}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.calculate_firing_rates}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_firing\_rates}}}{\emph{\DUrole{n}{spike\_probability\_matrix}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_firing\_rates}}}{\emph{\DUrole{n}{spike\_probability\_matrix}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30.0}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Calculate firing rates
@@ -407,15 +389,15 @@ Calculate firing rates
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{spike\_probability\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of n neuron x m samples where each element is the probability of a spike
+\sphinxstyleliteralstrong{\sphinxupquote{spike\_probability\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of n neuron x m samples where each element is the probability of a spike
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30}}) \sphinxhyphen{}\sphinxhyphen{} frame rate of dataset
+\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30}}) \textendash{} frame rate of dataset
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \sphinxhyphen{}\sphinxhyphen{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
 
 \end{itemize}
 
@@ -443,7 +425,7 @@ Calculate mean firing rate
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{firing\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of n neuron x m samples where each element is either a spike or an
+\sphinxstyleliteralstrong{\sphinxupquote{firing\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of n neuron x m samples where each element is either a spike or an
 instantaneous firing rate
 
 \sphinxlineitem{Returns}
@@ -458,39 +440,213 @@ instantaneous firing rate
 
 \end{fulllineitems}
 
-\index{gaussian\_smooth\_firing\_rates() (in module CalSciPy.event\_processing)@\spxentry{gaussian\_smooth\_firing\_rates()}\spxextra{in module CalSciPy.event\_processing}}
+\index{collect\_waveforms() (in module CalSciPy.event\_processing)@\spxentry{collect\_waveforms()}\spxextra{in module CalSciPy.event\_processing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.gaussian_smooth_firing_rates}}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.collect_waveforms}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{gaussian\_smooth\_firing\_rates}}}{\emph{\DUrole{n}{firing\_matrix}}, \emph{\DUrole{n}{sigma}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{collect\_waveforms}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{event\_indices}}, \emph{\DUrole{n}{pre}\DUrole{o}{=}\DUrole{default_value}{150}}, \emph{\DUrole{n}{post}\DUrole{o}{=}\DUrole{default_value}{450}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Normalize firing rates using a 1\sphinxhyphen{}D gaussian filter
+Collect waveforms for each event
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{firing\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of n neuron x m samples where each element is either a spike or an
-instantaneous firing rate
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} a matrix of M neurons x N samples
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{sigma}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}) \sphinxhyphen{}\sphinxhyphen{} standard deviation of gaussian kernel
+\sphinxstyleliteralstrong{\sphinxupquote{event\_indices}} (\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} a list of events
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \sphinxhyphen{}\sphinxhyphen{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
+\sphinxstyleliteralstrong{\sphinxupquote{pre}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of pre\sphinxhyphen{}event frames
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{post}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} number of post\sphinxhyphen{}event frames
 
 \end{itemize}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
-gaussian\sphinxhyphen{}smoothed firing rate matrix of n neurons x m samples
+a matrix of M events x N samples
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Tuple{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{convert\_tau() (in module CalSciPy.event\_processing)@\spxentry{convert\_tau()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.convert_tau}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{convert\_tau}}}{\emph{\DUrole{n}{tau}}, \emph{\DUrole{n}{dt}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Converts a discrete tau to a continuous tau
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{tau}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}) \textendash{} decay constant
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{dt}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}) \textendash{} time step (s)
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+continuous tau (s)
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{get\_event\_onset\_intensities() (in module CalSciPy.event\_processing)@\spxentry{get\_event\_onset\_intensities()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.get_event_onset_intensities}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{get\_event\_onset\_intensities}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{event\_indices}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Retrieve the signal intensity at event onset for each neuron in the event indices
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} An M neuron by N sample matrix
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{event\_indices}} (\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} An iterable of length M containing a sequence with a duration for each event
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+An iterable of length M neurons containing the onset intensities for each event in the sequence
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Tuple{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{get\_inter\_event\_intervals() (in module CalSciPy.event\_processing)@\spxentry{get\_inter\_event\_intervals()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.get_inter_event_intervals}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{get\_inter\_event\_intervals}}}{\emph{\DUrole{n}{event\_indices}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30.0}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Calculate the inter event intervals for each neuron in the event indices
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{event\_indices}} (\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} An iterable of length M containing a sequence with a duration for each event
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}) \textendash{} frame\_rate for trace matrix
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+An iterable of length M neurons containing the inter\sphinxhyphen{}event intervals for each event in the sequence
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Tuple{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{get\_num\_events() (in module CalSciPy.event\_processing)@\spxentry{get\_num\_events()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.get_num_events}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{get\_num\_events}}}{\emph{\DUrole{n}{event\_indices}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Determines the number of events for each neuron in the event indices
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{event\_indices}} (\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} An iterable of length M neurons containing a sequence with a duration for each event
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+A 1\sphinxhyphen{}D vector of length M neurons containing the number of events for each neuron
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{identify\_events() (in module CalSciPy.event\_processing)@\spxentry{identify\_events()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.identify_events}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{identify\_events}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{timeout}\DUrole{o}{=}\DUrole{default_value}{15}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30.0}}, \emph{\DUrole{n}{smooth}\DUrole{o}{=}\DUrole{default_value}{True}}, \emph{\DUrole{n}{force\_nonneg}\DUrole{o}{=}\DUrole{default_value}{True}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Identify event onset for each neuron using the smoothed, non\sphinxhyphen{}negative first\sphinxhyphen{}time derivative. The threshold for noise
+is considered 1/2th the standard deviation of the derivative.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} An M neuron by N sample matrix
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{timeout}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} timeout distance for peak finding (frames)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}) \textendash{} frame rate / time step for trace matrix
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{smooth}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = True}}) \textendash{} boolean indicating whether to smooth first\sphinxhyphen{}time derivative
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{force\_nonneg}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = True}}) \textendash{} boolean indicating whether to enforce non\sphinxhyphen{}negativity constraint on first\sphinxhyphen{}time derivative
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+An iterable where each element contains a sequence of frames identified as event onsets
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Tuple{[}List{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}{]}{]}
 
 \end{description}\end{quote}
 
@@ -509,12 +665,12 @@ Normalize firing rates by scaling to a max of 1.0. Non\sphinxhyphen{}negativity 
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{firing\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of n neuron x m samples where each element is either a spike or an
+\sphinxstyleliteralstrong{\sphinxupquote{firing\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of n neuron x m samples where each element is either a spike or an
 instantaneous firing rate
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \sphinxhyphen{}\sphinxhyphen{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
 
 \end{itemize}
 
@@ -525,6 +681,39 @@ normalized firing rate matrix of n neurons x m samples
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
 \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{scale\_waveforms() (in module CalSciPy.event\_processing)@\spxentry{scale\_waveforms()}\spxextra{in module CalSciPy.event\_processing}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.event_processing:CalSciPy.event_processing.scale_waveforms}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.event\_processing.}}\sphinxbfcode{\sphinxupquote{scale\_waveforms}}}{\emph{\DUrole{n}{waveforms}}, \emph{\DUrole{n}{scaler=\textless{}class \textquotesingle{}sklearn.preprocessing.\_data.StandardScaler\textquotesingle{}\textgreater{}}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Scale waveforms for cross\sphinxhyphen{}neuron comparisons
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{waveforms}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} An Iterable of M events by N samples matrices of waveforms
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{scaler}} (\sphinxstyleliteralemphasis{\sphinxupquote{Callable}}) \textendash{} sklearn preprocessing object
+
+\end{itemize}
+
+\sphinxlineitem{Returns}
+\sphinxAtStartPar
+An Iterable of M event by N samples scaled matrices of waveforms
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+Iterable{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}{]}
 
 \end{description}\end{quote}
 
@@ -545,118 +734,35 @@ normalized firing rate matrix of n neurons x m samples
 
 
 \subsection{CalSciPy.io\_tools module}
-\label{\detokenize{CalSciPy.io_tools:module-CalSciPy.io_tools}}\label{\detokenize{CalSciPy.io_tools:calscipy-io-tools-module}}\label{\detokenize{CalSciPy.io_tools::doc}}\index{module@\spxentry{module}!CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}}\index{CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}!module@\spxentry{module}}\index{load\_all\_tiffs() (in module CalSciPy.io\_tools)@\spxentry{load\_all\_tiffs()}\spxextra{in module CalSciPy.io\_tools}}
+\label{\detokenize{CalSciPy.io_tools:module-CalSciPy.io_tools}}\label{\detokenize{CalSciPy.io_tools:calscipy-io-tools-module}}\label{\detokenize{CalSciPy.io_tools::doc}}\index{module@\spxentry{module}!CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}}\index{CalSciPy.io\_tools@\spxentry{CalSciPy.io\_tools}!module@\spxentry{module}}\index{load\_binary() (in module CalSciPy.io\_tools)@\spxentry{load\_binary()}\spxextra{in module CalSciPy.io\_tools}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_all_tiffs}}
+\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_all\_tiffs}}}{\emph{\DUrole{n}{folder}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{mapped}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
+\pysigstopsignatures\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}, \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.memmap.html\#numpy.memmap}{\sphinxcode{\sphinxupquote{memmap}}}{]}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+\index{load\_images() (in module CalSciPy.io\_tools)@\spxentry{load\_images()}\spxextra{in module CalSciPy.io\_tools}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_images}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_images}}}{\emph{\DUrole{n}{path}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Loads all .tif\textquotesingle{}s within a folder into a single numpy array. Assumes .tif files are the standard unsigned 16\sphinxhyphen{}bit
-exported by the majority (all?) of imaging software.
+Load images into a numpy array. If path is a folder, all .tif files found non\sphinxhyphen{}recursively in the directory will be
+compiled to a single array
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder containing a sequence of tiff stacks
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-a numpy array containing the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_binary\_meta() (in module CalSciPy.io\_tools)@\spxentry{load\_binary\_meta()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_binary_meta}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_binary\_meta}}}{\emph{\DUrole{n}{path}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Loads the meta file for an associated binary video
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} The meta file (.txt ext) or a directory containing metafile
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-A tuple where (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html\#numpy.dtype}{\sphinxcode{\sphinxupquote{numpy.dtype}}})
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}{]}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_mapped\_binary() (in module CalSciPy.io\_tools)@\spxentry{load\_mapped\_binary()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_mapped_binary}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_mapped\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{o}{**}\DUrole{n}{kwargs}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Loads a raw binary file as numpy array without loading into memory (memmap). Enter a directory to autogenerate the
-default filenames (binary\_video, video\_meta.txt)
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or a folder containing a binary video with the default filename
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{meta\_filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} absolute path to meta file
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{mode}} \sphinxhyphen{}\sphinxhyphen{} mode used in loading numpy.memmap (str, default = "r")
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-memmap (numpy) array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.memmap.html\#numpy.memmap}{numpy.memmap}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_raw\_binary() (in module CalSciPy.io\_tools)@\spxentry{load\_raw\_binary()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_raw_binary}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_raw\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Loads a raw binary file as a numpy array. Enter a directory to autogenerate the default
-filenames (binary\_video, video\_meta.txt)
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for binary video or directory containing a file named binary video
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{meta\_filename}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} absolute path to meta file
-
-\end{itemize}
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} a file containing images or a folder containing several imaging stacks
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -670,159 +776,71 @@ numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 
 \end{fulllineitems}
 
-\index{load\_single\_tiff() (in module CalSciPy.io\_tools)@\spxentry{load\_single\_tiff()}\spxextra{in module CalSciPy.io\_tools}}
+\index{save\_binary() (in module CalSciPy.io\_tools)@\spxentry{save\_binary()}\spxextra{in module CalSciPy.io\_tools}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_single_tiff}}
+\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_single\_tiff}}}{\emph{\DUrole{n}{path}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_binary}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{images}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Load a single .tif as a numpy array
+Save images to language\sphinxhyphen{}agnostic binary format. Ideal for optimal read/write speeds and highly\sphinxhyphen{}robust to corruption.
+However, the downside is that the images and their metadata are split into two separate files. Images are saved with
+the \sphinxstyleemphasis{.bin} extension, while metadata is saved with extension \sphinxstyleemphasis{.json}. If for some reason you lose the metadata, you
+can still load the binary if you know three of the following: number of frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, and the
+datatype. The datatype is almost always unsigned 16\sphinxhyphen{}bit for all modern imaging systems\textendash{}even if they are collected
+at 12 or 13\sphinxhyphen{}bit.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filename
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} path to save images to. The path stem is considered the filename if it doesn’t have any extension.
+
+\end{description}\end{quote}
+
+\sphinxAtStartPar
+If no filename is provided then the default filename is \sphinxstyleemphasis{binary\_video}.
+:type path: str or pathlib.Path
+:type images: \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}
+:param images: images to save (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+:type images: numpy.ndarray
+:return: 0 if successful
+:rtype: int
+
+\end{fulllineitems}
+
+\index{save\_images() (in module CalSciPy.io\_tools)@\spxentry{save\_images()}\spxextra{in module CalSciPy.io\_tools}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_images}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_images}}}{\emph{\DUrole{n}{path}}, \emph{\DUrole{n}{images}}, \emph{\DUrole{n}{size\_cap}\DUrole{o}{=}\DUrole{default_value}{3.9}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Save a numpy array to a single .tif file. If size \textgreater{} 4GB then saved as a series of files. If path is not a file and
+already exists the default filename will be \sphinxstyleemphasis{images}.
+\begin{quote}\begin{description}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} filename or absolute path
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} numpy array (frames, y pixels, x pixels)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{size\_cap}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 3.9}}) \textendash{} maximum size per file
+
+\end{itemize}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
-numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+returns 0 if successful
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{save\_raw\_binary() (in module CalSciPy.io\_tools)@\spxentry{save\_raw\_binary()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_raw_binary}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_raw\_binary}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{meta\_filename}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Save a numpy array as a binary file with an associated meta .txt file
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}) \sphinxhyphen{}\sphinxhyphen{} folder to save in or an absolute filepath for binary video file
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{meta\_filename}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath for saving meta .txt file
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{save\_single\_tiff() (in module CalSciPy.io\_tools)@\spxentry{save\_single\_tiff()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_single_tiff}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_single\_tiff}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{type\_=\textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Save a numpy array to a single .tif file. Size must be \textless{}4 GB.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} numpy array {[}frames, y pixels, x pixels{]}
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} filename or absolute path
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{type}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html\#numpy.dtype}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.dtype}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= numpy.uint16}}) \sphinxhyphen{}\sphinxhyphen{} type for saving
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{save\_tiff\_stack() (in module CalSciPy.io\_tools)@\spxentry{save\_tiff\_stack()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_tiff_stack}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_tiff\_stack}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{output\_folder}}, \emph{\DUrole{n}{type\_=\textless{}class \textquotesingle{}numpy.uint16\textquotesingle{}\textgreater{}}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Save a numpy array to a sequence of .tif stacks
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} folder to save the sequence of .tif stacks
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{type}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.dtype.html\#numpy.dtype}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.dtype}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= numpy.uint16}}) \sphinxhyphen{}\sphinxhyphen{} type for saving
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{save\_video() (in module CalSciPy.io\_tools)@\spxentry{save\_video()}\spxextra{in module CalSciPy.io\_tools}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_video}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_video}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{path}}, \emph{\DUrole{n}{fps}\DUrole{o}{=}\DUrole{default_value}{30.0}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Save numpy array as an .mp4. Will be converted to uint8 if any other datatype.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.array}}) \sphinxhyphen{}\sphinxhyphen{} numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \sphinxhyphen{}\sphinxhyphen{} absolute filepath or filename
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{fps}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30.0}}) \sphinxhyphen{}\sphinxhyphen{} frame rate for saved video
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
+\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}
 
 \end{description}\end{quote}
 
@@ -843,38 +861,43 @@ None
 
 
 \subsection{CalSciPy.image\_processing module}
-\label{\detokenize{CalSciPy.image_processing:module-CalSciPy.image_processing}}\label{\detokenize{CalSciPy.image_processing:calscipy-image-processing-module}}\label{\detokenize{CalSciPy.image_processing::doc}}\index{module@\spxentry{module}!CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}}\index{CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}!module@\spxentry{module}}\index{blockwise\_fast\_filter\_tiff() (in module CalSciPy.image\_processing)@\spxentry{blockwise\_fast\_filter\_tiff()}\spxextra{in module CalSciPy.image\_processing}}
+\label{\detokenize{CalSciPy.image_processing:module-CalSciPy.image_processing}}\label{\detokenize{CalSciPy.image_processing:calscipy-image-processing-module}}\label{\detokenize{CalSciPy.image_processing::doc}}\index{module@\spxentry{module}!CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}}\index{CalSciPy.image\_processing@\spxentry{CalSciPy.image\_processing}!module@\spxentry{module}}\index{gaussian\_filter() (in module CalSciPy.image\_processing)@\spxentry{gaussian\_filter()}\spxextra{in module CalSciPy.image\_processing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.blockwise_fast_filter_tiff}}
+\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.gaussian_filter}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{blockwise\_fast\_filter\_tiff}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{mask}\DUrole{o}{=}\DUrole{default_value}{array({[}{[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}{]})}}, \emph{\DUrole{n}{block\_size}\DUrole{o}{=}\DUrole{default_value}{21000}}, \emph{\DUrole{n}{block\_buffer}\DUrole{o}{=}\DUrole{default_value}{500}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{gaussian\_filter}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{sigma}\DUrole{o}{=}\DUrole{default_value}{1.0}}, \emph{\DUrole{n}{block\_size}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{block\_buffer}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-GPU\sphinxhyphen{}parallelized multidimensional median filter performed in overlapping blocks.
+GPU\sphinxhyphen{}parallelized multidimensional gaussian filter. Optional arguments for in\sphinxhyphen{}place calculation. Can be calculated
+blockwise with overlapping or non\sphinxhyphen{}overlapping blocks.
 
 \sphinxAtStartPar
 Designed for use on arrays larger than the available memory capacity.
 
 \sphinxAtStartPar
-Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the cente
+Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the center
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} images stack to be filtered
+\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} images stack to be filtered
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{mask}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray = np.ones}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}) \sphinxhyphen{}\sphinxhyphen{} mask of the median filter
+\sphinxstyleliteralstrong{\sphinxupquote{sigma}} (\sphinxstyleliteralemphasis{\sphinxupquote{Number}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} sigma for gaussian filter
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{block\_size}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 21000}}) \sphinxhyphen{}\sphinxhyphen{} the size of each block. Must fit within memory
+\sphinxstyleliteralstrong{\sphinxupquote{block\_size}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = None}}) \textendash{} the size of each block. Must fit within memory
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{block\_buffer}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 500}}) \sphinxhyphen{}\sphinxhyphen{} the size of the overlapping region between block
+\sphinxstyleliteralstrong{\sphinxupquote{block\_buffer}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} the size of the overlapping region between block
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} whether to calculate in\sphinxhyphen{}place
 
 \end{itemize}
 
@@ -890,153 +913,49 @@ images: numpy array (frames, y pixels, x pixels)
 
 \end{fulllineitems}
 
-\index{clean\_image\_stack() (in module CalSciPy.image\_processing)@\spxentry{clean\_image\_stack()}\spxextra{in module CalSciPy.image\_processing}}
+\index{median\_filter() (in module CalSciPy.image\_processing)@\spxentry{median\_filter()}\spxextra{in module CalSciPy.image\_processing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.clean_image_stack}}
+\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.median_filter}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{clean\_image\_stack}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{artifact\_length}\DUrole{o}{=}\DUrole{default_value}{1000}}, \emph{\DUrole{n}{stack\_sizes}\DUrole{o}{=}\DUrole{default_value}{7000}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{median\_filter}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{mask}\DUrole{o}{=}\DUrole{default_value}{array({[}{[}{[}1., 1., 1.{]}, {[}1., 1., 1.{]}, {[}1., 1., 1.{]}{]}, {[}{[}1., 1., 1.{]}, {[}1., 1., 1.{]}, {[}1., 1., 1.{]}{]}, {[}{[}1., 1., 1.{]}, {[}1., 1., 1.{]}, {[}1., 1., 1.{]}{]}{]})}}, \emph{\DUrole{n}{block\_size}\DUrole{o}{=}\DUrole{default_value}{None}}, \emph{\DUrole{n}{block\_buffer}\DUrole{o}{=}\DUrole{default_value}{0}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Function to remove initial imaging frames such that any shutter artifact is removing and the resulting tensor
-is evenly divisible by the desired stack size
+GPU\sphinxhyphen{}parallelized multidimensional median filter. Optional arguments for in\sphinxhyphen{}place calculation. Can be calculated
+blockwise with overlapping or non\sphinxhyphen{}overlapping blocks.
+
+\sphinxAtStartPar
+Designed for use on arrays larger than the available memory capacity.
+
+\sphinxAtStartPar
+Footprint is of the form np.ones((frames, y pixels, x pixels)) with the origin in the center
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} images array (frames, y pixels, x pixels)
+\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} images stack to be filtered
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{artifact\_length}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 1000}}) \sphinxhyphen{}\sphinxhyphen{} number of frames considered artifact
+\sphinxstyleliteralstrong{\sphinxupquote{mask}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray = np.ones}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}) \textendash{} mask of the median filter
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{stack\_sizes}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 7000}}) \sphinxhyphen{}\sphinxhyphen{} number of frames per stack
+\sphinxstyleliteralstrong{\sphinxupquote{block\_size}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = None}}) \textendash{} the size of each block. Must fit within memory
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{block\_buffer}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 0}}) \textendash{} the size of the overlapping region between block
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} whether to calculate in\sphinxhyphen{}place
 
 \end{itemize}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
-images
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{fast\_filter\_images() (in module CalSciPy.image\_processing)@\spxentry{fast\_filter\_images()}\spxextra{in module CalSciPy.image\_processing}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.fast_filter_images}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{fast\_filter\_images}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{mask}\DUrole{o}{=}\DUrole{default_value}{array({[}{[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}{]})}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-GPU\sphinxhyphen{}parallelized multidimensional median filter
-
-\sphinxAtStartPar
-mask is of the form np.ones((frames, y pixels, x pixels)) with the origin in the center
-
-\sphinxAtStartPar
-Requires CuPy
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} image stack to be filtered (frames, y pixels, x pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{mask}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray = np.ones}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}) \sphinxhyphen{}\sphinxhyphen{} Mask of the median filter
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-filtered\_image (frames, y pixels, x pixels)
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-Any
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{filter\_images() (in module CalSciPy.image\_processing)@\spxentry{filter\_images()}\spxextra{in module CalSciPy.image\_processing}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.filter_images}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{filter\_images}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{mask}\DUrole{o}{=}\DUrole{default_value}{array({[}{[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}, {[}{[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}, {[}1.0, 1.0, 1.0{]}{]}{]})}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Denoise a tiff stack using a multidimensional median filter
-
-\sphinxAtStartPar
-This function simply calls
-
-\sphinxAtStartPar
-mask is of the form np.ones((frames, y pixels, x pixels) with the origin in the center
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} images stack to be filtered (frames, y pixels, x pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{mask}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray = np.ones}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{(}}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxstyleliteralemphasis{\sphinxupquote{3}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}\sphinxstyleliteralemphasis{\sphinxupquote{)}}) \sphinxhyphen{}\sphinxhyphen{} mask of the median filter
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-filtered images (frames, y pixels, x pixels)
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{grouped\_z\_project() (in module CalSciPy.image\_processing)@\spxentry{grouped\_z\_project()}\spxextra{in module CalSciPy.image\_processing}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.image_processing:CalSciPy.image_processing.grouped_z_project}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.image\_processing.}}\sphinxbfcode{\sphinxupquote{grouped\_z\_project}}}{\emph{\DUrole{n}{images}}, \emph{\DUrole{n}{bin\_size}}, \emph{\DUrole{n}{function=\textless{}function mean\textgreater{}}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Utilize grouped z\sphinxhyphen{}project to downsample data
-
-\sphinxAtStartPar
-Downsample example function \sphinxhyphen{}\textgreater{} np.mean
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} A numpy array containing a tiff stack (frames, y pixels, x pixels)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{bin\_size}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{\sphinxstyleliteralemphasis{\sphinxupquote{tuple}}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{, }}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} or }}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{\sphinxstyleliteralemphasis{\sphinxupquote{tuple}}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} size of each bin passed to downsampling function
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{function}} (\sphinxstyleliteralemphasis{\sphinxupquote{Callable = np.mean}}) \sphinxhyphen{}\sphinxhyphen{} group\sphinxhyphen{}z projecting function
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-downsampled image (frames, y pixels, x pixels)
+images: numpy array (frames, y pixels, x pixels)
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
@@ -1060,6 +979,23 @@ downsampled image (frames, y pixels, x pixels)
 
 \subsection{Interactive Visuals Methods}
 \label{\detokenize{Sub-Packages:interactive-visuals-methods}}
+\begin{DUlineblock}{0em}
+\item[] Import me
+\end{DUlineblock}
+
+
+\subsubsection{Miscellaneous}
+\label{\detokenize{Sub-Packages:miscellaneous}}\label{\detokenize{Sub-Packages:miscellaneous-module}}
+\begin{DUlineblock}{0em}
+\item[] Write me
+\item[] Write me
+\item[] Write me
+\item[] Write me
+\end{DUlineblock}
+
+
+\subsection{Miscellaneous Methods}
+\label{\detokenize{Sub-Packages:miscellaneous-methods}}
 \begin{DUlineblock}{0em}
 \item[] Import me
 \end{DUlineblock}
@@ -1089,16 +1025,16 @@ downsampled image (frames, y pixels, x pixels)
 \pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.reorganization.}}\sphinxbfcode{\sphinxupquote{generate\_raster}}}{\emph{\DUrole{n}{event\_frames}}, \emph{\DUrole{n}{total\_frames}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Generate raster from lists of frames containing an event (e.g., spikes)
+Generate raster from an iterable of iterables containing the spike or event times for each neuron
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{event\_frames}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#list}{\sphinxstyleliteralemphasis{\sphinxupquote{list}}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#list}{\sphinxstyleliteralemphasis{\sphinxupquote{list}}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \sphinxhyphen{}\sphinxhyphen{} list of event frames (e.g., spike frames)
+\sphinxstyleliteralstrong{\sphinxupquote{event\_frames}} (\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxstyleliteralemphasis{\sphinxupquote{Iterable}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]}}}) \textendash{} iterable containing an iterable identifying the event frames for each neuron
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{total\_frames}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \sphinxhyphen{}\sphinxhyphen{} total number of frames
+\sphinxstyleliteralstrong{\sphinxupquote{total\_frames}} (\sphinxstyleliteralemphasis{\sphinxupquote{Optional}}\sphinxstyleliteralemphasis{\sphinxupquote{{[}}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}\sphinxstyleliteralemphasis{\sphinxupquote{{]} }}\sphinxstyleliteralemphasis{\sphinxupquote{= None}}) \textendash{} total number of frames
 
 \end{itemize}
 
@@ -1127,11 +1063,11 @@ Generates a tensor given chunk / trial indices
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} traces in matrix form (neurons x frames)
+\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_matrix}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} traces in matrix form (neurons x frames)
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{chunk\_size}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} size of each chunk
+\sphinxstyleliteralstrong{\sphinxupquote{chunk\_size}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} size of each chunk
 
 \end{itemize}
 
@@ -1161,12 +1097,12 @@ original trace:
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{factorized\_traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} neurons x chunks (trial, tiff, etc) containing the neuron\textquotesingle{}s trace factorized
+\sphinxstyleliteralstrong{\sphinxupquote{factorized\_traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} neurons x chunks (trial, tiff, etc) containing the neuron’s trace factorized
 into several components
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{component}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \sphinxhyphen{}\sphinxhyphen{} specific component to extract
+\sphinxstyleliteralstrong{\sphinxupquote{component}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} specific component to extract
 
 \end{itemize}
 
@@ -1194,7 +1130,7 @@ Concatenate multiple trials or tiffs into single matrix:
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_tensor}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} chunk (trial, tiff, etc) x neurons x frames
+\sphinxstyleliteralstrong{\sphinxupquote{traces\_as\_tensor}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} chunk (trial, tiff, etc) x neurons x frames
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -1228,32 +1164,33 @@ traces in matrix form
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.trace_processing:CalSciPy.trace_processing.calculate_dfof}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_dfof}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{offset}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{raw}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_dfof}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30.0}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}, \emph{\DUrole{n}{offset}\DUrole{o}{=}\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{external\_reference}\DUrole{o}{=}\DUrole{default_value}{None}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Calculates Δf/f0 (fold fluorescence over baseline). Baseline is defined as the 5th percentile of the signal
-after a 1Hz low\sphinxhyphen{}pass filter using a Hamming window.
+after a 1Hz low\sphinxhyphen{}pass filter using a Hamming window. Baseline can be calculated using an external reference using the
+raw argument or adjusted by using the offset argument. Supports in\sphinxhyphen{}place calculation (off by default).
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of traces in the form of neurons x frames
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of traces in the form of neurons x frames
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30}}) \sphinxhyphen{}\sphinxhyphen{} frame rate of dataset
+\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30.0}}) \textendash{} frame rate of dataset
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \sphinxhyphen{}\sphinxhyphen{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{offset}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxstyleliteralemphasis{\sphinxupquote{float}}}) \sphinxhyphen{}\sphinxhyphen{} offset added to baseline; useful if traces are non\sphinxhyphen{}negative
+\sphinxstyleliteralstrong{\sphinxupquote{offset}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 0.0}}) \textendash{} offset added to baseline; useful if traces are non\sphinxhyphen{}negative
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{raw}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxstyleliteralemphasis{\sphinxupquote{None}}) \sphinxhyphen{}\sphinxhyphen{} raw dataset used to calculate baseline; useful if traces have been factorized
+\sphinxstyleliteralstrong{\sphinxupquote{external\_reference}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray = None}}) \textendash{} secondary dataset used to calculate baseline; useful if traces have been factorized
 
 \end{itemize}
 
@@ -1274,7 +1211,7 @@ after a 1Hz low\sphinxhyphen{}pass filter using a Hamming window.
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.trace_processing:CalSciPy.trace_processing.calculate_standardized_noise}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_standardized\_noise}}}{\emph{\DUrole{n}{fold\_fluorescence\_over\_baseline}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_standardized\_noise}}}{\emph{\DUrole{n}{fold\_fluorescence\_over\_baseline}}, \emph{\DUrole{n}{frame\_rate}\DUrole{o}{=}\DUrole{default_value}{30.0}}}{}
 \pysigstopsignatures\begin{description}
 \sphinxlineitem{Calculates a frame\sphinxhyphen{}rate independent standardized noise as defined as:}
 \begin{DUlineblock}{0em}
@@ -1285,22 +1222,22 @@ after a 1Hz low\sphinxhyphen{}pass filter using a Hamming window.
 
 \sphinxAtStartPar
 It is robust against outliers and approximates the standard deviation of Δf/f0 baseline fluctuations.
-For comparison, the more exquisite of the Allen Brain Institute\textquotesingle{}s public datasets are approximately 1*\%Hz\textasciicircum{}(\sphinxhyphen{}1/2)
+For comparison, the more exquisite of the Allen Brain Institute’s public datasets are approximately 1*\%Hz\textasciicircum{}(\sphinxhyphen{}1/2)
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{fold\_fluorescence\_over\_baseline}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} fold fluorescence over baseline (i.e., Δf/f0)
+\sphinxstyleliteralstrong{\sphinxupquote{fold\_fluorescence\_over\_baseline}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} fold fluorescence over baseline (i.e., Δf/f0)
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30}}) \sphinxhyphen{}\sphinxhyphen{} frame rate of dataset
+\sphinxstyleliteralstrong{\sphinxupquote{frame\_rate}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 30}}) \textendash{} frame rate of dataset
 
 \end{itemize}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
-standardized noise (units are  1*\%Hz\textasciicircum{}(\sphinxhyphen{}1/2) )
+standardized noise (units are  1*\%Hz\textasciicircum{}(\sphinxhyphen{}1/2) ) for each neuron
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
@@ -1323,11 +1260,11 @@ Detrend traces using a fourth\sphinxhyphen{}order polynomial
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} matrix of traces in the form of neurons x frames
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of traces in the form of neurons x frames
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \sphinxhyphen{}\sphinxhyphen{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} boolean indicating whether to perform calculation in\sphinxhyphen{}place
 
 \end{itemize}
 
@@ -1343,32 +1280,59 @@ detrended traces
 
 \end{fulllineitems}
 
-\index{smooth\_perona\_malik() (in module CalSciPy.trace\_processing)@\spxentry{smooth\_perona\_malik()}\spxextra{in module CalSciPy.trace\_processing}}
+\index{perona\_malik\_diffusion() (in module CalSciPy.trace\_processing)@\spxentry{perona\_malik\_diffusion()}\spxextra{in module CalSciPy.trace\_processing}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.trace_processing:CalSciPy.trace_processing.smooth_perona_malik}}
+\phantomsection\label{\detokenize{CalSciPy.trace_processing:CalSciPy.trace_processing.perona_malik_diffusion}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{smooth\_perona\_malik}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{iters}\DUrole{o}{=}\DUrole{default_value}{5}}, \emph{\DUrole{n}{kappa}\DUrole{o}{=}\DUrole{default_value}{100}}, \emph{\DUrole{n}{gamma}\DUrole{o}{=}\DUrole{default_value}{0.15}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{perona\_malik\_diffusion}}}{\emph{\DUrole{n}{traces}}, \emph{\DUrole{n}{iters}\DUrole{o}{=}\DUrole{default_value}{25}}, \emph{\DUrole{n}{kappa}\DUrole{o}{=}\DUrole{default_value}{0.15}}, \emph{\DUrole{n}{gamma}\DUrole{o}{=}\DUrole{default_value}{0.25}}, \emph{\DUrole{n}{in\_place}\DUrole{o}{=}\DUrole{default_value}{False}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Edge\sphinxhyphen{}preserving smoothing using perona malik diffusion
+Edge\sphinxhyphen{}preserving smoothing using perona malik diffusion. This is a non\sphinxhyphen{}linear smoothing technique that avoids the
+temporal distortion introduced onto traces by standard gaussian smoothing.
+
+\sphinxAtStartPar
+The parameter \sphinxtitleref{kappa} controls the level of smoothing (“diffusion”) as a function of the derivative of the trace
+(or “gradient” in the case of 2D images where this algorithm is often used). This function is known as the
+diffusion coefficient. When the derivative for some portion of the trace is low, the algorithm will encourage
+smoothing to reduce noise. If the derivative is large like during a burst of activity, the algorithm will discourage
+smoothing to maintain its structure. Here, the argument \sphinxtitleref{kappa} is multiplied by the dynamic range to generate the
+true kappa.
+
+\sphinxAtStartPar
+represents the percentile used to calculate the true
+kappa
+
+\sphinxAtStartPar
+The diffusion coefficient implemented here is e\textasciicircum{}(\sphinxhyphen{}(derivative/kappa)\textasciicircum{}2).
+
+\sphinxAtStartPar
+Perona\sphinxhyphen{}Malik diffusion is an iterative process. The parameter \sphinxtitleref{gamma} controls the rate of diffusion, while
+parameter \sphinxtitleref{iters} sets the number of iterations to perform.
+
+\sphinxAtStartPar
+This implementation is currently situated to handle 1\sphinxhyphen{}D vectors because it gives us some performance benefits.
 \begin{quote}\begin{description}
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \sphinxhyphen{}\sphinxhyphen{} a matrix of neurons x frames
+\sphinxstyleliteralstrong{\sphinxupquote{traces}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxstyleliteralemphasis{\sphinxupquote{numpy.ndarray}}}) \textendash{} matrix of M neurons by N samples
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{iters}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 5}}) \sphinxhyphen{}\sphinxhyphen{} number of iterations
+\sphinxstyleliteralstrong{\sphinxupquote{iters}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 25}}) \textendash{} number of iterations
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{kappa}} (\sphinxstyleliteralemphasis{\sphinxupquote{int = 100}}) \sphinxhyphen{}\sphinxhyphen{} diffusivity conductance
+\sphinxstyleliteralstrong{\sphinxupquote{kappa}} (\sphinxstyleliteralemphasis{\sphinxupquote{Number = 15}}) \textendash{} used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0\sphinxhyphen{}1
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{gamma}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 0.15}}) \sphinxhyphen{}\sphinxhyphen{} step size (must be less than 1)
+\sphinxstyleliteralstrong{\sphinxupquote{gamma}} (\sphinxstyleliteralemphasis{\sphinxupquote{float = 0.25}}) \textendash{} rate of diffusion for each iter. range 0\sphinxhyphen{}1
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{in\_place}} (\sphinxstyleliteralemphasis{\sphinxupquote{bool = False}}) \textendash{} whether to calculate in\sphinxhyphen{}place
 
 \end{itemize}
 
@@ -1384,10 +1348,7 @@ smoothed traces
 
 \end{fulllineitems}
 
-
-
-\section{Static Visuals}
-\label{\detokenize{Sub-Packages:static-visuals}}\label{\detokenize{Sub-Packages:static-visuals-module}}
+\phantomsection\label{\detokenize{Sub-Packages:version-module}}
 \begin{DUlineblock}{0em}
 \item[] Write me
 \item[] Write me
@@ -1396,10 +1357,10 @@ smoothed traces
 \end{DUlineblock}
 
 
-\subsection{Static Visual Methods}
-\label{\detokenize{Sub-Packages:static-visual-methods}}
+\subsection{Version Methods}
+\label{\detokenize{Sub-Packages:version-methods}}
 \begin{DUlineblock}{0em}
-\item[] Import me
+\item[] Import Me
 \end{DUlineblock}
 
 

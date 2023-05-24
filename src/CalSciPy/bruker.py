@@ -12,6 +12,7 @@ from .misc import PatternMatching, calculate_frames_per_file, generate_blocks, g
 from operator import eq
 from .io_tools import _load_single_tif, _save_single_tif
 
+
 """
 These functions have been incorporated into pyPrairieView and will be deprecated in the future
 """
@@ -54,34 +55,6 @@ def generate_bruker_naming_convention(channel: int = 0, plane: int = 0, num_chan
             return "".join(["*00000", str(plane + 1), ".ome.tif"])
         elif case([2, 2]):
             return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
-
-
-def _pretty_print_image_description(channels: int, planes: int, frames: int, height: int, width: int) -> None:
-    """
-    Function prints the description of an imaging dataset as a table.
-
-    :param channels: number of channels
-    :type channels: int
-    :param planes: number of planes
-    :type planes: int
-    :param frames: number of frames
-    :type frames: int
-    :param height: y-pixels
-    :type height: int
-    :param width: x-pixels
-    :type width: int
-    :rtype: None
-    """
-    _table = PrettyTable()
-    _table.header = False
-    _table.add_row(["Total Images Detected", channels * planes * frames])
-    _table.add_row(["Channels", channels])
-    _table.add_row(["Planes", planes])
-    _table.add_row(["Frames", frames])
-    _table.add_row(["Height", height])
-    _table.add_row(["Width", width])
-    print("\n")
-    print(_table)
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -179,6 +152,7 @@ def load_bruker_tifs(folder: Union[str, Path],
     return tuple(images)
 
 
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def repackage_bruker_tifs(input_folder: Union[str, Path], output_folder: Union[str, Path],
                           channel: int = 0, plane: int = 0) -> None:
     """
@@ -256,6 +230,34 @@ def _load_bruker_tif_stack(input_folder: Path, channel: int, plane: int,
     images = [_verbose_load_single_tif(file, pbar) for file in files]
     pbar.close()
     return np.concatenate(images, axis=0)
+
+
+def _pretty_print_image_description(channels: int, planes: int, frames: int, height: int, width: int) -> None:
+    """
+    Function prints the description of an imaging dataset as a table.
+
+    :param channels: number of channels
+    :type channels: int
+    :param planes: number of planes
+    :type planes: int
+    :param frames: number of frames
+    :type frames: int
+    :param height: y-pixels
+    :type height: int
+    :param width: x-pixels
+    :type width: int
+    :rtype: None
+    """
+    _table = PrettyTable()
+    _table.header = False
+    _table.add_row(["Total Images Detected", channels * planes * frames])
+    _table.add_row(["Channels", channels])
+    _table.add_row(["Planes", planes])
+    _table.add_row(["Frames", frames])
+    _table.add_row(["Height", height])
+    _table.add_row(["Width", width])
+    print("\n")
+    print(_table)
 
 
 def _verbose_load_single_tif(file: Union[str, Path], pbar: Any) -> np.ndarray:

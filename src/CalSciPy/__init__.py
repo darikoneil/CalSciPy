@@ -4,11 +4,10 @@ __all__ = [
     "event_processing",
     "imaging_processing",
     "interactive_visuals",
-    "_io_tools.py",
+    "io_tools.py",
     "reorganization",
     "static_visuals",
     "trace_processing",
-    "validators",
     "version"
 ]
 

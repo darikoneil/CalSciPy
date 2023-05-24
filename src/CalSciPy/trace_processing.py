@@ -1,6 +1,4 @@
 from __future__ import annotations
-from numbers import Number
-import numpy as np
 import numpy as np
 from scipy.signal import firwin, filtfilt
 from typing import Optional
@@ -230,5 +228,5 @@ def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0
 
 
 @njit
-def _diffusion_coefficient(derivative: np.ndarray, kappa: float):
-    return np.exp(-((derivative/kappa)**2.0))
+def _diffusion_coefficient(derivative: np.ndarray, kappa: float) -> np.ndarray:
+    return np.exp(-((derivative / kappa)**2.0))
