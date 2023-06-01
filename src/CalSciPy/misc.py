@@ -204,3 +204,44 @@ class PatternMatching:
             if not comparator(value, case):
                 return False
         return True
+        
+        
+def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:
+    window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
+    values = []
+    sequence_length = sequence.shape[-1] - window_length + 2
+    pbar = tqdm(total=sequence_length, desc="Calculating baselines...")
+    try:
+        for step in window_gen:
+            values.append(function(sequence[..., step], *args, **kwargs))
+            pbar.update(1)
+    except (RuntimeError, StopIteration):
+        pass
+    pbar.close()
+    return np.array(values)
+
+
+def generate_sliding_window(sequence: Iterable, window_length: int, step_size: int = 1) -> np.ndarray:
+
+    window = deque(maxlen=window_length)
+    iterable = iter(sequence)
+
+    for _ in range(window_length):
+        window.append(next(iterable))
+
+    while True:
+        try:
+            yield tuple(window)
+            for idx in range(step_size):
+                window.append(next(iterable))
+
+        except StopIteration:
+            # noinspection PyUnboundLocalVariable
+            if idx == 0:
+                pass
+            elif idx == step_size:
+                pass
+            else:
+                yield tuple(window)
+            raise StopIteration
+

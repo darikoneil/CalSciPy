@@ -17,5 +17,3 @@ call build_html
 call build_latex
 
 call build_pdf
-
-cd d
