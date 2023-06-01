@@ -6,6 +6,7 @@ from numbers import Number
 from functools import wraps
 
 import numpy as np
+from tqdm import tqdm
 
 try:
     import cupy
@@ -19,15 +20,10 @@ def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype 
     Estimates the number of image frames to allocate to each file given some maximum size.
 
     :param y_pixels: number of y_pixels in image
-    :type y_pixels: int
     :param x_pixels: number of x_pixels in image
-    :type x_pixels: int
     :param bit_depth: bit-depth / type of image elements
-    :type bit_depth: numpy.dtype = numpy.uint16
     :param size_cap: maximum file size
-    :type size_cap: float = 3.9
-    :return: the maximum number of frames to allocate for each file
-    :rtype: int
+    :returns: the maximum number of frames to allocate for each file
     """
     single_frame_size = np.ones((y_pixels, x_pixels), dtype=bit_depth).nbytes * 1e-9
     return size_cap // single_frame_size
@@ -38,13 +34,9 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
     Returns a generator of some arbitrary iterable sequence that yields m blocks with overlapping regions of size n
 
     :param sequence: Sequence to be split into overlapping blocks
-    :type sequence: Iterable
     :param block_size: size of blocks
-    :type block_size: int
     :param block_buffer: size of overlap between blocks
-    :type block_buffer: int
-    :return: generator yielding m blocks with overlapping regions of size n
-    :rtype: Iterator
+    :returns: generator yielding m blocks with overlapping regions of size n
     """
     if block_size <= 1:
         raise ValueError("Block size must be > 1")
@@ -82,6 +74,14 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
 
 
 def generate_overlapping_blocks(sequence: Iterable, block_size: int, block_buffer: int) -> Iterator:
+    """
+    Returns a generator of some arbitrary iterable sequence that yields m blocks with overlapping regions of size n
+
+    :param sequence: Sequence to be split into overlapping blocks
+    :param block_size: size of blocks
+    :param block_buffer: size of overlap between blocks
+    :returns: generator yielding m blocks with overlapping regions of size n
+    """
     if block_size <= 1:
         raise ValueError("Block size must be > 1")
     if block_buffer >= block_size:
@@ -128,17 +128,11 @@ def generate_padded_filename(output_folder: Path, index: int, base: str = "image
     is not equal to the number of digits
 
     :param output_folder: folder that will contain file
-    :type output_folder: pathlib.Path
     :param index: index of file
-    :type index: int
     :param base: base tag of file
-    :type base: str = "images"
     :param digits: number of digits for representing index
-    :type digits: int
     :param ext: file extension
-    :type ext: str
-    :return: generated filename
-    :rtype: pathlib.Path
+    :returns: generated filename
     """
     index = str(index)
 
@@ -156,9 +150,7 @@ def wrap_cupy_block(cupy_function: Callable) -> Callable:
     Wraps a cupy function such that incoming numpy arrays are converting to cupy arrays and swapped back on return
 
     :param cupy_function: any cupy function that accepts numpy arrays
-    :type cupy_function: Callable
     :return: wrapped function
-    :rtype: Callable
     """
     @wraps(cupy_function)
     def decorator(*args, **kwargs) -> Callable:
@@ -180,7 +172,6 @@ class PatternMatching:
 
 
         :param value: value or iterator of values of interest
-        :type value: Any
         """
         self.value = value
         self.comparison_expressions = comparison_expressions
@@ -196,16 +187,14 @@ class PatternMatching:
         Magic call for comparing some case with some value using some comparison operator
 
         :param cases: case/s for comparison
-        :type: Any
-        :return: whether the case/s are matched by the value/s
-        :rtype: bool
+        :returns: whether the case/s are matched by the value/s
         """
         for value, comparator, case in zip(self.value, self.comparison_expressions, cases):
             if not comparator(value, case):
                 return False
         return True
-        
-        
+
+
 def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:
     window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
     values = []
@@ -232,7 +221,7 @@ def generate_sliding_window(sequence: Iterable, window_length: int, step_size: i
     while True:
         try:
             yield tuple(window)
-            for idx in range(step_size):
+            for idx in range(step_size):  # noqa: B007
                 window.append(next(iterable))
 
         except StopIteration:
@@ -244,4 +233,3 @@ def generate_sliding_window(sequence: Iterable, window_length: int, step_size: i
             else:
                 yield tuple(window)
             raise StopIteration
-

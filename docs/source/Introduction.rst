@@ -24,4 +24,4 @@ some more non-trivial methods that are particularly useful.
 
 Limitations
 ***********
-The current distribution for the package is incomplete and partially tested
+The current distribution for the package is incomplete and partially tested. There may be breaking changes between versions.

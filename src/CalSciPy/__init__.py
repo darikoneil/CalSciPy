@@ -5,8 +5,8 @@ __all__ = [
     "imaging_processing",
     "interactive_visuals",
     "io_tools.py",
+    "misc",
     "reorganization",
-    "static_visuals",
     "trace_processing",
     "version"
 ]
