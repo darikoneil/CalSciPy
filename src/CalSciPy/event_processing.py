@@ -12,13 +12,9 @@ def calculate_firing_rates(spike_probability_matrix: np.ndarray, frame_rate: flo
     Calculate firing rates
 
     :param spike_probability_matrix: matrix of n neuron x m samples where each element is the probability of a spike
-    :type spike_probability_matrix: numpy.ndarray
     :param frame_rate: frame rate of dataset
-    :type frame_rate: float = 30
     :param in_place: boolean indicating whether to perform calculation in-place
-    :type in_place: bool = False
-    :return: firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event
-    :rtype: numpy.ndarray
+    :returns: firing matrix of n neurons x m samples where each element is a binary indicating presence of spike event
     """
     if in_place:
         firing_matrix = spike_probability_matrix
@@ -35,10 +31,8 @@ def calculate_mean_firing_rates(firing_matrix: np.ndarray) -> np.ndarray:
     Calculate mean firing rate
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
-        instantaneous firing rate
-    :type firing_matrix: numpy.ndarray
-    :return: 1-D vector of mean firing rates
-    :rtype: numpy.ndarray
+    | instantaneous firing rate
+    :returns: 1-D vector of mean firing rates
     """
     return np.nanmean(firing_matrix, axis=1)
 
@@ -49,15 +43,10 @@ def collect_waveforms(traces: np.ndarray, event_indices: Iterable[Iterable[int]]
     Collect waveforms for each event
 
     :param traces: a matrix of M neurons x N samples
-    :type traces: numpy.ndarray
     :param event_indices: a list of events
-    :type event_indices: Iterable[Iterable[int]]
     :param pre: number of pre-event frames
-    :type pre: int
     :param post: number of post-event frames
-    :type post: int
-    :return: a matrix of M events x N samples
-    :rtype: Tuple[numpy.ndarray]
+    :returns: a matrix of M events x N samples
     """
     return tuple([_collect_waveforms(traces[neuron, :], event_indices[neuron], pre, post)
                   for neuron in range(traces.shape[0])])
@@ -68,11 +57,8 @@ def convert_tau(tau: float, dt: float) -> float:
     Converts a discrete tau to a continuous tau
 
     :param tau: decay constant
-    :type dt: float
     :param dt: time step (s)
-    :type dt: float
-    :return: continuous tau (s)
-    :rtype: float
+    :returns: continuous tau (s)
     """
     ctau = np.roots(np.hstack([1, -tau]))
     if ctau < 0:
@@ -86,9 +72,7 @@ def get_num_events(event_indices: Iterable[Iterable[int]]) -> np.ndarray:
     Determines the number of events for each neuron in the event indices
 
     :param event_indices: An iterable of length M neurons containing a sequence with a duration for each event
-    :type event_indices: Iterable[Iterable[int]]
-    :return: A 1-D vector of length M neurons containing the number of events for each neuron
-    :rtype: numpy.ndarray
+    :returns: A 1-D vector of length M neurons containing the number of events for each neuron
     """
     return np.array([len(event_index) for event_index in event_indices])
 
@@ -98,11 +82,8 @@ def get_inter_event_intervals(event_indices: Iterable[Iterable[int]], frame_rate
     Calculate the inter event intervals for each neuron in the event indices
 
     :param event_indices: An iterable of length M containing a sequence with a duration for each event
-    :type event_indices: Iterable[Iterable[int]]
     :param frame_rate: frame_rate for trace matrix
-    :type frame_rate: float
-    :return: An iterable of length M neurons containing the inter-event intervals for each event in the sequence
-    :rtype: Tuple[numpy.ndarray]
+    :returns: An iterable of length M neurons containing the inter-event intervals for each event in the sequence
     """
     return tuple([np.diff(events) / frame_rate for events in event_indices])
 
@@ -112,11 +93,8 @@ def get_event_onset_intensities(traces: np.ndarray, event_indices: Iterable[Iter
     Retrieve the signal intensity at event onset for each neuron in the event indices
 
     :param traces: An M neuron by N sample matrix
-    :type traces: numpy.ndarray
     :param event_indices: An iterable of length M containing a sequence with a duration for each event
-    :type event_indices: Iterable[Iterable[int]]
-    :return: An iterable of length M neurons containing the onset intensities for each event in the sequence
-    :rtype: Tuple[numpy.ndarray]
+    :returns: An iterable of length M neurons containing the onset intensities for each event in the sequence
     """
     intensities = []
     for neuron in range(traces.shape[0]):
@@ -132,17 +110,11 @@ def identify_events(traces: np.ndarray, timeout: int = 15, frame_rate: float = 3
     is considered 1/2th the standard deviation of the derivative.
 
     :param traces: An M neuron by N sample matrix
-    :type traces: numpy.ndarray
     :param timeout: timeout distance for peak finding (frames)
-    :type timeout: int
     :param frame_rate: frame rate / time step for trace matrix
-    :type frame_rate: float
     :param smooth: boolean indicating whether to smooth first-time derivative
-    :type smooth: bool = True
     :param force_nonneg: boolean indicating whether to enforce non-negativity constraint on first-time derivative
-    :type force_nonneg: bool = True
-    :return: An iterable where each element contains a sequence of frames identified as event onsets
-    :rtype: Tuple[List[int]]
+    :returns: An iterable where each element contains a sequence of frames identified as event onsets
     """
     delta = np.zeros_like(traces)
     delta[..., 1:] = np.diff(traces, axis=-1)
@@ -168,11 +140,8 @@ def normalize_firing_rates(firing_matrix: np.ndarray, in_place: bool = False) ->
 
     :param firing_matrix: matrix of n neuron x m samples where each element is either a spike or an
         instantaneous firing rate
-    :type firing_matrix: numpy.ndarray
     :param in_place: boolean indicating whether to perform calculation in-place
-    :type in_place: bool = False
-    :return: normalized firing rate matrix of n neurons x m samples
-    :rtype: numpy.ndarray
+    :returns: normalized firing rate matrix of n neurons x m samples
     """
     if in_place:
         normalized_matrix = firing_matrix
@@ -189,11 +158,8 @@ def scale_waveforms(waveforms: Iterable[np.ndarray], scaler: Callable = Standard
     Scale waveforms for cross-neuron comparisons
 
     :param waveforms: An Iterable of M events by N samples matrices of waveforms
-    :type waveforms: numpy.ndarray
     :param scaler: sklearn preprocessing object
-    :type scaler: Callable
-    :return: An Iterable of M event by N samples scaled matrices of waveforms
-    :rtype: Iterable[numpy.ndarray]
+    :returns: An Iterable of M event by N samples scaled matrices of waveforms
     """
     return tuple([_scale_waveforms(waves, scaler) for waves in waveforms])
 
@@ -203,15 +169,10 @@ def _collect_waveforms(trace: np.ndarray, event_index: Iterable[int], pre: int =
     Collect waveforms for each event
 
     :param trace: a fluorescent trace
-    :type trace: numpy.ndarray
     :param event_index: a list of events
-    :type event_index: Iterable[int]
     :param pre: number of pre-event frames
-    :type pre: int
     :param post: number of post-event frames
-    :type post: int
-    :return: a matrix of M events x N samples
-    :rtype: numpy.ndarray
+    :returns: a matrix of M events x N samples
     """
     waveforms = []  # Pre-allocate empty list. Not need to preallocate numpy array this is fine.
     frames_in_waveform = pre + post + 1
@@ -234,11 +195,8 @@ def _scale_waveforms(waveforms: np.ndarray, scaler: Callable) -> np.ndarray:
     Scale waveforms for cross-neuron comparisons
 
     :param waveforms: an M events by N samples matrix of waveforms
-    :type waveforms: numpy.ndarray
     :param scaler: sklearn preprocessing object
-    :type scaler: Callable
-    :return: an M events by N samples scaled matrix of waveforms
-    :rtype: numpy.ndarray
+    :returns: an M events by N samples scaled matrix of waveforms
     """
     waves = []  # Again this is fine, don't premature optimize
     for wave in range(waveforms.shape[0]):

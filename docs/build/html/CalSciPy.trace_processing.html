@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.trace_processing module &mdash; CalSciPy 0.3.0 documentation</title>
+  <title>CalSciPy.trace_processing module &mdash; CalSciPy 0.3.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -45,11 +45,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.coloring.html">CalSciPy.coloring module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.trace_processing module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.trace_processing.calculate_dfof"><code class="docutils literal notranslate"><span class="pre">calculate_dfof()</span></code></a></li>
@@ -74,7 +76,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="Sub-Packages.html">Overview</a></li>
       <li class="breadcrumb-item active">CalSciPy.trace_processing module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/CalSciPy.trace_processing.rst.txt" rel="nofollow"> View page source</a>
@@ -91,23 +92,24 @@
 <dt class="sig sig-object py" id="CalSciPy.trace_processing.calculate_dfof">
 <span class="sig-prename descclassname"><span class="pre">CalSciPy.trace_processing.</span></span><span class="sig-name descname"><span class="pre">calculate_dfof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_place</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/trace_processing.html#calculate_dfof"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.trace_processing.calculate_dfof" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates Δf/f0 (fold fluorescence over baseline). Baseline is defined as the 5th percentile of the signal
-after a 1Hz low-pass filter using a Hamming window. Baseline can be calculated using an external reference using the
-raw argument or adjusted by using the offset argument. Supports in-place calculation (off by default).</p>
+after a 1Hz low-pass filter using a Hamming window. Baseline can be calculated using an external reference
+| using the raw argument or adjusted by using the offset argument. Supports in-place calculation
+| (off by default).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of traces in the form of neurons x frames</p></li>
-<li><p><strong>frame_rate</strong> (<em>float = 30.0</em>) – frame rate of dataset</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) – boolean indicating whether to perform calculation in-place</p></li>
-<li><p><strong>offset</strong> (<em>float = 0.0</em>) – offset added to baseline; useful if traces are non-negative</p></li>
-<li><p><strong>external_reference</strong> (<em>numpy.ndarray = None</em>) – secondary dataset used to calculate baseline; useful if traces have been factorized</p></li>
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – matrix of traces in the form of neurons x frames</p></li>
+<li><p><strong>frame_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">30.0</span></code>) – frame rate of dataset</p></li>
+<li><p><strong>in_place</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – boolean indicating whether to perform calculation in-place</p></li>
+<li><p><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code>) – offset added to baseline; useful if traces are non-negative</p></li>
+<li><p><strong>external_reference</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – secondary dataset used to calculate baseline; useful if traces have been factorized</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Δf/f0 matrix of n neurons x m samples</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Δf/f0 matrix of n neurons x m samples</p>
 </dd>
 </dl>
 </dd></dl>
@@ -126,15 +128,15 @@ For comparison, the more exquisite of the Allen Brain Institute’s public datas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fold_fluorescence_over_baseline</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – fold fluorescence over baseline (i.e., Δf/f0)</p></li>
-<li><p><strong>frame_rate</strong> (<em>float = 30</em>) – frame rate of dataset</p></li>
+<li><p><strong>fold_fluorescence_over_baseline</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – fold fluorescence over baseline (i.e., Δf/f0)</p></li>
+<li><p><strong>frame_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">30.0</span></code>) – frame rate of dataset</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>standardized noise (units are  1*%Hz^(-1/2) ) for each neuron</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>standardized noise (units are  1*%Hz^(-1/2) ) for each neuron</p>
 </dd>
 </dl>
 </dd></dl>
@@ -146,15 +148,15 @@ For comparison, the more exquisite of the Allen Brain Institute’s public datas
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of traces in the form of neurons x frames</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) – boolean indicating whether to perform calculation in-place</p></li>
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – matrix of traces in the form of neurons x frames</p></li>
+<li><p><strong>in_place</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – boolean indicating whether to perform calculation in-place</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>detrended traces</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>detrended traces</p>
 </dd>
 </dl>
 </dd></dl>
@@ -170,8 +172,6 @@ diffusion coefficient. When the derivative for some portion of the trace is low,
 smoothing to reduce noise. If the derivative is large like during a burst of activity, the algorithm will discourage
 smoothing to maintain its structure. Here, the argument <cite>kappa</cite> is multiplied by the dynamic range to generate the
 true kappa.</p>
-<p>represents the percentile used to calculate the true
-kappa</p>
 <p>The diffusion coefficient implemented here is e^(-(derivative/kappa)^2).</p>
 <p>Perona-Malik diffusion is an iterative process. The parameter <cite>gamma</cite> controls the rate of diffusion, while
 parameter <cite>iters</cite> sets the number of iterations to perform.</p>
@@ -179,18 +179,18 @@ parameter <cite>iters</cite> sets the number of iterations to perform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – matrix of M neurons by N samples</p></li>
-<li><p><strong>iters</strong> (<em>int = 25</em>) – number of iterations</p></li>
-<li><p><strong>kappa</strong> (<em>Number = 15</em>) – used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1</p></li>
-<li><p><strong>gamma</strong> (<em>float = 0.25</em>) – rate of diffusion for each iter. range 0-1</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) – whether to calculate in-place</p></li>
+<li><p><strong>traces</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – matrix of M neurons by N samples</p></li>
+<li><p><strong>iters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">25</span></code>) – number of iterations</p></li>
+<li><p><strong>kappa</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0.15</span></code>) – used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1</p></li>
+<li><p><strong>gamma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0.25</span></code>) – rate of diffusion for each iter. range 0-1</p></li>
+<li><p><strong>in_place</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – whether to calculate in-place</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>smoothed traces</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>smoothed traces</p>
 </dd>
 </dl>
 </dd></dl>

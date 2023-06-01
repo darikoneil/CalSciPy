@@ -1,7 +1,8 @@
 from __future__ import annotations
+from typing import Optional
+
 import numpy as np
 from scipy.signal import firwin, filtfilt
-from typing import Optional
 from numba import njit
 from tqdm import tqdm
 
@@ -9,24 +10,20 @@ from tqdm import tqdm
 def calculate_dfof(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
                    offset: float = 0.0, external_reference: Optional[np.ndarray] = None) \
         -> np.ndarray:
+    # noinspection GrazieInspection
     """
-    Calculates Δf/f0 (fold fluorescence over baseline). Baseline is defined as the 5th percentile of the signal
-    after a 1Hz low-pass filter using a Hamming window. Baseline can be calculated using an external reference using the
-    raw argument or adjusted by using the offset argument. Supports in-place calculation (off by default).
+        Calculates Δf/f0 (fold fluorescence over baseline). Baseline is defined as the 5th percentile of the signal
+        after a 1Hz low-pass filter using a Hamming window. Baseline can be calculated using an external reference
+        | using the raw argument or adjusted by using the offset argument. Supports in-place calculation
+        | (off by default).
 
-    :param traces: matrix of traces in the form of neurons x frames
-    :type traces: numpy.ndarray
-    :param frame_rate: frame rate of dataset
-    :type frame_rate: float = 30.0
-    :param in_place: boolean indicating whether to perform calculation in-place
-    :type in_place: bool = False
-    :param offset: offset added to baseline; useful if traces are non-negative
-    :type offset: float = 0.0
-    :param external_reference: secondary dataset used to calculate baseline; useful if traces have been factorized
-    :type external_reference: numpy.ndarray = None
-    :return: Δf/f0 matrix of n neurons x m samples
-    :rtype: numpy.ndarray
-    """
+        :param traces: matrix of traces in the form of neurons x frames
+        :param frame_rate: frame rate of dataset
+        :param in_place: boolean indicating whether to perform calculation in-place
+        :param offset: offset added to baseline; useful if traces are non-negative
+        :param external_reference: secondary dataset used to calculate baseline; useful if traces have been factorized
+        :return: Δf/f0 matrix of n neurons x m samples
+        """
     if in_place:
         dfof = traces
     else:
@@ -80,11 +77,8 @@ def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, fr
     For comparison, the more exquisite of the Allen Brain Institute's public datasets are approximately 1*%Hz^(-1/2)
 
     :param fold_fluorescence_over_baseline: fold fluorescence over baseline (i.e., Δf/f0)
-    :type fold_fluorescence_over_baseline: numpy.ndarray
     :param frame_rate: frame rate of dataset
-    :type frame_rate: float = 30
-    :return: standardized noise (units are  1*%Hz^(-1/2) ) for each neuron
-    :rtype: numpy.ndarray
+    :returns: standardized noise (units are  1*%Hz^(-1/2) ) for each neuron
     """
     return 100.0 * np.median(np.abs(np.diff(fold_fluorescence_over_baseline, axis=1)), axis=1) / np.sqrt(frame_rate)
 
@@ -94,11 +88,8 @@ def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray
     Detrend traces using a fourth-order polynomial
 
     :param traces: matrix of traces in the form of neurons x frames
-    :type traces: numpy.ndarray
     :param in_place: boolean indicating whether to perform calculation in-place
-    :type in_place: bool = False
-    :return: detrended traces
-    :rtype: numpy.ndarray
+    :returns: detrended traces
     """
     [_neurons, _samples] = traces.shape
     _samples_vector = np.arange(_samples)
@@ -127,9 +118,6 @@ def perona_malik_diffusion(traces: np.ndarray, iters: int = 25, kappa: float = 0
     smoothing to maintain its structure. Here, the argument `kappa` is multiplied by the dynamic range to generate the
     true kappa.
 
-    represents the percentile used to calculate the true
-    kappa
-
     The diffusion coefficient implemented here is e^(-(derivative/kappa)^2).
 
     Perona-Malik diffusion is an iterative process. The parameter `gamma` controls the rate of diffusion, while
@@ -138,17 +126,11 @@ def perona_malik_diffusion(traces: np.ndarray, iters: int = 25, kappa: float = 0
     This implementation is currently situated to handle 1-D vectors because it gives us some performance benefits.
 
     :param traces: matrix of M neurons by N samples
-    :type traces: numpy.ndarray
     :param iters: number of iterations
-    :type iters: int = 25
     :param kappa: used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1
-    :type kappa: Number = 15
     :param gamma: rate of diffusion for each iter. range 0-1
-    :type gamma: float = 0.25
     :param in_place: whether to calculate in-place
-    :type in_place: bool = False
-    :return: smoothed traces
-    :rtype: numpy.ndarray
+    :returns: smoothed traces
     """
 
     assert (0 < iters), "iters must be at least 1"
@@ -182,9 +164,6 @@ def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0
     smoothing to maintain its structure. Here, the argument `kappa` is multiplied by the dynamic range to generate the
     true kappa.
 
-    represents the percentile used to calculate the true
-    kappa
-
     The diffusion coefficient implemented here is e^(-(derivative/kappa)^2). If the diffusion coefficient was a
     scalar instead of a function of the derivative the algorithm would be equivalent to standard gaussian smoothing.
 
@@ -194,17 +173,11 @@ def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0
     This implementation is currently situated to handle 1-D vectors because it gives us some performance benefits.
 
     :param trace: trace for a single neuron (i.e., vector)
-    :type trace: numpy.ndarray
     :param iters: number of iterations
-    :type iters: int = 25
     :param kappa: used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1
-    :type kappa: Number = 15
     :param gamma: rate of diffusion for each iter. range 0-1
-    :type gamma: float = 0.25
     :param in_place: whether to calculate in-place
-    :type in_place: bool = False
-    :return: smoothed traces
-    :rtype: numpy.ndarray
+    :returns: smoothed traces
     """
 
     if in_place:
@@ -229,4 +202,11 @@ def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0
 
 @njit
 def _diffusion_coefficient(derivative: np.ndarray, kappa: float) -> np.ndarray:
+    """
+    Diffusion coefficient
+
+    :param derivative: derivative
+    :param kappa: kappa
+    :returns: value
+    """
     return np.exp(-((derivative / kappa)**2.0))

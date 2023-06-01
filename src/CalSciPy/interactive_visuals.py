@@ -10,6 +10,13 @@ import seaborn as sns  # noqa: F401, E402
 
 
 def interactive_traces(traces: np.ndarray, frame_rate: float, **kwargs) -> None:
+    """
+    Function to interactive compare traces. Press Up/Down to switch neurons
+
+    :param traces: primary traces
+    :param frame_rate: frame rate
+    :returns: interactive figure
+    """
     _num_neurons, _num_frames = traces.shape
 
     _line_width = kwargs.get("lw", 3)
@@ -93,6 +100,14 @@ def interactive_traces(traces: np.ndarray, frame_rate: float, **kwargs) -> None:
 
 
 def interactive_traces_overlay(traces: np.ndarray, traces2: np.ndarray, frame_rate: float, **kwargs) -> None:
+    """
+    Function to interactive compare traces with an overlay trace (e.g., noise). Press Up/Down to switch neurons
+
+    :param traces: primary traces
+    :param traces2: secondary trace
+    :param frame_rate: frame_rate
+    :returns: interactive figure
+    """
     _num_neurons, _num_frames = traces.shape
 
     _line_width = kwargs.get("lw", 3)
@@ -179,6 +194,14 @@ def interactive_traces_overlay(traces: np.ndarray, traces2: np.ndarray, frame_ra
 
 
 def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_rate: float, **kwargs) -> None:
+    """
+    Function to interactively compare two sets of traces. Press Up/Down to switch neurons
+
+    :param traces: primary traces
+    :param traces2: secondary trace
+    :param frame_rate: frame_rate
+    :returns: interactive figure
+    """
     _num_neurons, _num_frames = traces.shape
 
     _line_width = kwargs.get("lw", 3)

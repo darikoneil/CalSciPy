@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.image_processing module &mdash; CalSciPy 0.3.0 documentation</title>
+  <title>CalSciPy.image_processing module &mdash; CalSciPy 0.3.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CalSciPy.reorganization module" href="CalSciPy.reorganization.html" />
-    <link rel="prev" title="CalSciPy.io_tools module" href="CalSciPy.io_tools.html" /> 
+    <link rel="next" title="CalSciPy.interactive_visuals module" href="CalSciPy.interactive_visuals.html" />
+    <link rel="prev" title="CalSciPy.event_processing module" href="CalSciPy.event_processing.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,15 +45,17 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Sub-Packages.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.coloring.html">CalSciPy.coloring module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.image_processing module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.image_processing.gaussian_filter"><code class="docutils literal notranslate"><span class="pre">gaussian_filter()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#CalSciPy.image_processing.median_filter"><code class="docutils literal notranslate"><span class="pre">median_filter()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.trace_processing.html">CalSciPy.trace_processing module</a></li>
 </ul>
@@ -72,7 +74,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="Sub-Packages.html">Overview</a></li>
       <li class="breadcrumb-item active">CalSciPy.image_processing module</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/CalSciPy.image_processing.rst.txt" rel="nofollow"> View page source</a>
@@ -95,18 +96,15 @@ blockwise with overlapping or non-overlapping blocks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – images stack to be filtered</p></li>
-<li><p><strong>sigma</strong> (<em>Number</em><em> or </em><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – sigma for gaussian filter</p></li>
-<li><p><strong>block_size</strong> (<em>int = None</em>) – the size of each block. Must fit within memory</p></li>
-<li><p><strong>block_buffer</strong> (<em>int = 0</em>) – the size of the overlapping region between block</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) – whether to calculate in-place</p></li>
+<li><p><strong>images</strong> – images stack to be filtered</p></li>
+<li><p><strong>sigma</strong> (default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code>) – sigma for gaussian filter</p></li>
+<li><p><strong>block_size</strong> (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – the size of each block. Must fit within memory</p></li>
+<li><p><strong>block_buffer</strong> (default: <code class="docutils literal notranslate"><span class="pre">0</span></code>) – the size of the overlapping region between block</p></li>
+<li><p><strong>in_place</strong> (default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – whether to calculate in-place</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>images: numpy array (frames, y pixels, x pixels)</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -121,18 +119,28 @@ blockwise with overlapping or non-overlapping blocks.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – images stack to be filtered</p></li>
-<li><p><strong>mask</strong> (<em>numpy.ndarray = np.ones</em><em>(</em><em>(</em><em>3</em><em>, </em><em>3</em><em>, </em><em>3</em><em>)</em><em>)</em>) – mask of the median filter</p></li>
-<li><p><strong>block_size</strong> (<em>int = None</em>) – the size of each block. Must fit within memory</p></li>
-<li><p><strong>block_buffer</strong> (<em>int = 0</em>) – the size of the overlapping region between block</p></li>
-<li><p><strong>in_place</strong> (<em>bool = False</em>) – whether to calculate in-place</p></li>
+<li><p><strong>images</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>) – images stack to be filtered</p></li>
+<li><p><strong>mask</strong> (<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">array([[[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.]],</span>
+
+&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.]],</span>
+
+&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.],</span>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[1.,</span> <span class="pre">1.,</span> <span class="pre">1.]]])</span></code>) – mask of the median filter</p></li>
+<li><p><strong>block_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – the size of each block. Must fit within memory</p></li>
+<li><p><strong>block_buffer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0</span></code>) – the size of the overlapping region between block</p></li>
+<li><p><strong>in_place</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – whether to calculate in-place</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>images: numpy array (frames, y pixels, x pixels)</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>images: numpy array (frames, y pixels, x pixels)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -143,8 +151,8 @@ blockwise with overlapping or non-overlapping blocks.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="CalSciPy.io_tools.html" class="btn btn-neutral float-left" title="CalSciPy.io_tools module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="CalSciPy.reorganization.html" class="btn btn-neutral float-right" title="CalSciPy.reorganization module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CalSciPy.event_processing.html" class="btn btn-neutral float-left" title="CalSciPy.event_processing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CalSciPy.interactive_visuals.html" class="btn btn-neutral float-right" title="CalSciPy.interactive_visuals module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
