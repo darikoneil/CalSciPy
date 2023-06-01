@@ -1,17 +1,32 @@
 from __future__ import annotations
 from typing import Union, Optional
 from pathlib import Path
-import cv2
+from json import load, dump
+
+
 from PIL import Image
 import numpy as np
-from json import load, dump
+import cv2
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
+
+
 from .misc import generate_blocks, calculate_frames_per_file
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def load_binary(path: Union[str, Path], mapped: bool = False) -> Union[np.ndarray, np.memmap]:
+    """
+    This function loads images saved in language-agnostic binary format. Ideal for optimal read/write speeds and
+    highly-robust to corruption. However, the downside is that the images and their metadata are split into two
+    separate files. Images are saved with the *.bin* extension, while metadata is saved with extension *.json*.
+    If for some reason you lose the metadata, you can still load the binary if you know three of the following:
+    number of frames, y-pixels, x-pixels, and the datatype (:class:`numpy.dtype`)
+
+    :param path: folder containing binary file
+    :param mapped: boolean indicating whether to load image using memory-mapping
+    :returns: image (frames, y-pixels, x-pixels)
+    """
     if not path.is_file():
         path = path.joinpath("binary_video")
 
@@ -35,12 +50,10 @@ def load_binary(path: Union[str, Path], mapped: bool = False) -> Union[np.ndarra
 def load_images(path: Union[str, Path]) -> np.ndarray:
     """
     Load images into a numpy array. If path is a folder, all .tif files found non-recursively in the directory will be
-    compiled to a single array
+    compiled to a single array.
 
     :param path: a file containing images or a folder containing several imaging stacks
-    :type path: str or pathlib.Path
     :return: numpy array (frames, y-pixels, x-pixels)
-    :rtype: numpy.ndarray
     """
     if path.is_file():
         return _load_single_tif(path)
@@ -55,16 +68,12 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
     However, the downside is that the images and their metadata are split into two separate files. Images are saved with
     the *.bin* extension, while metadata is saved with extension *.json*. If for some reason you lose the metadata, you
     can still load the binary if you know three of the following: number of frames, y-pixels, x-pixels, and the
-    datatype. The datatype is almost always unsigned 16-bit for all modern imaging systems--even if they are collected
-    at 12 or 13-bit.
+    datatype. The datatype is almost always unsigned 16-bit (:class:`numpy.uint16`) for all modern imaging
+    systems--even if they are collected at 12 or 13-bit.
 
-    :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension.
-    If no filename is provided then the default filename is *binary_video*.
-    :type path: str or pathlib.Path
+    :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension. If no filename is provided then the default filename is *binary_video*.
     :param images: images to save (frames, y-pixels, x-pixels)
-    :type images: numpy.ndarray
-    :return: 0 if successful
-    :rtype: int
+    :returns: 0 if successful
     """
     # parse the desired path
     if path.is_file():
@@ -97,13 +106,9 @@ def save_images(path: Union[str, Path], images: np.ndarray, size_cap: float = 3.
     already exists the default filename will be *images*.
 
     :param path: filename or absolute path
-    :type path: str or pathlib.Path
     :param images: numpy array (frames, y pixels, x pixels)
-    :type images: numpy.ndarray
     :param size_cap: maximum size per file
-    :type size_cap: float = 3.9
-    :return: returns 0 if successful
-    :rtype: int
+    :returns: returns 0 if successful
     """
     # parse desired path
     if Path.exists(path):
@@ -153,9 +158,7 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     Loads all .tif's within a folder into a single numpy array.
 
     :param folder: folder containing a sequence of tiff stacks
-    :type folder: str or pathlib.Path
-    :return: a numpy array containing the images (frames, y-pixels, x-pixels)
-    :rtype: numpy.ndarray
+    :returns: a numpy array containing the images (frames, y-pixels, x-pixels)
     """
     files = list(folder.glob("*tif"))
     images = [_load_single_tif(file) for file in files]
@@ -215,7 +218,6 @@ class _Metadata:
         Metadata object using for saving/loading binary images
 
         :param images: images in numpy array (frames, y-pixels, x-pixels)
-        :type images: numpy.ndarray
         """
         self.frames, self.y, self.x, self.dtype = None, None, None, None
 

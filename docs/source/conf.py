@@ -28,7 +28,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_autodoc_typehints']
 
-typehints_defaults = 'comma'
+typehints_defaults = "comma"
 
 source_suffix = ".rst"
 
@@ -48,5 +48,9 @@ html_theme = 'sphinx_rtd_theme'
 pygments_style = "sphinx"
 
 latex_engine = "pdflatex"
+
+typehints_use_signature = True
+
+typehints_use_signature_return = True
 
 todo_include_todos = True
