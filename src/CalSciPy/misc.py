@@ -3,8 +3,8 @@ from typing import Iterable, Iterator, Any, Callable
 from collections import deque
 from pathlib import Path
 from numbers import Number
-from functools import wraps
-
+from functools import wraps, partial
+from joblib import Parallel, delayed
 import numpy as np
 from tqdm import tqdm
 
@@ -197,17 +197,12 @@ class PatternMatching:
 
 def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:
     window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
-    values = []
-    sequence_length = sequence.shape[-1] - window_length + 2
-    pbar = tqdm(total=sequence_length, desc="Calculating baselines...")
-    try:
-        for step in window_gen:
-            values.append(function(sequence[..., step], *args, **kwargs))
-            pbar.update(1)
-    except (RuntimeError, StopIteration):
-        pass
-    pbar.close()
-    return np.array(values)
+    sequence_length = sequence.shape[-1] - window_length + 1
+    slider = partial(function, *args, **kwargs)
+    values = Parallel(n_jobs=-1, backend="loky", verbose=0)\
+        (delayed(slider)(sequence[..., window])
+         for window in tqdm(total=sequence_length, desc="Calculating sliding windows"))
+    return np.asarray(values)
 
 
 def generate_sliding_window(sequence: Iterable, window_length: int, step_size: int = 1) -> np.ndarray:
@@ -231,5 +226,5 @@ def generate_sliding_window(sequence: Iterable, window_length: int, step_size: i
             elif idx == step_size:
                 pass
             else:
-                yield tuple(window)
-            raise StopIteration
+                return tuple(window)
+            return

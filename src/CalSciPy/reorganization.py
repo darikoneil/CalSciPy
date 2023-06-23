@@ -50,8 +50,28 @@ def merge_tensor(traces_as_tensor: np.ndarray) -> np.ndarray:
     return np.hstack(traces_as_tensor)
 
 
-@validate_numpy_type(required_dtype="object", pos=0)
-def merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:
+def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[int, Iterable[int]] = 0) -> np.ndarray:
+    """
+    Concatenate a neuron x chunk or trial array in which each element is a component x frame factorization of the
+    original trace:
+
+
+    :param factorized_traces: neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
+        into several components
+    :param component: specific component to extract
+    :returns: traces of specific component in matrix form
+    """
+    if isinstance(components, Iterable):
+        return np.dstack(
+            [_merge_factorized_matrices(factorized_traces, component) for component in components]
+        ).swapaxes(0, 2).swapaxes(1, 2)
+    else:
+        return _merge_factorized_matrices(factorized_traces, components)
+
+    return merged_traces
+
+
+def _merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:
     """
     Concatenate a neuron x chunk or trial array in which each element is a component x frame factorization of the
     original trace:

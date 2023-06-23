@@ -3,11 +3,21 @@ from typing import Optional
 
 import numpy as np
 from scipy.signal import firwin, filtfilt
+from scipy.ndimage.filters import gaussian_filter1d
 from numba import njit
 from tqdm import tqdm
+from slide import sliding_window
 
 
 def calculate_dfof(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
+                   offset: float = 0.0, external_reference: Optional[np.ndarray] = None, method="baseline") -> np.ndarray:
+    if method == "baseline":
+        return _calculate_dfof_baseline(traces, frame_rate, in_place, offset, external_reference)
+    else:
+        return _calculate_dfof_filter(traces, frame_rate, in_place, offset, external_reference)
+
+
+def _calculate_dfof_filter(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
                    offset: float = 0.0, external_reference: Optional[np.ndarray] = None) \
         -> np.ndarray:
     # noinspection GrazieInspection
@@ -68,6 +78,16 @@ def calculate_dfof(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool 
     return dfof
 
 
+def _calculate_dfof_baseline(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
+                   offset: float = 0.0, external_reference: Optional[np.ndarray] = None):
+    baselines = np.nanmean(sliding_window(traces, frame_rate * 30, np.nanpercentile, 8, axis=-1), axis=0)
+    if not in_place:
+        dfof = np.zeros_like(traces)
+    for neuron in range(dfof.shape[0]):
+        dfof[neuron, :] = (traces[neuron, :] - baseline[neuron]) / baseline[neuron]
+    return dfof
+
+
 def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, frame_rate: float = 30.0) -> np.ndarray:
     """
     Calculates a frame-rate independent standardized noise as defined as:
@@ -105,7 +125,7 @@ def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray
     return detrended_matrix
 
 
-def perona_malik_diffusion(traces: np.ndarray, iters: int = 25, kappa: float = 0.15, gamma: float = 0.25,
+def perona_malik_diffusion(traces: np.ndarray, iters: int = 25, kappa: float = 0.15, gamma: float = 0.25, sigma: float = 0,
                            in_place: bool = False) -> np.ndarray:
     """
     Edge-preserving smoothing using perona malik diffusion. This is a non-linear smoothing technique that avoids the
@@ -143,15 +163,15 @@ def perona_malik_diffusion(traces: np.ndarray, iters: int = 25, kappa: float = 0
         smoothed_traces = traces.copy()
 
     if traces.ndim == 1:
-        return _perona_malik_diffusion(traces, iters, kappa, gamma)
+        return _perona_malik_diffusion(traces, iters, kappa, gamma, sigma, in_place)
     else:
         for neuron in tqdm(range(traces.shape[0]), total=traces.shape[0], desc="Smoothing Traces"):
-            smoothed_traces[neuron, :] = _perona_malik_diffusion(traces[neuron, :], iters, kappa, gamma, in_place)
+            smoothed_traces[neuron, :] = _perona_malik_diffusion(traces[neuron, :], iters, kappa, gamma, sigma, in_place)
 
     return smoothed_traces
 
 
-def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0.15, gamma: float = 0.25,
+def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0.15, gamma: float = 0.25, sigma: float = 0,
                             in_place: bool = False) -> np.ndarray:
     """
     Edge-preserving smoothing using perona malik diffusion. This is a non-linear extension of gaussian smoothing
@@ -193,6 +213,8 @@ def _perona_malik_diffusion(trace: np.ndarray, iters: int = 25, kappa: float = 0
     for _ in range(iters):
         derivative = np.zeros_like(smoothed_trace)
         derivative[:-1] = np.diff(smoothed_trace)
+        if sigma > 0:
+            derivative = gaussian_filter1d(derivative, sigma)
         diffusion = derivative * _diffusion_coefficient(derivative, kappa)
         diffusion[1:] -= diffusion[:-1]
         smoothed_trace += (gamma * diffusion)
