@@ -201,7 +201,7 @@ def sliding_window(sequence: np.ndarray, window_length: int, function: Callable,
     slider = partial(function, *args, **kwargs)
     values = Parallel(n_jobs=-1, backend="loky", verbose=0)\
         (delayed(slider)(sequence[..., window])
-         for window in tqdm(total=sequence_length, desc="Calculating sliding windows"))
+         for window in tqdm(window_gen, total=sequence_length, desc="Calculating sliding windows"))
     return np.asarray(values)
 
 
