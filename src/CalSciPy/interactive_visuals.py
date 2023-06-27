@@ -1,7 +1,9 @@
 from __future__ import annotations
+from typing import Any, Union, Iterable
 import numpy as np
-from typing import Any
 import sys
+
+
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt   # noqa: E402
@@ -9,19 +11,19 @@ from matplotlib.widgets import Slider  # noqa: E402
 import seaborn as sns  # noqa: F401, E402
 
 
-def interactive_traces(traces: np.ndarray, frame_rate: float, **kwargs) -> None:
+def interactive_traces(traces: Union[np.ndarray, Iterable[np.ndarray]],
+                       frame_rate: float = 30,
+                       mode: str = "overlay",
+                       colors = 1) -> None:
     """
     Function to interactive compare traces. Press Up/Down to switch neurons
 
     :param traces: primary traces
     :param frame_rate: frame rate
+    :param mode: mode to plot group
     :returns: interactive figure
     """
     _num_neurons, _num_frames = traces.shape
-
-    _line_width = kwargs.get("lw", 3)
-    _alpha = kwargs.get("alpha", 0.95)
-
     x = np.arange(0, (_num_frames * (1 / frame_rate)), 1 / frame_rate, dtype=np.float64)
 
     fig = plt.figure(figsize=(16, 12))
@@ -285,4 +287,40 @@ def interactive_traces_compare(traces, frame_rate: float, colors, **kwargs) -> N
     plt.show()
 
 
-def interactive_spikes(spike_prob, spike_)
+def _interactive_spikes_single(spike_prob, spike_times, traces, frame_rate):
+
+    def plot_trace(neuron):
+        nonlocal traces
+        nonlocal time
+        nonlocal a
+        nonlocal colors
+        a.plot(time, traces[neuron], lw=1.5, alpha=0.95, color=colors.black)
+
+    def plot_prob(neuron):
+        nonlocal spike_prob
+        nonlocal time
+        nonlocal a
+        nonlocal colors
+        a.plot(time, spike_prob[neuron] - 1, lw=1.5, alpha=0.95, color=colors.orange)
+
+
+    f, a = plt.subplots(1, 1)
+
+
+    title_template = f"Spike Inference: Neuron "
+    if spike_prob is not None:
+        num_neurons, num_frames = spike_prob.shape
+    elif traces is not None:
+        num_neurons, num_frames = traces.shape
+        a.set_ylabel("Δf/f0")
+    else:
+        raise NotImplemented
+
+    if frame_rate:
+        time = np.arange(0, num_frames / frame_rate, 1 / frame_rate)
+        a.set_xlabel("Time (s)")
+    else:
+        time = np.arange(num_frames)
+        a.set_xlabel("Frame")
+
+
