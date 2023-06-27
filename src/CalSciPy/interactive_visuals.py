@@ -193,7 +193,7 @@ def interactive_traces_overlay(traces: np.ndarray, traces2: np.ndarray, frame_ra
     plt.show()
 
 
-def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_rate: float, **kwargs) -> None:
+def interactive_traces_compare(traces, frame_rate: float, colors, **kwargs) -> None:
     """
     Function to interactively compare two sets of traces. Press Up/Down to switch neurons
 
@@ -202,9 +202,8 @@ def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_ra
     :param frame_rate: frame_rate
     :returns: interactive figure
     """
-    _num_neurons, _num_frames = traces.shape
-
-    _line_width = kwargs.get("lw", 3)
+    _num_neurons, _num_frames = traces[0].shape
+    _line_width = kwargs.get("lw", 1.5)
     _alpha = kwargs.get("alpha", 0.95)
 
     x = np.arange(0, (_num_frames * (1 / frame_rate)), 1 / frame_rate, dtype=np.float64)
@@ -214,8 +213,8 @@ def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_ra
     ax1.set_title("Trace: Neuron 1")
     ax1.set_xlabel("Time (s)")
     ax1.set_ylabel("Signal (a.u.)")
-    ax1.plot(x, traces[0, :], color="#40cc8b", lw=_line_width, alpha=_alpha)
-    ax1.plot(x, traces2[0, :], color="#ff4b4e", lw=_line_width, alpha=_alpha)
+    for idx, trace in enumerate(traces):
+        ax1.plot(x, trace[0, :], color=colors[idx], lw=_line_width, alpha=_alpha)
     ax1.set_xlim([0, x[-1]])
     fig.subplots_adjust(bottom=0.25, hspace=0.5)
     xmin = fig.add_axes([0.25, 0.1, 0.65, 0.03])
@@ -253,14 +252,14 @@ def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_ra
         if event.key == "up":
             # print('press', event.key)
             n = int(ax1.title._text.split()[2]) - 1  # ZERO INDEXED
-            if n < traces.shape[0] - 1:
+            if n < traces[0].shape[0] - 1:
                 n += 1  # new n
                 ax1.clear()
 
                 ax1.set_xlabel("Time (s)")
                 ax1.set_ylabel("Signal (a.u.)")
-                ax1.plot(x, traces[n, :], color="#40cc8b", lw=_line_width, alpha=_alpha)
-                ax1.plot(x, traces2[n, :], color="#ff4b4e", lw=_line_width, alpha=_alpha)
+                for idx, trace in enumerate(traces):
+                    ax1.plot(x, trace[n, :], color=colors[idx], lw=_line_width, alpha=_alpha)
                 ax1.set_xlim([0, x[-1]])
                 n += 1
                 ax1.set_title("Trace: Neuron " + str(n))
@@ -275,8 +274,8 @@ def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_ra
 
                 ax1.set_xlabel("Time (s)")
                 ax1.set_ylabel("Signal (a.u.)")
-                ax1.plot(x, traces[n, :], color="#40cc8b", lw=_line_width, alpha=_alpha)
-                ax1.plot(x, traces2[n, :], color="#ff4b4e", lw=_line_width, alpha=_alpha)
+                for idx, trace in enumerate(traces):
+                    ax1.plot(x, trace[n, :], color=colors[idx], lw=_line_width, alpha=_alpha)
                 n += 1
                 ax1.set_title("Trace: Neuron " + str(n))
                 ax1.set_xlim([0, x[-1]])
@@ -284,3 +283,6 @@ def interactive_traces_compare(traces: np.ndarray, traces2: np.ndarray, frame_ra
 
     fig.canvas.mpl_connect('key_press_event', on_key)
     plt.show()
+
+
+def interactive_spikes(spike_prob, spike_)
