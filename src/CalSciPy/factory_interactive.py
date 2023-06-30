@@ -93,9 +93,9 @@ class InteractivePlot(ABC):
 
     def set_labels(self, axes=None, title=None):
         if not axes:
-            axes=self.axes
+            axes = self.axes
         if not title:
-            title=self.title
+            title = self.title
 
         axes.clear()
         axes.set_title(title)
@@ -308,11 +308,13 @@ class TrialPlot(InteractivePlot):
                 self.plot()
 
     def plot(self):
-        self.set_labels()
+        self.figure.suptitle(self.title)
         for condition in self.conditions:
             for trial in self.trials_per_condition:
+                title = f"Condition: {condition}, Trial {trial}"
                 self.axes[trial, condition].plot(self.time, self.data[self.pointer, :], lw=1.5, alpha=0.95,
                                                  color=colors.black)
+                self.set_labels(axes=self.axes[trial, condition], title=title)
 
     @property
     def conditions(self):
@@ -329,7 +331,9 @@ class TrialPlot(InteractivePlot):
             return self.num_trials
 
     def set_limits(self):
-        pass
+        for condition in self.conditions:
+            for trial in self.trials_per_condition:
+                self.axes[trial, condition].set_xlim([self.time[0], self.time[-1]])
 
     def set_time(self):
         if self.frame_rate:
