@@ -78,7 +78,7 @@ def _calculate_dfof_filter(traces: np.ndarray, frame_rate: float = 30.0, in_plac
     return dfof
 
 
-def _calculate_dfof_baseline(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
+def _calculate_dfof_mean_of_percentile(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
                    offset: float = 0.0, external_reference: Optional[np.ndarray] = None):
     baselines = np.nanmean(sliding_window(traces, frame_rate * 30, np.nanpercentile, q=8, axis=-1), axis=0)
     if not in_place:

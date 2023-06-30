@@ -1,9 +1,7 @@
 from __future__ import annotations
-from typing import Any, Union, Iterable
 import numpy as np
+from typing import Any
 import sys
-
-
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib import pyplot as plt   # noqa: E402
@@ -11,19 +9,19 @@ from matplotlib.widgets import Slider  # noqa: E402
 import seaborn as sns  # noqa: F401, E402
 
 
-def interactive_traces(traces: Union[np.ndarray, Iterable[np.ndarray]],
-                       frame_rate: float = 30,
-                       mode: str = "overlay",
-                       colors = 1) -> None:
+def interactive_traces(traces: np.ndarray, frame_rate: float, **kwargs) -> None:
     """
     Function to interactive compare traces. Press Up/Down to switch neurons
 
     :param traces: primary traces
     :param frame_rate: frame rate
-    :param mode: mode to plot group
     :returns: interactive figure
     """
     _num_neurons, _num_frames = traces.shape
+
+    _line_width = kwargs.get("lw", 3)
+    _alpha = kwargs.get("alpha", 0.95)
+
     x = np.arange(0, (_num_frames * (1 / frame_rate)), 1 / frame_rate, dtype=np.float64)
 
     fig = plt.figure(figsize=(16, 12))
@@ -322,5 +320,3 @@ def _interactive_spikes_single(spike_prob, spike_times, traces, frame_rate):
     else:
         time = np.arange(num_frames)
         a.set_xlabel("Frame")
-
-
