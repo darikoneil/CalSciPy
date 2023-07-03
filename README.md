@@ -20,8 +20,9 @@ This python packages contains a variety of useful methods for handling, processi
 #### Highlights
 * Assign unique colormaps to subsets of ROIs to generate rich, informative videos
 * Perona-Malik diffusion for edge-preserving denoising
-* Methods for handling Bruker's PrairieView data
-* Interactive visualization
+* Fast, convenient functions for handling, aligning, and compiling data collected in Bruker's PrairieView software
+* Functions for generating protocols for use in Bruker's Prairieview.
+* Interactive visualization of data
 
 #### Installation
 `pip install CalSciPy`
