@@ -4,7 +4,7 @@ __all__ = [
     "event_processing",
     "imaging_processing",
     "interactive_visuals",
-    "io_tools.py",
+    "io_tools",
     "misc",
     "reorganization",
     "trace_processing",
