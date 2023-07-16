@@ -13,6 +13,9 @@ from matplotlib import pyplot as plt
 import seaborn as sns  # noqa: F401, E402
 
 
+from CalSciPy.misc import generate_time_vector
+
+
 class _Colors:
     blue: Tuple[float, float, float] = (15/255, 159/255, 255/255)
     orange: Tuple[float, float, float] = (255/255, 159/255, 15/255)
@@ -190,9 +193,9 @@ class SpikePlot(InteractivePlot):
 
     def set_time(self):
         if self.frame_rate:
-            return np.arange(0, self.frames / self.frame_rate, 1 / self.frame_rate)
+            return generate_time_vector(self.frames, self.frame_rate)
         else:
-            return np.arange(0, self.frames, 1)
+            return generate_time_vector(self.frames, step=1)
 
 
 class TracePlot(InteractivePlot):
@@ -261,9 +264,9 @@ class TracePlot(InteractivePlot):
 
     def set_time(self):
         if self.frame_rate:
-            return np.arange(0, self.frames / self.frame_rate, 1 / self.frame_rate)
+            return generate_time_vector(self.frames, self.frame_rate)
         else:
-            return np.arange(0, self.frames, 1)
+            return generate_time_vector(self.frames, step=1)
 
 
 class TrialPlot(InteractivePlot):
@@ -335,7 +338,7 @@ class TrialPlot(InteractivePlot):
                 self.axes[trial, condition].set_xlim([self.time[0], self.time[-1]])
 
     def set_time(self):
-        if self.frame_rate:
-            return np.arange(0, self.frames / self.bin_duration, 1 / self.bin_duration)
+        if self.bin_duration:
+            return generate_time_vector(self.frames / self.bin_duration, step = 1 / self.bin_duration)
         else:
-            return np.arange(0, self.frames, 1)
+            return generate_time_vector(self.frames, step=1)

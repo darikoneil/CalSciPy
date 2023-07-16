@@ -7,12 +7,31 @@ from functools import wraps, partial
 from joblib import Parallel, delayed
 import numpy as np
 from tqdm import tqdm
+from numbers import Number
+
 
 try:
     import cupy
 except ModuleNotFoundError:
     pass
 
+
+def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None,
+) -> np.ndarray:
+    """
+    Generates a time vector for a number of samples collected at either
+
+    :param num_samples:
+    :param sampling_frequency:
+    :param start:
+    :param step:
+    :return:
+    """
+
+    if not step:
+        step = 1 /sampling_frequency
+
+    return np.arange(0, num_samples) * step + start
 
 def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: Number = 3.9) \
         -> int:
