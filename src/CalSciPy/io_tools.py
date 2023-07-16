@@ -15,7 +15,7 @@ from .misc import generate_blocks, calculate_frames_per_file
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def load_binary(path: Union[str, Path], mapped: bool = False) -> Union[np.ndarray, np.memmap]:
+def load_binary(path: Union[str, Path], mapped: bool = False,  mode="r+") -> Union[np.ndarray, np.memmap]:
     """
     This function loads images saved in language-agnostic binary format. Ideal for optimal read/write speeds and
     highly-robust to corruption. However, the downside is that the images and their metadata are split into two
@@ -37,7 +37,7 @@ def load_binary(path: Union[str, Path], mapped: bool = False) -> Union[np.ndarra
     metadata = _Metadata.decode(meta_filename)
 
     if mapped:
-        return np.memmap(imaging_filename, mode="r+", dtype=metadata.dtype, shape=(metadata.frames, metadata.y,
+        return np.memmap(imaging_filename, mode=mode, dtype=metadata.dtype, shape=(metadata.frames, metadata.y,
                                                                                    metadata.x))
     else:
         images = np.fromfile(imaging_filename, dtype=metadata.dtype)
