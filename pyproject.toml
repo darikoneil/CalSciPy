@@ -28,6 +28,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "joblib",
     "matplotlib",
     "numpy",
     "opencv-python",
