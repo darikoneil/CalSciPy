@@ -33,6 +33,7 @@ def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, st
 
     return np.arange(0, num_samples) * step + start
 
+
 def calculate_frames_per_file(y_pixels: int, x_pixels: int, bit_depth: np.dtype = np.uint16, size_cap: Number = 3.9) \
         -> int:
     """
