@@ -3,5 +3,7 @@
     "PVSavedMarkPointSeriesElements": "MarkPointSeriesElements",
     "PVMarkPointElement": "MarkPointElement",
     "PVGalvoPointElement": "GalvoPointElement",
+    "PVGalvoPointList": "GalvoPointList",
+    "PVGalvoPoint": "GalvoPoint",
     "Point": "Point"
 }

@@ -191,6 +191,8 @@ class BrukerXMLFactory:
         :type version: str
         :rtype: BrukerXMLFactory
         """
+        self._collect_element_class_mapping(version)
+
     def _collect_element_class_mapping(self, version: str) -> BrukerXMLFactory:
         """
         Loads appropriate mapping of xml tags and python objects

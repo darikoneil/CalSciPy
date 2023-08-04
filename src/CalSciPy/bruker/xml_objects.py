@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, Tuple, Generator
 from dataclasses import dataclass, field
 from abc import abstractmethod
 from collections import ChainMap
@@ -7,7 +7,7 @@ from inspect import get_annotations
 from PPVD.style import TerminalStyle
 from prettytable import PrettyTable, ALL
 from .validation import validate_fields
-
+from math import inf
 
 # These require python 3.10?
 @dataclass(kw_only=True)
@@ -33,21 +33,22 @@ class _BrukerObject:
         :rtype: str
         """
         string_to_print = ""
-        string_to_print += f"\n{self.__name__()}\n"
+        string_to_print += f"\n{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{TerminalStyle.UNDERLINE}" \
+                           f"{self.__name__()}{TerminalStyle.RESET}\n"
 
         annotations_ = self.collect_annotations()
 
         for key, type_ in annotations_.items():
             if "MappingProxyType" in type_ or "dict" in type_:  # Not robust to nesting
                 string_to_print += f"{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{key}{TerminalStyle.RESET}:"
-                string_to_print += f"{TerminalStyle.YELLOW} ({type_}){TerminalStyle.RESET}"
+                string_to_print += f"{TerminalStyle.BLUE} ({type_}){TerminalStyle.RESET}"
                 for nested_key in self.__dict__.get(key):
                     string_to_print += f"\n\t{nested_key}: {self.__dict__.get(key).get(nested_key)}"
                 string_to_print += "\n"
             else:
                 string_to_print += f"{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{key}: " \
                                    f"{TerminalStyle.RESET}{self.__dict__.get(key)}" \
-                                   f"{TerminalStyle.YELLOW} ({type_}){TerminalStyle.RESET}\n"
+                                   f"{TerminalStyle.BLUE} ({type_}){TerminalStyle.RESET}\n"
         return string_to_print
 
     @staticmethod
@@ -68,6 +69,10 @@ class _BrukerObject:
         :rtype: str
         """
         return "MarkPointObjectFactory"
+
+    # @abstractmethod
+    # def generate_xml(self):
+    #    pass
 
     @classmethod
     def collect_annotations(cls: _BrukerObject) -> dict:
@@ -227,24 +232,60 @@ class Point(_BrukerObject):
 
 
 @dataclass(kw_only=True)
+class GalvoPointList(_BrukerObject):
+    """
+    Dataclass for a list of galvo points
+
+    """
+    galvo_points: Tuple[object]
+
+    def __post_init__(self):
+        for idx, point in enumerate(self.galvo_points):
+            if not isinstance(point, GalvoPoint):
+                raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
+        super().__post_init__()
+
+    def generate_xml(self, spaces: int = 0) -> Generator:
+
+        start_tag = f"\n<{self.xml_tag()}>"
+
+        points = [f"\n  <{roi.xml_tag()}>" for roi in self.galvo_points]
+
+        end_tag = f"\n\<{self.xml_tag()}>"
+
+        return (line for line in [start_tag, *points, end_tag])
+
+    def __str__(self):
+        return f" Galvo Point List containing {len(self.galvo_points)} ROIs"
+
+    @staticmethod
+    def xml_tag() -> str:
+        return "PVGalvoPointList"
+
+    @staticmethod
+    def __name__() -> str:
+        return "GalvoPointList"
+
+
+@dataclass(kw_only=True)
 class GalvoPoint(_BrukerObject):
     """
      Dataclass for a specific point during galvo-stimulation for a specific marked point
      in a sequence of photostimulations
 
      """
-    x: float = -0.314262691377921
-    y: float = 9000.0
-    name: str = field(default="Point 5")
-    index: int = 4
+    x: float = field(default=0.0, metadata={"range": (0, 2048)})
+    y: float = field(default=0.0, metadata={"range": (0, 2048)})
+    name: str = field(default="Point 0")
+    index: int = field(default=0, metadata={"range": (0, inf)})
     activity_type: str = field(default="MarkPoints")
     uncaging_laser: str = "Uncaging"
-    uncaging_laser_power: int = field(default=0)
-    duration: float = 100.0
+    uncaging_laser_power: int = field(default=0, metadata={"range": (0, 1000)})
+    duration: int = field(default=100, metadata={"range": (0, inf)})
     is_spiral: bool = True
-    spiral_size: float = 0.338219758489175
-    spiral_revolutions: float = 0.0
-    z: float = 54.8692328473932
+    spiral_size: float = field(default=0.0, metadata={"range": (0, 2048)})
+    spiral_revolutions: int = field(default=0, metadata={"range": (0, inf)})
+    z: float = field(default=0.0, metadata={"range": (-8192, 8192)})
 
     @staticmethod
     def xml_tag() -> str:
@@ -253,3 +294,12 @@ class GalvoPoint(_BrukerObject):
     @staticmethod
     def __name__() -> str:
         return "GalvoPoint"
+
+    def _xml_format(self) -> str:
+        fields = vars(self)
+
+    def generate_xml(self, spaces: int = 0) -> str:
+
+        start_tag = f"  <{self.xml_tag()}"
+
+        end_tag = f" \>"

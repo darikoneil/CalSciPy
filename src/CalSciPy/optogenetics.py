@@ -3,8 +3,8 @@ from typing import Tuple, Callable, Union, Sequence
 from pathlib import Path
 from functools import partial, cached_property
 from abc import abstractmethod, abstractclassmethod
+from collections import ChainMap
 from numbers import Number
-
 
 import numpy as np
 from scipy.spatial import ConvexHull
@@ -18,6 +18,7 @@ from matplotlib.patches import Polygon
 import seaborn as sns
 
 from ._interactive_visuals import COLORS
+from .bruker.xml_objects import GalvoPoint, GalvoPointList
 
 
 class Photostimulation:
@@ -44,7 +45,7 @@ class Photostimulation:
         self.sequence = None
 
     @classmethod
-    def import_suite2p(cls, folder: Path, shape: Tuple = (512, 512)) -> Photostimulation:
+    def import_suite2p(cls, folder: Path, shape: Tuple[int, int] = (512, 512)) -> Photostimulation:
         """
         Class method which builds a photostimulation instance given suite2p data
 
@@ -80,25 +81,26 @@ class Photostimulation:
             reference_image = ops.get("Vcorr")
 
         # convert rois in stat to the expected form
-        rois = cls.convert_suite2p_rois(stat)
+        rois = cls.convert_suite2p_rois(stat, reference_image.shape)
 
         # generate instance
         return Photostimulation(rois, reference_image)
 
     @classmethod
-    def convert_suite2p_rois(cls, suite2p_rois: np.ndarray) -> dict:
+    def convert_suite2p_rois(cls, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)) -> dict:
         """
         Class method that generates the roi dictionary from provided suite2p stat array
 
         :param suite2p_rois: array containing suite2p stats for each roi
         :type suite2p_rois: numpy.ndarray
+        :param shape: dimensions of image
         :return: dictionary containing a collection of ROI objects for potential photostimulation
         """
-        converter = partial(cls._suite2p_roi, suite2p_rois)
+        converter = partial(cls._suite2p_roi, stat=suite2p_rois, shape=shape)
         return dict(enumerate([converter(idx) for idx in range(suite2p_rois.shape[0])]))
 
     @staticmethod
-    def _suite2p_roi(stat: np.ndarray, idx: int) -> ROI:
+    def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
         """
         Static method generating an ROI for each roi in stat
 
@@ -110,11 +112,34 @@ class Photostimulation:
         radius = stat[idx].get("radius")
         xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
         ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
-        return ROI(aspect_ratio=aspect_ratio, radius=radius, xpix=xpix, ypix=ypix)
+        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
+
+    def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
+        galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
+        return GalvoPointList(galvo_points=galvo_points)
+
+    def generate_galvo_point(self, idx: int, parameters: dict = None) -> GalvoPoint:
+        roi = self.rois[idx]
+        y, x = roi.coordinates
+        name = f"Point {idx}"
+        index = idx
+        spiral_size = roi.mask.bound_radius
+
+        roi_properties = {key: value for key, value in zip(["y", "x", "name", "index", "spiral_size"],
+                                                           [y, x, name, index, spiral_size])}
+
+        if parameters is not None:
+            roi_properties = ChainMap(parameters, roi_properties)
+
+        return GalvoPoint(**roi_properties)
+
+    @property
+    def targets(self) -> int:
+        return 15
 
     def __str__(self):
-        return f"Photostimulation with {len(self.rois)} ROIs within " \
-               f"{self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
+        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
+               f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
 
     @staticmethod
     def __name__():
