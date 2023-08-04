@@ -31,10 +31,6 @@ class PhotostimulationMeta(BrukerMeta):
 
     @staticmethod
     def __name__() -> str:
-        """
-        Abstract dunder method
-
-        """
         return "Photostimulation Metadata"
 
     def _build_meta(self, root: ElementTree, factory: object) -> PhotostimulationMeta:
@@ -161,8 +157,6 @@ class ROI:
 
     def __str__(self):
         """
-        Modified dunder method such that the printing is more verbose and easier for human consumption
-
         Prints the roi and each of its parameters, their values. It skips over the underlying chain map & the mask
 
         :rtype: str

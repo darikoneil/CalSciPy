@@ -318,59 +318,111 @@ class Mask:
                f"with theta {self.theta}'"
 
     @cached_property
-    def _mask(self):
+    def _mask(self) -> np.ndarray:
+        """
+        Photostimulation mask calculated using center, long/short radii, and theta constrained to lie within shape
+
+        """
         y, x = calculate_mask(self.center, self.radii, self.shape)
         return np.vstack([x, y]).T
 
     @cached_property
-    def _mask_vertices(self):
+    def _mask_vertices(self) -> Tuple[int]:
+        """
+        Indices of photostimulation points comprising the convex hull approximation of the photostimulation mask
+
+        """
         hull = ConvexHull(self._mask)
         return hull.vertices
 
     @cached_property
-    def bound_radius(self):
+    def bound_radius(self) -> float:
+        """
+        Radius used for constraining the bound mask
+
+        """
         return calculate_bounding_radius(self.center, self.rc_vert)
 
     @cached_property
     def _bound_mask(self):
+        """
+        Bound photostimulation mask calculated using center, the bound radius, and constrained to lie within shape
+
+        """
         y, x = calculate_mask(self.center, self.bound_radius, self.shape)
         return np.vstack([x, y]).T
 
     @cached_property
     def _bound_vertices(self):
+        """
+        Indices of photostimulation points comprising the convex hull approximation of the bound photostimulation mask
+
+        """
         hull = ConvexHull(self._bound_mask)
         return hull.vertices
 
     @property
     def bound_xy(self):
+        """
+        Nx2 array containing x,y coordinate pairs for the mask
+
+        """
         return self._bound_mask
 
     @property
     def bound_rc(self):
+        """
+        Nx2 array containing the r,c coordinate pairs for the mask
+
+        """
         return np.vstack([self._bound_mask[:, 1], self._bound_mask[:, 0]]).T
 
     @property
     def bound_xy_vert(self):
+        """
+        Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
+
+        """
         return self.bound_xy[self._bound_vertices, :]
 
     @property
     def bound_rc_vert(self):
+        """
+        Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
+
+        """
         return self.bound_rc[self._bound_vertices, :]
 
     @property
     def xy(self):
+        """
+        Nx2 array containing x,y coordinate pairs for the mask
+
+        """
         return self._mask
 
     @property
     def rc(self):
+        """
+        Nx2 array containing the r,c coordinate pairs for the mask
+
+        """
         return np.vstack([self._mask[:, 1], self._mask[:, 0]]).T
 
     @property
     def xy_vert(self):
+        """
+        Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
+
+        """
         return self.xy[self._mask_vertices, :]
 
     @property
     def rc_vert(self):
+        """
+        Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
+
+        """
         return self.rc[self._mask_vertices, :]
 
 
@@ -409,9 +461,25 @@ def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
 
 
 def calculate_mask(center: Sequence[Number, Number],
-                   radii: Union[Number, Sequence[Number]],
-                   shape: Union[Number, Sequence[Number, Number]] = None
+                   radii: Union[Number, Sequence[Number, Number]],
+                   shape: Union[Number, Sequence[Number, Number]] = None,
+                   theta: Number = None,
                    ) -> np.ndarray:
+    """
+    Calculates a photostimulation mask for an elliptical roi at center with radii at theta with respect to the y-axis
+    and constrained to lie within shape
+
+    :param center: center of the roi (y, x)
+    :type center: Sequence[Number, Number]
+    :param radii: radius of the roi. can provide one radius for a symmetrical roi or a long and short radius.
+    :type radii: Union[Number, Sequence[Number, Number]]
+    :param shape: dimensions of the image the roi lies within. If only one value is provided it is considered
+        symmetrical.
+    :type shape: Union[Number, Sequence[Number, Number]] = None
+    :param theta: angle of the long-radius with respect to the y-axis
+    :type theta: Number
+    :return: photostimulation mask
+    """
     # ensure center is numpy array
     center = np.asarray(center)
 
@@ -458,7 +526,7 @@ def calculate_mask(center: Sequence[Number, Number],
     return yy, xx
 
 
-def calculate_vertices(xpix: Union[np.ndarray, Sequence], ypix: Union[np.ndarray, Sequence]) -> Tuple[int]:
+def calculate_vertices(xpix: Union[np.ndarray, Sequence[int]], ypix: Union[np.ndarray, Sequence[int]]) -> Tuple[int]:
     """
     Calculate the index of points comprising the convex hull the polygon
 
@@ -471,33 +539,33 @@ def calculate_vertices(xpix: Union[np.ndarray, Sequence], ypix: Union[np.ndarray
     return hull.vertices
 
 
-def preview_stimulation_masks(self, ref_image: np.ndarray = None) -> None:
-    if ref_image is None:
-        ref_image = np.zeros((self.image_height, self.image_width))
+# def preview_stimulation_masks(self, ref_image: np.ndarray = None) -> None:
+#    if ref_image is None:
+#        ref_image = np.zeros((self.image_height, self.image_width))
+#
+#    with plt.style.context("CalSciPy.main"):
+#        # setup
+#
+#        fig, ax = plt.subplots(1, 1)
+#        ax.set_xlim(0, self.image_width)
+#        ax.set_ylim(self.image_height, 0)
+#        ax.set_title("Photostimulation Targets (ROI, Group)")
+#        ax.set_xlabel("X Pixels")
+#        ax.set_ylabel("Y Pixels")
+#        ax.xaxis.set_major_locator(MultipleLocator(64))
+#        ax.yaxis.set_major_locator(MultipleLocator(64))
+#        ax.set_axisbelow(True)
+#        ax.imshow(ref_image, cmap="Spectral_r")
 
-    with plt.style.context("CalSciPy.main"):
-        # setup
-
-        fig, ax = plt.subplots(1, 1)
-        ax.set_xlim(0, self.image_width)
-        ax.set_ylim(self.image_height, 0)
-        ax.set_title("Photostimulation Targets (ROI, Group)")
-        ax.set_xlabel("X Pixels")
-        ax.set_ylabel("Y Pixels")
-        ax.xaxis.set_major_locator(MultipleLocator(64))
-        ax.yaxis.set_major_locator(MultipleLocator(64))
-        ax.set_axisbelow(True)
-        ax.imshow(ref_image, cmap="Spectral_r")
-
-        # iterate
-        for roi in self.rois:
-            label_ = f"({roi.index}, {roi.stimulation_group})"
-            y = [y for _, y in roi.vertices]
-            x = [x for x, _ in roi.vertices]
-            vtx_pts = np.vstack([y, x]).T
-            vtx_pts = [vtx_pts[:, 1], vtx_pts[:, 0]]
-            pg = Polygon(vtx_pts, edgecolor=COLORS.red, lw=3, fill=False, label=label_)
-            ax.add_patch(pg)
+#        # iterate
+#        for roi in self.rois:
+#            label_ = f"({roi.index}, {roi.stimulation_group})"
+#            y = [y for _, y in roi.vertices]
+#            x = [x for x, _ in roi.vertices]
+#            vtx_pts = np.vstack([y, x]).T
+#            vtx_pts = [vtx_pts[:, 1], vtx_pts[:, 0]]
+#            pg = Polygon(vtx_pts, edgecolor=COLORS.red, lw=3, fill=False, label=label_)
+#            ax.add_patch(pg)
 
 
 # def true_mask(mask, rc):
@@ -509,12 +577,27 @@ def preview_stimulation_masks(self, ref_image: np.ndarray = None) -> None:
 #    return np.vstack([y, x]).T
 
 
-def calculate_bounding_radius(center: Tuple[float, float], vertices: np.ndarray) -> float:
+def calculate_bounding_radius(center: Sequence[Number, Number], vertices: np.ndarray) -> float:
+    """
+    Calculates the bounding radius of the roi, defined as the shortest distance between the centroid and any point that
+        lies within the boundary of the convex hull approximation
+
+    :param center: center of the roi (y, x)
+    :param vertices: Nx2 array containing the points that lie on the boundary of the convex hull approximation
+    :return: bounding radius
+    """
     func_handle = partial(_calculate_bounding_radius, center=center)
     return np.min([func_handle(point=vertices[point, :]) for point in range(vertices.shape[0])])
 
 
-def _calculate_bounding_radius(center: Tuple[float, float], point: np.ndarray) -> float:
+def _calculate_bounding_radius(center: Sequence[Number, Number], point: np.ndarray) -> float:
+    """
+    Calculates the distance between the centroid and a specific point
+
+    :param center: the center of the roi (y, x)
+    :param point: a specific point (y, x)
+    :return: the distance between the center and the point
+    """
     coordinate_pair = np.empty((2, 2))
     coordinate_pair[0, :] = center
     coordinate_pair[1, :] = point
