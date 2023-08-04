@@ -21,9 +21,18 @@ from ._interactive_visuals import COLORS
 
 
 class Photostimulation:
+    """
+    Photostimulation object that defines patterned photostimulation during an optogenetic experiment
+
+    :ivar rois: dictionary containing a collection of ROI objects for potential photostimulation
+    :type rois: dict
+    :ivar reference_image: a reference image containing the provided ROIs.
+    :type reference_image: numpy.ndarray
+    :ivar sequence: the sequence of individual photostimulation events
+    """
     def __init__(self, rois: dict, reference_image: np.ndarray = None):
         """
-        Photostimulation defining an optogenetic experiment
+        PPhotostimulation object that defines patterned photostimulation during an optogenetic experiment
 
         :param rois: dictionary containing a collection of ROI objects for potential photostimulation
         :type rois: dict
