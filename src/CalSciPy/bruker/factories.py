@@ -258,8 +258,7 @@ class BrukerXMLFactory:
             if failures == 0:
                 return True
 
-    @staticmethod
-    def _generate_start_tag(element: _BrukerObject, level: int = 0) -> str:
+    def _generate_start_tag(self, element: _BrukerObject, level: int = 0) -> str:
         """
         Generates the start tag of xml element
 
@@ -272,12 +271,11 @@ class BrukerXMLFactory:
             tag += " " * level * 2  # proper xml is 2 space indent of children
 
         tag += "<"
-        tag += element.xml_tag()
-
+        # tag += element.xml_tag()
+        tag += self.element_class_mapping.get(element.__name__())
         return tag
 
-    @staticmethod
-    def _generate_end_tag(element: _BrukerObject, level: int = 0) -> str:
+    def _generate_end_tag(self, element: _BrukerObject, level: int = 0) -> str:
         """
         Generates the start tag of xml element
 
@@ -290,7 +288,8 @@ class BrukerXMLFactory:
             tag += " " * level * 2  # proper xml is 2 space indent of children
 
         tag += "</"
-        tag += element.xml_tag()
+        # tag += element.xml_tag()
+        tag += self.element_class_mapping.get(element.__name__())
         tag += ">"
 
         return tag
@@ -359,11 +358,14 @@ class BrukerXMLFactory:
 
     @staticmethod
     def _flatten_encoding(xml_encoding: List[Union[str, List[str]]]) -> List[str]:
-        lines = []
-        for line in xml_encoding:
-            if isinstance(line, str):
-                lines.append(line)
-            else:
-                lines.extend(line)
 
-        return lines
+        while len({type(line) for line in xml_encoding}) > 1:
+            lines = []
+            for line in xml_encoding:
+                if isinstance(line, str):
+                    lines.append(line)
+                else:
+                    lines.extend(line)
+            xml_encoding = lines
+
+        return xml_encoding

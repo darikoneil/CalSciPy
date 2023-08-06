@@ -9,6 +9,7 @@ from prettytable import PrettyTable, ALL
 from .validation import validate_fields
 from math import inf
 
+
 # These require python 3.10?
 @dataclass(kw_only=True)
 class _BrukerObject:
@@ -51,14 +52,14 @@ class _BrukerObject:
                                    f"{TerminalStyle.BLUE} ({type_}){TerminalStyle.RESET}\n"
         return string_to_print
 
-    @staticmethod
-    @abstractmethod
-    def xml_tag() -> str:
-        """
-        Abstract static method which returns the tag of the object within bruker xml
-
-        """
-        return ""
+    # @staticmethod
+    # @abstractmethod
+    # def xml_tag() -> str:
+    #    """
+    #    Abstract static method which returns the tag of the object within bruker xml
+    #
+    #    """
+    #    return
 
     @staticmethod
     @abstractmethod
@@ -120,16 +121,18 @@ class MarkPointSeriesElements(_BrukerObject):
     """
     Dataclass for a sequence of photostimulations
     """
+    #: Tuple[object]: series of mark point elements
+    marks: Tuple[object]
     #: int: number of times this series is iterated
-    iterations: int = 1
+    iterations: int = field(default=1, metadata={"range": (1, inf)})
     #: float: delay between each series iteration (ms)
-    iteration_delay: float = 0.12
+    iteration_delay: float = field(default=0.0, metadata={"range": (0, inf)})
     #: bool: whether to calculate functional map
     calc_funct_map: bool = False
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "PVMarkPointSeriesElements"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "PVMarkPointSeriesElements"
 
     @staticmethod
     def __name__() -> str:
@@ -141,18 +144,20 @@ class MarkPointElement(_BrukerObject):
     """
     Dataclass for a specific marked point in a sequence of photostimulations
     """
+    #: object: Tuple of galvo point elements
+    points: Tuple[object]
     #: int: repetitions of this stimulation event
-    repetitions: int = 10
+    repetitions: int = field(default=0, metadata={"range": (0, inf)})
     #: str: identity of uncaging laser
     uncaging_laser: str = "Uncaging"
     #: int: uncaging laser power
-    uncaging_laser_power: int = 1000
+    uncaging_laser_power: int = field(default=0, metadata={"range": (0, 1000)})
     #: str: trigger frequency
     trigger_frequency: str = "None"
     # str: trigger selection id
     trigger_selection: str = "PFI0"
     #: int: number of triggers
-    trigger_count: int = 50
+    trigger_count: int = field(default=0, metadata={"range": (0, inf)})
     #: str: sync
     async_sync_frequency: str = "FirstRepetition"
     #: str: name of voltage output experiment
@@ -162,9 +167,9 @@ class MarkPointElement(_BrukerObject):
     #: str: id of parameter set
     parameter_set: str = "CurrentSettings"
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "PVMarkPointElement"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "PVMarkPointElement"
 
     @staticmethod
     def __name__() -> str:
@@ -177,23 +182,23 @@ class GalvoPointElement(_BrukerObject):
     Dataclass for a specific galvo-stimulation for a specific marked point in a sequence of photostimulations
     """
     #: int: initial delay for stimulation
-    initial_delay: int = 0
+    initial_delay: int = field(default=0, metadata={"range": (0, inf)})
     #: float: inter point delay
-    inter_point_delay: float = 0.0
+    inter_point_delay: float = field(default=0.0, metadata={"range": (0, inf)})
     #: float: duration of stimulation in ms
-    duration: float = 0
+    duration: int = field(default=0, metadata={"range": {0, inf}})
     #: int: number of spiral revolutions
-    spiral_revolutions: int = 0
+    spiral_revolutions: int = field(default=0, metadata={"range": (0, inf)})
     #: bool: whether to do all points at once
     all_points_at_once: bool = False
     #: str: id from galvo point list
-    points: str = "Point 1"
+    points: str = "Point 0"
     #: int: index from galvo point list
-    indices: int = 1
+    indices: int = field(default=0, metadata={"range": (0, inf)})
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "PVGalvoPointElement"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "PVGalvoPointElement"
 
     @staticmethod
     def __name__() -> str:
@@ -222,9 +227,9 @@ class Point(_BrukerObject):
     #: float: size of spiral in microns
     spiral_size_in_microns: float = 20
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "Point"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "Point"
 
     @staticmethod
     def __name__() -> str:
@@ -245,22 +250,22 @@ class GalvoPointList(_BrukerObject):
                 raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
         super().__post_init__()
 
-    def generate_xml(self, spaces: int = 0) -> Generator:
-
-        start_tag = f"\n<{self.xml_tag()}>"
-
-        points = [f"\n  <{roi.xml_tag()}>" for roi in self.galvo_points]
-
-        end_tag = f"\n\<{self.xml_tag()}>"
-
-        return (line for line in [start_tag, *points, end_tag])
+    # def generate_xml(self, spaces: int = 0) -> Generator:
+    #
+    #    start_tag = f"\n<{self.xml_tag()}>"
+    #
+    #    points = [f"\n  <{roi.xml_tag()}>" for roi in self.galvo_points]
+    #
+    #    end_tag = f"\n\<{self.xml_tag()}>"
+    #
+    #    return (line for line in [start_tag, *points, end_tag])
 
     def __str__(self):
         return f" Galvo Point List containing {len(self.galvo_points)} ROIs"
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "PVGalvoPointList"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "PVGalvoPointList"
 
     @staticmethod
     def __name__() -> str:
@@ -287,19 +292,19 @@ class GalvoPoint(_BrukerObject):
     spiral_revolutions: int = field(default=0, metadata={"range": (0, inf)})
     z: float = field(default=0.0, metadata={"range": (-8192, 8192)})
 
-    @staticmethod
-    def xml_tag() -> str:
-        return "PVGalvoPoint"
+    # @staticmethod
+    # def xml_tag() -> str:
+    #    return "PVGalvoPoint"
 
     @staticmethod
     def __name__() -> str:
         return "GalvoPoint"
 
-    def _xml_format(self) -> str:
-        fields = vars(self)
+    # def _xml_format(self) -> str:
+    #    fields = vars(self)
 
-    def generate_xml(self, spaces: int = 0) -> str:
-
-        start_tag = f"  <{self.xml_tag()}"
-
-        end_tag = f" \>"
+#    def generate_xml(self, spaces: int = 0) -> str:
+#
+#        start_tag = f"  <{self.xml_tag()}"
+#
+#        end_tag = f" \>"
