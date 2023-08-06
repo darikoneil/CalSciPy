@@ -147,7 +147,7 @@ class MarkPointElement(_BrukerObject):
     #: object: Tuple of galvo point elements
     points: Tuple[object]
     #: int: repetitions of this stimulation event
-    repetitions: int = field(default=0, metadata={"range": (0, inf)})
+    repetitions: int = field(default=1, metadata={"range": (1, inf)})
     #: str: identity of uncaging laser
     uncaging_laser: str = "Uncaging"
     #: int: uncaging laser power
@@ -185,7 +185,7 @@ class GalvoPointElement(_BrukerObject):
     initial_delay: int = field(default=0, metadata={"range": (0, inf)})
     #: float: inter point delay
     inter_point_delay: float = field(default=0.0, metadata={"range": (0, inf)})
-    #: float: duration of stimulation in ms
+    #: int: duration of stimulation in ms
     duration: int = field(default=0, metadata={"range": {0, inf}})
     #: int: number of spiral revolutions
     spiral_revolutions: int = field(default=0, metadata={"range": (0, inf)})
