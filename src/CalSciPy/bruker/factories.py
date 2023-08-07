@@ -188,13 +188,67 @@ class BrukerXMLFactory:
                 return True
 
     @staticmethod
-    def _parameter_to_xml(key: str, value: Any) -> str:
+    def _pad_numeric_string(value: str) -> str:
+        """
+        Pads numeric string to be a minimum of 16-characters
+
+        :param value: value to be padded
+        :return: padded 16-character string
+        """
+        while len(value) <= 15:
+            if "." in value:
+                value += "0"
+            else:
+                value += "."
+        # Make sure to include literal " characters
+        return f'"{value}"'
+
+    @classmethod
+    def _convert_float(cls: BrukerXMLFactory, value: float) -> str:
+        """
+        Converts a float value into a 16-character string representation
+
+        :param value: float
+        :return: 16-character string
+        """
+        # This is not efficient but I don't think it really needs to be
+        string_representation = f"{value}"
+
+        if len(string_representation) < 16:
+            return cls._pad_numeric_string(string_representation)
+        elif len(string_representation) == 16:
+            # make sure to include literal " characters
+            return f'"{value}"'
+        else:
+            # make 15 character base tag
+            tag = string_representation[:15]
+
+            # Find sixteenth character by rounding the seventeenth
+            sixteenth = int(string_representation[15])
+            seventeenth = int(string_representation[16])
+
+            # make sure to include literal " characters
+            if seventeenth >= 5:
+                tag += f'{sixteenth + 1}'
+            else:
+                tag += f'{string_representation[15]}'
+            return f'"{tag}"'
+
+    @classmethod
+    def _parameter_to_xml(cls: BrukerXMLFactory, key: str, value: Any) -> str:
+        """
+        Convert a parameter to xml formatting
+
+        :param key: key of parameter
+        :param value: value of parameter
+        :return: xml-formatted string
+        """
         tag = f" {key}="
         if isinstance(value, Number):
             if type(value) == bool:
                 tag += f'"{bool(value)}"'
-            elif type(value) == float:
-                tag += f'"{value:.14f}"'
+            elif isinstance(value, float):
+                tag += cls._convert_float(value)
             else:
                 tag += f'"{value}"'
         else:
@@ -364,7 +418,7 @@ class BrukerXMLFactory:
         tag = "\n"
 
         if level > 0:
-            tag += " " * level * 2  # proper xml is 2 space indent of children
+            tag += " " * level  # proper xml is 2 space indent of children
 
         tag += "<"
         # tag += element.xml_tag()

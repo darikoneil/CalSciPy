@@ -21,15 +21,34 @@ class Photostimulation:
     :type reference_image: numpy.ndarray
     :ivar sequence: the sequence of individual photostimulation events
     """
-    def __init__(self, rois: dict, reference_image: np.ndarray = None):
+    def __init__(self,
+                 rois: dict,
+                 etl_offset: float = 0.0,
+                 pixels_per_micron: float = 0.883,
+                 spiral_um_per_au: float = 29.6,
+                 x_range: Tuple[float, float] = (-8.333, 8.333),
+                 y_range: Tuple[float, float] = (-7.647, 7.647),
+                 reference_image: np.ndarray = None,
+                 ):
         """
-        PPhotostimulation object that defines patterned photostimulation during an optogenetic experiment
+        Photostimulation object that defines patterned photostimulation during an optogenetic experiment
 
         :param rois: dictionary containing a collection of ROI objects for potential photostimulation
         :type rois: dict
+        :param etl_offset: z-plane offset between imaging and stimulation focal planes
+        :type etl_offset: float = 0.0
+        :param pixels_per_micron: number of pixels per micron for the associated objective at 1.02X
+        :type pixels_per_micron: float = 0.883
         :param reference_image: a reference image containing the provided ROIs.
-        :type reference_image: numpy.ndarray
+        :type reference_image: numpy.ndarray = None
+        :param spiral_um_per_au: the diameter of a '.gpl' spiral in microns when the metadata equals 1.0
+        :type spiral_um_per_au: float = 29.6
+        :param x_range: the range of the x coordinate in '.gpl' files
+        :type x_range: Tuple[float, float] = (-8.333, 8.333)
+        :param y_range: the range of the y coordinate in '.gpl' files
+        :type y_range: Tuple[float, float] = (-7.647, 7.647)
         """
+        # TODO: When saving to galvo point lists the rois are in some sort of seemingly arbitrary scale...
         self.rois = rois
         self.reference_image = reference_image
         self.sequence = None
