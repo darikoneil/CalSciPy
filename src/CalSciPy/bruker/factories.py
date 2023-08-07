@@ -3,7 +3,7 @@ from typing import Mapping, Iterable, Any, List, Union
 from types import MappingProxyType
 from importlib import import_module
 from xml.etree.ElementTree import Element
-from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION
+from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION, BRUKER_XML_OBJECT_MODULES
 from .xml_mappings.xml_mapping import load_mapping
 from .xml_objects import _BrukerObject
 from numbers import Number
@@ -175,30 +175,6 @@ class BrukerXMLFactory:
     def _generate_header() -> str:
         return '<?xml version="1.0" encoding="utf-8"?>'
 
-    @classmethod
-    def _has_children(cls: BrukerXMLFactory, attr: Mapping) -> bool:
-        children = []
-        for key, value in attr.items():
-            if isinstance(value, _BrukerObject):
-                children.append(key)
-            if isinstance(value, Iterable):
-                if cls._nested_validate_element(value):
-                    children.append(key)
-        if children:
-            return children
-
-    @classmethod
-    def _map_attributes(cls: BrukerElementFactory, attr: dict) -> dict:
-        """
-        Generates new dictionary containing mapping of new keys with attribute values
-
-        :param attr: attributes
-        :type attr: dict
-        :rtype: dict
-        """
-        mapping = cls._camel_case_keys(attr.keys())
-        return {mapping.get(key): value for key, value in attr.items() if key in mapping}
-
     @staticmethod
     def _nested_validate_element(element: Any) -> bool:
         if isinstance(element, Iterable):
@@ -259,6 +235,30 @@ class BrukerXMLFactory:
         :return: new keys in CamelCase
         """
         return {key: cls._convert_key(key) for key in old_keys}
+
+    @classmethod
+    def _has_children(cls: BrukerXMLFactory, attr: Mapping) -> bool:
+        children = []
+        for key, value in attr.items():
+            if isinstance(value, _BrukerObject):
+                children.append(key)
+            if isinstance(value, Iterable):
+                if cls._nested_validate_element(value):
+                    children.append(key)
+        if children:
+            return children
+
+    @classmethod
+    def _map_attributes(cls: BrukerXMLFactory, attr: dict) -> dict:
+        """
+        Generates new dictionary containing mapping of new keys with attribute values
+
+        :param attr: attributes
+        :type attr: dict
+        :rtype: dict
+        """
+        mapping = cls._camel_case_keys(attr.keys())
+        return {mapping.get(key): value for key, value in attr.items() if key in mapping}
 
     def constructor(self, element: _BrukerObject) -> List:
 

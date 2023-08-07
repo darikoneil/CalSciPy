@@ -34,6 +34,14 @@ class Photostimulation:
         self.reference_image = reference_image
         self.sequence = None
 
+    def __str__(self):
+        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
+               f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
+
+    @property
+    def targets(self) -> int:
+        return 15
+
     @staticmethod
     def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
         """
@@ -48,6 +56,10 @@ class Photostimulation:
         xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
         ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
         return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
+
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation"
 
     @classmethod
     def convert_suite2p_rois(cls: Photostimulation, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)
@@ -112,8 +124,7 @@ class Photostimulation:
         index = idx
         spiral_size = roi.mask.bound_radius
 
-        roi_properties = {key: value for key, value in zip(["y", "x", "name", "index", "spiral_size"],
-                                                           [y, x, name, index, spiral_size])}
+        roi_properties = dict(zip(["y", "x", "name", "index", "spiral_size"], [y, x, name, index, spiral_size]))
 
         if parameters is not None:
             roi_properties = ChainMap(parameters, roi_properties)
@@ -123,18 +134,6 @@ class Photostimulation:
     def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
         galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
         return GalvoPointList(galvo_points=galvo_points)
-
-    @property
-    def targets(self) -> int:
-        return 15
-
-    def __str__(self):
-        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
-               f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
-
-    @staticmethod
-    def __name__() -> str:
-        return "Photostimulation"
 
 
 class Group:
@@ -215,6 +214,9 @@ class ROI:
         self.coordinates = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
         self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, 0, self.shape)  # requires vertices!!!
 
+    def __str__(self):
+        return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
+
     @property
     def adj_radii(self) -> Tuple[float, float]:
         """
@@ -257,15 +259,12 @@ class ROI:
         """
         return self.rc[self.vertices, :]
 
-    def __str__(self):
-        return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
-
-    def __repr__(self):
-        return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
-
     @staticmethod
     def __name__() -> str:
         return "ROI"
+
+    def __repr__(self):
+        return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
 
 class Mask:
@@ -330,13 +329,6 @@ class Mask:
         self.radii = radii
         self.theta = theta
         self.shape = shape
-
-    @staticmethod
-    def __name__() -> str:
-        return "Photostimulation Mask"
-
-    def __repr__(self):
-        return "Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
     def __str__(self):
         return f"Photostimulation mask centered at {self.center} with radii {self.radii} (bound: {self.bound_radius})" \
@@ -450,6 +442,13 @@ class Mask:
         """
         return self.rc[self._mask_vertices, :]
 
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation Mask"
+
+    def __repr__(self):
+        return "Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+
 
 def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
     """
@@ -481,14 +480,14 @@ def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
     signed_area = abs(sigma_signed_area) / 2
     center_x /= (6 * signed_area)
     center_y /= (6 * signed_area)
-    
+
     return center_x, center_y
 
 
 def calculate_mask(center: Sequence[Number, Number],
                    radii: Union[Number, Sequence[Number, Number]],
                    shape: Union[Number, Sequence[Number, Number]] = None,
-                   theta: Number = None,
+                   theta: Number = None  # noqa: U100,
                    ) -> np.ndarray:
     """
     Calculates a photostimulation mask for an elliptical roi at center with radii at theta with respect to the y-axis

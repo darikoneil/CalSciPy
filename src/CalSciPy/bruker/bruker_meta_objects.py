@@ -34,6 +34,17 @@ class BrukerMeta:
         return ""
 
     @abstractmethod
+    def generate_protocol(self, path: str) -> None:
+        """
+        Generates a protocol for the metadata to be imported into prairieview
+
+        :param path: path to write protocol
+        :type path: str or pathlib.Path
+        :rtype: None
+        """
+        pass
+
+    @abstractmethod
     def _build_meta(self, root: ElementTree, factory: object) -> BrukerMeta:
         """
         Abstract method for building metadata from the root of the xml's element tree using a factory class
@@ -52,17 +63,6 @@ class BrukerMeta:
         Abstract method for any additional actions here
 
         :rtype: BrukerMeta
-        """
-        pass
-
-    @abstractmethod
-    def generate_protocol(self, path: str) -> None:
-        """
-        Generates a protocol for the metadata to be imported into prairieview
-
-        :param path: path to write protocol
-        :type path: str or pathlib.Path
-        :rtype: None
         """
         pass
 
@@ -183,7 +183,7 @@ class BrukerElementFactory:
 
 
 class BrukerXMLFactory:
-    def __init__(self, version = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
+    def __init__(self, version: str = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
         """
         Factory class for constructing bruker xml objects
 
