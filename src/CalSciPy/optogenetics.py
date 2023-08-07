@@ -1,23 +1,13 @@
 from __future__ import annotations
-from typing import Tuple, Callable, Union, Sequence
+from typing import Tuple, Union, Sequence
 from pathlib import Path
 from functools import partial, cached_property
-from abc import abstractmethod, abstractclassmethod
 from collections import ChainMap
 from numbers import Number
 
 import numpy as np
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import pdist
-
-import matplotlib
-matplotlib.use("Qt5Agg")
-from matplotlib import pyplot as plt
-from matplotlib.ticker import MultipleLocator
-from matplotlib.patches import Polygon
-import seaborn as sns
-
-from ._interactive_visuals import COLORS
 from .bruker.xml_objects import GalvoPoint, GalvoPointList
 
 
@@ -44,8 +34,36 @@ class Photostimulation:
         self.reference_image = reference_image
         self.sequence = None
 
+    @staticmethod
+    def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
+        """
+        Static method generating an ROI for each roi in stat
+
+        :param stat: array containing suite2p stats for each roi
+        :param idx: idx of specific roi
+        :return: ROI instance for the roi 'idx'
+        """
+        aspect_ratio = stat[idx].get("aspect_ratio")
+        radius = stat[idx].get("radius")
+        xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
+        ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
+        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
+
     @classmethod
-    def import_suite2p(cls, folder: Path, shape: Tuple[int, int] = (512, 512)) -> Photostimulation:
+    def convert_suite2p_rois(cls: Photostimulation, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)) -> dict:
+        """
+        Class method that generates the roi dictionary from provided suite2p stat array
+
+        :param suite2p_rois: array containing suite2p stats for each roi
+        :type suite2p_rois: numpy.ndarray
+        :param shape: dimensions of image
+        :return: dictionary containing a collection of ROI objects for potential photostimulation
+        """
+        converter = partial(cls._suite2p_roi, stat=suite2p_rois, shape=shape)
+        return dict(enumerate([converter(idx) for idx in range(suite2p_rois.shape[0])]))
+
+    @classmethod
+    def import_suite2p(cls: Photostimulation, folder: Path, shape: Tuple[int, int] = (512, 512)) -> Photostimulation:
         """
         Class method which builds a photostimulation instance given suite2p data
 
@@ -86,37 +104,6 @@ class Photostimulation:
         # generate instance
         return Photostimulation(rois, reference_image)
 
-    @classmethod
-    def convert_suite2p_rois(cls, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)) -> dict:
-        """
-        Class method that generates the roi dictionary from provided suite2p stat array
-
-        :param suite2p_rois: array containing suite2p stats for each roi
-        :type suite2p_rois: numpy.ndarray
-        :param shape: dimensions of image
-        :return: dictionary containing a collection of ROI objects for potential photostimulation
-        """
-        converter = partial(cls._suite2p_roi, stat=suite2p_rois, shape=shape)
-        return dict(enumerate([converter(idx) for idx in range(suite2p_rois.shape[0])]))
-
-    @staticmethod
-    def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
-        """
-        Static method generating an ROI for each roi in stat
-
-        :param stat: array containing suite2p stats for each roi
-        :param idx: idx of specific roi
-        :return: ROI instance for the roi 'idx'
-        """
-        aspect_ratio = stat[idx].get("aspect_ratio")
-        radius = stat[idx].get("radius")
-        xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
-        ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
-        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
-
-    def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
-        galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
-        return GalvoPointList(galvo_points=galvo_points)
 
     def generate_galvo_point(self, idx: int, parameters: dict = None) -> GalvoPoint:
         roi = self.rois[idx]
@@ -133,6 +120,10 @@ class Photostimulation:
 
         return GalvoPoint(**roi_properties)
 
+    def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
+        galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
+        return GalvoPointList(galvo_points=galvo_points)
+
     @property
     def targets(self) -> int:
         return 15
@@ -142,7 +133,7 @@ class Photostimulation:
                f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
 
     @staticmethod
-    def __name__():
+    def __name__() -> str:
         return "Photostimulation"
 
 
@@ -270,10 +261,10 @@ class ROI:
         return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
 
     def __repr__(self):
-        return f"ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + f")"
+        return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
     @staticmethod
-    def __name__(self):
+    def __name__() -> str:
         return "ROI"
 
 
@@ -341,11 +332,11 @@ class Mask:
         self.shape = shape
 
     @staticmethod
-    def __name__(self):
+    def __name__() -> str:
         return "Photostimulation Mask"
 
     def __repr__(self):
-        return f"Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + f")"
+        return "Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
     def __str__(self):
         return f"Photostimulation mask centered at {self.center} with radii {self.radii} (bound: {self.bound_radius})" \
@@ -378,7 +369,7 @@ class Mask:
         return calculate_bounding_radius(self.center, self.rc_vert)
 
     @cached_property
-    def _bound_mask(self):
+    def _bound_mask(self) -> np.ndarray:
         """
         Bound photostimulation mask calculated using center, the bound radius, and constrained to lie within shape
 
@@ -387,7 +378,7 @@ class Mask:
         return np.vstack([x, y]).T
 
     @cached_property
-    def _bound_vertices(self):
+    def _bound_vertices(self) -> Tuple[int]:
         """
         Indices of photostimulation points comprising the convex hull approximation of the bound photostimulation mask
 
@@ -396,7 +387,7 @@ class Mask:
         return hull.vertices
 
     @property
-    def bound_xy(self):
+    def bound_xy(self) -> np.ndarray:
         """
         Nx2 array containing x,y coordinate pairs for the mask
 
@@ -404,7 +395,7 @@ class Mask:
         return self._bound_mask
 
     @property
-    def bound_rc(self):
+    def bound_rc(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs for the mask
 
@@ -412,7 +403,7 @@ class Mask:
         return np.vstack([self._bound_mask[:, 1], self._bound_mask[:, 0]]).T
 
     @property
-    def bound_xy_vert(self):
+    def bound_xy_vert(self) -> np.ndarray:
         """
         Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
 
@@ -420,7 +411,7 @@ class Mask:
         return self.bound_xy[self._bound_vertices, :]
 
     @property
-    def bound_rc_vert(self):
+    def bound_rc_vert(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
 
@@ -428,7 +419,7 @@ class Mask:
         return self.bound_rc[self._bound_vertices, :]
 
     @property
-    def xy(self):
+    def xy(self) -> np.ndarray:
         """
         Nx2 array containing x,y coordinate pairs for the mask
 
@@ -436,7 +427,7 @@ class Mask:
         return self._mask
 
     @property
-    def rc(self):
+    def rc(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs for the mask
 
@@ -444,7 +435,7 @@ class Mask:
         return np.vstack([self._mask[:, 1], self._mask[:, 0]]).T
 
     @property
-    def xy_vert(self):
+    def xy_vert(self) -> np.ndarray:
         """
         Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
 
@@ -452,7 +443,7 @@ class Mask:
         return self.xy[self._mask_vertices, :]
 
     @property
-    def rc_vert(self):
+    def rc_vert(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
 
@@ -519,7 +510,7 @@ def calculate_mask(center: Sequence[Number, Number],
 
     # make sure radii contains both x & y directions
     try:
-        assert(len(radii) == 2)
+        assert (len(radii) == 2)
     except TypeError:
         radii = np.asarray([radii, radii])
     except AssertionError:
