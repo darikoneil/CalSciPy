@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Mapping, Iterable, Any
+from typing import Mapping, Iterable, Any, List, Union
 from types import MappingProxyType
 from importlib import import_module
+from xml.etree.ElementTree import Element
 from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION
 from .xml_mappings.xml_mapping import load_mapping
 from .xml_objects import _BrukerObject
@@ -134,7 +135,7 @@ class BrukerXMLFactory:
 
     :ivar element_class_mapping: dictionary mapping bruker xml objects to CalSciPy's bruker xml classes
     """
-    def __init__(self, version=DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
+    def __init__(self, version: str = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
         """
         Factory class for constructing bruker xml objects
 
@@ -156,27 +157,74 @@ class BrukerXMLFactory:
         key_parts = [new_key.capitalize() for new_key in key_parts]
         return "".join(key_parts)
 
+    @staticmethod
+    def _flatten_encoding(xml_encoding: List[Union[str, List[str]]]) -> List[str]:
+
+        while len({type(line) for line in xml_encoding}) > 1:
+            lines = []
+            for line in xml_encoding:
+                if isinstance(line, str):
+                    lines.append(line)
+                else:
+                    lines.extend(line)
+            xml_encoding = lines
+
+        return xml_encoding
+
+    @staticmethod
+    def _generate_header() -> str:
+        return '<?xml version="1.0" encoding="utf-8"?>'
+
     @classmethod
-    def _camel_case_keys(cls: BrukerXMLFactory, old_keys: Iterable[str]):
-        """
-        Converts keys from python_standard to CamelCase and generates a read-only dictionary
-        mapping the original and new keys
+    def _has_children(cls: BrukerXMLFactory, attr: Mapping) -> bool:
+        children = []
+        for key, value in attr.items():
+            if isinstance(value, _BrukerObject):
+                children.append(key)
+            if isinstance(value, Iterable):
+                if cls._nested_validate_element(value):
+                    children.append(key)
+        if children:
+            return children
 
-        :param old_keys: original python_standard keys
-        :return: new keys in CamelCase
+    @classmethod
+    def _map_attributes(cls: BrukerElementFactory, attr: dict) -> dict:
         """
-        return {key: cls._convert_key(key) for key in old_keys}
+        Generates new dictionary containing mapping of new keys with attribute values
 
-    def _collect_element_class_mapping(self, version: str) -> BrukerXMLFactory:
+        :param attr: attributes
+        :type attr: dict
+        :rtype: dict
         """
-        Loads appropriate mapping of xml tags and python objects
+        mapping = cls._camel_case_keys(attr.keys())
+        return {mapping.get(key): value for key, value in attr.items() if key in mapping}
 
-        :param version: prairieview version
-        :type version: str
-        :rtype: BrukerXMLFactory
-        """
-        # we need to reverse the mapping such that the calscipy objects are the keys and the xml's the targets
-        self.element_class_mapping = self._reverse_mapping(load_mapping(version))
+    @staticmethod
+    def _nested_validate_element(element: Any) -> bool:
+        if isinstance(element, Iterable):
+            failures = 0
+            for child in element:
+                try:
+                    assert isinstance(child, _BrukerObject)
+                except AssertionError:
+                    failures += 1
+            if failures == 0:
+                return True
+
+    @staticmethod
+    def _parameter_to_xml(key: str, value: Any) -> str:
+        tag = f" {key}="
+        if isinstance(value, Number):
+            if type(value) == bool:
+                tag += f'"{bool(value)}"'
+            elif type(value) == float:
+                tag += f'"{value:.14f}"'
+            else:
+                tag += f'"{value}"'
+        else:
+            tag += f'"{value}"'
+
+        return tag
 
     @staticmethod
     def _reverse_mapping(mapping: Mapping) -> MappingProxyType:
@@ -187,6 +235,30 @@ class BrukerXMLFactory:
         :return: a read-only mapping where the values retrieve the keys
         """
         return MappingProxyType({value: key for key, value in mapping.items()})
+
+    @classmethod
+    def validate_element(cls: BrukerXMLFactory, element: Any) -> Union[None, Exception]:
+        try:
+            assert isinstance(element, _BrukerObject)
+        except AssertionError:
+            try:
+                assert cls._nested_validate_element(element)
+            except AssertionError:
+                try:
+                    return NotImplementedError(f"{element.__name__()} is not a supported bruker object")
+                except AttributeError:
+                    return NotImplementedError(f"{type(element)} element is not a supported bruker object")
+
+    @classmethod
+    def _camel_case_keys(cls: BrukerXMLFactory, old_keys: Iterable[str]) -> dict:
+        """
+        Converts keys from python_standard to CamelCase and generates a read-only dictionary
+        mapping the original and new keys
+
+        :param old_keys: original python_standard keys
+        :return: new keys in CamelCase
+        """
+        return {key: cls._convert_key(key) for key in old_keys}
 
     def constructor(self, element: _BrukerObject) -> List:
 
@@ -229,119 +301,16 @@ class BrukerXMLFactory:
 
         return tag
 
-    @staticmethod
-    def _generate_header() -> str:
-        return f'<?xml version="1.0" encoding="utf-8"?>'
-
-    @classmethod
-    def validate_element(cls, element: Any) -> Union[None, Exception]:
-        try:
-            assert isinstance(element, _BrukerObject)
-        except AssertionError:
-            try:
-                assert cls._nested_validate_element(element)
-            except AssertionError:
-                try:
-                    return NotImplementedError(f"{element.__name__()} is not a supported bruker object")
-                except AttributeError:
-                    return NotImplementedError(f"{type(element)} element is not a supported bruker object")
-
-    @staticmethod
-    def _nested_validate_element(element: Any):
-        if isinstance(element, Iterable):
-            failures = 0
-            for child in element:
-                try:
-                    assert isinstance(child, _BrukerObject)
-                except AssertionError:
-                    failures += 1
-            if failures == 0:
-                return True
-
-    def _generate_start_tag(self, element: _BrukerObject, level: int = 0) -> str:
+    def _collect_element_class_mapping(self, version: str) -> BrukerXMLFactory:
         """
-        Generates the start tag of xml element
+        Loads appropriate mapping of xml tags and python objects
 
-        :param element: element to be encoded as xml
-        :param level: indentation level
+        :param version: prairieview version
+        :type version: str
+        :rtype: BrukerXMLFactory
         """
-        tag = f"\n"
-
-        if level > 0:
-            tag += " " * level * 2  # proper xml is 2 space indent of children
-
-        tag += "<"
-        # tag += element.xml_tag()
-        tag += self.element_class_mapping.get(element.__name__())
-        return tag
-
-    def _generate_end_tag(self, element: _BrukerObject, level: int = 0) -> str:
-        """
-        Generates the start tag of xml element
-
-        :param element: element to be encoded as xml
-        :param level: indentation level
-        """
-        tag = f"\n"
-
-        if level > 0:
-            tag += " " * level * 2  # proper xml is 2 space indent of children
-
-        tag += "</"
-        # tag += element.xml_tag()
-        tag += self.element_class_mapping.get(element.__name__())
-        tag += ">"
-
-        return tag
-
-    @classmethod
-    def _map_attributes(cls: BrukerElementFactory, attr: dict) -> dict:
-        """
-        Generates new dictionary containing mapping of new keys with attribute values
-
-        :param attr: attributes
-        :type attr: dict
-        :rtype: dict
-        """
-        mapping = cls._camel_case_keys(attr.keys())
-        return {mapping.get(key): value for key, value in attr.items() if key in mapping}
-
-    def _generate_parameters(self, attr: Mapping) -> str:
-
-        tags = []
-
-        for key, value in attr.items():
-            if self.validate_element(value):
-                tags.append(self._parameter_to_xml(key, value))
-
-        return "".join([tag for tag in tags])
-
-    @staticmethod
-    def _parameter_to_xml(key: str, value: Any):
-        tag = f" {key}="
-        if isinstance(value, Number):
-            if type(value) == bool:
-                tag += f'"{bool(value)}"'
-            elif type(value) == float:
-                tag += f'"{value:.14f}"'
-            else:
-                tag += f'"{value}"'
-        else:
-            tag += f'"{value}"'
-
-        return tag
-
-    @classmethod
-    def _has_children(cls, attr: Mapping) -> bool:
-        children = []
-        for key, value in attr.items():
-            if isinstance(value, _BrukerObject):
-                children.append(key)
-            if isinstance(value, Iterable):
-                if cls._nested_validate_element(value):
-                    children.append(key)
-        if children:
-            return children
+        # we need to reverse the mapping such that the calscipy objects are the keys and the xml's the targets
+        self.element_class_mapping = self._reverse_mapping(load_mapping(version))
 
     def _generate_children(self, attr: Mapping, level: int = 0) -> str:
         new_level = level + 2  # bump inward one indentation
@@ -356,16 +325,48 @@ class BrukerXMLFactory:
 
         return tags
 
-    @staticmethod
-    def _flatten_encoding(xml_encoding: List[Union[str, List[str]]]) -> List[str]:
+    def _generate_end_tag(self, element: _BrukerObject, level: int = 0) -> str:
+        """
+        Generates the start tag of xml element
 
-        while len({type(line) for line in xml_encoding}) > 1:
-            lines = []
-            for line in xml_encoding:
-                if isinstance(line, str):
-                    lines.append(line)
-                else:
-                    lines.extend(line)
-            xml_encoding = lines
+        :param element: element to be encoded as xml
+        :param level: indentation level
+        """
+        tag = "\n"
 
-        return xml_encoding
+        if level > 0:
+            tag += " " * level * 2  # proper xml is 2 space indent of children
+
+        tag += "</"
+        # tag += element.xml_tag()
+        tag += self.element_class_mapping.get(element.__name__())
+        tag += ">"
+
+        return tag
+
+    def _generate_parameters(self, attr: Mapping) -> str:
+
+        tags = []
+
+        for key, value in attr.items():
+            if self.validate_element(value):
+                tags.append(self._parameter_to_xml(key, value))
+
+        return "".join(tags)
+
+    def _generate_start_tag(self, element: _BrukerObject, level: int = 0) -> str:
+        """
+        Generates the start tag of xml element
+
+        :param element: element to be encoded as xml
+        :param level: indentation level
+        """
+        tag = "\n"
+
+        if level > 0:
+            tag += " " * level * 2  # proper xml is 2 space indent of children
+
+        tag += "<"
+        # tag += element.xml_tag()
+        tag += self.element_class_mapping.get(element.__name__())
+        return tag

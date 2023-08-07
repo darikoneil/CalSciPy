@@ -4,7 +4,7 @@ from ._interactive_visuals import SpikePlot, TracePlot, TrialPlot
 
 import matplotlib
 matplotlib.use("Qt5Agg")  # noqa: E402
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt  # noqa: E402
 
 
 def plot_spikes(spike_prob: np.ndarray = None,
