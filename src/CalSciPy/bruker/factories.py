@@ -203,6 +203,16 @@ class BrukerXMLFactory:
         # Make sure to include literal " characters
         return f'"{value}"'
 
+    @staticmethod
+    def _reverse_mapping(mapping: Mapping) -> MappingProxyType:
+        """
+        static method generates a read-only mapping where the values retrieve the keys
+
+        :param mapping: the original mapping
+        :return: a read-only mapping where the values retrieve the keys
+        """
+        return MappingProxyType({value: key for key, value in mapping.items()})
+
     @classmethod
     def _convert_float(cls: BrukerXMLFactory, value: float) -> str:
         """
@@ -255,16 +265,6 @@ class BrukerXMLFactory:
             tag += f'"{value}"'
 
         return tag
-
-    @staticmethod
-    def _reverse_mapping(mapping: Mapping) -> MappingProxyType:
-        """
-        static method generates a read-only mapping where the values retrieve the keys
-
-        :param mapping: the original mapping
-        :return: a read-only mapping where the values retrieve the keys
-        """
-        return MappingProxyType({value: key for key, value in mapping.items()})
 
     @classmethod
     def validate_element(cls: BrukerXMLFactory, element: Any) -> Union[None, Exception]:
