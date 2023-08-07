@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Any, Tuple, Generator
+from typing import Any, Tuple
 from dataclasses import dataclass, field
 from abc import abstractmethod
 from collections import ChainMap

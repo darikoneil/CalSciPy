@@ -5,7 +5,7 @@ from shutil import rmtree
 from tests.helpers import BlockPrinting, read_descriptions
 from tests.conftest import SAMPLES_DATASETS_DIRECTORY
 from CalSciPy.io_tools import load_images
-from CalSciPy.bruker import determine_imaging_content, load_bruker_tifs, repackage_bruker_tifs
+from CalSciPy.bruker.bruker import determine_imaging_content, load_bruker_tifs, repackage_bruker_tifs
 
 
 DATASET = pytest.mark.datafiles(

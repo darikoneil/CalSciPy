@@ -183,7 +183,7 @@ class BrukerElementFactory:
 
 
 class BrukerXMLFactory:
-    def __init__(self, version=DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
+    def __init__(self, version = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
         """
         Factory class for constructing bruker xml objects
 
@@ -202,4 +202,3 @@ class BrukerXMLFactory:
         :rtype: BrukerXMLFactory
         """
         self.element_class_mapping = load_mapping(version)
-

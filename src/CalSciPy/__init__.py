@@ -1,11 +1,11 @@
 __all__ = [
     "bruker",
-    "coloring",
     "event_processing",
     "imaging_processing",
     "interactive_visuals",
     "io_tools",
     "misc",
+    "optogenetics",
     "reorganization",
     "trace_processing",
     "version"

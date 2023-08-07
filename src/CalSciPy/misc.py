@@ -7,7 +7,6 @@ from functools import wraps, partial
 from joblib import Parallel, delayed
 import numpy as np
 from tqdm import tqdm
-from numbers import Number
 
 
 try:
@@ -16,8 +15,8 @@ except ModuleNotFoundError:
     pass
 
 
-def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None,
-) -> np.ndarray:
+def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None
+                         ) -> np.ndarray:
     """
     Generates a time vector for a number of samples collected at either
 
@@ -29,7 +28,7 @@ def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, st
     """
 
     if not step:
-        step = 1 /sampling_frequency
+        step = 1 / sampling_frequency
 
     return np.arange(0, num_samples) * step + start
 

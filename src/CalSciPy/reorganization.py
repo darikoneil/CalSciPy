@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Union
 import numpy as np
-from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_numpy_type, validate_tensor
+from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_tensor
 
 
 def generate_raster(event_frames: Iterable[Iterable[int]], total_frames: Optional[int] = None) -> np.ndarray:
