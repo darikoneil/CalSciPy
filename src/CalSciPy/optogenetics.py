@@ -50,7 +50,8 @@ class Photostimulation:
         return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
 
     @classmethod
-    def convert_suite2p_rois(cls: Photostimulation, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)) -> dict:
+    def convert_suite2p_rois(cls: Photostimulation, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)
+                             ) -> dict:
         """
         Class method that generates the roi dictionary from provided suite2p stat array
 
@@ -103,7 +104,6 @@ class Photostimulation:
 
         # generate instance
         return Photostimulation(rois, reference_image)
-
 
     def generate_galvo_point(self, idx: int, parameters: dict = None) -> GalvoPoint:
         roi = self.rois[idx]
