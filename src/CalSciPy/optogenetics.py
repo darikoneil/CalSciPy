@@ -34,19 +34,12 @@ class Photostimulation:
         Photostimulation object that defines patterned photostimulation during an optogenetic experiment
 
         :param rois: dictionary containing a collection of ROI objects for potential photostimulation
-        :type rois: dict
         :param etl_offset: z-plane offset between imaging and stimulation focal planes
-        :type etl_offset: float = 0.0
         :param pixels_per_micron: number of pixels per micron for the associated objective at 1.02X
-        :type pixels_per_micron: float = 0.883
         :param reference_image: a reference image containing the provided ROIs.
-        :type reference_image: numpy.ndarray = None
         :param spiral_um_per_au: the diameter of a '.gpl' spiral in microns when the metadata equals 1.0
-        :type spiral_um_per_au: float = 29.6
         :param x_range: the range of the x coordinate in '.gpl' files
-        :type x_range: Tuple[float, float] = (-8.333, 8.333)
         :param y_range: the range of the y coordinate in '.gpl' files
-        :type y_range: Tuple[float, float] = (-7.647, 7.647)
         """
         # TODO: When saving to galvo point lists the rois are in some sort of seemingly arbitrary scale...
         self.rois = rois
@@ -87,7 +80,6 @@ class Photostimulation:
         Class method that generates the roi dictionary from provided suite2p stat array
 
         :param suite2p_rois: array containing suite2p stats for each roi
-        :type suite2p_rois: numpy.ndarray
         :param shape: dimensions of image
         :return: dictionary containing a collection of ROI objects for potential photostimulation
         """
@@ -164,6 +156,7 @@ class Group:
         :ivar order: a tuple containing the identity and stimulation order of the rois in this group
         :type order: Tuple[int]
         :ivar repetitions: an integer indicating the number of times to repeat the stimulation
+        :type repetitions: int
         """
         self.order = None
         self.repetitions = 1
@@ -175,7 +168,6 @@ class ROI:
     protocols.
 
     :param aspect_ratio: ratio of the short-to-long radius of the roi
-    :type aspect_ratio: float = 1.0
     :param radius: approximate radius of the ROI
     :type radius: float
     :param shape: the shape of the image from which the roi was generated
@@ -213,15 +205,10 @@ class ROI:
         protocols.
 
         :param aspect_ratio: ratio of the short-to-long radius of the roi
-        :type aspect_ratio: float = 1.0
         :param radius: approximate radius of the ROI
-        :type radius: float
         :param shape: the shape of the image from which the roi was generated
-        :type shape: Tuple[int, int]
         :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
-        :type xpix: numpy.ndarray
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-        :type ypix: numpy.ndarray
         """
         self.aspect_ratio = aspect_ratio
         self.radius = radius
@@ -331,15 +318,10 @@ class Mask:
         Photostimulation Mask object associated with some ROI
 
         :param center: the centroid of the roi (y, x) calculated using the shoelace approximation
-        :type center: Tuple[float, float]
         :param rc_vert: Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
-        :type rc_vert: numpy.ndarray
         :param radii: the long and short radii of the roi (long, short)
-        :type radii: Tuple[float, float]
         :param theta: angle of the long axis of the roi with respective to the y-axis
-        :type theta: float
         :param shape: the shape of the image from which the roi was generated
-        :type shape: Tuple[int, int]
 
         """
 
@@ -475,7 +457,6 @@ def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
     convex hull using the shoelace formula
 
     :param vertices: vertices of the polygon's convex hull (boundary points)
-    :type vertices: numpy.ndarray
     :return: a tuple containing the centroid of the polygon
     """
     points = vertices.shape[0]
@@ -513,14 +494,10 @@ def calculate_mask(center: Sequence[Number, Number],
     and constrained to lie within shape
 
     :param center: center of the roi (y, x)
-    :type center: Sequence[Number, Number]
     :param radii: radius of the roi. can provide one radius for a symmetrical roi or a long and short radius.
-    :type radii: Union[Number, Sequence[Number, Number]]
     :param shape: dimensions of the image the roi lies within. If only one value is provided it is considered
         symmetrical.
-    :type shape: Union[Number, Sequence[Number, Number]] = None
     :param theta: angle of the long-radius with respect to the y-axis
-    :type theta: Number
     :return: photostimulation mask
     """
     # ensure center is numpy array

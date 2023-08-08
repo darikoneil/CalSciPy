@@ -7,35 +7,41 @@ from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
-from prettytable import PrettyTable
 import cv2
 from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
     find_num_unique_files_containing_tag
 from PPVD.validation import validate_extension
 from tqdm import tqdm as tq
 
-
+from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION
+from .meta_objects import PhotostimulationMeta
+from .factories import BrukerElementFactory
 from ..misc import PatternMatching, calculate_frames_per_file, generate_blocks, generate_padded_filename
 from ..io_tools import _load_single_tif, _save_single_tif
 
 
 """
-These functions have been incorporated into pyPrairieView and will likely be deprecated in the future and/or
-pyPrairieView will absorbed into CalSciPy
+A collection of functions for importing / converting PrairieView collected data
 """
 
 
-def align_data(analog_data: pd.DataFrame, frame_times: pd.DataFrame, fill: bool = False) -> pd.DataFrame:
+def align_data(analog_data: pd.DataFrame,
+               frame_times: pd.DataFrame,
+               fill: bool = False,
+               method: str = "nearest"
+               ) -> pd.DataFrame:
     """
     Synchronizes analog data & imaging frames using the timestamp of each frame. Option to generate a second column
     in which the frame index is interpolated such that each analog sample matches with an associated frame.
 
     :param analog_data: analog data
     :param frame_times: frame timestamps
-    :param fill: whether to include an interpolated nearest-neighbor column so each sample has an associated frame
+    :param fill: whether to include an interpolated column so each sample has an associated frame
+    :param method: method for interpolating samples
     :returns: a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and imaging frame
     """
     frame_times = frame_times.reindex(index=analog_data.index)
+
 
     # Join frames & analog (deep copy to make sure not a view)
     data = analog_data.copy(deep=True)
@@ -44,44 +50,12 @@ def align_data(analog_data: pd.DataFrame, frame_times: pd.DataFrame, fill: bool 
     if fill:
         frame_times_filled = frame_times.copy(deep=True)
         frame_times_filled.columns = ["Imaging Frame (interpolated)"]
-        frame_times_filled.interpolate(method="nearest", inplace=True)
+        frame_times_filled.interpolate(method=fill_method, inplace=True)
         # forward fill the final frame
         frame_times_filled.ffill(inplace=True)
         data = data.join(frame_times_filled)
 
     return data
-
-
-def generate_bruker_naming_convention(channel: int, plane: int, num_channels: int = 1, num_planes: int = 1) \
-        -> str:
-    """
-    Generates the expected bruker naming convention for images collected with an arbitrary number of cycles & channels
-
-    This function expects that the naming convention is _Cycle00000_Ch0_000000.ome.tiff where the channel is
-    one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and the 6-digit tag represents
-    the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.
-
-    Please note that the parameters channel and plane are *zero-indexed*.
-
-    :param channel: channel to produce name for
-    :param plane: plane to produce name for
-    :param num_channels: number of channels
-    :param num_planes: number of planes
-    :returns: proper naming convention
-    """
-    if num_channels > 1:
-        num_channels = 2
-    if num_planes > 1:
-        num_planes = 2
-    with PatternMatching([num_channels, num_planes], [eq, eq]) as case:
-        if case([1, 1]):
-            return "*.ome.tif"
-        elif case([2, 1]):
-            return "".join(["*Ch", str(channel + 1), "*"])
-        elif case([1, 2]):
-            return "".join(["*00000", str(plane + 1), ".ome.tif"])
-        elif case([2, 2]):
-            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -95,6 +69,8 @@ def determine_imaging_content(folder: Union[str, Path]) -> Tuple[int, int, int, 
     :param folder: folder containing bruker imaging data
     :returns: channels, planes, frames, height, width
     """
+
+    # TODO: I am spaghetti
 
     _files = [_file for _file in folder.glob("*.tif") if _file.is_file()]
 
@@ -184,15 +160,52 @@ def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
     return pd.DataFrame(data=frames, index=frame_times, columns=["Imaging Frame"])
 
 
+def generate_bruker_naming_convention(channel: int,
+                                      plane: int,
+                                      num_channels: int = 1,
+                                      num_planes: int = 1
+                                      ) -> str:
+    """
+    Generates the expected bruker naming convention for images collected with an arbitrary number of cycles & channels
+
+    This function expects that the naming convention is _Cycle00000_Ch0_000000.ome.tiff where the channel is
+    one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and the 6-digit tag represents
+    the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.
+
+    Please note that the parameters channel and plane are *zero-indexed*.
+
+    :param channel: channel to produce name for
+    :param plane: plane to produce name for
+    :param num_channels: number of channels
+    :param num_planes: number of planes
+    :returns: proper naming convention
+    """
+    if num_channels > 1:
+        num_channels = 2
+    if num_planes > 1:
+        num_planes = 2
+    with PatternMatching([num_channels, num_planes], [eq, eq]) as case:
+        if case([1, 1]):
+            return "*.ome.tif"
+        elif case([2, 1]):
+            return "".join(["*Ch", str(channel + 1), "*"])
+        elif case([1, 2]):
+            return "".join(["*00000", str(plane + 1), ".ome.tif"])
+        elif case([2, 2]):
+            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
+
+
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def load_bruker_tifs(folder: Union[str, Path],
-                     channel: Optional[int] = None, plane: Optional[int] = None) -> Tuple[np.ndarray]:  # noqa: C901
+                     channel: Optional[int] = None,
+                     plane: Optional[int] = None
+                     ) -> Tuple[np.ndarray]:  # noqa: C901
     """
     This function loads images collected and converted to .tif files by Bruker's Prairieview software.
     If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
     numpy array. Identification of multiple channels / planes is dependent on :func:`determine_imaging_content`.
     Images are loaded as unsigned 16-bit (:class:`numpy.uint16`), though note that raw bruker files are
-    natively 12 or 13-bit.
+    natively could be 12 or 13-bit.
 
     :param folder: folder containing a sequence of single frame tiff files
     :param channel: specific channel to load from dataset (zero-indexed)
@@ -200,7 +213,7 @@ def load_bruker_tifs(folder: Union[str, Path],
     :return: a tuple of numpy arrays (frames, y-pixels, x-pixels, :class:`numpy.uint16`)
      """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(folder)
-    _pretty_print_image_description(num_channels, num_planes, num_frames, y, x)
+    _print_image_description(num_channels, num_planes, num_frames, y, x)
 
     images = []
     if channel is None and plane is None:
@@ -211,11 +224,40 @@ def load_bruker_tifs(folder: Union[str, Path],
     return tuple(images)
 
 
+@convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
+def load_mark_points(file_path: Union[str, Path], version: str = DEFAULT_PRAIRIEVIEW_VERSION) -> PhotostimulationMeta:
+    """
+
+    :param file_path: path to xml file
+    :param version: version of prairieview
+    :return: photostimulation metadata
+    """
+    # We generally expected the file to be structured such that
+    # File/
+    # ├── MarkPointSeriesElements
+    # │   └──MarkPointElement
+    # │      ├──GalvoPointElement
+    # │      |      └──Point
+    #        └──GalvoPointElement (Empty)
+    # However, by using configurable mappings we do have some wiggle room
+
+    tree = ElementTree.parse(file_path)
+    root = tree.getroot()
+
+    # if it's imaging we can grab the version directly
+    if "version" in root.attrib:
+        version = root.attrib.get("version")
+
+    bruker_element_factory = BrukerElementFactory(version)
+
+    return PhotostimulationMeta(root, factory=bruker_element_factory)
+
+
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def load_voltage_recording(path: Union[str, Path]) -> pd.DataFrame:
     """
     Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
-    | files contain "VoltageRecording" in the name.
+    files contain "VoltageRecording" in the name.
 
     :param path: folder or filename containing analog data
     :returns: dataframe containing time (index, ms) x channel data
@@ -224,15 +266,30 @@ def load_voltage_recording(path: Union[str, Path]) -> pd.DataFrame:
         return _import_csv(path)
     elif not path.is_file():
         file = [file for file in path.glob("*.csv") if "VoltageRecording" in str(file)]
-        assert (len(file) == 1), "Too many files meeting parsing requirements"
+        assert (len(file) == 1), f"Too many files meet parsing requirements: {file}"
         return _import_csv(file)
     else:
         raise FileNotFoundError
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def repackage_bruker_tifs(input_folder: Union[str, Path], output_folder: Union[str, Path],
-                          channel: int = 0, plane: int = 0) -> None:
+def load_voltage_output(path: Union[str, Path]) -> pd.DataFrame:
+    """
+    Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
+    files contain "VoltageOutput" in the name.
+
+    :param path: folder or filename containing analog data
+    :returns: dataframe containing time (index, ms) x channel data
+    """
+    raise NotImplementedError
+
+
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def repackage_bruker_tifs(input_folder: Union[str, Path],
+                          output_folder: Union[str, Path],
+                          channel: int = 0,
+                          plane: int = 0
+                          ) -> None:
     """
     This function repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence
     of <4 GB .tif stacks. Note that parameters channel and plane are **zero-indexed**.
@@ -243,7 +300,7 @@ def repackage_bruker_tifs(input_folder: Union[str, Path], output_folder: Union[s
     :param plane: specify plane
     """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(input_folder)
-    _pretty_print_image_description(num_channels, num_planes, num_frames, y, x)
+    _print_image_description(num_channels, num_planes, num_frames, y, x)
 
     naming_convention = generate_bruker_naming_convention(channel, plane, num_channels, num_planes)
 
@@ -285,9 +342,7 @@ def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
     Implementation function for loading csv files. Abstracted from the upper-level functions for cleaner logic.
 
     :param path: filepath of .csv to import
-    :type path: str or Path
     :return: dataframe containing time (index) x data [0:8]
-    :rtype: pandas.DataFrame
     """
     data = pd.read_csv(path, skipinitialspace=True)
     data = data.set_index("Time(ms)")
@@ -295,8 +350,12 @@ def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
     return data
 
 
-def _load_bruker_tif_stack(input_folder: Path, channel: int, plane: int,
-                           num_channels: int, num_planes: int) -> np.ndarray:
+def _load_bruker_tif_stack(input_folder: Path,
+                           channel: int,
+                           plane: int,
+                           num_channels: int,
+                           num_planes: int
+                           ) -> np.ndarray:
     """
     Implementation function to load a single bruker tif stack
 
@@ -316,32 +375,30 @@ def _load_bruker_tif_stack(input_folder: Path, channel: int, plane: int,
     return np.concatenate(images, axis=0)
 
 
-def _pretty_print_image_description(channels: int, planes: int, frames: int, height: int, width: int) -> None:
+def _print_image_description(channels: int,
+                             planes: int,
+                             frames: int,
+                             height: int,
+                             width: int
+                             ) -> None:
     """
-    Function prints the description of an imaging dataset as a table.
+    Function prints the description of an imaging dataset.
 
     :param channels: number of channels
-    :type channels: int
     :param planes: number of planes
-    :type planes: int
     :param frames: number of frames
-    :type frames: int
     :param height: y-pixels
-    :type height: int
     :param width: x-pixels
-    :type width: int
-    :rtype: None
     """
-    _table = PrettyTable()
-    _table.header = False
-    _table.add_row(["Total Images Detected", channels * planes * frames])
-    _table.add_row(["Channels", channels])
-    _table.add_row(["Planes", planes])
-    _table.add_row(["Frames", frames])
-    _table.add_row(["Height", height])
-    _table.add_row(["Width", width])
-    print("\n")
-    print(_table)
+    msg = f"\nTotal Images Detected: {channels * planes * frames}"
+    msg += f"\nChannels\t{channels}"
+    msg += f"\nPlanes\t{planes}"
+    msg += f"\nFrames\t{frames}"
+    msg += f"\nHeight\t{height}"
+    msg += f"\nWidth\t{width}"
+    msg += "\n"
+
+    print(msg)
 
 
 def _verbose_load_single_tif(file: Union[str, Path], pbar: Any) -> np.ndarray:
@@ -350,11 +407,8 @@ def _verbose_load_single_tif(file: Union[str, Path], pbar: Any) -> np.ndarray:
     and updating progressbar
 
     :param file: file to load
-    :type file: str or pathlib.Path
     :param pbar: progressbar
-    :type pbar: Any
     :return: loaded image
-    :rtype: numpy.ndarray
     """
     image = _load_single_tif(file)
     pbar.update(1)

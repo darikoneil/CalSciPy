@@ -11,7 +11,7 @@ from enum import Enum
 
 
 """
-Interface for PrairieView Software -- Tested on PrairieView 5.8.0 (Released 3/03/2023)
+Interface for PrairieView Software -- Tested on PrairieView 5.8.0 (Released 3/03/2023) -- EXPERIMENTAL
 """
 
 
@@ -24,11 +24,8 @@ class PrairieLink:
         Python Interface for Interacting with PrairieView Software through the PrairieLink64 API
 
         :param system_id: prairieview system id
-        :type system_id: str
         :param user_: optional argument to provide username
-        :type user_: str
         :param pass_: optional argument to provide password
-        :type pass_: str = None
         """
         #: str: username
         self._username = user_
@@ -50,7 +47,6 @@ class PrairieLink:
         PrairieLink object is connected to an instance of PrairieLink
 
         :return: status of connection to prairieview instance
-        :rtype: bool
         """
         return self._prairie_link.Connected()
 
@@ -61,7 +57,6 @@ class PrairieLink:
         Otherwise, all data may be considered successfully written to file.
 
         :return: indicator of dropped data
-        :rtype: bool
         """
         return self._prairie_link.DroppedData()
 
@@ -72,7 +67,6 @@ class PrairieLink:
         resulting images.
 
         :return: lines per frame
-        :rtype: int
         """
         return self._prairie_link.LinesPerFrame()
 
@@ -82,7 +76,6 @@ class PrairieLink:
         Indicates the number of pixels per line. This is synonymous with the width or number of x-pixels.
 
         :return: pixels per line
-        :rtype: int
         """
         return self._prairie_link.PixelsPerLine()
 
@@ -95,7 +88,6 @@ class PrairieLink:
         samples into a single scalar value
 
         :return: samples per pixel
-        :rtype: int
         """
         return self._prairie_link.SamplesPerPixel()
 
@@ -106,7 +98,6 @@ class PrairieLink:
         expected to change within an instance
 
         :return: version of connected prairieview instance
-        :rtype: str
         """
         return self._prairie_link.Version()
 
@@ -118,8 +109,6 @@ class PrairieLink:
         Clears all cached values (except the prairieview version)
 
         :param refill: whether to refill the cache with newly retrieved values
-        :type refill: bool = True
-        :rtype: PrairieLink
         """
         for function in dir(self):
             try:
@@ -135,9 +124,7 @@ class PrairieLink:
         Send a script command to prairieview
 
         :param command: command as a string
-        :type command: str
         :return: indication of successful command
-        :rtype: bool
         """
         return self._prairie_link.SendScriptCommands(command)
 
@@ -147,8 +134,6 @@ class PrairieLink:
         to avoid unnecessarily storing passwords within an instance
 
         :param password: password for prairieview
-        :type password: str
-        :rtype: PrairieLink
         """
         # Via Michael Fox (Sr. Software Engineer; PrairieView): this password is necessary to stop other services from
         # accidentally interfacing with the software while port scanning. Each user on the PC receives a password
@@ -166,7 +151,6 @@ class PrairieLink:
         """
         Disconnect from PrairieView
 
-        :rtype: PrairieLink
         """
         self._prairie_link.Disconnect()
 
@@ -175,9 +159,7 @@ class PrairieLink:
         Returns the position within the specified axis on the specified device. Axis and device are both zero-indexed.
 
         :param axis: requested axis (x, y, z)
-        :type axis: int
         :param device: requested device
-        :type device: int
         :return: motor position
         """
         return self._prairie_link.GetMotorPosition(MotorAxes(axis).name, device)
@@ -188,9 +170,7 @@ class PrairieLink:
         multiple times, the results are *summed* not averaged.
 
         :param channel: channel to retrieve image from
-        :type channel: int
         :return: image
-        :rtype: array
         """
         return self._prairie_link.GetImage_2(channel, self._pixels_per_line(), self._lines_per_frame())
 
@@ -199,13 +179,9 @@ class PrairieLink:
         Returns the value for the specified state / substate
 
         :param key: prairieview state
-        :type key: str
         :param index: index for state
-        :type index: str
         :param subindex: subindex for state
-        :type subindex: str
         :return: associated value
-        :rtype: str
         """
         self._prairie_link.GetState(key, index, subindex)
 
@@ -222,9 +198,7 @@ class PrairieLink:
            SetCustomOutput scripts with many values).
 
         :param timeout: length of timeout in milliseconds
-        :type timeout: int = 2000
         :param retries: number of times to retry
-        :type retries: int = 5
         :return:
         """
         self._prairie_link.SetTimeoutAndRetries(timeout, retries)
@@ -234,7 +208,6 @@ class PrairieLink:
         Reads a single raw data sample (unbuffered)
 
         :return: raw data
-        :rtype: Any
         """
         return self._prairie_link.ReadRawDataStream(self.samples_per_pixel)
 
@@ -244,7 +217,6 @@ class PrairieLink:
         Cached implementation for reading lines per frame, permitting more performant calls to read raw data stream
 
         :return: lines per frame
-        :rtype: int
         """
         return self._prairie_link.LinesPerFrame()
 
@@ -254,7 +226,6 @@ class PrairieLink:
         Cached implementation for reading pixels per line, permitting more performant calls to read raw data stream
 
         :return: pixels per line
-        :rtype: int
         """
         return self._prairie_link.PixelsPerLine()
 
@@ -264,7 +235,6 @@ class PrairieLink:
         Cached implementation for reading samples per pixel, permitting more performant calls to read raw data stream
 
         :return: number of samples per pixel
-        :rtype: int
         """
         return self._prairie_link.SamplesPerPixel()
 
@@ -272,7 +242,6 @@ class PrairieLink:
         """
         If using a context manager we will connect upon entry
 
-        :rtype: PrairieLink
         """
         if not self.connected:
             self.connect()
@@ -282,7 +251,6 @@ class PrairieLink:
         PrairieView needs to perform some cleanup methods following disconnect or undesirable behavior could occur, so
         we will make sure to disconnect on exit from a context manager
 
-        :rtype: None
         """
         self.disconnect()
 
@@ -290,7 +258,6 @@ class PrairieLink:
         """
         PrairieView needs to perform some cleanup methods following disconnect or undesirable behavior could occur
 
-        :rtype: None
         """
         self.disconnect()
 

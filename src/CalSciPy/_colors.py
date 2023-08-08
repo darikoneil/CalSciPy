@@ -3,6 +3,10 @@ from typing import Tuple, Union
 
 
 class _Colors:
+    """
+    A container class for CalSciPy's color scheme
+
+    """
     blue: Tuple[float, float, float] = (15 / 255, 159 / 255, 255 / 255)
     orange: Tuple[float, float, float] = (255 / 255, 159 / 255, 15 / 255)
     green: Tuple[float, float, float] = (64 / 255, 204 / 255, 139 / 255)

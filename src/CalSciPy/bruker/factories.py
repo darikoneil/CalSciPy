@@ -3,11 +3,16 @@ from typing import Mapping, Iterable, Any, List, Union
 from types import MappingProxyType
 from importlib import import_module
 from xml.etree.ElementTree import Element
+from numbers import Number
+
 from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION, BRUKER_XML_OBJECT_MODULES
 from .xml_mappings.xml_mapping import load_mapping
 from .xml_objects import _BrukerObject
-from numbers import Number
 
+
+"""
+These are factories for importing elements from bruker .xml files and generating elements from python objects
+"""
 
 class BrukerElementFactory:
     """
@@ -20,8 +25,6 @@ class BrukerElementFactory:
         Factory class for constructing bruker element objects
 
         :param version: version of prairieview
-        :type version: str
-        :rtype: BrukerElementFactory
         """
         self._collect_element_class_mapping(version)
 
@@ -32,8 +35,6 @@ class BrukerElementFactory:
 
 
         :param old_key_: original CamelCase key
-        :type old_key_: str
-        :rtype: str
         """
         new_key = [old_key_[0].lower()]
         for _char in old_key_[1:]:
@@ -50,10 +51,7 @@ class BrukerElementFactory:
         Duck-typing conversion of xml strings to expected types using the dataclass annotations
 
         :param attr: attributes containing keys and xml strings
-        :type attr: dict
         :param type_annotations: dictionary mapping attribute key and expected type
-        :type type_annotations: dict
-        :rtype: dict
         """
         # Because bool("False") == True, here I specifically check for the "False" value
         return {key: (eval("".join([type_annotations.get(key), "(value)"])) if value != "False" else False)
@@ -65,8 +63,6 @@ class BrukerElementFactory:
         Generates new dictionary containing mapping of new keys with attribute values
 
         :param attr: attributes
-        :type attr: dict
-        :rtype: dict
         """
         mapping = cls._pythonize_keys(attr.keys())
         return {mapping.get(key): value for key, value in attr.items() if key in mapping}
@@ -79,8 +75,6 @@ class BrukerElementFactory:
 
 
         :param old_keys: original CamelCase keys
-        :type old_keys: Iterable[str]
-        :rtype: MappingProxyType
         """
         return {key: cls._convert_key(key) for key in old_keys}
 
@@ -89,8 +83,6 @@ class BrukerElementFactory:
         Constructor method of bruker xml objects from xml Element
 
         :param element: xml Element
-        :type element: Element
-        :rtype:object
         """
 
         attr = self._map_attributes(element.attrib)
@@ -105,8 +97,6 @@ class BrukerElementFactory:
         Loads appropriate mapping of xml tags and python objects
 
         :param version: prairieview version
-        :type version: str
-        :rtype: BrukerElementFactory
         """
         self.element_class_mapping = load_mapping(version)
 
@@ -115,8 +105,6 @@ class BrukerElementFactory:
         Identifies which bruker xml object to call given some element
 
         :param element: element in xml tree
-        :type element: Element
-        :rtype: object
         """
         try:
             assert (element.tag in self.element_class_mapping)
@@ -140,8 +128,6 @@ class BrukerXMLFactory:
         Factory class for constructing bruker xml objects
 
         :param version: version of prairieview
-        :type version: str
-        :rtype: BrukerXMLFactory
         """
         self._collect_element_class_mapping(version)
 
@@ -308,8 +294,6 @@ class BrukerXMLFactory:
         Generates new dictionary containing mapping of new keys with attribute values
 
         :param attr: attributes
-        :type attr: dict
-        :rtype: dict
         """
         mapping = cls._camel_case_keys(attr.keys())
         return {mapping.get(key): value for key, value in attr.items() if key in mapping}
@@ -360,8 +344,6 @@ class BrukerXMLFactory:
         Loads appropriate mapping of xml tags and python objects
 
         :param version: prairieview version
-        :type version: str
-        :rtype: BrukerXMLFactory
         """
         # we need to reverse the mapping such that the calscipy objects are the keys and the xml's the targets
         self.element_class_mapping = self._reverse_mapping(load_mapping(version))
