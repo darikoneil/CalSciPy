@@ -22,7 +22,13 @@ with Bruker's PrairieView Imaging Software and MeadowLark Spatial Light Modulato
 code written for my imaging experiments that might be considered useful to others.
 
 #### Active Development
-* The current implementation is unstable and should be considered an open beta.
+The current implementation is unstable and should be considered an open beta.
+
+
+#### Stable Modules
+These modules' current implementation is stable and have >90% test coverage
+* io_tools
+
 
 #### Highlights
 * Assign unique colormaps to subsets of ROIs to generate rich, informative videos

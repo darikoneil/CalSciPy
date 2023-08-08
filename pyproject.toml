@@ -31,6 +31,7 @@ classifiers = [
 dependencies = [
     "joblib",
     "matplotlib",
+    "numba",
     "numpy",
     "opencv-python",
     "pillow <= 9.4.0",

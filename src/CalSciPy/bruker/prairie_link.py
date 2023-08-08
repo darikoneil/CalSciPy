@@ -1,13 +1,19 @@
 from __future__ import annotations
 from typing import Any
 from socket import gethostname, gethostbyname
-import win32com.client as client
-from win32com.client import CDispatch  # noqa: F401
 from getpass import getuser, getpass
 from functools import cached_property
-from memoization import cached
 from array import array
 from enum import Enum
+
+from memoization import cached
+
+try:
+    import win32com
+    import win32com.client as client
+    from win32com.client import CDispatch  # noqa: F401
+except ImportError:
+    print("Unable to locate pywin32 installation")
 
 
 """

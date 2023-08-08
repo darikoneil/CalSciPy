@@ -17,7 +17,7 @@ def calculate_dfof(traces: np.ndarray,
                    method: str = "baseline"
                    ) -> np.ndarray:
     if method == "baseline":
-        return _calculate_dfof_baseline(traces, frame_rate, in_place, offset, external_reference)
+        return _calculate_dfof_mean_of_percentile(traces, frame_rate, in_place, offset, external_reference)
     else:
         return _calculate_dfof_filter(traces, frame_rate, in_place, offset, external_reference)
 
@@ -89,7 +89,7 @@ def _calculate_dfof_mean_of_percentile(traces: np.ndarray,
                                        offset: float = 0.0,
                                        external_reference: Optional[np.ndarray] = None
                                        ) -> np.ndarray:
-    baselines = np.nanmean(sliding_window(traces, frame_rate * 30, np.nanpercentile, q=8, axis=-1), axis=0)
+    baseline = np.nanmean(sliding_window(traces, int(frame_rate * 30), np.nanpercentile, q=8, axis=-1), axis=0)
     if not in_place:
         dfof = np.zeros_like(traces)
     for neuron in range(dfof.shape[0]):

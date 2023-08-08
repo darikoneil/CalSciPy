@@ -6,8 +6,9 @@ from collections import ChainMap
 from inspect import get_annotations
 from PPVD.style import TerminalStyle
 from prettytable import PrettyTable, ALL
-from .validation import validate_fields
 from math import inf
+
+from .validation import validate_fields
 
 
 # These require python 3.10?
