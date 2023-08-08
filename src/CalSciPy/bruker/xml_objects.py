@@ -231,25 +231,31 @@ class GalvoPoint(_BrukerObject):
      Dataclass for a specific point during galvo-stimulation for a specific marked point
      in a sequence of photostimulations
 
-    :ivar z: relative z-position of the motor + ETL offset (um)
-    :type z: float
     """
+    #: float: x position of the ROI scaled to the number of x-pixels
     x: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
+    #: float: y position of the ROI scaled to the number of y-pixels
     y: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
+    #: str: name of the roi
     name: str = field(default="Point 0")
+    #: int: index of the roi in the galvo point list
     index: int = field(default=0, metadata={"range": (0, inf)})
+    #: str: type of activity
     activity_type: str = field(default="MarkPoints")
+    #: str: stimulation laser ID
     uncaging_laser: str = "Uncaging"
+    #: int: stimulation laser power (a.u.)
     uncaging_laser_power: int = field(default=0, metadata={"range": (0, 1000)})
+    #: float: stimulation duration
     duration: float = field(default=100.0, metadata={"range": (0.0, inf)})
+    #: bool: whether stimulation pattern is a spiral scan
     is_spiral: bool = True
+    #: float: diameter of the spiral scaled to the number of x-pixels if spiral scan
     spiral_size: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
+    #: float: number of spiral revolutions if spiral scan
     spiral_revolutions: float = field(default=0.0, metadata={"range": (0.0, inf)})
+    #: float: relative z-position of the motor + ETL offset (um)
     z: float = field(default=0.0, metadata={"range": (-8192.0, 8192.0)})
-
-    # @staticmethod
-    # def xml_tag() -> str:
-    #    return "PVGalvoPoint"
 
     @staticmethod
     def __name__() -> str:
