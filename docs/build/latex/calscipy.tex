@@ -65,7 +65,7 @@
 
 \title{CalSciPy}
 \date{2023}
-\release{0.3.4}
+\release{0.3.5}
 \author{Darik A.\@{} O\textquotesingle{}Neil}
 \newcommand{\sphinxlogo}{\vbox{}}
 \renewcommand{\releasename}{Release}
@@ -216,784 +216,64 @@ None
 \sphinxstepscope
 
 
-\subsection{CalSciPy.bruker.align module}
-\label{\detokenize{CalSciPy.bruker.align:module-CalSciPy.bruker.align}}\label{\detokenize{CalSciPy.bruker.align:calscipy-bruker-align-module}}\label{\detokenize{CalSciPy.bruker.align::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.align@\spxentry{CalSciPy.bruker.align}}\index{CalSciPy.bruker.align@\spxentry{CalSciPy.bruker.align}!module@\spxentry{module}}
-\sphinxstepscope
-
-
-\subsection{CalSciPy.bruker.bruker module}
-\label{\detokenize{CalSciPy.bruker.bruker:module-CalSciPy.bruker.bruker}}\label{\detokenize{CalSciPy.bruker.bruker:calscipy-bruker-bruker-module}}\label{\detokenize{CalSciPy.bruker.bruker::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.bruker@\spxentry{CalSciPy.bruker.bruker}}\index{CalSciPy.bruker.bruker@\spxentry{CalSciPy.bruker.bruker}!module@\spxentry{module}}\index{align\_data() (in module CalSciPy.bruker.bruker)@\spxentry{align\_data()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.align_data}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{align\_data}}}{\emph{\DUrole{n}{analog\_data}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}, \emph{\DUrole{n}{frame\_times}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}, \emph{\DUrole{n}{fill}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Synchronizes analog data \& imaging frames using the timestamp of each frame. Option to generate a second column
-in which the frame index is interpolated such that each analog sample matches with an associated frame.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{analog\_data}} (\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}) \textendash{} analog data
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frame\_times}} (\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}) \textendash{} frame timestamps
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{fill}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxcode{\sphinxupquote{bool}}}, default: \sphinxcode{\sphinxupquote{False}}) \textendash{} whether to include an interpolated nearest\sphinxhyphen{}neighbor column so each sample has an associated frame
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and imaging frame
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{determine\_imaging\_content() (in module CalSciPy.bruker.bruker)@\spxentry{determine\_imaging\_content()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.determine_imaging_content}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{determine\_imaging\_content}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker’s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels).
-It’s a quick / fast alternative to parsing its respective xml. However, note that the function is dependent on the
-naming conventions of PrairieView and will not work on arbitrary folders.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing bruker imaging data
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-channels, planes, frames, height, width
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{extract\_frame\_times() (in module CalSciPy.bruker.bruker)@\spxentry{extract\_frame\_times()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.extract_frame_times}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{extract\_frame\_times}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Function to extract the relative frame times from a PrairieView imaging session’s primary .xml file
-\begin{quote}\begin{description}
-\sphinxlineitem{Param}
-\sphinxAtStartPar
-filename
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-dataframe containing time (index, ms) x imaging frame (\sphinxstyleemphasis{zero\sphinxhyphen{}indexed})
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{generate\_bruker\_naming\_convention() (in module CalSciPy.bruker.bruker)@\spxentry{generate\_bruker\_naming\_convention()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.generate_bruker_naming_convention}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{generate\_bruker\_naming\_convention}}}{\emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{num\_channels}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{num\_planes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Generates the expected bruker naming convention for images collected with an arbitrary number of cycles \& channels
-
-\sphinxAtStartPar
-This function expects that the naming convention is \_Cycle00000\_Ch0\_000000.ome.tiff where the channel is
-one\sphinxhyphen{}indexed. The 5\sphinxhyphen{}digit cycle id represents the frame if using multiplane imaging and the 6\sphinxhyphen{}digit tag represents
-the plane. Otherwise, the 5\sphinxhyphen{}digit tag is static and the 6\sphinxhyphen{}digit tag represents the frame.
-
-\sphinxAtStartPar
-Please note that the parameters channel and plane are \sphinxstyleemphasis{zero\sphinxhyphen{}indexed}.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} channel to produce name for
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} plane to produce name for
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{num\_channels}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{1}}) \textendash{} number of channels
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{num\_planes}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{1}}) \textendash{} number of planes
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-proper naming convention
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_bruker\_tifs() (in module CalSciPy.bruker.bruker)@\spxentry{load\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.load_bruker_tifs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tifs}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{p}{{]}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function loads images collected and converted to .tif files by Bruker’s Prairieview software.
-If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
-numpy array. Identification of multiple channels / planes is dependent on {\hyperref[\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.determine_imaging_content}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{determine\_imaging\_content()}}}}}.
-Images are loaded as unsigned 16\sphinxhyphen{}bit (\sphinxcode{\sphinxupquote{numpy.uint16}}), though note that raw bruker files are
-natively 12 or 13\sphinxhyphen{}bit.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing a sequence of single frame tiff files
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}, default: \sphinxcode{\sphinxupquote{None}}) \textendash{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}, default: \sphinxcode{\sphinxupquote{None}}) \textendash{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}{]}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-a tuple of numpy arrays (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, \sphinxcode{\sphinxupquote{numpy.uint16}})
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_voltage\_recording() (in module CalSciPy.bruker.bruker)@\spxentry{load\_voltage\_recording()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.load_voltage_recording}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{load\_voltage\_recording}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
-| files contain “VoltageRecording” in the name.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder or filename containing analog data
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-dataframe containing time (index, ms) x channel data
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{repackage\_bruker\_tifs() (in module CalSciPy.bruker.bruker)@\spxentry{repackage\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker.bruker}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker:CalSciPy.bruker.bruker.repackage_bruker_tifs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tifs}}}{\emph{\DUrole{n}{input\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{output\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function repackages a folder containing .tif files exported by Bruker’s Prairieview software into a sequence
-of \textless{}4 GB .tif stacks. Note that parameters channel and plane are \sphinxstylestrong{zero\sphinxhyphen{}indexed}.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing a sequence of single frame .tif files exported by Bruker’s Prairieview
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} empty folder where .tif stacks will be saved
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{0}}) \textendash{} specify channel
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{0}}) \textendash{} specify plane
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{\sphinxcode{\sphinxupquote{None}}}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\sphinxstepscope
-
-
-\subsection{CalSciPy.bruker.bruker\_meta\_objects module}
-\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:module-CalSciPy.bruker.bruker_meta_objects}}\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:calscipy-bruker-bruker-meta-objects-module}}\label{\detokenize{CalSciPy.bruker.bruker_meta_objects::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.bruker\_meta\_objects@\spxentry{CalSciPy.bruker.bruker\_meta\_objects}}\index{CalSciPy.bruker.bruker\_meta\_objects@\spxentry{CalSciPy.bruker.bruker\_meta\_objects}!module@\spxentry{module}}\index{BrukerElementFactory (class in CalSciPy.bruker.bruker\_meta\_objects)@\spxentry{BrukerElementFactory}\spxextra{class in CalSciPy.bruker.bruker\_meta\_objects}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerElementFactory}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker\_meta\_objects.}}\sphinxbfcode{\sphinxupquote{BrukerElementFactory}}}{\emph{\DUrole{n}{version}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}5.5.64.600\textquotesingle{}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerElementFactory}]{\sphinxcrossref{CalSciPy.bruker.bruker\_meta\_objects.BrukerElementFactory}}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
-\index{constructor() (CalSciPy.bruker.bruker\_meta\_objects.BrukerElementFactory method)@\spxentry{constructor()}\spxextra{CalSciPy.bruker.bruker\_meta\_objects.BrukerElementFactory method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerElementFactory.constructor}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{constructor}}}{\emph{\DUrole{n}{element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/xml.etree.elementtree.html\#xml.etree.ElementTree.Element}{xml.etree.ElementTree.Element}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{object}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Constructor method of bruker xml objects from xml Element
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{element}} (\sphinxstyleliteralemphasis{\sphinxupquote{Element}}) \textendash{} xml Element
-
-\end{description}\end{quote}
-
-\sphinxAtStartPar
-:rtype:object
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{BrukerMeta (class in CalSciPy.bruker.bruker\_meta\_objects)@\spxentry{BrukerMeta}\spxextra{class in CalSciPy.bruker.bruker\_meta\_objects}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerMeta}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker\_meta\_objects.}}\sphinxbfcode{\sphinxupquote{BrukerMeta}}}{\emph{\DUrole{n}{root}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ElementTree}}, \emph{\DUrole{n}{factory}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#object}{object}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerMeta}]{\sphinxcrossref{BrukerMeta}}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
-\index{generate\_protocol() (CalSciPy.bruker.bruker\_meta\_objects.BrukerMeta method)@\spxentry{generate\_protocol()}\spxextra{CalSciPy.bruker.bruker\_meta\_objects.BrukerMeta method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerMeta.generate_protocol}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{abstract\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{generate\_protocol}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Generates a protocol for the metadata to be imported into prairieview
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} path to write protocol
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{BrukerXMLFactory (class in CalSciPy.bruker.bruker\_meta\_objects)@\spxentry{BrukerXMLFactory}\spxextra{class in CalSciPy.bruker.bruker\_meta\_objects}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerXMLFactory}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.bruker\_meta\_objects.}}\sphinxbfcode{\sphinxupquote{BrukerXMLFactory}}}{\emph{\DUrole{n}{version}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}5.5.64.600\textquotesingle{}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerXMLFactory}]{\sphinxcrossref{CalSciPy.bruker.bruker\_meta\_objects.BrukerXMLFactory}}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
-
-\end{fulllineitems}
-
-
-\sphinxstepscope
-
-
 \subsection{CalSciPy.bruker.configuration\_values module}
-\label{\detokenize{CalSciPy.bruker.configuration_values:module-CalSciPy.bruker.configuration_values}}\label{\detokenize{CalSciPy.bruker.configuration_values:calscipy-bruker-configuration-values-module}}\label{\detokenize{CalSciPy.bruker.configuration_values::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.configuration\_values@\spxentry{CalSciPy.bruker.configuration\_values}}\index{CalSciPy.bruker.configuration\_values@\spxentry{CalSciPy.bruker.configuration\_values}!module@\spxentry{module}}
+\label{\detokenize{CalSciPy.bruker.configuration_values:calscipy-bruker-configuration-values-module}}\label{\detokenize{CalSciPy.bruker.configuration_values::doc}}
 \sphinxstepscope
 
 
 \subsection{CalSciPy.bruker.data module}
-\label{\detokenize{CalSciPy.bruker.data:module-CalSciPy.bruker.data}}\label{\detokenize{CalSciPy.bruker.data:calscipy-bruker-data-module}}\label{\detokenize{CalSciPy.bruker.data::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.data@\spxentry{CalSciPy.bruker.data}}\index{CalSciPy.bruker.data@\spxentry{CalSciPy.bruker.data}!module@\spxentry{module}}\index{align\_data() (in module CalSciPy.bruker.data)@\spxentry{align\_data()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.align_data}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{align\_data}}}{\emph{\DUrole{n}{analog\_data}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}, \emph{\DUrole{n}{frame\_times}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}, \emph{\DUrole{n}{fill}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Synchronizes analog data \& imaging frames using the timestamp of each frame. Option to generate a second column
-in which the frame index is interpolated such that each analog sample matches with an associated frame.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{analog\_data}} (\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}) \textendash{} analog data
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{frame\_times}} (\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}) \textendash{} frame timestamps
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{fill}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{\sphinxcode{\sphinxupquote{bool}}}, default: \sphinxcode{\sphinxupquote{False}}) \textendash{} whether to include an interpolated nearest\sphinxhyphen{}neighbor column so each sample has an associated frame
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and imaging frame
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{determine\_imaging\_content() (in module CalSciPy.bruker.data)@\spxentry{determine\_imaging\_content()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.determine_imaging_content}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{determine\_imaging\_content}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker’s Prairieview software. It also determines the size of the images (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels).
-It’s a quick / fast alternative to parsing its respective xml. However, note that the function is dependent on the
-naming conventions of PrairieView and will not work on arbitrary folders.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing bruker imaging data
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-channels, planes, frames, height, width
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{extract\_frame\_times() (in module CalSciPy.bruker.data)@\spxentry{extract\_frame\_times()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.extract_frame_times}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{extract\_frame\_times}}}{\emph{\DUrole{n}{filename}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Function to extract the relative frame times from a PrairieView imaging session’s primary .xml file
-\begin{quote}\begin{description}
-\sphinxlineitem{Param}
-\sphinxAtStartPar
-filename
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-dataframe containing time (index, ms) x imaging frame (\sphinxstyleemphasis{zero\sphinxhyphen{}indexed})
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{generate\_bruker\_naming\_convention() (in module CalSciPy.bruker.data)@\spxentry{generate\_bruker\_naming\_convention()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.generate_bruker_naming_convention}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{generate\_bruker\_naming\_convention}}}{\emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{num\_channels}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{num\_planes}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Generates the expected bruker naming convention for images collected with an arbitrary number of cycles \& channels
-
-\sphinxAtStartPar
-This function expects that the naming convention is \_Cycle00000\_Ch0\_000000.ome.tiff where the channel is
-one\sphinxhyphen{}indexed. The 5\sphinxhyphen{}digit cycle id represents the frame if using multiplane imaging and the 6\sphinxhyphen{}digit tag represents
-the plane. Otherwise, the 5\sphinxhyphen{}digit tag is static and the 6\sphinxhyphen{}digit tag represents the frame.
-
-\sphinxAtStartPar
-Please note that the parameters channel and plane are \sphinxstyleemphasis{zero\sphinxhyphen{}indexed}.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} channel to produce name for
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} plane to produce name for
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{num\_channels}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{1}}) \textendash{} number of channels
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{num\_planes}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{1}}) \textendash{} number of planes
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-proper naming convention
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_bruker\_tifs() (in module CalSciPy.bruker.data)@\spxentry{load\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.load_bruker_tifs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{load\_bruker\_tifs}}}{\emph{\DUrole{n}{folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{p}{{]}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function loads images collected and converted to .tif files by Bruker’s Prairieview software.
-If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
-numpy array. Identification of multiple channels / planes is dependent on {\hyperref[\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.determine_imaging_content}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{determine\_imaging\_content()}}}}}.
-Images are loaded as unsigned 16\sphinxhyphen{}bit (\sphinxcode{\sphinxupquote{numpy.uint16}}), though note that raw bruker files are
-natively 12 or 13\sphinxhyphen{}bit.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing a sequence of single frame tiff files
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}, default: \sphinxcode{\sphinxupquote{None}}) \textendash{} specific channel to load from dataset (zero\sphinxhyphen{}indexed)
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}, default: \sphinxcode{\sphinxupquote{None}}) \textendash{} specific plane to load from dataset (zero\sphinxhyphen{}indexed)
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}{]}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-a tuple of numpy arrays (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, \sphinxcode{\sphinxupquote{numpy.uint16}})
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{load\_voltage\_recording() (in module CalSciPy.bruker.data)@\spxentry{load\_voltage\_recording()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.load_voltage_recording}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{load\_voltage\_recording}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}}{{ $\rightarrow$ \sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{pandas.core.frame.DataFrame}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
-| files contain “VoltageRecording” in the name.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder or filename containing analog data
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html\#pandas.DataFrame}{\sphinxcode{\sphinxupquote{DataFrame}}}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-dataframe containing time (index, ms) x channel data
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{repackage\_bruker\_tifs() (in module CalSciPy.bruker.data)@\spxentry{repackage\_bruker\_tifs()}\spxextra{in module CalSciPy.bruker.data}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.data:CalSciPy.bruker.data.repackage_bruker_tifs}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.data.}}\sphinxbfcode{\sphinxupquote{repackage\_bruker\_tifs}}}{\emph{\DUrole{n}{input\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{output\_folder}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{channel}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{plane}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-This function repackages a folder containing .tif files exported by Bruker’s Prairieview software into a sequence
-of \textless{}4 GB .tif stacks. Note that parameters channel and plane are \sphinxstylestrong{zero\sphinxhyphen{}indexed}.
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{input\_folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} folder containing a sequence of single frame .tif files exported by Bruker’s Prairieview
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{output\_folder}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, \sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxcode{\sphinxupquote{Path}}}{]}) \textendash{} empty folder where .tif stacks will be saved
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{channel}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{0}}) \textendash{} specify channel
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{plane}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, default: \sphinxcode{\sphinxupquote{0}}) \textendash{} specify plane
-
-\end{itemize}
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{\sphinxcode{\sphinxupquote{None}}}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
+\label{\detokenize{CalSciPy.bruker.data:calscipy-bruker-data-module}}\label{\detokenize{CalSciPy.bruker.data::doc}}
 \sphinxstepscope
 
 
 \subsection{CalSciPy.bruker.factories module}
-\label{\detokenize{CalSciPy.bruker.factories:module-CalSciPy.bruker.factories}}\label{\detokenize{CalSciPy.bruker.factories:calscipy-bruker-factories-module}}\label{\detokenize{CalSciPy.bruker.factories::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.factories@\spxentry{CalSciPy.bruker.factories}}\index{CalSciPy.bruker.factories@\spxentry{CalSciPy.bruker.factories}!module@\spxentry{module}}\index{BrukerElementFactory (class in CalSciPy.bruker.factories)@\spxentry{BrukerElementFactory}\spxextra{class in CalSciPy.bruker.factories}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerElementFactory}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.factories.}}\sphinxbfcode{\sphinxupquote{BrukerElementFactory}}}{\emph{\DUrole{n}{version}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}5.5.64.600\textquotesingle{}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerElementFactory}]{\sphinxcrossref{CalSciPy.bruker.factories.BrukerElementFactory}}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
-
-\sphinxAtStartPar
-Factory class for constructing bruker element objects
-\begin{quote}\begin{description}
-\sphinxlineitem{Variables}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{element\_class\_mapping}} \textendash{} dictionary mapping bruker xml objects to CalSciPy’s bruker xml classes
-
-\end{description}\end{quote}
-\index{constructor() (CalSciPy.bruker.factories.BrukerElementFactory method)@\spxentry{constructor()}\spxextra{CalSciPy.bruker.factories.BrukerElementFactory method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerElementFactory.constructor}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{constructor}}}{\emph{\DUrole{n}{element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/xml.etree.elementtree.html\#xml.etree.ElementTree.Element}{xml.etree.ElementTree.Element}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{object}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Constructor method of bruker xml objects from xml Element
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{element}} (\sphinxstyleliteralemphasis{\sphinxupquote{Element}}) \textendash{} xml Element
-
-\end{description}\end{quote}
-
-\sphinxAtStartPar
-:rtype:object
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{BrukerXMLFactory (class in CalSciPy.bruker.factories)@\spxentry{BrukerXMLFactory}\spxextra{class in CalSciPy.bruker.factories}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerXMLFactory}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.factories.}}\sphinxbfcode{\sphinxupquote{BrukerXMLFactory}}}{\emph{\DUrole{n}{version}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}5.5.64.600\textquotesingle{}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerXMLFactory}]{\sphinxcrossref{CalSciPy.bruker.factories.BrukerXMLFactory}}}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
-
-\sphinxAtStartPar
-Factory class for constructing CalSciPy’s bruker xml objects from CalSciPy’s protocol objects.
-\begin{quote}\begin{description}
-\sphinxlineitem{Variables}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{element\_class\_mapping}} \textendash{} dictionary mapping bruker xml objects to CalSciPy’s bruker xml classes
-
-\end{description}\end{quote}
-\index{construct\_element() (CalSciPy.bruker.factories.BrukerXMLFactory method)@\spxentry{construct\_element()}\spxextra{CalSciPy.bruker.factories.BrukerXMLFactory method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerXMLFactory.construct_element}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{construct\_element}}}{\emph{\DUrole{n}{element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{CalSciPy.bruker.xml\_objects.\_BrukerObject}}, \emph{\DUrole{n}{level}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}
-\pysigstopsignatures\begin{quote}\begin{description}
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{constructor() (CalSciPy.bruker.factories.BrukerXMLFactory method)@\spxentry{constructor()}\spxextra{CalSciPy.bruker.factories.BrukerXMLFactory method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerXMLFactory.constructor}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{constructor}}}{\emph{\DUrole{n}{element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{CalSciPy.bruker.xml\_objects.\_BrukerObject}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.List}{List}}}
-\pysigstopsignatures\begin{quote}\begin{description}
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.List}{\sphinxcode{\sphinxupquote{List}}}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-\index{validate\_element() (CalSciPy.bruker.factories.BrukerXMLFactory class method)@\spxentry{validate\_element()}\spxextra{CalSciPy.bruker.factories.BrukerXMLFactory class method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.factories:CalSciPy.bruker.factories.BrukerXMLFactory.validate_element}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{classmethod\DUrole{w}{  }}}\sphinxbfcode{\sphinxupquote{validate\_element}}}{\emph{\DUrole{n}{element}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Any}{Any}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/exceptions.html\#Exception}{Exception}}}
-\pysigstopsignatures\begin{quote}\begin{description}
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/exceptions.html\#Exception}{\sphinxcode{\sphinxupquote{Exception}}}{]}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-
+\label{\detokenize{CalSciPy.bruker.factories:calscipy-bruker-factories-module}}\label{\detokenize{CalSciPy.bruker.factories::doc}}
 \sphinxstepscope
 
 
-\subsection{CalSciPy.bruker.mark\_points module}
-\label{\detokenize{CalSciPy.bruker.mark_points:module-CalSciPy.bruker.mark_points}}\label{\detokenize{CalSciPy.bruker.mark_points:calscipy-bruker-mark-points-module}}\label{\detokenize{CalSciPy.bruker.mark_points::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.mark\_points@\spxentry{CalSciPy.bruker.mark\_points}}\index{CalSciPy.bruker.mark\_points@\spxentry{CalSciPy.bruker.mark\_points}!module@\spxentry{module}}\index{Group (class in CalSciPy.bruker.mark\_points)@\spxentry{Group}\spxextra{class in CalSciPy.bruker.mark\_points}}
+\subsection{CalSciPy.bruker.meta\_objects module}
+\label{\detokenize{CalSciPy.bruker.meta_objects:module-CalSciPy.bruker.meta_objects}}\label{\detokenize{CalSciPy.bruker.meta_objects:calscipy-bruker-meta-objects-module}}\label{\detokenize{CalSciPy.bruker.meta_objects::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.meta\_objects@\spxentry{CalSciPy.bruker.meta\_objects}}\index{CalSciPy.bruker.meta\_objects@\spxentry{CalSciPy.bruker.meta\_objects}!module@\spxentry{module}}\index{GroupMeta (class in CalSciPy.bruker.meta\_objects)@\spxentry{GroupMeta}\spxextra{class in CalSciPy.bruker.meta\_objects}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.Group}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.GroupMeta}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.mark\_points.}}\sphinxbfcode{\sphinxupquote{Group}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.meta\_objects.}}\sphinxbfcode{\sphinxupquote{GroupMeta}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
 
 \end{fulllineitems}
 
-\index{PhotostimulationMeta (class in CalSciPy.bruker.mark\_points)@\spxentry{PhotostimulationMeta}\spxextra{class in CalSciPy.bruker.mark\_points}}
+\index{PhotostimulationMeta (class in CalSciPy.bruker.meta\_objects)@\spxentry{PhotostimulationMeta}\spxextra{class in CalSciPy.bruker.meta\_objects}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.PhotostimulationMeta}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.PhotostimulationMeta}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.mark\_points.}}\sphinxbfcode{\sphinxupquote{PhotostimulationMeta}}}{\emph{\DUrole{n}{root}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ElementTree}}, \emph{\DUrole{n}{factory}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#object}{object}}}, \emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{512}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{512}}}{}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.meta\_objects.}}\sphinxbfcode{\sphinxupquote{PhotostimulationMeta}}}{\emph{\DUrole{n}{root}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{ElementTree}}, \emph{\DUrole{n}{factory}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#object}{object}}}, \emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{512}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{512}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Bases: {\hyperref[\detokenize{CalSciPy.bruker.bruker_meta_objects:CalSciPy.bruker.bruker_meta_objects.BrukerMeta}]{\sphinxcrossref{\sphinxcode{\sphinxupquote{BrukerMeta}}}}}
-\index{generate\_protocol() (CalSciPy.bruker.mark\_points.PhotostimulationMeta method)@\spxentry{generate\_protocol()}\spxextra{CalSciPy.bruker.mark\_points.PhotostimulationMeta method}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.PhotostimulationMeta.generate_protocol}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_protocol}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
-\pysigstopsignatures
-\sphinxAtStartPar
-Generates a protocol for the metadata to be imported into prairieview
-\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} path to write protocol
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-None
-
-\end{description}\end{quote}
+Bases: \sphinxcode{\sphinxupquote{\_BrukerMeta}}
 
 \end{fulllineitems}
 
-
-\end{fulllineitems}
-
-\index{ROI (class in CalSciPy.bruker.mark\_points)@\spxentry{ROI}\spxextra{class in CalSciPy.bruker.mark\_points}}
+\index{ROIMeta (class in CalSciPy.bruker.meta\_objects)@\spxentry{ROIMeta}\spxextra{class in CalSciPy.bruker.meta\_objects}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.ROI}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.ROIMeta}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.mark\_points.}}\sphinxbfcode{\sphinxupquote{ROI}}}{\emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.meta\_objects.}}\sphinxbfcode{\sphinxupquote{ROIMeta}}}{\emph{\DUrole{o}{*}\DUrole{n}{args}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
 Bases: \sphinxhref{https://docs.python.org/3/library/functions.html\#object}{\sphinxcode{\sphinxupquote{object}}}
 
 \sphinxAtStartPar
 ROI Object
-\index{generate\_coordinates() (CalSciPy.bruker.mark\_points.ROI method)@\spxentry{generate\_coordinates()}\spxextra{CalSciPy.bruker.mark\_points.ROI method}}
+\index{generate\_coordinates() (CalSciPy.bruker.meta\_objects.ROIMeta method)@\spxentry{generate\_coordinates()}\spxextra{CalSciPy.bruker.meta\_objects.ROIMeta method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.ROI.generate_coordinates}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.ROIMeta.generate_coordinates}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_coordinates}}}{\emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_coordinates}}}{\emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}\DUrole{p}{{]}}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Converts the normalized coordinates to image coordinates
@@ -1001,39 +281,39 @@ Converts the normalized coordinates to image coordinates
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{width}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} width of image
+\sphinxstyleliteralstrong{\sphinxupquote{width}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} width of image
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} height of image
+\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} height of image
 
 \end{itemize}
+
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}{]}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
 x,y coordinates
 
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#tuple}{tuple}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}, \sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}{]}
-
 \end{description}\end{quote}
 
 \end{fulllineitems}
 
-\index{generate\_hull\_vertices() (CalSciPy.bruker.mark\_points.ROI method)@\spxentry{generate\_hull\_vertices()}\spxextra{CalSciPy.bruker.mark\_points.ROI method}}
+\index{generate\_hull\_vertices() (CalSciPy.bruker.meta\_objects.ROIMeta method)@\spxentry{generate\_hull\_vertices()}\spxextra{CalSciPy.bruker.meta\_objects.ROIMeta method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.ROI.generate_hull_vertices}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.ROIMeta.generate_hull_vertices}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_hull\_vertices}}}{}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}Tuple\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_hull\_vertices}}}{}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}\DUrole{p}{{]}}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Identifies the vertices of the Convex\sphinxhyphen{}Hull approximation
 \begin{quote}\begin{description}
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
-Tuple{[}Tuple{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}{]}{]}
+\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}{]}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -1043,12 +323,12 @@ vertices (Nx2)
 
 \end{fulllineitems}
 
-\index{generate\_mask() (CalSciPy.bruker.mark\_points.ROI method)@\spxentry{generate\_mask()}\spxextra{CalSciPy.bruker.mark\_points.ROI method}}
+\index{generate\_mask() (CalSciPy.bruker.meta\_objects.ROIMeta method)@\spxentry{generate\_mask()}\spxextra{CalSciPy.bruker.meta\_objects.ROIMeta method}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.ROI.generate_mask}}
+\phantomsection\label{\detokenize{CalSciPy.bruker.meta_objects:CalSciPy.bruker.meta_objects.ROIMeta.generate_mask}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_mask}}}{\emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}}{{ $\rightarrow$ Tuple\DUrole{p}{{[}}Tuple\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}\DUrole{p}{{]}}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{generate\_mask}}}{\emph{\DUrole{n}{width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{Tuple}\DUrole{p}{{[}}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{,}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}\DUrole{p}{{]}}\DUrole{p}{{]}}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Converts spiral center \& radii to a coordinate mask
@@ -1056,17 +336,17 @@ Converts spiral center \& radii to a coordinate mask
 \sphinxlineitem{Parameters}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{width}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} width of image
+\sphinxstyleliteralstrong{\sphinxupquote{width}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} width of image
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxstyleliteralemphasis{\sphinxupquote{int}}}) \textendash{} height of image
+\sphinxstyleliteralstrong{\sphinxupquote{height}} (\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}) \textendash{} height of image
 
 \end{itemize}
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
-Tuple{[}Tuple{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}{]}{]}
+\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Tuple}{\sphinxcode{\sphinxupquote{Tuple}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}{]}
 
 \sphinxlineitem{Returns}
 \sphinxAtStartPar
@@ -1079,32 +359,17 @@ coordinate mask (y, x)
 
 \end{fulllineitems}
 
-\index{generate\_photostimulation\_mask() (in module CalSciPy.bruker.mark\_points)@\spxentry{generate\_photostimulation\_mask()}\spxextra{in module CalSciPy.bruker.mark\_points}}
 
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.generate_photostimulation_mask}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.mark\_points.}}\sphinxbfcode{\sphinxupquote{generate\_photostimulation\_mask}}}{\emph{\DUrole{n}{center}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Sequence\DUrole{p}{{[}}Number\DUrole{p}{,}\DUrole{w}{  }Number\DUrole{p}{{]}}}}, \emph{\DUrole{n}{radii}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Number\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }Sequence\DUrole{p}{{[}}Number\DUrole{p}{{]}}}}, \emph{\DUrole{n}{shape}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{Number\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }Sequence\DUrole{p}{{[}}Number\DUrole{p}{,}\DUrole{w}{  }Number\DUrole{p}{{]}}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ np.ndarray}}
-\pysigstopsignatures\begin{quote}\begin{description}
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-np.ndarray
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\sphinxstepscope
-
-
-\subsection{CalSciPy.bruker.meta\_objects module}
-\label{\detokenize{CalSciPy.bruker.meta_objects:module-CalSciPy.bruker.meta_objects}}\label{\detokenize{CalSciPy.bruker.meta_objects:calscipy-bruker-meta-objects-module}}\label{\detokenize{CalSciPy.bruker.meta_objects::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.meta\_objects@\spxentry{CalSciPy.bruker.meta\_objects}}\index{CalSciPy.bruker.meta\_objects@\spxentry{CalSciPy.bruker.meta\_objects}!module@\spxentry{module}}
 \sphinxstepscope
 
 
 \subsection{CalSciPy.bruker.prairie\_link module}
 \label{\detokenize{CalSciPy.bruker.prairie_link:calscipy-bruker-prairie-link-module}}\label{\detokenize{CalSciPy.bruker.prairie_link::doc}}
+\sphinxstepscope
+
+
+\subsection{CalSciPy.bruker.protocols module}
+\label{\detokenize{CalSciPy.bruker.protocols:module-CalSciPy.bruker.protocols}}\label{\detokenize{CalSciPy.bruker.protocols:calscipy-bruker-protocols-module}}\label{\detokenize{CalSciPy.bruker.protocols::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.protocols@\spxentry{CalSciPy.bruker.protocols}}\index{CalSciPy.bruker.protocols@\spxentry{CalSciPy.bruker.protocols}!module@\spxentry{module}}
 \sphinxstepscope
 
 
@@ -1245,118 +510,28 @@ boolean type comparison
 \sphinxstepscope
 
 
-\subsection{CalSciPy.bruker.xml\_load module}
-\label{\detokenize{CalSciPy.bruker.xml_load:module-CalSciPy.bruker.xml_load}}\label{\detokenize{CalSciPy.bruker.xml_load:calscipy-bruker-xml-load-module}}\label{\detokenize{CalSciPy.bruker.xml_load::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.xml\_load@\spxentry{CalSciPy.bruker.xml\_load}}\index{CalSciPy.bruker.xml\_load@\spxentry{CalSciPy.bruker.xml\_load}!module@\spxentry{module}}\index{get\_image\_xml() (in module CalSciPy.bruker.xml\_load)@\spxentry{get\_image\_xml()}\spxextra{in module CalSciPy.bruker.xml\_load}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.xml_load:CalSciPy.bruker.xml_load.get_image_xml}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_load.}}\sphinxbfcode{\sphinxupquote{get\_image\_xml}}}{\emph{\DUrole{n}{xml\_file}}}{}
-\pysigstopsignatures
-\end{fulllineitems}
-
-\index{get\_voltage\_output() (in module CalSciPy.bruker.xml\_load)@\spxentry{get\_voltage\_output()}\spxextra{in module CalSciPy.bruker.xml\_load}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.xml_load:CalSciPy.bruker.xml_load.get_voltage_output}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_load.}}\sphinxbfcode{\sphinxupquote{get\_voltage\_output}}}{\emph{\DUrole{n}{xml\_file}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Compile the important metadata that pertains to the VoltageOutput in PrairieView.
-
-
-\subsubsection{Parameters}
-\label{\detokenize{CalSciPy.bruker.xml_load:parameters}}\begin{description}
-\sphinxlineitem{xml\_file}{[}str{]}
-\sphinxAtStartPar
-Path to XML file for voltage output.
-
-\end{description}
-
-
-\subsubsection{Returns}
-\label{\detokenize{CalSciPy.bruker.xml_load:returns}}
-\sphinxAtStartPar
-None.
-
-\end{fulllineitems}
-
-\index{get\_voltage\_recording() (in module CalSciPy.bruker.xml\_load)@\spxentry{get\_voltage\_recording()}\spxextra{in module CalSciPy.bruker.xml\_load}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.xml_load:CalSciPy.bruker.xml_load.get_voltage_recording}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_load.}}\sphinxbfcode{\sphinxupquote{get\_voltage\_recording}}}{\emph{\DUrole{n}{xml\_file}}}{}
-\pysigstopsignatures
-\sphinxAtStartPar
-Extract time and number of samples from VoltageRecording XML file.
-
-
-\subsubsection{Parameters}
-\label{\detokenize{CalSciPy.bruker.xml_load:id1}}\begin{description}
-\sphinxlineitem{xml\_file}{[}TYPE{]}
-\sphinxAtStartPar
-DESCRIPTION.
-
-\end{description}
-
-
-\subsubsection{Returns}
-\label{\detokenize{CalSciPy.bruker.xml_load:id2}}
-\sphinxAtStartPar
-None.
-
-\end{fulllineitems}
-
-\index{read\_mark\_points\_xml() (in module CalSciPy.bruker.xml\_load)@\spxentry{read\_mark\_points\_xml()}\spxextra{in module CalSciPy.bruker.xml\_load}}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{CalSciPy.bruker.xml_load:CalSciPy.bruker.xml_load.read_mark_points_xml}}
-\pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_load.}}\sphinxbfcode{\sphinxupquote{read\_mark\_points\_xml}}}{\emph{\DUrole{n}{file\_path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}, \emph{\DUrole{n}{version}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}5.5.64.600\textquotesingle{}}}}{{ $\rightarrow$ {\hyperref[\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.PhotostimulationMeta}]{\sphinxcrossref{CalSciPy.bruker.mark\_points.PhotostimulationMeta}}}}}
-\pysigstopsignatures\begin{quote}\begin{description}
-\sphinxlineitem{Parameters}\begin{itemize}
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{file\_path}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}\sphinxstyleliteralemphasis{\sphinxupquote{ or }}\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{\sphinxstyleliteralemphasis{\sphinxupquote{pathlib.Path}}}) \textendash{} path to xml file
-
-\item {} 
-\sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{version}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxstyleliteralemphasis{\sphinxupquote{str}}}) \textendash{} version of prairieview
-
-\end{itemize}
-
-\sphinxlineitem{Returns}
-\sphinxAtStartPar
-photostimulation metadata
-
-\sphinxlineitem{Return type}
-\sphinxAtStartPar
-{\hyperref[\detokenize{CalSciPy.bruker.mark_points:CalSciPy.bruker.mark_points.PhotostimulationMeta}]{\sphinxcrossref{PhotostimulationMeta}}}
-
-\end{description}\end{quote}
-
-\end{fulllineitems}
-
-
-\sphinxstepscope
-
-
 \subsection{CalSciPy.bruker.xml\_objects module}
 \label{\detokenize{CalSciPy.bruker.xml_objects:module-CalSciPy.bruker.xml_objects}}\label{\detokenize{CalSciPy.bruker.xml_objects:calscipy-bruker-xml-objects-module}}\label{\detokenize{CalSciPy.bruker.xml_objects::doc}}\index{module@\spxentry{module}!CalSciPy.bruker.xml\_objects@\spxentry{CalSciPy.bruker.xml\_objects}}\index{CalSciPy.bruker.xml\_objects@\spxentry{CalSciPy.bruker.xml\_objects}!module@\spxentry{module}}\index{GalvoPoint (class in CalSciPy.bruker.xml\_objects)@\spxentry{GalvoPoint}\spxextra{class in CalSciPy.bruker.xml\_objects}}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPoint}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{GalvoPoint}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{y}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Point 0\textquotesingle{}}}, \emph{\DUrole{n}{index}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{activity\_type}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}MarkPoints\textquotesingle{}}}, \emph{\DUrole{n}{uncaging\_laser}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Uncaging\textquotesingle{}}}, \emph{\DUrole{n}{uncaging\_laser\_power}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{duration}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{100}}, \emph{\DUrole{n}{is\_spiral}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{True}}, \emph{\DUrole{n}{spiral\_size}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{spiral\_revolutions}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{z}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{GalvoPoint}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{y}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Point 0\textquotesingle{}}}, \emph{\DUrole{n}{index}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{activity\_type}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}MarkPoints\textquotesingle{}}}, \emph{\DUrole{n}{uncaging\_laser}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Uncaging\textquotesingle{}}}, \emph{\DUrole{n}{uncaging\_laser\_power}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{duration}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{100.0}}, \emph{\DUrole{n}{is\_spiral}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{True}}, \emph{\DUrole{n}{spiral\_size}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{spiral\_revolutions}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{z}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Bases: \sphinxcode{\sphinxupquote{\_BrukerObject}}
+\begin{quote}
 
 \sphinxAtStartPar
 Dataclass for a specific point during galvo\sphinxhyphen{}stimulation for a specific marked point
 in a sequence of photostimulations
+\end{quote}
+\begin{quote}\begin{description}
+\sphinxlineitem{Variables}
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{z}} \textendash{} relative z\sphinxhyphen{}position of the motor + ETL offset (um)
+
+\end{description}\end{quote}
 \index{activity\_type (CalSciPy.bruker.xml\_objects.GalvoPoint attribute)@\spxentry{activity\_type}\spxextra{CalSciPy.bruker.xml\_objects.GalvoPoint attribute}}
 
 \begin{fulllineitems}
@@ -1371,7 +546,7 @@ in a sequence of photostimulations
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPoint.duration}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{duration}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }100}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{duration}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }100.0}}}
 \pysigstopsignatures
 \end{fulllineitems}
 
@@ -1407,7 +582,7 @@ in a sequence of photostimulations
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPoint.spiral_revolutions}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_revolutions}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_revolutions}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \end{fulllineitems}
 
@@ -1473,7 +648,7 @@ in a sequence of photostimulations
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPointElement}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{GalvoPointElement}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{initial\_delay}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{inter\_point\_delay}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{duration}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{spiral\_revolutions}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{all\_points\_at\_once}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{points}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Point 0\textquotesingle{}}}, \emph{\DUrole{n}{indices}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{GalvoPointElement}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{initial\_delay}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{inter\_point\_delay}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{duration}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{spiral\_revolutions}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{all\_points\_at\_once}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{points}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}Point 0\textquotesingle{}}}, \emph{\DUrole{n}{indices}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Bases: \sphinxcode{\sphinxupquote{\_BrukerObject}}
@@ -1497,7 +672,7 @@ bool: whether to do all points at once
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPointElement.duration}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{duration}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{duration}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 int: duration of stimulation in ms
@@ -1557,7 +732,7 @@ str: id from galvo point list
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.GalvoPointElement.spiral_revolutions}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_revolutions}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_revolutions}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 int: number of spiral revolutions
@@ -1803,7 +978,7 @@ Tuple{[}object{]}: series of mark point elements
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{Point}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{index}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{1}}, \emph{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.5}}, \emph{\DUrole{n}{y}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.5}}, \emph{\DUrole{n}{is\_spiral}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{True}}, \emph{\DUrole{n}{spiral\_width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0340461221379181}}, \emph{\DUrole{n}{spiral\_height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0340461221379181}}, \emph{\DUrole{n}{spiral\_size\_in\_microns}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{20}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
+\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class\DUrole{w}{  }}}\sphinxcode{\sphinxupquote{CalSciPy.bruker.xml\_objects.}}\sphinxbfcode{\sphinxupquote{Point}}}{\emph{\DUrole{o}{*}}, \emph{\DUrole{n}{index}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0}}, \emph{\DUrole{n}{x}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{y}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{is\_spiral}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{True}}, \emph{\DUrole{n}{spiral\_width}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{spiral\_height}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{spiral\_size\_in\_microns}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Bases: \sphinxcode{\sphinxupquote{\_BrukerObject}}
@@ -1816,7 +991,7 @@ in a sequence of photostimulations
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.index}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{index}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }1}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{index}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 str: 1\sphinxhyphen{}order index in galvo point list
@@ -1840,7 +1015,7 @@ bool: boolean indicating whether point is spiral
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.spiral_height}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_height}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0340461221379181}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_height}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 float: height of spiral
@@ -1852,7 +1027,7 @@ float: height of spiral
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.spiral_size_in_microns}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_size\_in\_microns}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }20}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_size\_in\_microns}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 float: size of spiral in microns
@@ -1864,7 +1039,7 @@ float: size of spiral in microns
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.spiral_width}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_width}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0340461221379181}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{spiral\_width}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 float: width of spiral
@@ -1876,7 +1051,7 @@ float: width of spiral
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.x}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{x}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.5}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{x}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 float: normalized x position
@@ -1888,7 +1063,7 @@ float: normalized x position
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.bruker.xml_objects:CalSciPy.bruker.xml_objects.Point.y}}
 \pysigstartsignatures
-\pysigline{\sphinxbfcode{\sphinxupquote{y}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.5}}}
+\pysigline{\sphinxbfcode{\sphinxupquote{y}}\sphinxbfcode{\sphinxupquote{\DUrole{p}{:}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{\sphinxcode{\sphinxupquote{float}}}}}\sphinxbfcode{\sphinxupquote{\DUrole{w}{  }\DUrole{p}{=}\DUrole{w}{  }0.0}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 float: normalized y position
@@ -1902,11 +1077,6 @@ float: normalized y position
 
 \section{Module contents}
 \label{\detokenize{CalSciPy.bruker:module-CalSciPy.bruker}}\label{\detokenize{CalSciPy.bruker:module-contents}}\index{module@\spxentry{module}!CalSciPy.bruker@\spxentry{CalSciPy.bruker}}\index{CalSciPy.bruker@\spxentry{CalSciPy.bruker}!module@\spxentry{module}}
-\sphinxstepscope
-
-
-\chapter{CalSciPy.coloring module}
-\label{\detokenize{CalSciPy.coloring:calscipy-coloring-module}}\label{\detokenize{CalSciPy.coloring::doc}}
 \sphinxstepscope
 
 
@@ -2525,7 +1695,7 @@ Function to interactively visualize spike inference
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.load_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_binary}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{mapped}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{mode}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}r+\textquotesingle{}}}}{{ $\rightarrow$ \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.memmap.html\#numpy.memmap}{numpy.memmap}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{load\_binary}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{mapped}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{mode}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}r+\textquotesingle{}}}, \emph{\DUrole{n}{missing\_metadata}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Mapping}{Mapping}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}}{{ $\rightarrow$ \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.memmap.html\#numpy.memmap}{numpy.memmap}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 This function loads images saved in language\sphinxhyphen{}agnostic binary format. Ideal for optimal read/write speeds and
@@ -2546,6 +1716,10 @@ number of frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels, and the dataty
 \item {} 
 \sphinxAtStartPar
 \sphinxstyleliteralstrong{\sphinxupquote{mode}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, default: \sphinxcode{\sphinxupquote{\textquotesingle{}r+\textquotesingle{}}}) \textendash{} indicates the level of access permitted to the original binary
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{missing\_metadata}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Optional}{\sphinxcode{\sphinxupquote{Optional}}}{[}\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Mapping}{\sphinxcode{\sphinxupquote{Mapping}}}{]}, default: \sphinxcode{\sphinxupquote{None}}) \textendash{} if you have lost the metadata or otherwise wish to manually provide it
 
 \end{itemize}
 
@@ -2593,7 +1767,7 @@ numpy array (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_binary}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_binary}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_binary}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}, \emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}binary\_video\textquotesingle{}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Save images to language\sphinxhyphen{}agnostic binary format. Ideal for optimal read/write speeds and highly\sphinxhyphen{}robust to corruption.
@@ -2613,9 +1787,16 @@ systems\textendash{}even if they are collected at 12 or 13\sphinxhyphen{}bit.
 \item[] no filename is provided then the default filename is \sphinxstyleemphasis{binary\_video}.
 \end{DUlineblock}
 \begin{quote}\begin{description}
-\sphinxlineitem{Parameters}
+\sphinxlineitem{Parameters}\begin{itemize}
+\item {} 
 \sphinxAtStartPar
 \sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}) \textendash{} images to save (frames, y\sphinxhyphen{}pixels, x\sphinxhyphen{}pixels)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{name}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, default: \sphinxcode{\sphinxupquote{\textquotesingle{}binary\_video\textquotesingle{}}}) \textendash{} specify filename for produced files
+
+\end{itemize}
 
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
@@ -2634,7 +1815,7 @@ systems\textendash{}even if they are collected at 12 or 13\sphinxhyphen{}bit.
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.io_tools:CalSciPy.io_tools.save_images}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_images}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}, \emph{\DUrole{n}{size\_cap}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{3.9}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.io\_tools.}}\sphinxbfcode{\sphinxupquote{save\_images}}}{\emph{\DUrole{n}{path}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/pathlib.html\#pathlib.Path}{pathlib.Path}}}, \emph{\DUrole{n}{images}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}, \emph{\DUrole{n}{name}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}images\textquotesingle{}}}, \emph{\DUrole{n}{size\_cap}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{3.9}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}
 \pysigstopsignatures
 \sphinxAtStartPar
 Save a numpy array to a single .tif file. If size \textgreater{} 4GB then saved as a series of files. If path is not a file and
@@ -2648,6 +1829,10 @@ already exists the default filename will be \sphinxstyleemphasis{images}.
 \item {} 
 \sphinxAtStartPar
 \sphinxstyleliteralstrong{\sphinxupquote{images}} (\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{\sphinxcode{\sphinxupquote{ndarray}}}) \textendash{} numpy array (frames, y pixels, x pixels)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{name}} (\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}, default: \sphinxcode{\sphinxupquote{\textquotesingle{}images\textquotesingle{}}}) \textendash{} filename for saving images
 
 \item {} 
 \sphinxAtStartPar
@@ -2942,6 +2127,21 @@ wrapped function
 
 \end{fulllineitems}
 
+\index{zero\_pad\_num\_to\_string() (in module CalSciPy.misc)@\spxentry{zero\_pad\_num\_to\_string()}\spxextra{in module CalSciPy.misc}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{CalSciPy.misc:CalSciPy.misc.zero_pad_num_to_string}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.misc.}}\sphinxbfcode{\sphinxupquote{zero\_pad\_num\_to\_string}}}{\emph{\DUrole{n}{idx}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}, \emph{\DUrole{n}{num\_zeros}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{int}}}}{{ $\rightarrow$ \sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}}
+\pysigstopsignatures\begin{quote}\begin{description}
+\sphinxlineitem{Return type}
+\sphinxAtStartPar
+\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{\sphinxcode{\sphinxupquote{str}}}
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
 
 \sphinxstepscope
 
@@ -3032,7 +2232,7 @@ into several components
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{component}} \textendash{} specific component to extract
+\sphinxstyleliteralstrong{\sphinxupquote{components}} (\sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Union}{\sphinxcode{\sphinxupquote{Union}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}, \sphinxhref{https://docs.python.org/3/library/typing.html\#typing.Iterable}{\sphinxcode{\sphinxupquote{Iterable}}}{[}\sphinxhref{https://docs.python.org/3/library/functions.html\#int}{\sphinxcode{\sphinxupquote{int}}}{]}{]}, default: \sphinxcode{\sphinxupquote{0}}) \textendash{} specific component to extract
 
 \end{itemize}
 
@@ -3084,7 +2284,7 @@ traces in matrix form (neurons x frames)
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{CalSciPy.trace_processing:CalSciPy.trace_processing.calculate_dfof}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_dfof}}}{\emph{\DUrole{n}{traces}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}, \emph{\DUrole{n}{frame\_rate}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{30.0}}, \emph{\DUrole{n}{in\_place}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{offset}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{external\_reference}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{method}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}baseline\textquotesingle{}}}}{{ $\rightarrow$ \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{CalSciPy.trace\_processing.}}\sphinxbfcode{\sphinxupquote{calculate\_dfof}}}{\emph{\DUrole{n}{traces}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}, \emph{\DUrole{n}{frame\_rate}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{30.0}}, \emph{\DUrole{n}{in\_place}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#bool}{bool}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{False}}, \emph{\DUrole{n}{offset}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/functions.html\#float}{float}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{0.0}}, \emph{\DUrole{n}{external\_reference}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}\DUrole{w}{  }\DUrole{p}{|}\DUrole{w}{  }\sphinxhref{https://docs.python.org/3/library/constants.html\#None}{None}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{None}}, \emph{\DUrole{n}{method}\DUrole{p}{:}\DUrole{w}{  }\DUrole{n}{\sphinxhref{https://docs.python.org/3/library/stdtypes.html\#str}{str}}\DUrole{w}{  }\DUrole{o}{=}\DUrole{w}{  }\DUrole{default_value}{\textquotesingle{}baseline\textquotesingle{}}}}{{ $\rightarrow$ \sphinxhref{https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html\#numpy.ndarray}{numpy.ndarray}}}
 \pysigstopsignatures\begin{quote}\begin{description}
 \sphinxlineitem{Return type}
 \sphinxAtStartPar
@@ -3256,16 +2456,9 @@ smoothed traces
 \let\bigletter\sphinxstyleindexlettergroup
 \bigletter{c}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker}\sphinxstyleindexpageref{CalSciPy.bruker:\detokenize{module-CalSciPy.bruker}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.align}\sphinxstyleindexpageref{CalSciPy.bruker.align:\detokenize{module-CalSciPy.bruker.align}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.bruker}\sphinxstyleindexpageref{CalSciPy.bruker.bruker:\detokenize{module-CalSciPy.bruker.bruker}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.bruker\_meta\_objects}\sphinxstyleindexpageref{CalSciPy.bruker.bruker_meta_objects:\detokenize{module-CalSciPy.bruker.bruker_meta_objects}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.configuration\_values}\sphinxstyleindexpageref{CalSciPy.bruker.configuration_values:\detokenize{module-CalSciPy.bruker.configuration_values}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.data}\sphinxstyleindexpageref{CalSciPy.bruker.data:\detokenize{module-CalSciPy.bruker.data}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.factories}\sphinxstyleindexpageref{CalSciPy.bruker.factories:\detokenize{module-CalSciPy.bruker.factories}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.mark\_points}\sphinxstyleindexpageref{CalSciPy.bruker.mark_points:\detokenize{module-CalSciPy.bruker.mark_points}}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker.meta\_objects}\sphinxstyleindexpageref{CalSciPy.bruker.meta_objects:\detokenize{module-CalSciPy.bruker.meta_objects}}
+\item\relax\sphinxstyleindexentry{CalSciPy.bruker.protocols}\sphinxstyleindexpageref{CalSciPy.bruker.protocols:\detokenize{module-CalSciPy.bruker.protocols}}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker.validation}\sphinxstyleindexpageref{CalSciPy.bruker.validation:\detokenize{module-CalSciPy.bruker.validation}}
-\item\relax\sphinxstyleindexentry{CalSciPy.bruker.xml\_load}\sphinxstyleindexpageref{CalSciPy.bruker.xml_load:\detokenize{module-CalSciPy.bruker.xml_load}}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker.xml\_mappings}\sphinxstyleindexpageref{CalSciPy.bruker.xml_mappings:\detokenize{module-CalSciPy.bruker.xml_mappings}}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker.xml\_mappings.xml\_mapping}\sphinxstyleindexpageref{CalSciPy.bruker.xml_mappings.xml_mapping:\detokenize{module-CalSciPy.bruker.xml_mappings.xml_mapping}}
 \item\relax\sphinxstyleindexentry{CalSciPy.bruker.xml\_objects}\sphinxstyleindexpageref{CalSciPy.bruker.xml_objects:\detokenize{module-CalSciPy.bruker.xml_objects}}
