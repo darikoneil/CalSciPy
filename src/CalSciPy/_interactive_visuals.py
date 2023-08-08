@@ -10,7 +10,7 @@ from matplotlib import pyplot as plt  # noqa: E402
 import seaborn as sns  # noqa: F401, E402
 
 from .misc import generate_time_vector  # noqa: E402
-from ._colors import COLORS  # noqa: E402
+from .color_scheme import COLORS  # noqa: E402
 
 
 class InteractivePlot(ABC):

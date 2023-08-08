@@ -33,9 +33,10 @@ dependencies = [
     "matplotlib",
     "numpy",
     "opencv-python",
-    "pillow",
+    "pillow <= 9.4.0",
     "PPVD",
     "PyQt5",
+    "pywin32",
     "seaborn",
     "scikit-learn",
     "scipy",
@@ -94,7 +95,8 @@ filterwarnings = [
 branch = true
 command_line = "-m pytest"
 omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests", "scratch", "htmlcov", "flake_report", "docs",
-"dist", "lib", ".pytest_cache", ".idea", ".github"]
+    "dist", "lib", ".pytest_cache", ".idea", ".github", "config-3.py", "config.py", "*CalSciPy/config-3.py",
+    "*CalSciPy/config.py"]
 dynamic_context = "test_function"
 
 

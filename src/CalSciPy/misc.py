@@ -15,6 +15,15 @@ except ModuleNotFoundError:
     pass
 
 
+def zero_pad_num_to_string(idx: int, num_zeros: int) -> str:
+
+    str_idx = f"{idx}"
+
+    pad_length = num_zeros - len(str_idx)
+
+    return "".join(["_", "0" * pad_length, str_idx])
+
+
 def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None
                          ) -> np.ndarray:
     """

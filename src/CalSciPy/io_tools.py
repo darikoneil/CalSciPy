@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import Union, Optional
+from typing import Union, Optional, Mapping
 from pathlib import Path
 from json import load, dump
-
 
 from PIL import Image
 import numpy as np
@@ -10,12 +9,21 @@ import cv2
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
+from .misc import generate_blocks, calculate_frames_per_file, zero_pad_num_to_string
 
-from .misc import generate_blocks, calculate_frames_per_file
+
+"""
+A collection of functions for loading, saving & converting imaging files. Stable as of version 3.5
+"""
 
 
+@validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def load_binary(path: Union[str, Path], mapped: bool = False, mode: str = "r+") -> Union[np.ndarray, np.memmap]:
+def load_binary(path: Union[str, Path],
+                mapped: bool = False,
+                mode: str = "r+",
+                missing_metadata: Mapping = None
+                ) -> Union[np.ndarray, np.memmap]:
     """
     This function loads images saved in language-agnostic binary format. Ideal for optimal read/write speeds and
     highly-robust to corruption. However, the downside is that the images and their metadata are split into two
@@ -26,16 +34,27 @@ def load_binary(path: Union[str, Path], mapped: bool = False, mode: str = "r+") 
     :param path: folder containing binary file
     :param mapped: boolean indicating whether to load image using memory-mapping
     :param mode: indicates the level of access permitted to the original binary
+    :param missing_metadata: if you have lost the metadata or otherwise wish to manually provide it
     :returns: image (frames, y-pixels, x-pixels)
     """
-    if not path.is_file():
-        path = path.joinpath("binary_video")
+    # If path is a folder and not just the filepath without an extension
+    if not path.is_file() and not path.with_suffix(".bin").exists():
+        try:
+            path = path.joinpath("binary_video")
+            assert (path.with_suffix(".bin").exists())
+            assert (path.with_suffix(".json").exists())
+        except AssertionError:
+            raise FileNotFoundError(f"{path.parent.with_suffix('.bin')} or "
+                                    f"{path.with_suffix('.bin')}/{path.with_suffix('.json')}")
 
     # add extensions
     meta_filename = path.with_suffix(".json")
     imaging_filename = path.with_suffix(".bin")
 
-    metadata = _Metadata.decode(meta_filename)
+    if missing_metadata:
+        metadata = _Metadata(**missing_metadata)
+    else:
+        metadata = _Metadata.decode(meta_filename)
 
     if mapped:
         return np.memmap(imaging_filename, mode=mode, dtype=metadata.dtype, shape=(metadata.frames, metadata.y,
@@ -62,8 +81,9 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
         return _load_many_tif(path)
 
 
+@validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
+def save_binary(path: Union[str, Path], images: np.ndarray, name: str = "binary_video") -> int:
     """
     Save images to language-agnostic binary format. Ideal for optimal read/write speeds and highly-robust to corruption.
     However, the downside is that the images and their metadata are split into two separate files. Images are saved with
@@ -75,22 +95,16 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
     :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension. If
     | no filename is provided then the default filename is *binary_video*.
     :param images: images to save (frames, y-pixels, x-pixels)
+    :param name: specify filename for produced files
     :returns: 0 if successful
     """
-    # parse the desired path
-    if path.is_file():
-        name = Path.name
-        file_path = Path(path.parents)
-    else:
-        name = "binary_video"
-        file_path = path
-
-    if not file_path.exists():
-        file_path.mkdir(parents=True, exist_ok=True)
+    # make folder if it doesn't exist
+    if not path.exists():
+        path.mkdir(parents=True, exist_ok=True)
 
     # add extensions
-    imaging_filename = file_path.joinpath(name).with_suffix(".bin")
-    metadata_filename = file_path.joinpath(name).with_suffix(".json")
+    imaging_filename = path.joinpath(name).with_suffix(".bin")
+    metadata_filename = path.joinpath(name).with_suffix(".json")
 
     # save metadata
     metadata = _Metadata(images)
@@ -102,41 +116,29 @@ def save_binary(path: Union[str, Path], images: np.ndarray) -> int:
 
 @validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def save_images(path: Union[str, Path], images: np.ndarray, size_cap: float = 3.9) -> int:
+def save_images(path: Union[str, Path],
+                images: np.ndarray,
+                name: str = "images",
+                size_cap: float = 3.9,) -> int:
     """
     Save a numpy array to a single .tif file. If size > 4GB then saved as a series of files. If path is not a file and
     already exists the default filename will be *images*.
 
     :param path: filename or absolute path
     :param images: numpy array (frames, y pixels, x pixels)
+    :param name: filename for saving images
     :param size_cap: maximum size per file
     :returns: returns 0 if successful
     """
-    # parse desired path
-    if Path.exists(path):
-        if path.is_file():
-            name = path.name
-            file_path = path.parent
-        else:
-            name = "images"
-            file_path = path
-    else:
-        if path.is_file():
-            name = path.name
-            file_path = path.parent
-        else:
-            name = "images"
-            file_path = path
-
-    if not Path.exists(file_path):
-        Path.mkdir(file_path, parents=True, exist_ok=True)
+    if not Path.exists(path):
+        Path.mkdir(path, parents=True, exist_ok=True)
 
     file_size = images.nbytes * 1e-9  # convert to GB
     if file_size <= size_cap:  # crop at 3.9 to be saved
-        filename = file_path.joinpath(name).with_suffix(".tif")
+        filename = path.joinpath(name).with_suffix(".tif")
         _save_single_tif(filename, images)
     else:
-        filename = file_path.joinpath(name)
+        filename = path.joinpath(name)
         _save_many_tif(filename, images, size_cap)
 
 
@@ -144,12 +146,10 @@ def save_images(path: Union[str, Path], images: np.ndarray, size_cap: float = 3.
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def _load_single_tif(file: Union[str, Path]) -> np.ndarray:
     """
-    Load a single .tif as a numpy array
+    Load a single .tif as a numpy array (implementation function)
 
     :param file: absolute filename
-    :type file: str or pathlib.Path
     :return: numpy array (frames, y-pixels, x-pixels)
-    :rtype: numpy.ndarray
     """
     return np.array(cv2.imreadmulti(file, flags=-1)[1])
 
@@ -157,7 +157,7 @@ def _load_single_tif(file: Union[str, Path]) -> np.ndarray:
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     """
-    Loads all .tif's within a folder into a single numpy array.
+    Loads all .tif's within a folder into a single numpy array (implementation function)
 
     :param folder: folder containing a sequence of tiff stacks
     :returns: a numpy array containing the images (frames, y-pixels, x-pixels)
@@ -177,6 +177,13 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
 @validate_extension(required_extension=".tif", pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
+    """
+    Implementation function for saving a single tif
+
+    :param path: path to save at
+    :param images: images
+    :return: 0 if successful
+    """
     # if single page save direct
     if len(images.shape) == 2:
         images = Image.fromarray(images)
@@ -193,6 +200,13 @@ def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
 @validate_extension(required_extension=".tif", pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3.9) -> int:
+    """
+    Implementation function for saving many tif
+
+    :param path: path to save at
+    :param images: images
+    :return: 0 if successful
+    """
     frames_per_file = calculate_frames_per_file(*images.shape[1:], size_cap=size_cap)
     frames = list(range(images.shape[0]))
     blocks = generate_blocks(frames, frames_per_file, 0)
@@ -201,12 +215,9 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
 
     try:
         for block in blocks:
-            if idx <= 9:
-                filename = base_filename.with_name("".join([base_filename.name, "_0", str(idx)]))
-                filename = filename.with_suffix(".tif")
-            else:
-                filename = path.with_name("".join([base_filename.name, "_", str(idx)]))
-                filename = filename.with_suffix(".tif")
+            str_idx = zero_pad_num_to_string(idx, 5)
+            filename = base_filename.with_name("".join([base_filename.name, str_idx]))
+            filename = filename.with_suffix(".tif")
             _save_single_tif(filename, images[block, :, :])
             idx += 1
     except (RuntimeError, StopIteration):
@@ -215,17 +226,43 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
 
 
 class _Metadata:
-    def __init__(self, images: Optional[np.ndarray] = None):
+    """
+    Metadata object used for saving/loading binary images
+
+    :ivar frames: number of frames
+    :type frames: int
+    :ivar y: height of each frame
+    :type y: int
+    :ivar x: width of each frame
+    :type x: int
+    :ivar dtype: datatype of each frame
+    :type dtype: np.dtype
+    """
+    def __init__(self,
+                 images: Optional[np.ndarray] = None,
+                 frames: int = None,
+                 y: int = None,
+                 x: int = None,
+                 dtype: np.dtype = None):
         """
-        Metadata object using for saving/loading binary images
+        Metadata object used for saving/loading binary images
 
         :param images: images in numpy array (frames, y-pixels, x-pixels)
+        :param frames: number of frames
+        :param y: number of y pixels
+        :param x: number of x pixels
+        :param dtype: type of data
         """
-        self.frames, self.y, self.x, self.dtype = None, None, None, None
+        self.frames = frames
+        self.y = y
+        self.x = x
+        self.dtype = dtype
 
         if images is not None:
             self.frames, self.y, self.x = images.shape
             self.dtype = str(images.dtype)
+
+        self._validate_metadata()
 
     @classmethod
     def decode(cls: _Metadata, filename: Path) -> _Metadata:
@@ -233,29 +270,26 @@ class _Metadata:
         with open(str(filename), "r+") as file:
             attrs = load(file)
 
-        metadata = _Metadata()
-        for key, value in attrs.items():
-            setattr(metadata, key, value)
-
-        if "dtype" not in attrs:
-            raise AttributeError("dtype not found")
-
-        missing_keys = []
-        for key in ["frames", "y", "x"]:
-            if key not in attrs:
-                missing_keys.append(key)
-
-        if len(missing_keys) > 1:
-            raise AttributeError("Require at least 2/3 shape keys")
-
-        if len(missing_keys) == 1:
-            setattr(metadata, missing_keys[0], -1)
-            # set to negative one to let numpy figure it out
-
-        return metadata
+        return _Metadata(**attrs)
 
     def encode(self, filename: Path) -> int:
         meta = vars(self)
         with open(str(filename), "w+") as file:
             dump(meta, file)
         return 0
+
+    def _validate_metadata(self) -> _Metadata:
+
+        attrs = vars(self)
+
+        missing_keys = [key for key in ["dtype", "frames", "y", "x"] if not attrs.get(key)]
+
+        if "dtype" in missing_keys:
+            raise AttributeError("dtype not found")
+
+        if len(missing_keys) > 1:
+            raise AttributeError("Require at least 2/3 shape keys")
+
+        if len(missing_keys) == 1:
+            setattr(self, missing_keys[0], -1)
+            # set to negative one to let numpy figure it out
