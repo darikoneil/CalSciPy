@@ -233,7 +233,9 @@ class GalvoPoint(_BrukerObject):
      Dataclass for a specific point during galvo-stimulation for a specific marked point
      in a sequence of photostimulations
 
-     """
+    :ivar z: relative z-position of the motor + ETL offset (um)
+    :type z: float
+    """
     x: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
     y: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
     name: str = field(default="Point 0")
