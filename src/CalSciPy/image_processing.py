@@ -7,8 +7,19 @@ from .misc import generate_blocks, wrap_cupy_block
 try:
     import cupy
     import cupyx.scipy.ndimage
+    USE_GPU = True
 except ModuleNotFoundError:
-    pass
+    import scipy.ndimage
+    USE_GPU = False
+finally:
+    if USE_GPU:
+        _gaussian_filter = _gaussian_filter_gpu
+        _median_filter = _median_filter_gpu
+    else:
+        _gaussian_filter = _gaussian_filter_cpu
+        _median_filter = _median_filter_cpu
+
+
 
 DEFAULT_MASK = np.ones((3, 3, 3))
 
@@ -89,7 +100,7 @@ def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_siz
 
 
 @wrap_cupy_block
-def _gaussian_filter(images: cupy.ndarray, sigma: Union[Number, np.ndarray]) -> np.ndarray:
+def _gaussian_filter_gpu(images: cupy.ndarray, sigma: Union[Number, np.ndarray]) -> np.ndarray:
     """
     Implementation function of gaussian filter
 
@@ -101,7 +112,7 @@ def _gaussian_filter(images: cupy.ndarray, sigma: Union[Number, np.ndarray]) -> 
 
 
 @wrap_cupy_block
-def _median_filter(images: cupy.ndarray, mask: np.ndarray) -> np.ndarray:
+def _median_filter_gpu(images: cupy.ndarray, mask: np.ndarray) -> np.ndarray:
     """
     Implementation function of median filter
 
@@ -110,3 +121,25 @@ def _median_filter(images: cupy.ndarray, mask: np.ndarray) -> np.ndarray:
     :returns: filtered numpy array
     """
     return cupyx.scipy.ndimage.median_filter(images, footprint=mask)
+
+
+def _gaussian_filter_cpu(images: np.ndarray, sigma: Union[Number, np.ndarray]) -> np.ndarray:
+    """
+    Implementation function of gaussian filter
+
+    :param images: images to be filtered
+    :param sigma: sigma for filter
+    :returns: filtered numpy array
+    """
+    return scipy.ndimage.gaussian_filter(images, sigma=sigma)
+
+
+def _median_filter_cpu(images: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """
+    Implementation function of median filter
+
+    :param images: images to be filtered
+    :param mask: mask for filtering
+    :returns: filtered numpy array
+    """
+    return scipy.ndimage.median_filter(images, footprint=mask)

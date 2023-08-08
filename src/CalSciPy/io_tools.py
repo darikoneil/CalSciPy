@@ -57,7 +57,8 @@ def load_binary(path: Union[str, Path],
         metadata = _Metadata.decode(meta_filename)
 
     if mapped:
-        return np.memmap(imaging_filename, mode=mode, dtype=metadata.dtype, shape=(metadata.frames, metadata.y,
+        return np.memmap(imaging_filename, mode=mode, dtype=metadata.dtype, shape=(metadata.frames,
+                                                                                   metadata.y,
                                                                                    metadata.x))
     else:
         images = np.fromfile(imaging_filename, dtype=metadata.dtype)
