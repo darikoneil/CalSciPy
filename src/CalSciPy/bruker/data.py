@@ -42,7 +42,6 @@ def align_data(analog_data: pd.DataFrame,
     """
     frame_times = frame_times.reindex(index=analog_data.index)
 
-
     # Join frames & analog (deep copy to make sure not a view)
     data = analog_data.copy(deep=True)
     data = data.join(frame_times)
@@ -50,7 +49,7 @@ def align_data(analog_data: pd.DataFrame,
     if fill:
         frame_times_filled = frame_times.copy(deep=True)
         frame_times_filled.columns = ["Imaging Frame (interpolated)"]
-        frame_times_filled.interpolate(method=fill_method, inplace=True)
+        frame_times_filled.interpolate(method=method, inplace=True)
         # forward fill the final frame
         frame_times_filled.ffill(inplace=True)
         data = data.join(frame_times_filled)

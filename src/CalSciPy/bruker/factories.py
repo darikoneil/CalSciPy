@@ -14,6 +14,7 @@ from .xml_objects import _BrukerObject
 These are factories for importing elements from bruker .xml files and generating elements from python objects
 """
 
+
 class BrukerElementFactory:
     """
     Factory class for constructing bruker element objects

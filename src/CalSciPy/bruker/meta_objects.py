@@ -1,6 +1,5 @@
 from __future__ import annotations
-from typing import Tuple, Sequence, Union
-from numbers import Number
+from typing import Tuple
 from abc import abstractmethod
 from xml.etree import ElementTree
 import numpy as np
@@ -57,7 +56,7 @@ class PhotostimulationMeta(_BrukerMeta):
         """
         Metadata object for Photostimulation / MarkedPoints Protocols.
 
-        Can either be loaded from an experiment OR built to generate new experiments
+        loaded from an experiment
         """
         self.sequence = None
         self.groups = []
@@ -205,7 +204,7 @@ class ROIMeta:
         # calculate mask
         return generate_photostimulation_mask(center, radii, (height, width))
 
-    def _pull_parameters_to_upper_level(self) -> ROI:
+    def _pull_parameters_to_upper_level(self) -> ROIMeta:
         params = []
         for parameter_set in self._map.maps:
             params.append(parameter_set.__dict__)
