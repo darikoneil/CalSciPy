@@ -12,10 +12,17 @@
 [![Contributors](https://img.shields.io/github/contributors-anon/darikoneil/CalSciPy)](https://github.com/darikoneil/CalSciPy/graphs/contributors)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/darikoneil/CalSciPy/calscipy_lint_test_action.yml)
 
-This python packages contains a variety of useful methods for handling, processing, and visualizing calcium imaging data. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between environments. I wrote this so ~I don't have to~ you don't have to.  It's intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software packages such as [Caiman](https://github.com/flatironinstitute/CaImAn), [SIMA](https://github.com/losonczylab/sima), and [Suite2P](https://github.com/MouseLand/suite2p).
+This python packages contains a variety of useful tools for handling, processing, visualizing, & designing calcium 
+imaging experiments. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
+environments. I wrote this so ~I don't have to~ you don't have to. It's intended to be a collection of useful, 
+well-documented functions often used in boilerplate code alongside software packages such as 
+[Caiman](https://github.com/flatironinstitute/CaImAn), [SIMA](https://github.com/losonczylab/sima), 
+and [Suite2P](https://github.com/MouseLand/suite2p), as well as a collection of more bespoke software designed for use 
+with Bruker's PrairieView Imaging Software and MeadowLark Spatial Light Modulators. Essentially, it's a collection of 
+code written for my imaging experiments that might be considered useful to others.
 
 #### Active Development
-* Things are gonna break
+* The current implementation is unstable and should be considered an open beta.
 
 #### Highlights
 * Assign unique colormaps to subsets of ROIs to generate rich, informative videos

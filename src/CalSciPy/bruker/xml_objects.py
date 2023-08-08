@@ -22,7 +22,6 @@ class _BrukerObject:
         """
         Post-initialization method which conducts type-checking and other validation features
 
-        :rtype: _BrukerObject
         """
         validate_fields(self)
 
@@ -31,7 +30,7 @@ class _BrukerObject:
         Modified dunder method such that the printing is more verbose and easier for human consumption
 
         Prints the dataclass name and each of its parameters, their values, and associated types
-        :rtype: str
+
         """
         string_to_print = f"\n{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{TerminalStyle.UNDERLINE}" \
                           f"{self.__name__()}{TerminalStyle.RESET}\n"
@@ -57,9 +56,8 @@ class _BrukerObject:
         """
         Abstract modified static dunder method which returns the name of the dataclass
 
-        :rtype: str
         """
-        return "MarkPointObjectFactory"
+        ...
 
     @classmethod
     def collect_annotations(cls: _BrukerObject) -> dict:

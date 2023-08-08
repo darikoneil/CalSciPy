@@ -47,11 +47,18 @@ def test_single_page_tifs(datafiles, tmp_path, matrix):
         _save_single_tif(output_folder, image_abstracted_method)
         image_abstracted_method_reloaded = load_images(output_folder)
         image_implement_method_reloaded = load_images(output_folder)
+        # test 2D single image
+        save_images(output_folder, image_abstracted_method.reshape(image_abstracted_method.shape[1:]))
+        images_abstracted_2d = load_images(output_folder)
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_implement_method_reloaded,
                                       err_msg=f"Image Mismatch between loading with implementation "
                                               f"and abstracted methods")
         np.testing.assert_array_equal(image_abstracted_method_reloaded, image_abstracted_method,
                                       err_msg=f"Image mismatch between saved and loaded image")
+        np.testing.assert_array_equal(
+            image_abstracted_method_reloaded,
+            images_abstracted_2d,
+            err_msg=f"Image mismatch between 3D & 2D image")
         # test exact filename
         output_file = Path(tmp_path).joinpath("exact_filename.tif")
         save_images(output_file, image_abstracted_method)
@@ -198,6 +205,7 @@ def test_binary(datafiles, tmp_path, matrix):
         # Description of Expected
         descriptions = Path(directory).joinpath("description.txt")
         descriptions = read_descriptions(descriptions)
+        frames, y, x = descriptions[2:]
 
         # single image
         imaging_folder = Path(directory).joinpath("binary")
@@ -222,19 +230,37 @@ def test_binary(datafiles, tmp_path, matrix):
         image_memory_mapped = load_binary(output_folder, mapped=True)
 
         # make sure we can save & load a non-default filename
-        output_file = Path(tmp_path).joinpath("exact_filename.bin")
-        save_binary(output_file, images)
-        images_reloaded_exact_filename = load_binary(output_file)
+        exact_output_folder = Path(tmp_path).joinpath("exact_folder")
+        save_binary(exact_output_folder, images, name="exact_filename")
+        images_reloaded_exact_filename = load_binary(exact_output_folder.joinpath("exact_filename"))
 
-    # test exceptions
+        # make sure we can load with interpolated metadata
+        interp_images = load_binary(exact_output_folder.joinpath("exact_filename"),
+                                    missing_metadata={"dtype": np.uint16, "y": y, "x": x})
+
+        np.testing.assert_array_equal(images_reloaded_exact_filename, interp_images,
+                                      err_msg=f"Mismatch: failed matching original and reloaded dataset")
+
+        # we also fail if missing sufficient metadata
+        with pytest.raises(AttributeError):
+            load_binary(exact_output_folder.joinpath("exact_filename"),
+                        missing_metadata={"frames": frames, "y": y, "x": x})
+        with pytest.raises(AttributeError):
+            load_binary(exact_output_folder.joinpath("exact_filename"),
+                        missing_metadata={"dtype": np.uint16, "x": x})
+
+    # generic test exceptions
+    with pytest.raises(FileNotFoundError):
+        load_binary(Path.cwd())
     with pytest.raises(ValueError):
-        load_images("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
+        load_binary("C:\\&^6* ***%")  # FAIL PERMITTED CHARS
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
-        load_images(125.6)  # fail with bad type so we don't do anything unexpected
+        load_binary(125.6)  # fail with bad type so we don't do anything unexpected
     with pytest.raises(ValueError):
-        save_images("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
+        save_binary("C:\\&^6*", matrix)  # FAIL VALIDATE PATH PERMITTED CHARS
     with pytest.raises(TypeError):
         # noinspection PyTypeChecker
-        save_images(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+        save_binary(125.6, matrix)  # fail with bad type so we don't do anything unexpected
+
     # the rest of failures are fine being trial by forgiveness

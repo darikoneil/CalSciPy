@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Tuple, Union
 
 
-class _Colors:
+class _ColorScheme:
     """
     A container class for CalSciPy's color scheme
 
@@ -24,7 +24,7 @@ class _Colors:
 
     def __new__(cls):
         if not hasattr(cls, "instance"):
-            cls.instance = super(_Colors, cls).__new__(cls)
+            cls.instance = super(_ColorScheme, cls).__new__(cls)
         return cls.instance
 
     def __call__(self, value: Union[int, str], *args, **kwargs):
@@ -37,4 +37,4 @@ class _Colors:
 
 
 # instance
-COLORS = _Colors()
+COLORS = _ColorScheme()
