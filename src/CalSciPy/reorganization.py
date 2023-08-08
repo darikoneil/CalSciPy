@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Optional, Iterable
+from typing import Optional, Iterable, Union
 import numpy as np
-from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_numpy_type, validate_tensor
+from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_tensor
 
 
 def generate_raster(event_frames: Iterable[Iterable[int]], total_frames: Optional[int] = None) -> np.ndarray:
@@ -58,7 +58,7 @@ def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[i
 
     :param factorized_traces: neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
         into several components
-    :param component: specific component to extract
+    :param components: specific component to extract
     :returns: traces of specific component in matrix form
     """
     if isinstance(components, Iterable):
@@ -67,8 +67,6 @@ def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[i
         ).swapaxes(0, 2).swapaxes(1, 2)
     else:
         return _merge_factorized_matrices(factorized_traces, components)
-
-    return merged_traces
 
 
 def _merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy.bruker module &mdash; CalSciPy 0.3.1 documentation</title>
+  <title>CalSciPy.bruker package &mdash; CalSciPy 0.3.4 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CalSciPy.coloring module" href="CalSciPy.coloring.html" />
+    <link rel="next" title="CalSciPy.bruker.xml_mappings package" href="CalSciPy.bruker.xml_mappings.html" />
     <link rel="prev" title="Installation" href="Installation.html" /> 
 </head>
 
@@ -45,14 +45,27 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.bruker module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.align_data"><code class="docutils literal notranslate"><span class="pre">align_data()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.determine_imaging_content"><code class="docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.extract_frame_times"><code class="docutils literal notranslate"><span class="pre">extract_frame_times()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.generate_bruker_naming_convention"><code class="docutils literal notranslate"><span class="pre">generate_bruker_naming_convention()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.load_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tifs()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.load_voltage_recording"><code class="docutils literal notranslate"><span class="pre">load_voltage_recording()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#CalSciPy.bruker.repackage_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tifs()</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CalSciPy.bruker package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.html">CalSciPy.bruker.xml_mappings package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.align.html">CalSciPy.bruker.align module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.bruker.html">CalSciPy.bruker.bruker module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html">CalSciPy.bruker.bruker_meta_objects module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.configuration_values.html">CalSciPy.bruker.configuration_values module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.data.html">CalSciPy.bruker.data module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html">CalSciPy.bruker.factories module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.mark_points.html">CalSciPy.bruker.mark_points module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html">CalSciPy.bruker.meta_objects module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.prairie_link.html">CalSciPy.bruker.prairie_link module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.validation.html">CalSciPy.bruker.validation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_load.html">CalSciPy.bruker.xml_load module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html">CalSciPy.bruker.xml_objects module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-CalSciPy.bruker">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.coloring.html">CalSciPy.coloring module</a></li>
@@ -79,7 +92,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">CalSciPy.bruker module</li>
+      <li class="breadcrumb-item active">CalSciPy.bruker package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/CalSciPy.bruker.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,156 +102,184 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-CalSciPy.bruker">
-<span id="calscipy-bruker-module"></span><h1>CalSciPy.bruker module<a class="headerlink" href="#module-CalSciPy.bruker" title="Permalink to this heading"></a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.align_data">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">align_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analog_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_times</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#align_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.align_data" title="Permalink to this definition"></a></dt>
-<dd><p>Synchronizes analog data &amp; imaging frames using the timestamp of each frame. Option to generate a second column
-in which the frame index is interpolated such that each analog sample matches with an associated frame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>analog_data</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>) – analog data</p></li>
-<li><p><strong>frame_times</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>) – frame timestamps</p></li>
-<li><p><strong>fill</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">False</span></code>) – whether to include an interpolated nearest-neighbor column so each sample has an associated frame</p></li>
+  <section id="calscipy-bruker-package">
+<h1>CalSciPy.bruker package<a class="headerlink" href="#calscipy-bruker-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.html">CalSciPy.bruker.xml_mappings package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.xml_mapping.html">CalSciPy.bruker.xml_mappings.xml_mapping module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.xml_mapping.html#CalSciPy.bruker.xml_mappings.xml_mapping.load_mapping"><code class="docutils literal notranslate"><span class="pre">load_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.xml_mapping.html#CalSciPy.bruker.xml_mappings.xml_mapping.write_mapping"><code class="docutils literal notranslate"><span class="pre">write_mapping()</span></code></a></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and imaging frame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.determine_imaging_content">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">determine_imaging_content</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#determine_imaging_content"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.determine_imaging_content" title="Permalink to this definition"></a></dt>
-<dd><p>This function determines the number of channels and planes within a folder containing .tif files
-exported by Bruker’s Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels).
-It’s a quick / fast alternative to parsing its respective xml. However, note that the function is dependent on the
-naming conventions of PrairieView and will not work on arbitrary folders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – folder containing bruker imaging data</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>channels, planes, frames, height, width</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.extract_frame_times">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">extract_frame_times</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#extract_frame_times"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.extract_frame_times" title="Permalink to this definition"></a></dt>
-<dd><p>Function to extract the relative frame times from a PrairieView imaging session’s primary .xml file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Param<span class="colon">:</span></dt>
-<dd class="field-odd"><p>filename</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dataframe containing time (index, ms) x imaging frame (<em>zero-indexed</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.generate_bruker_naming_convention">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">generate_bruker_naming_convention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_channels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_planes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#generate_bruker_naming_convention"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.generate_bruker_naming_convention" title="Permalink to this definition"></a></dt>
-<dd><p>Generates the expected bruker naming convention for images collected with an arbitrary number of cycles &amp; channels</p>
-<p>This function expects that the naming convention is _Cycle00000_Ch0_000000.ome.tiff where the channel is
-one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and the 6-digit tag represents
-the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.</p>
-<p>Please note that the parameters channel and plane are <em>zero-indexed</em>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>channel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – channel to produce name for</p></li>
-<li><p><strong>plane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – plane to produce name for</p></li>
-<li><p><strong>num_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">1</span></code>) – number of channels</p></li>
-<li><p><strong>num_planes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">1</span></code>) – number of planes</p></li>
+</li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>proper naming convention</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.load_bruker_tifs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">load_bruker_tifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#load_bruker_tifs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.load_bruker_tifs" title="Permalink to this definition"></a></dt>
-<dd><p>This function loads images collected and converted to .tif files by Bruker’s Prairieview software.
-If multiple channels or multiple planes exist, each channel and plane combination is loaded to a separate
-numpy array. Identification of multiple channels / planes is dependent on <a class="reference internal" href="#CalSciPy.bruker.determine_imaging_content" title="CalSciPy.bruker.determine_imaging_content"><code class="xref py py-func docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a>.
-Images are loaded as unsigned 16-bit (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.uint16</span></code>), though note that raw bruker files are
-natively 12 or 13-bit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – folder containing a sequence of single frame tiff files</p></li>
-<li><p><strong>channel</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – specific channel to load from dataset (zero-indexed)</p></li>
-<li><p><strong>plane</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>], default: <code class="docutils literal notranslate"><span class="pre">None</span></code>) – specific plane to load from dataset (zero-indexed)</p></li>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_mappings.html#module-CalSciPy.bruker.xml_mappings">Module contents</a></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code></a>[<a class="reference external" href="https://numpy.org/doc/1.24/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></a>]</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a tuple of numpy arrays (frames, y-pixels, x-pixels, <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.uint16</span></code>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.load_voltage_recording">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">load_voltage_recording</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#load_voltage_recording"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.load_voltage_recording" title="Permalink to this definition"></a></dt>
-<dd><p>Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
-| files contain “VoltageRecording” in the name.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – folder or filename containing analog data</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dataframe containing time (index, ms) x channel data</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="CalSciPy.bruker.repackage_bruker_tifs">
-<span class="sig-prename descclassname"><span class="pre">CalSciPy.bruker.</span></span><span class="sig-name descname"><span class="pre">repackage_bruker_tifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/CalSciPy/bruker.html#repackage_bruker_tifs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CalSciPy.bruker.repackage_bruker_tifs" title="Permalink to this definition"></a></dt>
-<dd><p>This function repackages a folder containing .tif files exported by Bruker’s Prairieview software into a sequence
-of &lt;4 GB .tif stacks. Note that parameters channel and plane are <strong>zero-indexed</strong>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – folder containing a sequence of single frame .tif files exported by Bruker’s Prairieview</p></li>
-<li><p><strong>output_folder</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a>]) – empty folder where .tif stacks will be saved</p></li>
-<li><p><strong>channel</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0</span></code>) – specify channel</p></li>
-<li><p><strong>plane</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, default: <code class="docutils literal notranslate"><span class="pre">0</span></code>) – specify plane</p></li>
+</li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.align.html">CalSciPy.bruker.align module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.bruker.html">CalSciPy.bruker.bruker module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.align_data"><code class="docutils literal notranslate"><span class="pre">align_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.determine_imaging_content"><code class="docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.extract_frame_times"><code class="docutils literal notranslate"><span class="pre">extract_frame_times()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.generate_bruker_naming_convention"><code class="docutils literal notranslate"><span class="pre">generate_bruker_naming_convention()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.load_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tifs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.load_voltage_recording"><code class="docutils literal notranslate"><span class="pre">load_voltage_recording()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker.html#CalSciPy.bruker.bruker.repackage_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tifs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html">CalSciPy.bruker.bruker_meta_objects module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html#CalSciPy.bruker.bruker_meta_objects.BrukerElementFactory"><code class="docutils literal notranslate"><span class="pre">BrukerElementFactory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html#CalSciPy.bruker.bruker_meta_objects.BrukerElementFactory.constructor"><code class="docutils literal notranslate"><span class="pre">BrukerElementFactory.constructor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html#CalSciPy.bruker.bruker_meta_objects.BrukerMeta"><code class="docutils literal notranslate"><span class="pre">BrukerMeta</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html#CalSciPy.bruker.bruker_meta_objects.BrukerMeta.generate_protocol"><code class="docutils literal notranslate"><span class="pre">BrukerMeta.generate_protocol()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.bruker_meta_objects.html#CalSciPy.bruker.bruker_meta_objects.BrukerXMLFactory"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.configuration_values.html">CalSciPy.bruker.configuration_values module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.data.html">CalSciPy.bruker.data module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.align_data"><code class="docutils literal notranslate"><span class="pre">align_data()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.determine_imaging_content"><code class="docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.extract_frame_times"><code class="docutils literal notranslate"><span class="pre">extract_frame_times()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.generate_bruker_naming_convention"><code class="docutils literal notranslate"><span class="pre">generate_bruker_naming_convention()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tifs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_voltage_recording"><code class="docutils literal notranslate"><span class="pre">load_voltage_recording()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.repackage_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tifs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.factories.html">CalSciPy.bruker.factories module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerElementFactory"><code class="docutils literal notranslate"><span class="pre">BrukerElementFactory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerElementFactory.constructor"><code class="docutils literal notranslate"><span class="pre">BrukerElementFactory.constructor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.construct_element"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory.construct_element()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.constructor"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory.constructor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.validate_element"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory.validate_element()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.mark_points.html">CalSciPy.bruker.mark_points module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.Group"><code class="docutils literal notranslate"><span class="pre">Group</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.PhotostimulationMeta"><code class="docutils literal notranslate"><span class="pre">PhotostimulationMeta</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.PhotostimulationMeta.generate_protocol"><code class="docutils literal notranslate"><span class="pre">PhotostimulationMeta.generate_protocol()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.ROI"><code class="docutils literal notranslate"><span class="pre">ROI</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.ROI.generate_coordinates"><code class="docutils literal notranslate"><span class="pre">ROI.generate_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.ROI.generate_hull_vertices"><code class="docutils literal notranslate"><span class="pre">ROI.generate_hull_vertices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.ROI.generate_mask"><code class="docutils literal notranslate"><span class="pre">ROI.generate_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.mark_points.html#CalSciPy.bruker.mark_points.generate_photostimulation_mask"><code class="docutils literal notranslate"><span class="pre">generate_photostimulation_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html">CalSciPy.bruker.meta_objects module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.prairie_link.html">CalSciPy.bruker.prairie_link module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.validation.html">CalSciPy.bruker.validation module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusException"><code class="docutils literal notranslate"><span class="pre">DingusException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger"><code class="docutils literal notranslate"><span class="pre">DingusLogger</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger.add_exception"><code class="docutils literal notranslate"><span class="pre">DingusLogger.add_exception()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger.raise_exceptions"><code class="docutils literal notranslate"><span class="pre">DingusLogger.raise_exceptions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.field_validator"><code class="docutils literal notranslate"><span class="pre">field_validator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.format_fields"><code class="docutils literal notranslate"><span class="pre">format_fields()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.type_check_nested_types"><code class="docutils literal notranslate"><span class="pre">type_check_nested_types()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.validate_fields"><code class="docutils literal notranslate"><span class="pre">validate_fields()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.xml_load.html">CalSciPy.bruker.xml_load module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_load.html#CalSciPy.bruker.xml_load.get_image_xml"><code class="docutils literal notranslate"><span class="pre">get_image_xml()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_load.html#CalSciPy.bruker.xml_load.get_voltage_output"><code class="docutils literal notranslate"><span class="pre">get_voltage_output()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_load.html#CalSciPy.bruker.xml_load.get_voltage_recording"><code class="docutils literal notranslate"><span class="pre">get_voltage_recording()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_load.html#CalSciPy.bruker.xml_load.read_mark_points_xml"><code class="docutils literal notranslate"><span class="pre">read_mark_points_xml()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html">CalSciPy.bruker.xml_objects module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint"><code class="docutils literal notranslate"><span class="pre">GalvoPoint</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.activity_type"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.activity_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.duration"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.duration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.index"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.is_spiral"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.is_spiral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.name"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.spiral_revolutions"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.spiral_revolutions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.spiral_size"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.spiral_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.uncaging_laser"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.uncaging_laser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.uncaging_laser_power"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.uncaging_laser_power</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.x"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.y"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.z"><code class="docutils literal notranslate"><span class="pre">GalvoPoint.z</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.all_points_at_once"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.all_points_at_once</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.duration"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.duration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.indices"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.indices</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.initial_delay"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.initial_delay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.inter_point_delay"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.inter_point_delay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.points"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.points</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.spiral_revolutions"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement.spiral_revolutions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointList"><code class="docutils literal notranslate"><span class="pre">GalvoPointList</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointList.galvo_points"><code class="docutils literal notranslate"><span class="pre">GalvoPointList.galvo_points</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement"><code class="docutils literal notranslate"><span class="pre">MarkPointElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.async_sync_frequency"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.async_sync_frequency</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.parameter_set"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.parameter_set</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.points"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.points</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.repetitions"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.repetitions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_count"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.trigger_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_frequency"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.trigger_frequency</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_selection"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.trigger_selection</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.uncaging_laser"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.uncaging_laser</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.uncaging_laser_power"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.uncaging_laser_power</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.voltage_output_category_name"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.voltage_output_category_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.voltage_rec_category_name"><code class="docutils literal notranslate"><span class="pre">MarkPointElement.voltage_rec_category_name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.calc_funct_map"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements.calc_funct_map</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.iteration_delay"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements.iteration_delay</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.iterations"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements.iterations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.marks"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements.marks</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point"><code class="docutils literal notranslate"><span class="pre">Point</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.index"><code class="docutils literal notranslate"><span class="pre">Point.index</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.is_spiral"><code class="docutils literal notranslate"><span class="pre">Point.is_spiral</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_height"><code class="docutils literal notranslate"><span class="pre">Point.spiral_height</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_size_in_microns"><code class="docutils literal notranslate"><span class="pre">Point.spiral_size_in_microns</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_width"><code class="docutils literal notranslate"><span class="pre">Point.spiral_width</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.x"><code class="docutils literal notranslate"><span class="pre">Point.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.y"><code class="docutils literal notranslate"><span class="pre">Point.y</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-CalSciPy.bruker">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-CalSciPy.bruker" title="Permalink to this heading"></a></h2>
+</section>
 </section>
 
 
@@ -246,7 +287,7 @@ of &lt;4 GB .tif stacks. Note that parameters channel and plane are <strong>zero
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="CalSciPy.coloring.html" class="btn btn-neutral float-right" title="CalSciPy.coloring module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="CalSciPy.bruker.xml_mappings.html" class="btn btn-neutral float-right" title="CalSciPy.bruker.xml_mappings package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

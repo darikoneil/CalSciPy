@@ -1,23 +1,13 @@
 from __future__ import annotations
-from typing import Tuple, Callable, Union, Sequence
+from typing import Tuple, Union, Sequence
 from pathlib import Path
 from functools import partial, cached_property
-from abc import abstractmethod, abstractclassmethod
 from collections import ChainMap
 from numbers import Number
 
 import numpy as np
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import pdist
-
-import matplotlib
-matplotlib.use("Qt5Agg")
-from matplotlib import pyplot as plt
-from matplotlib.ticker import MultipleLocator
-from matplotlib.patches import Polygon
-import seaborn as sns
-
-from ._interactive_visuals import COLORS
 from .bruker.xml_objects import GalvoPoint, GalvoPointList
 
 
@@ -31,21 +21,73 @@ class Photostimulation:
     :type reference_image: numpy.ndarray
     :ivar sequence: the sequence of individual photostimulation events
     """
-    def __init__(self, rois: dict, reference_image: np.ndarray = None):
+    def __init__(self,
+                 rois: dict,
+                 etl_offset: float = 0.0,
+                 pixels_per_micron: float = 0.883,
+                 spiral_um_per_au: float = 29.6,
+                 x_range: Tuple[float, float] = (-8.333, 8.333),
+                 y_range: Tuple[float, float] = (-7.647, 7.647),
+                 reference_image: np.ndarray = None,
+                 ):
         """
-        PPhotostimulation object that defines patterned photostimulation during an optogenetic experiment
+        Photostimulation object that defines patterned photostimulation during an optogenetic experiment
 
         :param rois: dictionary containing a collection of ROI objects for potential photostimulation
-        :type rois: dict
+        :param etl_offset: z-plane offset between imaging and stimulation focal planes
+        :param pixels_per_micron: number of pixels per micron for the associated objective at 1.02X
         :param reference_image: a reference image containing the provided ROIs.
-        :type reference_image: numpy.ndarray
+        :param spiral_um_per_au: the diameter of a '.gpl' spiral in microns when the metadata equals 1.0
+        :param x_range: the range of the x coordinate in '.gpl' files
+        :param y_range: the range of the y coordinate in '.gpl' files
         """
+        # TODO: When saving to galvo point lists the rois are in some sort of seemingly arbitrary scale...
         self.rois = rois
         self.reference_image = reference_image
         self.sequence = None
 
+    def __str__(self):
+        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
+               f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
+
+    @property
+    def targets(self) -> int:
+        return 15
+
+    @staticmethod
+    def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
+        """
+        Static method generating an ROI for each roi in stat
+
+        :param stat: array containing suite2p stats for each roi
+        :param idx: idx of specific roi
+        :return: ROI instance for the roi 'idx'
+        """
+        aspect_ratio = stat[idx].get("aspect_ratio")
+        radius = stat[idx].get("radius")
+        xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
+        ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
+        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
+
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation"
+
     @classmethod
-    def import_suite2p(cls, folder: Path, shape: Tuple[int, int] = (512, 512)) -> Photostimulation:
+    def convert_suite2p_rois(cls: Photostimulation, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)
+                             ) -> dict:
+        """
+        Class method that generates the roi dictionary from provided suite2p stat array
+
+        :param suite2p_rois: array containing suite2p stats for each roi
+        :param shape: dimensions of image
+        :return: dictionary containing a collection of ROI objects for potential photostimulation
+        """
+        converter = partial(cls._suite2p_roi, stat=suite2p_rois, shape=shape)
+        return dict(enumerate([converter(idx) for idx in range(suite2p_rois.shape[0])]))
+
+    @classmethod
+    def import_suite2p(cls: Photostimulation, folder: Path, shape: Tuple[int, int] = (512, 512)) -> Photostimulation:
         """
         Class method which builds a photostimulation instance given suite2p data
 
@@ -86,38 +128,6 @@ class Photostimulation:
         # generate instance
         return Photostimulation(rois, reference_image)
 
-    @classmethod
-    def convert_suite2p_rois(cls, suite2p_rois: np.ndarray, shape: Tuple[int, int] = (512, 512)) -> dict:
-        """
-        Class method that generates the roi dictionary from provided suite2p stat array
-
-        :param suite2p_rois: array containing suite2p stats for each roi
-        :type suite2p_rois: numpy.ndarray
-        :param shape: dimensions of image
-        :return: dictionary containing a collection of ROI objects for potential photostimulation
-        """
-        converter = partial(cls._suite2p_roi, stat=suite2p_rois, shape=shape)
-        return dict(enumerate([converter(idx) for idx in range(suite2p_rois.shape[0])]))
-
-    @staticmethod
-    def _suite2p_roi(idx: int, stat: np.ndarray, shape: Tuple[int, int]) -> ROI:
-        """
-        Static method generating an ROI for each roi in stat
-
-        :param stat: array containing suite2p stats for each roi
-        :param idx: idx of specific roi
-        :return: ROI instance for the roi 'idx'
-        """
-        aspect_ratio = stat[idx].get("aspect_ratio")
-        radius = stat[idx].get("radius")
-        xpix = stat[idx].get("xpix")[~stat[idx].get("overlap")]
-        ypix = stat[idx].get("ypix")[~stat[idx].get("overlap")]
-        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=shape, xpix=xpix, ypix=ypix)
-
-    def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
-        galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
-        return GalvoPointList(galvo_points=galvo_points)
-
     def generate_galvo_point(self, idx: int, parameters: dict = None) -> GalvoPoint:
         roi = self.rois[idx]
         y, x = roi.coordinates
@@ -125,25 +135,16 @@ class Photostimulation:
         index = idx
         spiral_size = roi.mask.bound_radius
 
-        roi_properties = {key: value for key, value in zip(["y", "x", "name", "index", "spiral_size"],
-                                                           [y, x, name, index, spiral_size])}
+        roi_properties = dict(zip(["y", "x", "name", "index", "spiral_size"], [y, x, name, index, spiral_size]))
 
         if parameters is not None:
             roi_properties = ChainMap(parameters, roi_properties)
 
         return GalvoPoint(**roi_properties)
 
-    @property
-    def targets(self) -> int:
-        return 15
-
-    def __str__(self):
-        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
-               f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
-
-    @staticmethod
-    def __name__():
-        return "Photostimulation"
+    def generate_galvo_point_list(self, parameters: dict = None) -> GalvoPointList:
+        galvo_points = tuple([self.generate_galvo_point(idx, parameters) for idx in self.rois])
+        return GalvoPointList(galvo_points=galvo_points)
 
 
 class Group:
@@ -155,6 +156,7 @@ class Group:
         :ivar order: a tuple containing the identity and stimulation order of the rois in this group
         :type order: Tuple[int]
         :ivar repetitions: an integer indicating the number of times to repeat the stimulation
+        :type repetitions: int
         """
         self.order = None
         self.repetitions = 1
@@ -166,7 +168,6 @@ class ROI:
     protocols.
 
     :param aspect_ratio: ratio of the short-to-long radius of the roi
-    :type aspect_ratio: float = 1.0
     :param radius: approximate radius of the ROI
     :type radius: float
     :param shape: the shape of the image from which the roi was generated
@@ -204,15 +205,10 @@ class ROI:
         protocols.
 
         :param aspect_ratio: ratio of the short-to-long radius of the roi
-        :type aspect_ratio: float = 1.0
         :param radius: approximate radius of the ROI
-        :type radius: float
         :param shape: the shape of the image from which the roi was generated
-        :type shape: Tuple[int, int]
         :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
-        :type xpix: numpy.ndarray
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-        :type ypix: numpy.ndarray
         """
         self.aspect_ratio = aspect_ratio
         self.radius = radius
@@ -223,6 +219,9 @@ class ROI:
         self.vertices = calculate_vertices(self.xpix, self.ypix)
         self.coordinates = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
         self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, 0, self.shape)  # requires vertices!!!
+
+    def __str__(self):
+        return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
 
     @property
     def adj_radii(self) -> Tuple[float, float]:
@@ -266,15 +265,12 @@ class ROI:
         """
         return self.rc[self.vertices, :]
 
-    def __str__(self):
-        return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
+    @staticmethod
+    def __name__() -> str:
+        return "ROI"
 
     def __repr__(self):
-        return f"ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + f")"
-
-    @staticmethod
-    def __name__(self):
-        return "ROI"
+        return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
 
 class Mask:
@@ -322,15 +318,10 @@ class Mask:
         Photostimulation Mask object associated with some ROI
 
         :param center: the centroid of the roi (y, x) calculated using the shoelace approximation
-        :type center: Tuple[float, float]
         :param rc_vert: Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
-        :type rc_vert: numpy.ndarray
         :param radii: the long and short radii of the roi (long, short)
-        :type radii: Tuple[float, float]
         :param theta: angle of the long axis of the roi with respective to the y-axis
-        :type theta: float
         :param shape: the shape of the image from which the roi was generated
-        :type shape: Tuple[int, int]
 
         """
 
@@ -339,13 +330,6 @@ class Mask:
         self.radii = radii
         self.theta = theta
         self.shape = shape
-
-    @staticmethod
-    def __name__(self):
-        return "Photostimulation Mask"
-
-    def __repr__(self):
-        return f"Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + f")"
 
     def __str__(self):
         return f"Photostimulation mask centered at {self.center} with radii {self.radii} (bound: {self.bound_radius})" \
@@ -378,7 +362,7 @@ class Mask:
         return calculate_bounding_radius(self.center, self.rc_vert)
 
     @cached_property
-    def _bound_mask(self):
+    def _bound_mask(self) -> np.ndarray:
         """
         Bound photostimulation mask calculated using center, the bound radius, and constrained to lie within shape
 
@@ -387,7 +371,7 @@ class Mask:
         return np.vstack([x, y]).T
 
     @cached_property
-    def _bound_vertices(self):
+    def _bound_vertices(self) -> Tuple[int]:
         """
         Indices of photostimulation points comprising the convex hull approximation of the bound photostimulation mask
 
@@ -396,7 +380,7 @@ class Mask:
         return hull.vertices
 
     @property
-    def bound_xy(self):
+    def bound_xy(self) -> np.ndarray:
         """
         Nx2 array containing x,y coordinate pairs for the mask
 
@@ -404,7 +388,7 @@ class Mask:
         return self._bound_mask
 
     @property
-    def bound_rc(self):
+    def bound_rc(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs for the mask
 
@@ -412,7 +396,7 @@ class Mask:
         return np.vstack([self._bound_mask[:, 1], self._bound_mask[:, 0]]).T
 
     @property
-    def bound_xy_vert(self):
+    def bound_xy_vert(self) -> np.ndarray:
         """
         Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
 
@@ -420,7 +404,7 @@ class Mask:
         return self.bound_xy[self._bound_vertices, :]
 
     @property
-    def bound_rc_vert(self):
+    def bound_rc_vert(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
 
@@ -428,7 +412,7 @@ class Mask:
         return self.bound_rc[self._bound_vertices, :]
 
     @property
-    def xy(self):
+    def xy(self) -> np.ndarray:
         """
         Nx2 array containing x,y coordinate pairs for the mask
 
@@ -436,7 +420,7 @@ class Mask:
         return self._mask
 
     @property
-    def rc(self):
+    def rc(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs for the mask
 
@@ -444,7 +428,7 @@ class Mask:
         return np.vstack([self._mask[:, 1], self._mask[:, 0]]).T
 
     @property
-    def xy_vert(self):
+    def xy_vert(self) -> np.ndarray:
         """
         Nx2 array containing the x,y coordinate pairs comprising the mask's convex hull approximation
 
@@ -452,12 +436,19 @@ class Mask:
         return self.xy[self._mask_vertices, :]
 
     @property
-    def rc_vert(self):
+    def rc_vert(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs comprising the mask's convex hull approximation
 
         """
         return self.rc[self._mask_vertices, :]
+
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation Mask"
+
+    def __repr__(self):
+        return "Photostimulation Mask(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
 
 def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
@@ -466,7 +457,6 @@ def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
     convex hull using the shoelace formula
 
     :param vertices: vertices of the polygon's convex hull (boundary points)
-    :type vertices: numpy.ndarray
     :return: a tuple containing the centroid of the polygon
     """
     points = vertices.shape[0]
@@ -490,28 +480,24 @@ def calculate_centroid(vertices: np.ndarray) -> Tuple[int, int]:
     signed_area = abs(sigma_signed_area) / 2
     center_x /= (6 * signed_area)
     center_y /= (6 * signed_area)
-    
+
     return center_x, center_y
 
 
 def calculate_mask(center: Sequence[Number, Number],
                    radii: Union[Number, Sequence[Number, Number]],
                    shape: Union[Number, Sequence[Number, Number]] = None,
-                   theta: Number = None,
+                   theta: Number = None  # noqa: U100,
                    ) -> np.ndarray:
     """
     Calculates a photostimulation mask for an elliptical roi at center with radii at theta with respect to the y-axis
     and constrained to lie within shape
 
     :param center: center of the roi (y, x)
-    :type center: Sequence[Number, Number]
     :param radii: radius of the roi. can provide one radius for a symmetrical roi or a long and short radius.
-    :type radii: Union[Number, Sequence[Number, Number]]
     :param shape: dimensions of the image the roi lies within. If only one value is provided it is considered
         symmetrical.
-    :type shape: Union[Number, Sequence[Number, Number]] = None
     :param theta: angle of the long-radius with respect to the y-axis
-    :type theta: Number
     :return: photostimulation mask
     """
     # ensure center is numpy array
@@ -519,7 +505,7 @@ def calculate_mask(center: Sequence[Number, Number],
 
     # make sure radii contains both x & y directions
     try:
-        assert(len(radii) == 2)
+        assert (len(radii) == 2)
     except TypeError:
         radii = np.asarray([radii, radii])
     except AssertionError:

@@ -2,10 +2,9 @@ from __future__ import annotations
 import numpy as np
 from ._interactive_visuals import SpikePlot, TracePlot, TrialPlot
 
-
 import matplotlib
-matplotlib.use("Qt5Agg")
-from matplotlib import pyplot as plt
+matplotlib.use("Qt5Agg")  # noqa: E402
+from matplotlib import pyplot as plt  # noqa: E402
 
 
 def plot_spikes(spike_prob: np.ndarray = None,
@@ -21,10 +20,9 @@ def plot_spikes(spike_prob: np.ndarray = None,
     :param traces:
     :param frame_rate:
     :param y_label:
-    :return:
     """
     with plt.style.context("CalSciPy.main"):
-        spike_plot = SpikePlot(spike_prob, spike_times, traces, frame_rate, y_label)
+        _ = SpikePlot(spike_prob, spike_times, traces, frame_rate, y_label)  # noqa: F841
 
 
 def plot_traces(traces: np.ndarray,
@@ -40,7 +38,7 @@ def plot_traces(traces: np.ndarray,
     :return:
     """
     with plt.style.context("CalSciPy.main"):
-        trace_plot = TracePlot(traces, frame_rate, y_label, mode)
+        _ = TracePlot(traces, frame_rate, y_label, mode)  # noqa: F841
 
 
 def plot_trials(data: np.ndarray,
@@ -58,4 +56,4 @@ def plot_trials(data: np.ndarray,
     :return:
     """
     with plt.style.context("CalSciPy.main"):
-        trial_plot = TrialPlot(data, trials, trial_conditions, bin_duration, y_label)
+        _ = TrialPlot(data, trials, trial_conditions, bin_duration, y_label)  # noqa: F841

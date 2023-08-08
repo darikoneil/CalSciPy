@@ -1,53 +1,16 @@
 from __future__ import annotations
-from typing import Union, Iterable, Callable
-from collections import namedtuple
-from functools import wraps
+from typing import Callable, Any
 import sys
 from abc import ABC, abstractmethod
 import numpy as np
 
-
 import matplotlib
 matplotlib.use("Qt5Agg")
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt  # noqa: E402
 import seaborn as sns  # noqa: F401, E402
 
-
-from CalSciPy.misc import generate_time_vector
-
-
-class _Colors:
-    blue: Tuple[float, float, float] = (15/255, 159/255, 255/255)
-    orange: Tuple[float, float, float] = (255/255, 159/255, 15/255)
-    green: Tuple[float, float, float] = (64/255, 204/255, 139/255)
-    red: Tuple[float, float, float] = (255/255, 78/255, 75/255)
-    purple: Tuple[float, float, float] = (120/255, 64/255, 204/255)
-    yellow: Tuple[float, float, float] = (255/255, 240/255, 15/255)
-    shadow: Tuple[float, float, float] = (224/255, 224/255, 224/255)
-    light: Tuple[float, float, float] = (192/255, 192/255, 192/255)
-    medium: Tuple[float, float, float] = (128/255, 128/255, 128/255)
-    dark: Tuple[float, float, float] = (65/255, 65/255, 65/255)
-    black: Tuple[float, float, float] = (0/255, 0/255, 0/255)
-    white: Tuple[float, float, float] = (255/255, 255/255, 255/255)
-    background: Tuple[float, float, float] = (245/255, 245/255, 245/255)
-    mapping = list(enumerate([red, green, blue, orange, purple, yellow, black, dark, medium, light, background, white]))
-
-    def __new__(cls):
-        if not hasattr(cls, "instance"):
-            cls.instance = super(_Colors, cls).__new__(cls)
-        return cls.instance
-
-    def __call__(self, value: Union[int, str], *args, **kwargs):
-        if isinstance(value, int):
-            if value >= len(self.mapping):
-                value = len(self.mapping) % value
-            return self.mapping[value][1]
-        elif isinstance(value, str):
-            return getattr(self, value)
-
-
-# instance
-COLORS = _Colors()
+from .misc import generate_time_vector  # noqa: E402
+from ._colors import COLORS  # noqa: E402
 
 
 class InteractivePlot(ABC):
@@ -69,23 +32,31 @@ class InteractivePlot(ABC):
         self.init_figure()
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.title_template + f"{self.pointer}"
 
     @abstractmethod
-    def loop(self, event):
+    def loop(self, event: Any) -> None:
         ...
-
-    def on_key(self, event):
-        sys.stdout.flush()
-        self.loop(event)
-        self.figure.canvas.draw()
 
     @abstractmethod
-    def set_limits(self):
+    def set_limits(self) -> None:
         ...
 
-    def init_figure(self, one_axes=True):
+    def default_labels(self, function: Callable, *args, **kwargs) -> Callable:
+        # noinspection PyShadowingNames
+        def decorator(*args, **kwargs) -> Callable:
+            args = list(args)
+            arg_vals = [self.axes, self.title, self.x_label, self.y_label]
+            kwargs_keys = ["axes", "title", "x_label", "y_label"]  # noqa: F841
+            for idx, arg in enumerate(args):
+                if not arg:
+                    args[idx] = arg_vals[idx]
+            args = tuple(args)
+            return function(*args, **kwargs)
+        return decorator
+
+    def init_figure(self, one_axes: bool = True) -> None:
         self.pointer = 0
         plt.style.use("CalSciPy.style")
         self.figure = plt.figure(figsize=(16, 9))
@@ -95,7 +66,12 @@ class InteractivePlot(ABC):
             self.set_labels()
         plt.show()
 
-    def set_labels(self, axes=None, title=None):
+    def on_key(self, event: Any) -> None:
+        sys.stdout.flush()
+        self.loop(event)
+        self.figure.canvas.draw()
+
+    def set_labels(self, axes: Any = None, title: str = None) -> None:
         if not axes:
             axes = self.axes
         if not title:
@@ -105,19 +81,6 @@ class InteractivePlot(ABC):
         axes.set_title(title)
         axes.set_xlabel(self.x_label)
         axes.set_ylabel(self.y_label)
-
-    def default_labels(self, function: Callable, *args, **kwargs):
-        # noinspection PyShadowingNames
-        def decorator(*args, **kwargs):
-            args = list(args)
-            arg_vals = [self.axes, self.title, self.x_label, self.y_label]
-            kwargs_keys = ["axes", "title", "x_label", "y_label"]
-            for idx, arg in enumerate(args):
-                if not arg:
-                    args[idx] = arg_vals[idx]
-            args = tuple(args)
-            return function(*args, **kwargs)
-        return decorator
 
 
 class SpikePlot(InteractivePlot):
@@ -146,27 +109,27 @@ class SpikePlot(InteractivePlot):
             self.x_label = "Frame (#)"
         self.time = self.set_time()
 
-        self.title_template = f"Spike Inference: Neuron "
+        self.title_template = "Spike Inference: Neuron "
 
         super().__init__()
 
         self.plot()
 
     @property
-    def frames(self):
+    def frames(self) -> int:
         if self.spike_prob is not None:
             return self.spike_prob.shape[-1]
         else:
             return self.traces.shape[-1]
 
     @property
-    def neurons(self):
+    def neurons(self) -> int:
         if self.spike_prob is not None:
             return self.spike_prob.shape[0]
         else:
             return self.traces.shape[0]
 
-    def loop(self, event):
+    def loop(self, event: Any) -> None:
         if event.key == "up":
             if 0 <= self.pointer + 1 <= self.neurons - 1:
                 self.pointer += 1
@@ -176,7 +139,7 @@ class SpikePlot(InteractivePlot):
                 self.pointer -= 1
                 self.plot()
 
-    def plot(self):
+    def plot(self) -> None:
         self.set_labels()
         if self.spike_prob is not None:
             self.axes.plot(self.time, self.spike_prob[self.pointer, :] - 1, lw=1.5, alpha=0.95, color=COLORS.red)
@@ -187,13 +150,13 @@ class SpikePlot(InteractivePlot):
                 self.axes.plot(np.asarray([self.time[spike], self.time[spike]]), [-1.4, -1.2], "k")
         self.set_limits()
 
-    def set_limits(self):
+    def set_limits(self) -> None:
         if self.spike_prob is not None:
             self.axes.set_xlim([0, self.time[-1]])
         else:
             self.axes.set_xlim([0, self.time[-1]])
 
-    def set_time(self):
+    def set_time(self) -> None:
         if self.frame_rate:
             return generate_time_vector(self.frames, self.frame_rate)
         else:
@@ -222,27 +185,27 @@ class TracePlot(InteractivePlot):
             self.x_label = "Frame (#)"
         self.time = self.set_time()
 
-        self.title_template = f"Trace: Neuron "
+        self.title_template = "Trace: Neuron "
 
         super().__init__()
 
         self.plot()
 
     @property
-    def frames(self):
+    def frames(self) -> int:
         if self.datasets == 1:
             return self.traces.shape[-1]
         else:
             return self.traces[0].shape[-1]
 
     @property
-    def neurons(self):
+    def neurons(self) -> int:
         if self.datasets == 1:
             return self.traces.shape[0]
         else:
             return self.traces[0].shape[0]
 
-    def loop(self, event):
+    def loop(self, event: Any) -> None:
         if event.key == "up":
             if 0 <= self.pointer + 1 <= self.neurons - 1:
                 self.pointer += 1
@@ -252,19 +215,19 @@ class TracePlot(InteractivePlot):
                 self.pointer -= 1
                 self.plot()
 
-    def plot(self):
+    def plot(self) -> None:
         self.set_labels()
         if self.datasets == 1:
             self.axes.plot(self.time, self.traces[self.pointer, :], lw=1.5, alpha=0.95, color=COLORS.black)
         else:
             for idx, dataset in enumerate(self.traces):
-                self.axes.plot(self.time, dataset[self.pointer, :], lw=1.5, alpha=0.95, colors=COLOR(idx))
+                self.axes.plot(self.time, dataset[self.pointer, :], lw=1.5, alpha=0.95, colors=COLORS(idx))
         self.set_limits()
 
-    def set_limits(self):
+    def set_limits(self) -> None:
         self.axes.set_xlim([0, self.time[-1]])
 
-    def set_time(self):
+    def set_time(self) -> None:
         if self.frame_rate:
             return generate_time_vector(self.frames, self.frame_rate)
         else:
@@ -293,7 +256,7 @@ class TrialPlot(InteractivePlot):
             self.x_label = "Frame (#)"
         self.time = self.set_time()
 
-        self.title_template = f"Variable: "
+        self.title_template = "Variable: "
 
         self.pointer = 0
 
@@ -301,7 +264,21 @@ class TrialPlot(InteractivePlot):
 
         self.plot()
 
-    def loop(self, event):
+    @property
+    def conditions(self) -> int:
+        if self.trial_conditions:
+            return len(self.trial_conditions)
+        else:
+            return 1
+
+    @property
+    def trials_per_condition(self) -> int:
+        if self.trials_conditions:
+            return self.num_trials // self.conditions
+        else:
+            return self.num_trials
+
+    def loop(self, event: Any) -> None:
         if event.key == "up":
             if 0 <= self.pointer + 1 <= self.variables - 1:
                 self.pointer += 1
@@ -311,36 +288,22 @@ class TrialPlot(InteractivePlot):
                 self.pointer -= 1
                 self.plot()
 
-    def plot(self):
+    def plot(self) -> None:
         self.figure.suptitle(self.title)
         for condition in self.conditions:
             for trial in self.trials_per_condition:
                 title = f"Condition: {condition}, Trial {trial}"
                 self.axes[trial, condition].plot(self.time, self.data[self.pointer, :], lw=1.5, alpha=0.95,
-                                                 color=colors.black)
+                                                 color=COLORS.black)
                 self.set_labels(axes=self.axes[trial, condition], title=title)
 
-    @property
-    def conditions(self):
-        if self.trial_conditions:
-            return len(self.trial_conditions)
-        else:
-            return 1
-
-    @property
-    def trials_per_condition(self):
-        if self.trials_conditions:
-            return self.num_trials // self.conditions
-        else:
-            return self.num_trials
-
-    def set_limits(self):
+    def set_limits(self) -> None:
         for condition in self.conditions:
             for trial in self.trials_per_condition:
                 self.axes[trial, condition].set_xlim([self.time[0], self.time[-1]])
 
-    def set_time(self):
+    def set_time(self) -> None:
         if self.bin_duration:
-            return generate_time_vector(self.frames / self.bin_duration, step = 1 / self.bin_duration)
+            return generate_time_vector(self.frames / self.bin_duration, step=1 / self.bin_duration)
         else:
             return generate_time_vector(self.frames, step=1)

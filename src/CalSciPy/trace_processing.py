@@ -9,8 +9,13 @@ from tqdm import tqdm
 from .misc import sliding_window
 
 
-def calculate_dfof(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
-                   offset: float = 0.0, external_reference: Optional[np.ndarray] = None, method="baseline") -> np.ndarray:
+def calculate_dfof(traces: np.ndarray,
+                   frame_rate: float = 30.0,
+                   in_place: bool = False,
+                   offset: float = 0.0,
+                   external_reference: Optional[np.ndarray] = None,
+                   method: str = "baseline"
+                   ) -> np.ndarray:
     if method == "baseline":
         return _calculate_dfof_baseline(traces, frame_rate, in_place, offset, external_reference)
     else:
@@ -78,8 +83,12 @@ def _calculate_dfof_filter(traces: np.ndarray, frame_rate: float = 30.0, in_plac
     return dfof
 
 
-def _calculate_dfof_mean_of_percentile(traces: np.ndarray, frame_rate: float = 30.0, in_place: bool = False,
-                   offset: float = 0.0, external_reference: Optional[np.ndarray] = None):
+def _calculate_dfof_mean_of_percentile(traces: np.ndarray,
+                                       frame_rate: float = 30.0,
+                                       in_place: bool = False,
+                                       offset: float = 0.0,
+                                       external_reference: Optional[np.ndarray] = None
+                                       ) -> np.ndarray:
     baselines = np.nanmean(sliding_window(traces, frame_rate * 30, np.nanpercentile, q=8, axis=-1), axis=0)
     if not in_place:
         dfof = np.zeros_like(traces)

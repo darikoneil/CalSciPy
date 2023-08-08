@@ -7,7 +7,6 @@ from functools import wraps, partial
 from joblib import Parallel, delayed
 import numpy as np
 from tqdm import tqdm
-from numbers import Number
 
 
 try:
@@ -16,8 +15,8 @@ except ModuleNotFoundError:
     pass
 
 
-def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None,
-) -> np.ndarray:
+def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, start: Number = 0.0, step: Number = None
+                         ) -> np.ndarray:
     """
     Generates a time vector for a number of samples collected at either
 
@@ -29,7 +28,7 @@ def generate_time_vector(num_samples: int, sampling_frequency: Number = 30.0, st
     """
 
     if not step:
-        step = 1 /sampling_frequency
+        step = 1 / sampling_frequency
 
     return np.arange(0, num_samples) * step + start
 
@@ -219,9 +218,11 @@ def sliding_window(sequence: np.ndarray, window_length: int, function: Callable,
     window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
     sequence_length = sequence.shape[-1] - window_length + 1
     slider = partial(function, *args, **kwargs)
-    values = Parallel(n_jobs=-1, backend="loky", verbose=0)\
-        (delayed(slider)(sequence[..., window])
-         for window in tqdm(window_gen, total=sequence_length, desc="Calculating sliding windows"))
+    values = Parallel(n_jobs=-1, backend="loky", verbose=0)(delayed(slider)(sequence[..., window])
+                                                            for window in tqdm(window_gen,
+                                                                               total=sequence_length,
+                                                                               desc="Calculating sliding windows")
+                                                            )
     return np.asarray(values)
 
 
