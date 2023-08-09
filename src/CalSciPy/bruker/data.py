@@ -13,11 +13,14 @@ from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_fi
 from PPVD.validation import validate_extension
 from tqdm import tqdm as tq
 
-from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION
+from . import CONSTANTS
 from .meta_objects import PhotostimulationMeta
 from .factories import BrukerElementFactory
 from ..misc import PatternMatching, calculate_frames_per_file, generate_blocks, generate_padded_filename
 from ..io_tools import _load_single_tif, _save_single_tif
+
+
+DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
 
 
 """

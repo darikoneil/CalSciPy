@@ -1,4 +1,7 @@
-__all__ = ["data",
+__all__ = ["CONSTANTS",
+           "data",
            "prairie_link",
-           "protocols"
+           "protocols",
            ]
+
+from .constants import CONSTANTS

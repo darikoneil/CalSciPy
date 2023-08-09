@@ -4,10 +4,11 @@ from dataclasses import dataclass, field
 from abc import abstractmethod
 from collections import ChainMap
 from inspect import get_annotations
-from PPVD.style import TerminalStyle
-from prettytable import PrettyTable, ALL
 from math import inf
 
+from PPVD.style import TerminalStyle
+
+from . import CONSTANTS
 from .validation import validate_fields
 
 
@@ -68,23 +69,20 @@ class _BrukerObject:
         """
         return dict(ChainMap(*(get_annotations(cls_) for cls_ in cls.__mro__)))
 
-    def hint_types(self: _BrukerObject) -> None:
+    def hint_types(self) -> None:
         """
-        Prints type hints for each parameter
+        Verbose printing of type information to assist users in setting decodanda parameters
+        """
+        type_hints = f"\n{TerminalStyle.BOLD}{TerminalStyle.YELLOW}{TerminalStyle.UNDERLINE}" \
+                     f"{self.__name__()}{TerminalStyle.RESET}\n"
 
-        :rtype: None
-        """
-        pretty_table = PrettyTable(hrules=ALL, vrules=ALL, float_format=".2f")
-        title = f"{TerminalStyle.BOLD}{TerminalStyle.YELLOW}{self.__name__()}{TerminalStyle.RESET}"
-        type_string = f"{TerminalStyle.BOLD}{TerminalStyle.YELLOW}Type{TerminalStyle.RESET}"
-        pretty_table.field_names = [title, type_string]
-        pretty_table.align[title] = "l"
-        pretty_table.align[type_string] = "c"
-        annotations_ = self.collect_annotations()
+        annotations_ = self._collect_annotations()
+
         for key, type_ in annotations_.items():
-            pretty_table.add_row([f"{TerminalStyle.BOLD}{key}{TerminalStyle.RESET}",
-                                  f" {type_} "])
-        print(pretty_table.get_string())
+            type_hints += f"{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{key}: {TerminalStyle.RESET}" \
+                          f"{TerminalStyle.BLUE}{type_}{TerminalStyle.RESET}\n"
+
+        print(type_hints)
 
     def __setattr__(self, key: str, value: Any) -> _BrukerObject:
         """
@@ -233,10 +231,10 @@ class GalvoPoint(_BrukerObject):
      in a sequence of photostimulations
 
     """
-    #: float: x position of the ROI scaled to the number of x-pixels
-    x: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
-    #: float: y position of the ROI scaled to the number of y-pixels
-    y: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
+    #: float: x position of the ROI scaled to voltage of the X Galvo
+    x: float = field(default=0.0, metadata={"range": CONSTANTS.X_GALVO_VOLTAGE_RANGE})
+    #: float: y position of the ROI scaled to the number of Y Galvo
+    y: float = field(default=0.0, metadata={"range": CONSTANTS.Y_GALVO_VOLTAGE_RANGE})
     #: str: name of the roi
     name: str = field(default="Point 0")
     #: int: index of the roi in the galvo point list
@@ -245,8 +243,8 @@ class GalvoPoint(_BrukerObject):
     activity_type: str = field(default="MarkPoints")
     #: str: stimulation laser ID
     uncaging_laser: str = "Uncaging"
-    #: int: stimulation laser power (a.u.)
-    uncaging_laser_power: int = field(default=0, metadata={"range": (0, 1000)})
+    #: int: stimulation laser power (a.u.) scaled to the constant "power scale"
+    uncaging_laser_power: float = field(default=0, metadata={"range": (0, 1000 / CONSTANTS.POWER_SCALE)})
     #: float: stimulation duration
     duration: float = field(default=100.0, metadata={"range": (0.0, inf)})
     #: bool: whether stimulation pattern is a spiral scan
@@ -256,7 +254,7 @@ class GalvoPoint(_BrukerObject):
     #: float: number of spiral revolutions if spiral scan
     spiral_revolutions: float = field(default=0.0, metadata={"range": (0.0, inf)})
     #: float: relative z-position of the motor + ETL offset (um)
-    z: float = field(default=0.0, metadata={"range": (-8192.0, 8192.0)})
+    z: float = field(default=0.0, metadata={"range": (-21500.0, 21500.0)})
 
     @staticmethod
     def __name__() -> str:

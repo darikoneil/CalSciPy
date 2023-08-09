@@ -5,9 +5,13 @@ from importlib import import_module
 from xml.etree.ElementTree import Element
 from numbers import Number
 
-from .configuration_values import DEFAULT_PRAIRIEVIEW_VERSION, BRUKER_XML_OBJECT_MODULES
+from . import CONSTANTS
 from .xml_mappings.xml_mapping import load_mapping
 from .xml_objects import _BrukerObject
+
+
+DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
+BRUKER_XML_OBJECT_MODULES = CONSTANTS.BRUKER_XML_OBJECT_MODULES
 
 
 """

@@ -7,6 +7,7 @@ __all__ = [
     "misc",
     "optogenetics",
     "reorganization",
+    "roi_tools",
     "trace_processing",
     "version"
 ]
