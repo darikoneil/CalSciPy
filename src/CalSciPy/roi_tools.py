@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Optional, Tuple, Union, Sequence
+from typing import Optional, Tuple, Union, Sequence, Iterable
 from numbers import Number
 from functools import partial
+from abc import abstractmethod
 
 import numpy as np
 from scipy.spatial import ConvexHull
@@ -39,22 +40,26 @@ class ROI:
     :ivar rc_vert: Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
     """
     def __init__(self,
+                 xpix: Union[np.ndarray, Sequence[int]],
+                 ypix: Union[np.ndarray, Sequence[int]],
                  aspect_ratio: float = 1.0,
-                 radius: float = None,
-                 shape: Tuple[float, float] = (512, 512),
-                 xpix: np.ndarray = None,
-                 ypix: np.ndarray = None):
+                 plane: int = 0,
+                 radius: float = 1.0,
+                 shape: Tuple[float, float] = (512, 512)):
         """
         ROI object containing the relevant properties of some specific ROI for using in generating photostimulation
         protocols.
 
-        :param aspect_ratio: ratio of the short-to-long radius of the roi
-        :param radius: approximate radius of the ROI
-        :param shape: the shape of the image from which the roi was generated
         :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
+        :param aspect_ratio: ratio of the short-to-long radius of the roi
+        :param plane: index of the imaging plane
+        :param radius: approximate radius of the ROI
+        :param shape: the shape of the image from which the roi was generated
+
         """
         self.aspect_ratio = aspect_ratio
+        self.plane = plane
         self.radius = radius
         self.shape = shape
         self.xpix = xpix
@@ -115,6 +120,158 @@ class ROI:
 
     def __repr__(self):
         return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+
+
+class ROIHandler:
+    """
+    Abstract object for generating reference images and ROI objects
+
+    """
+
+    @classmethod
+    def load(cls: ROIHandler, *args, **kwargs) -> Tuple[dict, np.ndarray]:
+        """
+        Method that loads rois and generates reference image
+
+        :returns: a dictionary in which each key is an integer indexing an ROI object and a reference image
+        """
+
+        rois_data_structure, reference_image_data_structure = cls.from_file(*args, **kwargs)
+
+        reference_image = cls.generate_reference_image(reference_image_data_structure)
+
+        rois = cls.import_rois(rois_data_structure, reference_image.shape)
+
+        return rois, reference_image
+
+    @staticmethod
+    @abstractmethod
+    def convert_one_roi(roi: Any, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
+        """
+        Abstract method for converting one roi in an ROI object
+
+        :param roi: some sort of roi data structure
+        :param reference_shape: the shape of the image containing the rois
+        :return: a single ROI object
+        """
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def from_file(*args, **kwargs) -> Tuple[Any, Any]:
+        """
+        Abstract method to load the rois_data_structure and reference_image_data_structure from a file or folder
+
+        :returns: data structures containing the rois and reference image
+        """
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def generate_reference_image(data_structure: Any) -> np.ndarray:
+        """
+        Abstract method to generate a reference image from some data structure
+
+        :param data_structure: some data structure from which the reference image can be derived
+        :return: reference image
+        """
+        ...
+
+    @classmethod
+    def import_rois(cls: ROIHandler,
+                    rois: Union[Iterable, np.ndarray],
+                    reference_shape: Tuple[int, int] = (512, 512)
+                    ) -> dict:
+        """
+        Abstract method for importing rois
+
+        :param rois: some sort of data structure iterating over all rois or a numpy array which will be converted to
+            an Iterable
+        :param reference_shape: the shape of the image containing the rois
+        :return: dictionary containing in which the keys are integers indexing the roi and each roi is an ROI object
+        """
+
+        # Convert numpy array if provided
+        if isinstance(rois, np.ndarray):
+            rois = rois.tolist()
+
+        converter = partial(cls.convert_one_roi, reference_shape=shape)
+        return dict(enumerate([converter(element) for element in rois]))
+
+
+class Suite2PHandler(ROIHandler):
+    @staticmethod
+    def convert_one_roi(roi: Any, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
+        """
+        Generates ROI from suite2p stat array
+
+        :param roi: dictionary containing one suite2p roi
+        :param reference_shape: shape of the reference image containing the roi
+        :return: ROI instance for the roi
+        """
+        aspect_ratio = stat_element.get("aspect_ratio")
+        radius = stat_element.get("radius")
+        xpix = stat_element.get("xpix")[~stat_element.get("overlap")]
+        ypix = stat_element.get("ypix")[~stat_element.get("overlap")]
+        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=reference_shape, xpix=xpix, ypix=ypix)
+
+    @staticmethod
+    def from_file(folder: Path) -> Tuple[np.ndarray, dict]:
+        """
+
+        :param folder: folder containing suite2p data. The folder must contain the associated "stat.npy"
+            & "ops.npy" files, though it is recommended the folder also contain the "iscell.npy" file.
+        :returns: "stat" and "ops"
+        """
+
+        # append suite2p + plane if necessary
+        if "suite2p" not in str(folder):
+            folder = folder.joinpath("suite2p")
+
+        if "plane" not in str(folder):
+            folder = folder.joinpath("plane0")
+
+        stat = np.load(folder.joinpath("stat.npy"), allow_pickle=True)
+
+        # use only neuronal rois if iscell is provided
+        try:
+            iscell = np.load(folder.joinpath("iscell.npy"), allow_pickle=True)
+        except FileNotFoundError:
+            stat[:] = stat
+        else:
+            stat = stat[np.where(iscell[:, 0] == 1)[0]]
+
+        ops = np.load(folder.joinpath("ops.npy"), allow_pickle=True).item()
+
+        return stat, ops
+
+    @staticmethod
+    def generate_reference_image(data_structure: Any) -> np.ndarray:
+        """
+         Generates an appropriate reference image from suite2p ops dictionary
+
+        :param data_structure: ops dictionary
+        :return: reference image
+        """
+
+        true_shape = (ops.get("Ly"), ops.get("Lx"))
+
+        # Load Vcorr as our reference image
+        try:
+            reference_image = ops.get("Vcorr")
+            assert(reference_image is not None)
+        except (KeyError, AssertionError):
+            reference_image = np.ones(true_shape)
+
+        # If motion correction cropped Vcorr, append minimum around edges
+        if reference_image.shape != true_shape:
+            true_reference_image = np.ones(true_shape) * np.min(reference_image)
+            x_range = ops.get("xrange")
+            y_range = ops.get("yrange")
+            true_reference_image[y_range[0]: y_range[-1], x_range[0]:x_range[-1]] = reference_image
+            return true_reference_image
+        else:
+            return reference_image
 
 
 def calculate_bounding_radius(centroid: Sequence[Number, Number], vertices: np.ndarray) -> float:
@@ -245,25 +402,6 @@ def calculate_mask(centroid: Sequence[Number, Number],
     return yy, xx
 
 
-def generate_suite2p_reference_image(ops: dict) -> np.ndarray:
-    """
-    Generates an appropriate reference image from suite2p ops dictionary
-
-    :param ops: suite2p ops dictionary
-    :return: reference image
-    """
-    reference_image = ops.get("Vcorr")
-    true_shape = (ops.get("Ly"), ops.get("Lx"))
-    if reference_image.shape != true_shape:
-        true_reference_image = np.ones(true_shape) * np.min(reference_image)
-        x_range = ops.get("xrange")
-        y_range = ops.get("yrange")
-        true_reference_image[y_range[0]: y_range[-1], x_range[0]:x_range[-1]] = reference_image
-        return true_reference_image
-    else:
-        return reference_image
-
-
 def identify_vertices(roi: Union[np.ndarray, Sequence[int]],
                       ypix: Optional[Union[np.ndarray, Sequence[int]]] = None
                       ) -> Tuple[int]:
@@ -284,30 +422,3 @@ def identify_vertices(roi: Union[np.ndarray, Sequence[int]],
     hull = ConvexHull(roi)
 
     return hull.vertices
-
-
-def import_suite2p_rois(stat: np.ndarray, reference_shape: Tuple[int, int] = (512, 512)) -> dict:
-    """
-    Generates a dictionary of ROI objects from the provided suite2p stat array
-
-    :param stat: array containing suite2p stats for each roi
-    :param reference_shape: shape of the reference image containing the roi
-    :return: dictionary containing a collection of ROI objects for potential photostimulation
-    """
-    converter = partial(_suite2p_roi, reference_shape=shape)
-    return dict(enumerate([converter(element) for element in stat.tolist()]))
-
-
-def _suite2p_roi(stat_element: dict, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
-    """
-    Generates ROI from suite2p stat array
-
-    :param stat_element: array containing suite2p stats for each roi
-    :param reference_shape: shape of the reference image containing the roi
-    :return: ROI instance for the roi 'idx'
-    """
-    aspect_ratio = stat_element.get("aspect_ratio")
-    radius = stat_element.get("radius")
-    xpix = stat_element.get("xpix")[~stat_element.get("overlap")]
-    ypix = stat_element.get("ypix")[~stat_element.get("overlap")]
-    return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=reference_shape, xpix=xpix, ypix=ypix)
