@@ -116,3 +116,11 @@ class Group:
 
     def __repr__(self):
         return "Group(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+
+
+class Sequence:
+    """
+    Sequence of photostimulation groups (e.g., an experiment)
+
+    """
+    ...
