@@ -64,7 +64,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
 
     if file_path is not None:
-        write_protocol(galvo_point_list, file_path, ext=".gpl")
+        write_protocol(galvo_point_list, file_path, ".gpl", name)
 
     return galvo_point_list
 
@@ -93,7 +93,7 @@ def write_protocol(protocol: _BrukerObject,
         file_path = file_path.with_suffix(ext)
 
     factory = BrukerXMLFactory()
-    lines = factory.constructor(pv)
+    lines = factory.constructor(protocol)
     with open(file_path, "w+") as file:
         for line in lines:
             file.write(line)
