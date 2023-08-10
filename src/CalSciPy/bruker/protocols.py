@@ -2,6 +2,9 @@ from __future__ import annotations
 from typing import Tuple, Any, Sequence, Union, Optional
 from numbers import Number
 from pathlib import Path
+from collections import ChainMap
+from copy import deepcopy
+
 import numpy as np
 
 from PPVD.validation import validate_filename
@@ -23,26 +26,39 @@ _DEFAULT_PATH = Path.cwd().joinpath("prairieview_protocol.xml")
 
 
 def generate_galvo_point_list(photostimulation: Photostimulation,
+                              targets_only: bool = False,
                               parameters: Optional[dict] = None,
-                              file_path: Path = None,
+                              file_path: Optional[Path] = None,
                               name: Optional[str] = None,
-                              z_offset: Union[float, Sequence[float]] = None
+                              z_offset: Optional[Union[float, Sequence[float]]] = None
                               ) -> GalvoPointList:
     """
     Generates a galvo point list to import identified or targeted ROIs into PrairieView.
-    If you are using multiple planes or a device to modify the depth of the imaging and stimulation paths independently,
-    you must pass a z_offset for the stimulation laser for each joint imaging-stimulation plane
+    If you are using multiple planes, you must pass a z_offset for the stimulation laser for each joint
+    imaging-stimulation plane. If you are stimulating only one plane and using a device to modify the depth of the
+    imaging and stimulation paths independently such as an electrically-tunable lens, then you only must either supply
+    z_offset or enter the offset as "z" in the parameter dictionary
 
     :param photostimulation: instance of photostimulation object
+    :param targets_only: flag indicating to generate a galvo point list containing only selected targets.
+        this reduces complexity and is particularly useful if you are selecting a subset from a very large number of
+        neurons
     :param parameters: stimulation parameters to override the galvo point defaults
     :param file_path: path to write galvo point list to
     :param name: name of protocol
     :param z_offset: z_offset for each plane
     :return: a galvo point list instance
     """
+
+    # Reduce number of galvo points required if desired
+    if targets_only:
+        permitted_points = photostimulation.targets
+    else:
+        permitted_points = np.arange(photostimulation.neurons).tolist()
+
     # Generate each galvo point
-    galvo_points = tuple([self.generate_galvo_point(roi=roi, index=index, parameters=parameters, z_offset=z_offset)
-                          for index, roi in enumerate(self.rois)])
+    galvo_points = tuple([_generate_galvo_point(roi=roi, index=index, parameters=parameters, z_offset=z_offset)
+                          for index, roi in enumerate(photostimulation.rois.values()) if index in permitted_points])
 
     # Instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
@@ -84,16 +100,16 @@ def write_protocol(protocol: _BrukerObject,
 
 
 def _generate_galvo_point(roi: ROI,
-                          index: Optional[int] = None,
-                          name: Optional[str] = None,
-                          parameters: Optional[dict] = None,
                           pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
                           power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
                           reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
                           spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
                           x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
                           y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
-                          z_offset: float = None
+                          index: Optional[int] = None,
+                          name: Optional[str] = None,
+                          parameters: Optional[Mapping] = None,
+                          z_offset: Optional[float] = None
                           ) -> GalvoPoint:
     """
     Generates a single galvo point
@@ -116,15 +132,25 @@ def _generate_galvo_point(roi: ROI,
     if name is None and index is not None:
         name = f"Point {index}"
 
-    # Scale laser power if in override parameters
-    if "uncaging_laser_power" in parameters:
-        parameters["uncaging_laser_power"] = _scale_power(parameters.get("uncaging_laser_power"))
+    # Retrieve and scale coordinates
+    y, x = roi.coordinates
 
-    # Scale spiral if in override parameters
-    if "spiral_size" in parameters:
-        parameters["spiral_size"] = _scale_spiral(parameters.get("spiral_size"))
+    # Retrieve spiral size
+    spiral_size = roi.mask.bound_radius
 
-    # Offset "z" if provided
+    # Collect and merge with passed parameters. Allows overlap of things like spiral_size
+    roi_properties = dict(zip(
+        ["y", "x", "name", "index", "spiral_size"],
+        [y, x, name, index, spiral_size]
+    ))
+
+    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
+    parameters = deepcopy(parameters)
+
+    # merge and allow parameters to override roi properties
+    parameters = ChainMap(parameters, roi_properties)
+
+    # Offset "z" if specified
     if "z" in parameters and z_offset is not None:
         if isinstance(z_offset, Number):
             parameters["z"] += z_offset
@@ -132,22 +158,35 @@ def _generate_galvo_point(roi: ROI,
             this_plane = roi.plane
             parameters["z"] += z_offset[this_plane]
 
-    # Retrieve and scale coordinates
-    y, x = roi.coordinates
-    x, y = _scale_coordinates(x, y, reference_shape)
+    _scale_galvo_point_parameters(parameters)
 
-    # Retrieve and scale spiral size
-    spiral_size = _scale_spiral(roi.mask.bound_radius)
+    return GalvoPoint(**parameters)
 
-    roi_properties = dict(zip(
-        ["y", "x", "name", "index", "spiral_size"],
-        [y, x, name, index, spiral_size]
-    ))
 
-    if parameters is not None:
-        roi_properties = ChainMap(parameters, roi_properties)
+def _scale_galvo_point_parameters(parameters: dict,
+                                  pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
+                                  power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
+                                  reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
+                                  spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
+                                  x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
+                                  y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
+                                  ) -> dict:
 
-    return GalvoPoint(**roi_properties)
+    # Scale coordinates if specified in parameters
+    if "x" in parameters and "y" in parameters and reference_shape is not None:
+        x = parameters.get("x")
+        y = parameters.get("y")
+        x, y = _scale_coordinates((x, y), reference_shape)
+        parameters["x"] = x
+        parameters["y"] = y
+
+    # Scale laser power if specified in parameters
+    if "uncaging_laser_power" in parameters:
+        parameters["uncaging_laser_power"] = _scale_power(parameters.get("uncaging_laser_power"))
+
+    # Scale spiral if specified in parameters
+    if "spiral_size" in parameters:
+        parameters["spiral_size"] = _scale_spiral(parameters.get("spiral_size"))
 
 
 def _scale_coordinates(coordinates: Tuple[Number, Number],
@@ -164,6 +203,10 @@ def _scale_coordinates(coordinates: Tuple[Number, Number],
     :param y_range: voltage amplitude of y galvo
     :return: coordinates scaled to scanner voltages
     """
+
+    # adjust for zero-index
+    fov = tuple([pixels - 1 for pixels in fov])
+
     return tuple([_scale_coordinate(coordinate, (0, pixels), voltage_range)
                   for coordinate, pixels, voltage_range
                   in zip(coordinates, fov, (x_range, y_range))])

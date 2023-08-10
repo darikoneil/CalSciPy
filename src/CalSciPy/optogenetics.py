@@ -21,6 +21,8 @@ class Photostimulation:
     """
     def __init__(self,
                  rois: dict,
+                 # groups: Group = None,
+                 # sequence: Sequence = None,
                  reference_image: np.ndarray = None,
                  ):
         """
@@ -33,6 +35,7 @@ class Photostimulation:
         self.rois = rois
         self.reference_image = reference_image
         self.sequence = None
+        self._targets = [0, 5, 10, 15]
 
     def __str__(self):
         return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
@@ -40,7 +43,7 @@ class Photostimulation:
 
     @property
     def targets(self) -> int:
-        return 15
+        return self._targets
 
     @property
     def neurons(self) -> int:

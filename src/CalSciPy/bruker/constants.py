@@ -82,9 +82,9 @@ class CONSTANTS:
     DEFAULT_PRAIRIEVIEW_VERSION: str = _config_parser.get("PRAIRIEVIEW", "VERSION")
 
     #: field of view in pixels (X, Y)
-    FIELD_OF_VIEW_PIXELS: Tuple[float, float] \
-        = (_config_parser.get("SOFTWARE", "FIELD_OF_VIEW_X_PIXELS"),
-           _config_parser.get("SOFTWARE", "FIELD_OF_VIEW_Y_PIXELS")
+    FIELD_OF_VIEW_PIXELS: Tuple[int, int] \
+        = (int(_config_parser.get("SOFTWARE", "FIELD_OF_VIEW_X_PIXELS")),
+           int(_config_parser.get("SOFTWARE", "FIELD_OF_VIEW_Y_PIXELS"))
            )
 
     #: field of view in microns (X, Y)

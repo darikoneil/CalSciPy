@@ -54,6 +54,7 @@ class ROI:
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
         :param aspect_ratio: ratio of the short-to-long radius of the roi
         :param plane: index of the imaging plane
+        :param power: laser power specific to this roi
         :param radius: approximate radius of the ROI
         :param shape: the shape of the image from which the roi was generated
 
@@ -67,7 +68,7 @@ class ROI:
 
         self.vertices = identify_vertices(self.xpix, self.ypix)
         self.coordinates = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
-        self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, 0, self.shape)  # requires vertices!!!
+        self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, None, self.shape)  # requires vertices!!!
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
@@ -181,7 +182,7 @@ class Mask:
         self.shape = shape
 
     def __str__(self):
-        return f"Photostimulation mask centered at {self.center} with radii {self.radii} (bound: {self.bound_radius})" \
+        return f"Photostimulation mask centered at {self.centroid} with radii {self.radii} (bound: {self.bound_radius})" \
                f"with theta {self.theta}'"
 
     @cached_property
