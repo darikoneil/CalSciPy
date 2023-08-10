@@ -35,6 +35,7 @@ class Photostimulation:
         self.rois = rois
         self.reference_image = reference_image
         self.sequence = None
+        self.groups = None
         self._targets = [0, 5, 10, 15]
 
     def __str__(self):
@@ -66,6 +67,17 @@ class Photostimulation:
 
         return Photostimulation(rois, reference_image=reference_image)
 
+    def add_photostimulation_group(self,
+                                   name: str,
+                                   ordered_index: Sequence[int],
+                                   delay: float = 0.0, repetitions: int = 1,
+                                   point_interval: float = 0.12):
+
+        if self.groups is None:
+            self.groups = []
+
+        self.groups.append(Group(name, ordered_index, delay, repetitions))
+
     def __repr__(self):
         return "Photostimulation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
@@ -77,7 +89,6 @@ class Group:
                  delay: float = 0.0,
                  repetitions: int = 1,
                  point_interval: float = 0.12,
-                 override_parameters: Optional[dict] = None,
                  ):
         """
         Photostimulation group object containing the index of rois to stimulate
@@ -94,5 +105,14 @@ class Group:
         self.point_interval = point_interval
         #: int: the number of times to repeat the stimulation group
         self.repetitions = repetitions
-        #: dict: override individual roi parameters
-        self.override_parameters = override_parameters
+
+    def __str__(self):
+        return f'Photostimulation Group "{self.name}" containing {len(ordered_index)} targets with a ' \
+               f'{self.point_interval} inter-point interval repeated {self.repetitions} times.'
+
+    @staticmethod
+    def __name__():
+        return "Photostimulation Group"
+
+    def __repr__(self):
+        return "Group(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
