@@ -156,13 +156,13 @@ class GalvoPointElement(_BrukerObject):
     Dataclass for a specific galvo-stimulation for a specific marked point in a sequence of photostimulations
     """
     #: int: initial delay for stimulation
-    initial_delay: int = field(default=0, metadata={"range": (0, inf)})
+    initial_delay: int = field(default=1000, metadata={"range": (0, inf)})
     #: float: inter point delay
-    inter_point_delay: float = field(default=0.0, metadata={"range": (0.0, inf)})
+    inter_point_delay: float = field(default=0.12, metadata={"range": (0.12, inf)})
     #: int: duration of stimulation in ms
-    duration: float = field(default=0, metadata={"range": {0.0, inf}})
+    duration: float = field(default=100, metadata={"range": {100.0, inf}})
     #: int: number of spiral revolutions
-    spiral_revolutions: float = field(default=0, metadata={"range": (0.0, inf)})
+    spiral_revolutions: float = field(default=0.01, metadata={"range": (0.01, inf)})
     #: bool: whether to do all points at once
     all_points_at_once: bool = False
     #: str: id from galvo point list
@@ -225,6 +225,40 @@ class GalvoPointList(_BrukerObject):
 
 
 @dataclass(kw_only=True)
+class GalvoPointGroup(_BrukerObject):
+    """
+    Dataclass for a group of points during galvo-stimulation
+
+    """
+    #: Tuple[int]: a tuple indexing the galvo points to be stimulated as part of this group
+    indices: Tuple[int] = (0, )
+    #: str: name of the group
+    name: str = "Group 0"
+    #: int: index of the photostimulation group (number of points + 1)
+    index: int = 0
+    #: str: type of activity
+    activity_type: str = field(default="MarkPoints")
+    #: str: stimulation laser ID
+    uncaging_laser: str = "Uncaging"
+    #: int: stimulation laser power (a.u.) scaled to the constant "power scale"
+    uncaging_laser_power: float = field(default=0.0, metadata={"range": (0, 1000 / CONSTANTS.POWER_SCALE)})
+    #: float: stimulation duration
+    duration: float = field(default=100.0, metadata={"range": (0.0, inf)})
+    #: bool: whether stimulation pattern is a spiral scan
+    is_spiral: bool = True
+    #: float: diameter of the spiral scaled to the number of x-pixels if spiral scan
+    spiral_size: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
+    #: float: number of spiral revolutions if spiral scan
+    spiral_revolutions: float = field(default=0.01, metadata={"range": (0.0, inf)})
+    #: float: relative z-position of the motor + ETL offset (um)
+    z: float = field(default=0.0, metadata={"range": (-21500.0, 21500.0)})
+
+    @staticmethod
+    def __name__():
+        return "GalvoPointGroup"
+
+
+@dataclass(kw_only=True)
 class GalvoPoint(_BrukerObject):
     """
      Dataclass for a specific point during galvo-stimulation for a specific marked point
@@ -244,7 +278,7 @@ class GalvoPoint(_BrukerObject):
     #: str: stimulation laser ID
     uncaging_laser: str = "Uncaging"
     #: int: stimulation laser power (a.u.) scaled to the constant "power scale"
-    uncaging_laser_power: float = field(default=0, metadata={"range": (0, 1000 / CONSTANTS.POWER_SCALE)})
+    uncaging_laser_power: float = field(default=0.0, metadata={"range": (0, 1000 / CONSTANTS.POWER_SCALE)})
     #: float: stimulation duration
     duration: float = field(default=100.0, metadata={"range": (0.0, inf)})
     #: bool: whether stimulation pattern is a spiral scan
@@ -252,7 +286,7 @@ class GalvoPoint(_BrukerObject):
     #: float: diameter of the spiral scaled to the number of x-pixels if spiral scan
     spiral_size: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
     #: float: number of spiral revolutions if spiral scan
-    spiral_revolutions: float = field(default=0.0, metadata={"range": (0.0, inf)})
+    spiral_revolutions: float = field(default=0.01, metadata={"range": (0.0, inf)})
     #: float: relative z-position of the motor + ETL offset (um)
     z: float = field(default=0.0, metadata={"range": (-21500.0, 21500.0)})
 

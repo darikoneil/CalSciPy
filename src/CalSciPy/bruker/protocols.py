@@ -65,6 +65,10 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                                                 z_offset=z_offset)
                           for index, point, roi in zip(range(len(permitted_points)), permitted_points, rois)])
 
+    if photostimulation.groups is not None:
+        # do something!
+        pass
+
     # Instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
 

@@ -71,15 +71,28 @@ class Photostimulation:
 
 
 class Group:
-    def __init__(self):
+    def __init__(self,
+                 name: str,
+                 ordered_index: Sequence[int],
+                 delay: float = 0.0,
+                 repetitions: int = 1,
+                 point_interval: float = 0.12,
+                 override_parameters: Optional[dict] = None,
+                 ):
         """
         Photostimulation group object containing the index of rois to stimulate
         and relevant stimulation parameters
 
-        :ivar order: a tuple containing the identity and stimulation order of the rois in this group
-        :type order: Tuple[int]
-        :ivar repetitions: an integer indicating the number of times to repeat the stimulation
-        :type repetitions: int
         """
-        self.order = None
-        self.repetitions = 1
+        #: float: delay before stimulating group
+        self.delay = delay
+        #: str: name of the group
+        self.name = name
+        #: Sequence[int]: a sequence containing the identity and stimulation order of the rois in this group
+        self.ordered_index = ordered_index
+        #: float: the duration between stimulating each target in the sequence (ms)
+        self.point_interval = point_interval
+        #: int: the number of times to repeat the stimulation group
+        self.repetitions = repetitions
+        #: dict: override individual roi parameters
+        self.override_parameters = override_parameters
