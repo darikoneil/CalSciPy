@@ -55,10 +55,15 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
         permitted_points = photostimulation.targets
     else:
         permitted_points = np.arange(photostimulation.neurons).tolist()
+    rois = [photostimulation.rois[point] for point in permitted_points]
 
     # Generate each galvo point
-    galvo_points = tuple([_generate_galvo_point(roi=roi, index=index, parameters=parameters, z_offset=z_offset)
-                          for index, roi in enumerate(photostimulation.rois.values()) if index in permitted_points])
+    galvo_points = tuple([_generate_galvo_point(roi=roi,
+                                                index=index,
+                                                name=f"ROI {point}",
+                                                parameters=parameters,
+                                                z_offset=z_offset)
+                          for index, point, roi in zip(range(len(permitted_points)), permitted_points, rois)])
 
     # Instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
