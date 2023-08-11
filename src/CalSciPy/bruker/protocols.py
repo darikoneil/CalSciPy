@@ -4,6 +4,7 @@ from numbers import Number
 from pathlib import Path
 from collections import ChainMap
 from copy import deepcopy
+from itertools import chain
 
 import numpy as np
 
@@ -11,9 +12,9 @@ from PPVD.validation import validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
 from . import CONSTANTS
-from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject
+from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup
 from .factories import BrukerXMLFactory
-from ..optogenetics import Photostimulation
+from ..optogenetics import Photostimulation, Group
 from ..roi_tools import ROI
 
 
@@ -52,7 +53,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
 
     # Reduce number of galvo points required if desired
     if targets_only:
-        permitted_points = photostimulation.targets
+        permitted_points = photostimulation.stimulated_neurons
     else:
         permitted_points = np.arange(photostimulation.neurons).tolist()
     rois = [photostimulation.rois[point] for point in permitted_points]
@@ -65,9 +66,14 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                                                 z_offset=z_offset)
                           for index, point, roi in zip(range(len(permitted_points)), permitted_points, rois)])
 
-    if photostimulation.groups is not None:
-        # do something!
-        pass
+    if photostimulation.groups > 0:
+        start_index = photostimulation.targets
+        galvo_groups = [_generate_galvo_group(index=index,
+                                              group=group,
+                                              parameters=parameters)
+                        for index, group in zip(range(start_index, start_index + photostimulation.groups),
+                                                photostimulation.sequence)]
+        galvo_points = tuple(chain.from_iterable([element for element in [galvo_points, galvo_groups]]))
 
     # Instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
@@ -167,19 +173,43 @@ def _generate_galvo_point(roi: ROI,
             this_plane = roi.plane
             parameters["z"] += z_offset[this_plane]
 
-    _scale_galvo_point_parameters(parameters)
+    _scale_gpl_parameters(parameters)
 
     return GalvoPoint(**parameters)
 
 
-def _scale_galvo_point_parameters(parameters: dict,
-                                  pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
-                                  power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
-                                  reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
-                                  spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
-                                  x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
-                                  y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
-                                  ) -> dict:
+def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None):
+
+    indices = tuple(group.ordered_index)
+
+    name = group.name
+    if name is None:
+        tag = f"{indices}"[1:-1]
+        name = "Group" + tag
+
+    group_properties = dict(zip(
+        ["indices", "name", "index"],
+        [indices, name, index]
+    ))
+    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
+    parameters = deepcopy(parameters)
+
+    # merge and allow parameters to override group properties
+    parameters = ChainMap(parameters, group_properties)
+
+    _scale_gpl_parameters(parameters)
+
+    return GalvoPointGroup(**parameters)
+
+
+def _scale_gpl_parameters(parameters: dict,
+                          pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
+                          power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
+                          reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
+                          spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
+                          x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
+                          y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
+                          ) -> dict:
 
     # Scale coordinates if specified in parameters
     if "x" in parameters and "y" in parameters and reference_shape is not None:

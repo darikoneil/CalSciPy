@@ -212,7 +212,7 @@ class GalvoPointList(_BrukerObject):
 
     def __post_init__(self):
         for idx, point in enumerate(self.galvo_points):
-            if not isinstance(point, GalvoPoint):
+            if not isinstance(point, (GalvoPoint, GalvoPointGroup)):
                 raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
         super().__post_init__()
 

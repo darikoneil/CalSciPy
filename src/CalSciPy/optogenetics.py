@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import Tuple, Union, Sequence
 from pathlib import Path
-from collections import ChainMap
+from collections import ChainMap, UserList
+from itertools import chain
 from numbers import Number
 
 import numpy as np
@@ -21,8 +22,6 @@ class Photostimulation:
     """
     def __init__(self,
                  rois: dict,
-                 # groups: Group = None,
-                 # sequence: Sequence = None,
                  reference_image: np.ndarray = None,
                  ):
         """
@@ -34,20 +33,36 @@ class Photostimulation:
 
         self.rois = rois
         self.reference_image = reference_image
-        self.sequence = None
-        self.groups = None
-        self._targets = [0, 5, 10, 15]
+        self.sequence = Sequence()
 
     def __str__(self):
-        return f"Photostimulation experiment targeting {self.targets} neurons from {len(self.rois)} total " \
+        return f"Photostimulation experiment targeting {self.targets} neurons from {self.total_neurons} total " \
                f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
 
     @property
-    def targets(self) -> int:
-        return self._targets
+    def groups(self) -> int:
+        return len(self.sequence)
 
     @property
-    def neurons(self) -> int:
+    def stimulated_neurons(self) -> set:
+        # Return unique neurons in the ordered indices of each group in the sequence
+        if self.sequence is not None:
+            return set(chain.from_iterable([group.ordered_index for group in self.sequence]))
+
+    @property
+    def targets(self) -> int:
+        """
+        The number of neurons photostimulated
+
+        """
+        return len(self.stimulated_neurons)
+
+    @property
+    def total_neurons(self) -> int:
+        """
+        The total number of neurons in the image
+
+        """
         return len(self.rois)
 
     @staticmethod
@@ -68,15 +83,14 @@ class Photostimulation:
         return Photostimulation(rois, reference_image=reference_image)
 
     def add_photostimulation_group(self,
-                                   name: str,
                                    ordered_index: Sequence[int],
-                                   delay: float = 0.0, repetitions: int = 1,
-                                   point_interval: float = 0.12):
+                                   delay: float = 0.0,
+                                   repetitions: int = 1,
+                                   point_interval: float = 0.12,
+                                   name: str = None,
+                                   ) -> Photostimulation:
 
-        if self.groups is None:
-            self.groups = []
-
-        self.groups.append(Group(name, ordered_index, delay, repetitions))
+        self.sequence.append(Group(ordered_index, delay, repetitions, point_interval, name))
 
     def __repr__(self):
         return "Photostimulation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
@@ -84,11 +98,11 @@ class Photostimulation:
 
 class Group:
     def __init__(self,
-                 name: str,
                  ordered_index: Sequence[int],
                  delay: float = 0.0,
                  repetitions: int = 1,
                  point_interval: float = 0.12,
+                 name: str = None,
                  ):
         """
         Photostimulation group object containing the index of rois to stimulate
@@ -115,12 +129,30 @@ class Group:
         return "Photostimulation Group"
 
     def __repr__(self):
-        return "Group(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+        return "Group(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
 
 
-class Sequence:
+class Sequence(UserList):
     """
-    Sequence of photostimulation groups (e.g., an experiment)
+    Photostimulation Sequence
 
     """
-    ...
+    def __init__(self,
+                 groups: Sequence = None,
+                 repetitions: int = 1,
+                 interval: float = 0.0):
+
+        #: int: number of repetitions
+        self.repetitions = repetitions,
+        #: float: interval between repetitions
+        self.interval = interval
+
+        super().__init__(initlist=groups)
+
+    def __str__(self):
+        return f"Photostimulation Sequence containing {len(self)} groups repeated {self.repetitions} " \
+               f"times with an inter-repetition interval of {self.interval}"
+
+    @staticmethod
+    def __set_name__() -> str:
+        return "Photostimulation Sequence"
