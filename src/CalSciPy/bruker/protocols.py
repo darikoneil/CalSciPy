@@ -294,7 +294,7 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
 
     # make mark point / galvo point elements
     for group in groups:
-            pass
+        pass
 
     # make mark point element
 
