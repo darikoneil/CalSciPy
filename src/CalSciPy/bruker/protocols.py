@@ -43,18 +43,6 @@ def generate_marked_points_protocol(photostimulation: Photostimulation,
                                     z_offset=z_offset)
 
 
-def _generate_mark_point_series(photostimulation,
-                                targets_only,
-                                parameters,
-                                file_path,
-                                name,
-                                z_offset):
-
-    mpl = MarkPointSeriesElements(marks=None,
-                                  iterations=photostimulation.sequence.repetitions,
-                                  iteration_delay=photostimulation.sequence.delay)
-
-
 def generate_galvo_point_list(photostimulation: Photostimulation,
                               targets_only: bool = False,
                               parameters: Optional[dict] = None,
@@ -98,7 +86,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                           for index, point, roi in zip(idx, permitted_points, rois)])
 
     if photostimulation.groups > 0:
-        start_index = len(idx) + 1
+        start_index = len(idx)
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)
@@ -113,22 +101,6 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
         write_protocol(galvo_point_list, file_path, ".gpl", name)
 
     return galvo_point_list
-
-
-def _revise_indices_targets_only(photostimulation: Photostimulation
-                                 ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
-    target_map = photostimulation.target_mapping
-    permitted_points = photostimulation.stimulated_neurons
-    rois = [photostimulation.rois[point] for point in permitted_points]
-    groups = [_map_index(group, target_map) for group in photostimulation.sequence]
-    index = range(len(rois))
-    return index, permitted_points, rois, groups
-
-
-def _map_index(group, target_map):
-    group = deepcopy(group)
-    group.ordered_index = [target_map.get(value) for value in group.ordered_index]
-    return group
 
 
 @validate_filename(pos=1)
@@ -159,6 +131,35 @@ def write_protocol(protocol: _BrukerObject,
     with open(file_path, "w+") as file:
         for line in lines:
             file.write(line)
+
+
+def _check_parameters(element: _BrukerObject, parameters: dict):
+    true_keys = vars(element).keys()
+    return {key: value for key, value in parameters.items() if key in true_keys}
+
+
+def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None):
+
+    indices = tuple(group.ordered_index)
+
+    name = group.name
+    if name is None:
+        tag = f"{indices}"[1:-1]
+        name = "Group" + tag
+
+    group_properties = dict(zip(
+        ["indices", "name", "index"],
+        [indices, name, index]
+    ))
+    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
+    parameters = deepcopy(parameters)
+
+    # merge and allow parameters to override group properties
+    parameters = ChainMap(parameters, group_properties)
+
+    _scale_gpl_parameters(parameters)
+
+    return GalvoPointGroup(**parameters)
 
 
 def _generate_galvo_point(roi: ROI,
@@ -225,28 +226,56 @@ def _generate_galvo_point(roi: ROI,
     return GalvoPoint(**parameters)
 
 
-def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None):
+def _generate_galvo_point_element(element):
+    ...
 
-    indices = tuple(group.ordered_index)
 
-    name = group.name
-    if name is None:
-        tag = f"{indices}"[1:-1]
-        name = "Group" + tag
+def _generate_mark_point_element():
+    ...
 
-    group_properties = dict(zip(
-        ["indices", "name", "index"],
-        [indices, name, index]
-    ))
-    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
-    parameters = deepcopy(parameters)
 
-    # merge and allow parameters to override group properties
-    parameters = ChainMap(parameters, group_properties)
+def _generate_mark_point_series(photostimulation,
+                                targets_only,
+                                parameters,
+                                file_path,
+                                name,
+                                z_offset):
 
-    _scale_gpl_parameters(parameters)
+    # Reduce number of points required if desired
+    if targets_only:
+        idx, permitted_points, rois, groups = _revise_indices_targets_only(photostimulation)
+    else:
+        idx = np.arange(photostimulation.neurons).tolist()
+        permitted_points = np.arange(photostimulation.neurons).tolist()
+        rois = photostimulation.rois
+        groups = photostimulation.sequence
 
-    return GalvoPointGroup(**parameters)
+    # make galvo point element
+    for group in groups:
+        pass
+
+    # make mark point element
+
+    # make mark point series
+    mpl = MarkPointSeriesElements(marks=None,
+                                  iterations=photostimulation.sequence.repetitions,
+                                  iteration_delay=photostimulation.sequence.delay)
+
+
+def _map_index(group, target_map):
+    group = deepcopy(group)
+    group.ordered_index = [target_map.get(value) for value in group.ordered_index]
+    return group
+
+
+def _revise_indices_targets_only(photostimulation: Photostimulation
+                                 ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
+    target_map = photostimulation.target_mapping
+    permitted_points = photostimulation.stimulated_neurons
+    rois = [photostimulation.rois[point] for point in permitted_points]
+    groups = [_map_index(group, target_map) for group in photostimulation.sequence]
+    index = range(len(rois))
+    return index, permitted_points, rois, groups
 
 
 def _scale_gpl_parameters(parameters: dict,

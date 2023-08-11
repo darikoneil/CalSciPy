@@ -151,7 +151,7 @@ class Sequence(UserList):
                  interval: float = 0.0):
 
         #: int: number of repetitions
-        self.repetitions = repetitions,
+        self.repetitions = repetitions
         #: float: interval between repetitions
         self.interval = interval
         #: float: delay before beginning sequence

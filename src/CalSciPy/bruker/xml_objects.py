@@ -129,7 +129,7 @@ class MarkPointElement(_BrukerObject):
     #: str: identity of uncaging laser
     uncaging_laser: str = "Uncaging"
     #: int: uncaging laser power
-    uncaging_laser_power: int = field(default=0, metadata={"range": (0, 1000)})
+    uncaging_laser_power: float = field(default=0.0, metadata={"range": (0.0, 1000.0 / CONSTANTS.POWER_SCALE)})
     #: str: trigger frequency
     trigger_frequency: str = "None"
     # str: trigger selection id
@@ -156,11 +156,11 @@ class GalvoPointElement(_BrukerObject):
     Dataclass for a specific galvo-stimulation for a specific marked point in a sequence of photostimulations
     """
     #: int: initial delay for stimulation
-    initial_delay: int = field(default=1000, metadata={"range": (0, inf)})
+    initial_delay: float = field(default=1000.0, metadata={"range": (0, inf)})
     #: float: inter point delay
     inter_point_delay: float = field(default=0.12, metadata={"range": (0.12, inf)})
     #: int: duration of stimulation in ms
-    duration: float = field(default=100, metadata={"range": {100.0, inf}})
+    duration: float = field(default=100.0, metadata={"range": {100.0, inf}})
     #: int: number of spiral revolutions
     spiral_revolutions: float = field(default=0.01, metadata={"range": (0.01, inf)})
     #: bool: whether to do all points at once
