@@ -53,10 +53,12 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
 
     # Reduce number of galvo points required if desired
     if targets_only:
-        permitted_points = photostimulation.stimulated_neurons
+        idx, permitted_points, rois, groups = _revise_indices_targets_only(photostimulation)
     else:
+        idx = np.arange(photostimulation.neurons).tolist()
         permitted_points = np.arange(photostimulation.neurons).tolist()
-    rois = [photostimulation.rois[point] for point in permitted_points]
+        rois = photostimulation.rois
+        groups = photostimulation.sequence
 
     # Generate each galvo point
     galvo_points = tuple([_generate_galvo_point(roi=roi,
@@ -64,15 +66,15 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                                                 name=f"ROI {point}",
                                                 parameters=parameters,
                                                 z_offset=z_offset)
-                          for index, point, roi in zip(range(len(permitted_points)), permitted_points, rois)])
+                          for index, point, roi in zip(idx, permitted_points, rois)])
 
     if photostimulation.groups > 0:
-        start_index = photostimulation.targets
+        start_index = len(idx) + 1
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)
                         for index, group in zip(range(start_index, start_index + photostimulation.groups),
-                                                photostimulation.sequence)]
+                                                groups)]
         galvo_points = tuple(chain.from_iterable([element for element in [galvo_points, galvo_groups]]))
 
     # Instance galvo point list
@@ -82,6 +84,22 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
         write_protocol(galvo_point_list, file_path, ".gpl", name)
 
     return galvo_point_list
+
+
+def _revise_indices_targets_only(photostimulation: Photostimulation
+                                 ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
+    target_map = photostimulation.target_mapping
+    permitted_points = photostimulation.stimulated_neurons
+    rois = [photostimulation.rois[point] for point in permitted_points]
+    groups = [_map_index(group, target_map) for group in photostimulation.sequence]
+    index = range(len(rois))
+    return index, permitted_points, rois, groups
+
+
+def _map_index(group, target_map):
+    group = deepcopy(group)
+    group.ordered_index = [target_map.get(value) for value in group.ordered_index]
+    return group
 
 
 @validate_filename(pos=1)

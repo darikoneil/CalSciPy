@@ -40,6 +40,13 @@ class Photostimulation:
                f"ROIs within {self.reference_image.shape[0]} x {self.reference_image.shape[1]} reference image (x, y)"
 
     @property
+    def target_mapping(self) -> int:
+        return dict(zip(
+            self.stimulated_neurons,
+            range(self.targets)
+        ))
+
+    @property
     def groups(self) -> int:
         return len(self.sequence)
 

@@ -212,7 +212,7 @@ class BrukerXMLFactory:
         :param value: float
         :return: 16-character string
         """
-        # This is not efficient but I don't think it really needs to be
+        # This is not efficient... but I don't think it really needs to be
         string_representation = f"{value}"
 
         if len(string_representation) < 16:
