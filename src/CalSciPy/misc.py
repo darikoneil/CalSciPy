@@ -258,3 +258,17 @@ def generate_sliding_window(sequence: Iterable, window_length: int, step_size: i
             else:
                 return tuple(window)
             return
+
+
+def min_max_scale(values, old_range, new_range):
+    """
+    Scale values to new range
+
+    :param values: coordinate
+    :param old_range: old range
+    :param new_range: new range
+    :return: scaled value
+    """
+    old_min, old_max = old_range
+    new_min, new_max = new_range
+    return new_min + ((np.asarray(values) - old_min) * (new_max - new_min)) / (old_max - old_min)

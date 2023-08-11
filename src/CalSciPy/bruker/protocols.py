@@ -16,31 +16,15 @@ from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGr
 from .factories import BrukerXMLFactory
 from ..optogenetics import Photostimulation, Group
 from ..roi_tools import ROI
+from ..misc import min_max_scale
 
 
 """
 Collection of functions for generating protocols importable into PrairieView
 """
 
-
+# DEFAULT LOCATION / NAME FOR SAVING PROTOCOLS
 _DEFAULT_PATH = Path.cwd().joinpath("prairieview_protocol.xml")
-
-
-def generate_marked_points_protocol(photostimulation: Photostimulation,
-                                    targets_only: bool = False,
-                                    point_parameters: Optional[dict] = None,
-                                    file_path: Optional[Path] = None,
-                                    name: Optional[str] = None,
-                                    z_offset: Optional[Union[float, Sequence[float]]] = None
-                                    ) -> Tuple[MarkPointSeriesElements, GalvoPointList]:
-
-    # we require a galvo point list
-    gpl = generate_galvo_point_list(photostimulation,
-                                    targets_only,
-                                    parameters=point_parameters,
-                                    file_path=file_path,
-                                    name=name,
-                                    z_offset=z_offset)
 
 
 def generate_galvo_point_list(photostimulation: Photostimulation,
@@ -53,7 +37,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
     """
     Generates a galvo point list to import identified or targeted ROIs into PrairieView.
     If you are using multiple planes, you must pass a z_offset for the stimulation laser for each joint
-    imaging-stimulation plane. If you are stimulating only one plane and using a device to modify the depth of the
+    imaging-stimulation plane. If you are stimulating only one plane and are using a device to modify the depth of the
     imaging and stimulation paths independently such as an electrically-tunable lens, then you only must either supply
     z_offset or enter the offset as "z" in the parameter dictionary
 
@@ -68,39 +52,52 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
     :return: a galvo point list instance
     """
 
-    # Reduce number of galvo points required if desired
-    if targets_only:
-        idx, permitted_points, rois, groups = _revise_indices_targets_only(photostimulation)
-    else:
-        idx = np.arange(photostimulation.neurons).tolist()
-        permitted_points = np.arange(photostimulation.neurons).tolist()
-        rois = photostimulation.rois
-        groups = photostimulation.sequence
+    # format for easy construction
+    indices, points, rois, groups = _format_photostim(photostimulation, targets_only)
 
-    # Generate each galvo point
-    galvo_points = tuple([_generate_galvo_point(roi=roi,
-                                                index=index,
-                                                name=f"ROI {point}",
-                                                parameters=parameters,
-                                                z_offset=z_offset)
-                          for index, point, roi in zip(idx, permitted_points, rois)])
+    # generate galvo point for each roi
+    galvo_points = [_generate_galvo_point(roi=roi,
+                                          index=index,
+                                          name=f"ROI {point}",
+                                          parameters=parameters,
+                                          z_offset=z_offset)
+                    for index, point, roi in zip(indices, points, rois)]
 
+    # generate galvo point for each group if exists
     if photostimulation.groups > 0:
-        start_index = len(idx)
+        start_index = len(indices)
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)
                         for index, group in zip(range(start_index, start_index + photostimulation.groups),
                                                 groups)]
-        galvo_points = tuple(chain.from_iterable([element for element in [galvo_points, galvo_groups]]))
+        galvo_points = tuple(chain.from_iterable([point for point in [galvo_rois, galvo_groups]]))
 
-    # Instance galvo point list
+    # instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
 
+    # write to file if requested
     if file_path is not None:
         write_protocol(galvo_point_list, file_path, ".gpl", name)
 
     return galvo_point_list
+
+
+def generate_marked_points_protocol(photostimulation: Photostimulation,
+                                    targets_only: bool = False,
+                                    parameters: Optional[dict] = None,
+                                    file_path: Optional[Path] = None,
+                                    name: Optional[str] = None,
+                                    z_offset: Optional[Union[float, Sequence[float]]] = None
+                                    ) -> Tuple[MarkPointSeriesElements, GalvoPointList]:
+
+    # we require a galvo point list
+    gpl = generate_galvo_point_list(photostimulation,
+                                    targets_only,
+                                    parameters=parameters,
+                                    file_path=file_path,
+                                    name=name,
+                                    z_offset=z_offset)
 
 
 @validate_filename(pos=1)
@@ -133,12 +130,63 @@ def write_protocol(protocol: _BrukerObject,
             file.write(line)
 
 
-def _check_parameters(element: _BrukerObject, parameters: dict):
-    true_keys = vars(element).keys()
-    return {key: value for key, value in parameters.items() if key in true_keys}
+def _convert_parameters_relative_to_galvo_voltage(parameters: dict,
+                                                  fov: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
+                                                  pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
+                                                  power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
+                                                  spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
+                                                  x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
+                                                  y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
+                                                  inplace: bool = True
+                                                  ) -> dict:
+    if not inplace:
+        parameters = deepcopy(parameters)
+
+    if "uncaging_laser_power" in parameters:
+        parameters["uncaging_laser_power"] *= power_scale
+
+    if "spiral_size" in parameters:
+        parameters["spiral_size"] *= pixels_per_micron * spiral_scale
+
+    if "x" in parameters:
+        # subtract one to account for rois being zero-indexed
+        parameters["x"] = min_max_scale(parameters.get("x"), (0, fov[0] - 1), x_range)
+
+    if "y" in parameters:
+        # subtract one to account for rois being zero-indexed
+        parameters["y"] = min_max_scale(parameters.get("y"), (0, fov[0] - 1), y_range)
+
+    return parameters
 
 
-def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None):
+def _format_photostim(photostimulation: Photostimulation,
+                      targets_only: bool = False
+                      ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
+    """
+    Formats the relevant data such that we have an index from 0 to the number of included rois,
+    the actual point relative to the group of total rois, (included & not included), a sequence of included rois,
+    and a sequence of photostimulation groups
+
+    :param photostimulation: photostimulation object
+    :param targets_only: whether to use targets only when making the index
+    :returns: index of included rois, index of included rois to total rois, sequence of included rois,
+        sequence of photostimulation groups
+    """
+    # if we only want target roi's included
+    if targets_only:
+        points = photostimulation.stimulated_neurons
+        indices = list(range(photostimulation.targets))
+        rois = [roi for roi in photostimulation.remapped_rois.values()]
+        groups = photostimulation.remapped_groups
+    else:
+        indices = np.arange(photostimulation.neurons).tolist()
+        points = np.arange(photostimulation.neurons).tolist()
+        rois = photostimulation.rois
+        groups = photostimulation.sequence
+    return indices, points, rois, groups
+
+
+def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None) -> GalvoPointGroup:
 
     indices = tuple(group.ordered_index)
 
@@ -151,13 +199,21 @@ def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping
         ["indices", "name", "index"],
         [indices, name, index]
     ))
+
     # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
     parameters = deepcopy(parameters)
 
-    # merge and allow parameters to override group properties
+    # make sure we only pass expected parameters since type checking will flag the unexpected
+    parameters = _validate_keys(GalvoPoint, parameters)
+
+    # merge and allow parameters to override roi properties
     parameters = ChainMap(parameters, group_properties)
 
-    _scale_gpl_parameters(parameters)
+    # offset "z" if specified
+    _offset_z(parameters, z_offset)
+
+    # scale galvo point list parameters
+    _convert_parameters_relative_to_galvo_voltage(parameters)
 
     return GalvoPointGroup(**parameters)
 
@@ -210,45 +266,30 @@ def _generate_galvo_point(roi: ROI,
     # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
     parameters = deepcopy(parameters)
 
+    # make sure we only pass expected parameters since type checking will flag the unexpected
+    parameters = _validate_keys(GalvoPoint, parameters)
+
     # merge and allow parameters to override roi properties
     parameters = ChainMap(parameters, roi_properties)
 
-    # Offset "z" if specified
-    if "z" in parameters and z_offset is not None:
-        if isinstance(z_offset, Number):
-            parameters["z"] += z_offset
-        if isinstance(z_offset, Sequence):
-            this_plane = roi.plane
-            parameters["z"] += z_offset[this_plane]
+    # offset "z" if specified
+    _offset_z(parameters, z_offset)
 
-    _scale_gpl_parameters(parameters)
+    # scale galvo point list parameters
+    _convert_parameters_relative_to_galvo_voltage(parameters)
 
     return GalvoPoint(**parameters)
 
 
-def _generate_galvo_point_element(element):
-    ...
-
-
-def _generate_mark_point_element():
-    ...
-
-
-def _generate_mark_point_series(photostimulation,
+def _generate_mark_point_series(photostimulation: Photostimulation,
                                 targets_only,
                                 parameters,
                                 file_path,
                                 name,
                                 z_offset):
 
-    # Reduce number of points required if desired
-    if targets_only:
-        idx, permitted_points, rois, groups = _revise_indices_targets_only(photostimulation)
-    else:
-        idx = np.arange(photostimulation.neurons).tolist()
-        permitted_points = np.arange(photostimulation.neurons).tolist()
-        rois = photostimulation.rois
-        groups = photostimulation.sequence
+    # format for easy construction
+    indices, points, rois, groups = _format_photostim(photostimulation, targets_only)
 
     # make galvo point element
     for group in groups:
@@ -257,111 +298,24 @@ def _generate_mark_point_series(photostimulation,
     # make mark point element
 
     # make mark point series
-    mpl = MarkPointSeriesElements(marks=None,
-                                  iterations=photostimulation.sequence.repetitions,
-                                  iteration_delay=photostimulation.sequence.delay)
+    mark_point_series = MarkPointSeriesElements(marks=None,
+                                                iterations=photostimulation.sequence.repetitions,
+                                                iteration_delay=photostimulation.sequence.delay)
+
+    # write to file if requested
+    if file_path is not None:
+        write_protocol(mark_point_series, file_path, ".xml", name)
 
 
-def _map_index(group, target_map):
-    group = deepcopy(group)
-    group.ordered_index = [target_map.get(value) for value in group.ordered_index]
-    return group
+def _offset_z(parameters: dict, z_offset: float = None):
+
+    if z_offset is not None:
+        if "z" in parameters:
+            parameters["z"] += z_offset
+        else:
+            parameters["z"] = z_offset
 
 
-def _revise_indices_targets_only(photostimulation: Photostimulation
-                                 ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
-    target_map = photostimulation.target_mapping
-    permitted_points = photostimulation.stimulated_neurons
-    rois = [photostimulation.rois[point] for point in permitted_points]
-    groups = [_map_index(group, target_map) for group in photostimulation.sequence]
-    index = range(len(rois))
-    return index, permitted_points, rois, groups
-
-
-def _scale_gpl_parameters(parameters: dict,
-                          pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
-                          power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
-                          reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
-                          spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
-                          x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
-                          y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
-                          ) -> dict:
-
-    # Scale coordinates if specified in parameters
-    if "x" in parameters and "y" in parameters and reference_shape is not None:
-        x = parameters.get("x")
-        y = parameters.get("y")
-        x, y = _scale_coordinates((x, y), reference_shape)
-        parameters["x"] = x
-        parameters["y"] = y
-
-    # Scale laser power if specified in parameters
-    if "uncaging_laser_power" in parameters:
-        parameters["uncaging_laser_power"] = _scale_power(parameters.get("uncaging_laser_power"))
-
-    # Scale spiral if specified in parameters
-    if "spiral_size" in parameters:
-        parameters["spiral_size"] = _scale_spiral(parameters.get("spiral_size"))
-
-
-def _scale_coordinates(coordinates: Tuple[Number, Number],
-                       fov: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
-                       x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
-                       y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
-                       ) -> Tuple[float, float]:
-    """
-    Scale x, y coordinates to scanner voltages
-
-    :param coordinates: x, y coordinates
-    :param fov: field of view in pixels
-    :param x_range: voltage amplitude of x galvo
-    :param y_range: voltage amplitude of y galvo
-    :return: coordinates scaled to scanner voltages
-    """
-
-    # adjust for zero-index
-    fov = tuple([pixels - 1 for pixels in fov])
-
-    return tuple([_scale_coordinate(coordinate, (0, pixels), voltage_range)
-                  for coordinate, pixels, voltage_range
-                  in zip(coordinates, fov, (x_range, y_range))])
-
-
-def _scale_coordinate(value: Number, old_range: Tuple[int, int], new_range: Tuple[float, float]) -> float:
-    """
-    Scale coordinate to new range
-
-    :param value: coordinate
-    :param old_range: old range
-    :param new_range: new range
-    :return: scaled value
-    """
-    old_min, old_max = old_range
-    new_min, new_max = new_range
-    return new_min + ((value - old_min) * (new_max - new_min)) / (old_max - old_min)
-
-
-def _scale_power(value: Number, multiplier: float = CONSTANTS.POWER_SCALE) -> float:
-    """
-    Scales laser power to correct range in .gpl files
-
-    :param value: unscaled laser power value
-    :param multiplier: power scale multiplier constant
-    :return: scaled value
-    """
-    return value * multiplier
-
-
-def _scale_spiral(value: Number,
-                  pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
-                  multiplier: float = CONSTANTS.SPIRAL_SCALE
-                  ) -> float:
-    """
-    Scales spiral diameter to correct range in .gpl files
-
-    :param value: unscaled spiral size value
-    :param pixels_per_micron: number of pixels per micron constant
-    :param multiplier: spiral size multiplier constant
-    :return: scaled value
-    """
-    return value * pixels_per_micron * multiplier
+def _validate_keys(element: _BrukerObject, parameters: dict) -> dict:
+    expected_keys = vars(element).keys()
+    return {key: value for key, value in parameters.items() if key in expected_keys}

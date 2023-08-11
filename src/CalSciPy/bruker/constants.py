@@ -17,20 +17,6 @@ _config = _config_parser.read(_path)
 _OBJECTIVE_FLAG = _config_parser.get("OBJECTIVE", "OBJECTIVE")
 
 
-def _format_amplitude_range(value: Number) -> Tuple[float, float]:
-    """
-    Formats voltage amplitude of galvo in range
-
-    :param value: galvo amplitude
-    :return: voltage amplitude range
-    """
-
-    if not isinstance(value, float):
-        value = float(value)
-
-    return -1 * value, value
-
-
 def _calculate_field_of_view(value: Number,
                              pixels_per_micron: float = _config_parser.get(_OBJECTIVE_FLAG, "PIXELS_PER_MICRON")
                              ) -> float:
@@ -48,6 +34,20 @@ def _calculate_field_of_view(value: Number,
         pixels_per_micron = float(pixels_per_micron)
 
     return value * pixels_per_micron
+
+
+def _format_amplitude_range(value: Number) -> Tuple[float, float]:
+    """
+    Formats voltage amplitude of galvo in range
+
+    :param value: galvo amplitude
+    :return: voltage amplitude range
+    """
+
+    if not isinstance(value, float):
+        value = float(value)
+
+    return -1 * value, value
 
 
 def _scale_to_magnification(value: Number,

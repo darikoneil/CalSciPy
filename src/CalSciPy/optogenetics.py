@@ -4,6 +4,7 @@ from pathlib import Path
 from collections import ChainMap, UserList
 from itertools import chain
 from numbers import Number
+from copy import deepcopy
 
 import numpy as np
 
@@ -45,6 +46,17 @@ class Photostimulation:
             self.stimulated_neurons,
             range(self.targets)
         ))
+
+    @property
+    def remapped_groups(self) -> int:
+        remapped_sequence = deepcopy(self.sequence)
+        for group in remapped_sequence:
+            group.ordered_index = [self.target_mapping.get(target) for target in self.stimulated_neurons]
+        return remapped_sequence
+
+    @property
+    def remapped_rois(self) -> dict:
+        return dict(enumerate([roi for index, roi in enumerate(self.rois) if index in self.stimulated_neurons]))
 
     @property
     def groups(self) -> int:
