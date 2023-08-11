@@ -12,7 +12,7 @@ from PPVD.validation import validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
 from . import CONSTANTS
-from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup
+from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements
 from .factories import BrukerXMLFactory
 from ..optogenetics import Photostimulation, Group
 from ..roi_tools import ROI
@@ -24,6 +24,35 @@ Collection of functions for generating protocols importable into PrairieView
 
 
 _DEFAULT_PATH = Path.cwd().joinpath("prairieview_protocol.xml")
+
+
+def generate_marked_points_protocol(photostimulation: Photostimulation,
+                                    targets_only: bool = False,
+                                    point_parameters: Optional[dict] = None,
+                                    file_path: Optional[Path] = None,
+                                    name: Optional[str] = None,
+                                    z_offset: Optional[Union[float, Sequence[float]]] = None
+                                    ) -> Tuple[MarkPointSeriesElements, GalvoPointList]:
+
+    # we require a galvo point list
+    gpl = generate_galvo_point_list(photostimulation,
+                                    targets_only,
+                                    parameters=point_parameters,
+                                    file_path=file_path,
+                                    name=name,
+                                    z_offset=z_offset)
+
+
+def _generate_mark_point_series(photostimulation,
+                                targets_only,
+                                parameters,
+                                file_path,
+                                name,
+                                z_offset):
+
+    mpl = MarkPointSeriesElements(marks=None,
+                                  iterations=photostimulation.sequence.repetitions,
+                                  iteration_delay=photostimulation.sequence.delay)
 
 
 def generate_galvo_point_list(photostimulation: Photostimulation,

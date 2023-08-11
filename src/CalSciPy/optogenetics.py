@@ -146,6 +146,7 @@ class Sequence(UserList):
     """
     def __init__(self,
                  groups: Sequence = None,
+                 delay: float = 0.0,
                  repetitions: int = 1,
                  interval: float = 0.0):
 
@@ -153,6 +154,8 @@ class Sequence(UserList):
         self.repetitions = repetitions,
         #: float: interval between repetitions
         self.interval = interval
+        #: float: delay before beginning sequence
+        self.delay = delay
 
         super().__init__(initlist=groups)
 
