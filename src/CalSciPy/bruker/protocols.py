@@ -12,7 +12,8 @@ from PPVD.validation import validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
 from . import CONSTANTS
-from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements
+from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
+    GalvoPointElement, MarkPointElement
 from .factories import BrukerXMLFactory
 from ..optogenetics import Photostimulation, Group
 from ..roi_tools import ROI
@@ -291,9 +292,9 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
     # format for easy construction
     indices, points, rois, groups = _format_photostim(photostimulation, targets_only)
 
-    # make galvo point element
+    # make mark point / galvo point elements
     for group in groups:
-        pass
+            pass
 
     # make mark point element
 
