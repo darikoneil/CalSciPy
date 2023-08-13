@@ -9,9 +9,9 @@ BASE_DIRECTORY = Path.cwd()
 if "tests" not in str(BASE_DIRECTORY):
     BASE_DIRECTORY = BASE_DIRECTORY.joinpath("tests")
 
-SAMPLES_DIRECTORY_ = BASE_DIRECTORY.joinpath("testing_data")
-SAMPLES_DATASETS_DIRECTORY = SAMPLES_DIRECTORY_.joinpath("sample_datasets")
-SAMPLES_VARIABLES_DIRECTORY = SAMPLES_DIRECTORY_.joinpath("sample_variables")
+SAMPLES_DIRECTORY_ = BASE_DIRECTORY.joinpath("testing_samples")
+SAMPLES_DATASETS_DIRECTORY = SAMPLES_DIRECTORY_.joinpath("datasets")
+SAMPLES_VARIABLES_DIRECTORY = SAMPLES_DIRECTORY_.joinpath("variables")
 
 # Turn off JIT for proper coverage
 environ["NUMBA_DISABLE_JIT"] = "1"

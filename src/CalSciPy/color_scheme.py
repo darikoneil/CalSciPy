@@ -1,5 +1,8 @@
 from __future__ import annotations
 from typing import Tuple, Union
+from operator import eq
+
+from ._backports import PatternMatching
 
 
 class _ColorScheme:
@@ -22,12 +25,22 @@ class _ColorScheme:
     background: Tuple[float, float, float] = (245 / 255, 245 / 255, 245 / 255)
     mapping = list(enumerate([red, green, blue, orange, purple, yellow, black, dark, medium, light, background, white]))
 
-    def __new__(cls):
+    def __new__(cls: _ColorScheme) -> _ColorScheme:
+        """
+        Force color scheme as singleton
+
+        """
         if not hasattr(cls, "instance"):
             cls.instance = super(_ColorScheme, cls).__new__(cls)
         return cls.instance
 
-    def __call__(self, value: Union[int, str], *args, **kwargs):
+    def __call__(self, value: Union[int, str], *args, **kwargs) -> Tuple[float, float, float]:
+        """
+        Call for next color in scheme
+
+        :param value: requested color directly or by index
+        :returns: tuple of RGB values
+        """
         if isinstance(value, int):
             if value >= len(self.mapping):
                 value = len(self.mapping) % value
@@ -36,5 +49,83 @@ class _ColorScheme:
             return getattr(self, value)
 
 
-# instance
+class _TerminalScheme:
+    """
+    A container class for CalSciPy's terminal printing color/font scheme
+
+    """
+    BLUE = "\u001b[38;5;39m"  # Types
+    YELLOW = "\u001b[38;5;11m"  # Emphasis
+    BOLD = "\u001b[1m"  # Titles, Headers + UNDERLINE + YELLOW
+    UNDERLINE = "\u001b[7m"  # Titles, Headers + BOLD + YELLOW, implemented as a reverse of font color/background color
+    # on some terminals (e.g., PyCharm)
+    RESET = "\033[0m"
+
+    @property
+    def type(self) -> str:
+        """
+        Style for type hinting
+
+        """
+        return self.BLUE
+
+    @property
+    def emphasis(self) -> str:
+        """
+        Style for emphasis
+
+        """
+        return self.YELLOW
+
+    @property
+    def header(self) -> str:
+        """
+        Style for headers, titles and other things of utmost importance
+
+        """
+        return self.BOLD + self.UNDERLINE + self.YELLOW
+
+    def __new__(cls: _TerminalScheme) -> _TerminalScheme:
+        """
+        Force color scheme as singleton
+
+        """
+        if not hasattr(cls, "instance"):
+            cls.instance = super(_TerminalScheme, cls).__new__(cls)
+        return cls.instance
+
+    @staticmethod
+    def __name__():
+        return "Terminal Scheme"
+
+    def __str__(self):
+        return "Scheme for CalSciPy terminal printing"
+
+    def __repr__(self):
+        return "Scheme for CalSciPy terminal printing"
+
+    def __call__(self, message: str, style: str) -> str:
+        """
+        Returns properly formatted string without setting global style if appending additional messages
+
+        :param message: string to be formatted
+        :param style: desired format (type, emphasis, header or class var)
+
+        :return: formatted string
+        """
+        # I could probably just have this fail directly, but this is a bit more graceful.
+        # It's more important that the message to the user is received than raising an exception because of style
+        # matters.
+
+        with PatternMatching(style, eq) as case:
+            if any([case(style_) for style_ in dir(self) if "__" not in style_]):
+                return "".join([getattr(self, style), message, self.RESET])
+            else:
+                return "".join([message, f"--requested terminal printing style {style} does not exist"])
+
+
+# instance color scheme
 COLORS = _ColorScheme()
+
+# instance terminal scheme
+TERM_SCHEME = _TerminalScheme()

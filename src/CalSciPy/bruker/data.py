@@ -16,8 +16,9 @@ from tqdm import tqdm as tq
 from . import CONSTANTS
 from .meta_objects import PhotostimulationMeta
 from .factories import BrukerElementFactory
-from ..misc import PatternMatching, calculate_frames_per_file, generate_blocks, generate_padded_filename
+from ..misc import calculate_frames_per_file, generate_blocks, generate_padded_filename
 from ..io_tools import _load_single_tif, _save_single_tif
+from .._backports import PatternMatching
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
