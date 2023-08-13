@@ -1,27 +1,13 @@
 from __future__ import annotations
-from typing import Union
+from typing import Union, Callable, Tuple
 from numbers import Number
 import numpy as np
 from .misc import generate_blocks, wrap_cupy_block
 
-try:
-    import cupy
-    import cupyx.scipy.ndimage
-    USE_GPU = True
-except ModuleNotFoundError:
-    import scipy.ndimage
-    USE_GPU = False
-finally:
-    if USE_GPU:
-        _gaussian_filter = _gaussian_filter_gpu
-        _median_filter = _median_filter_gpu
-    else:
-        _gaussian_filter = _gaussian_filter_cpu
-        _median_filter = _median_filter_cpu
 
+_USE_GPU, _gaussian_filter, _median_filter = _set_gpu_flag()
 
-
-DEFAULT_MASK = np.ones((3, 3, 3))
+_DEFAULT_MASK = np.ones((3, 3, 3))
 
 
 def gaussian_filter(images: np.ndarray, sigma: Union[Number, np.ndarry] = 1.0, block_size: int = None,
@@ -61,7 +47,7 @@ def gaussian_filter(images: np.ndarray, sigma: Union[Number, np.ndarry] = 1.0, b
     return filtered_images
 
 
-def median_filter(images: np.ndarray, mask: np.ndarray = DEFAULT_MASK, block_size: int = None,
+def median_filter(images: np.ndarray, mask: np.ndarray = _DEFAULT_MASK, block_size: int = None,
                   block_buffer: int = 0, in_place: bool = False) -> np.ndarray:
     """
     GPU-parallelized multidimensional median filter. Optional arguments for in-place calculation. Can be calculated
@@ -108,7 +94,7 @@ def _gaussian_filter_gpu(images: cupy.ndarray, sigma: Union[Number, np.ndarray])
     :param sigma: sigma for filter
     :returns: filtered numpy array
     """
-    return cupyx.scipy.ndimage.gaussian_filter(images, sigma=sigma)
+    return cupyx.scipy.ndimage.gaussian_filter(images, sigma=sigma)  # noqa: F821
 
 
 @wrap_cupy_block
@@ -120,7 +106,7 @@ def _median_filter_gpu(images: cupy.ndarray, mask: np.ndarray) -> np.ndarray:
     :param mask: mask for filtering
     :returns: filtered numpy array
     """
-    return cupyx.scipy.ndimage.median_filter(images, footprint=mask)
+    return cupyx.scipy.ndimage.median_filter(images, footprint=mask)  # noqa: F821
 
 
 def _gaussian_filter_cpu(images: np.ndarray, sigma: Union[Number, np.ndarray]) -> np.ndarray:
@@ -131,7 +117,7 @@ def _gaussian_filter_cpu(images: np.ndarray, sigma: Union[Number, np.ndarray]) -
     :param sigma: sigma for filter
     :returns: filtered numpy array
     """
-    return scipy.ndimage.gaussian_filter(images, sigma=sigma)
+    return scipy.ndimage.gaussian_filter(images, sigma=sigma)  # noqa: F821
 
 
 def _median_filter_cpu(images: np.ndarray, mask: np.ndarray) -> np.ndarray:
@@ -142,4 +128,29 @@ def _median_filter_cpu(images: np.ndarray, mask: np.ndarray) -> np.ndarray:
     :param mask: mask for filtering
     :returns: filtered numpy array
     """
-    return scipy.ndimage.median_filter(images, footprint=mask)
+    return scipy.ndimage.median_filter(images, footprint=mask)  # noqa: F821
+
+
+def _set_gpu_flag() -> Tuple[bool, Callable, Callable]:
+    """
+    Sets appropriate filter implementations
+
+    :returns: flag indicating whether gpu is being used, gaussian filter implementation
+        median filter implementation
+    """
+    try:
+        import cupy  # noqa: F401
+        import cupyx.scipy.ndimage  # noqa: F401
+        USE_GPU = True
+    except ModuleNotFoundError:
+        import scipy.ndimage  # noqa: F401
+        USE_GPU = False
+    finally:
+        if USE_GPU:
+            _gaussian_filter = _gaussian_filter_gpu
+            _median_filter = _median_filter_gpu
+        else:
+            _gaussian_filter = _gaussian_filter_cpu
+            _median_filter = _median_filter_cpu
+
+    return USE_GPU, _gaussian_filter, _median_filter

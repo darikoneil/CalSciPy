@@ -1,9 +1,10 @@
 from __future__ import annotations
-from typing import Iterable, Iterator, Any, Callable
+from typing import Iterable, Iterator, Callable, Union, Tuple
 from collections import deque
 from pathlib import Path
 from numbers import Number
 from functools import wraps, partial
+
 from joblib import Parallel, delayed
 import numpy as np
 from tqdm import tqdm
@@ -227,11 +228,14 @@ def generate_sliding_window(sequence: Iterable, window_length: int, step_size: i
             return
 
 
-def min_max_scale(values, old_range, new_range):
+def min_max_scale(values: Union[Number, Iterable[Number], np.ndarray],
+                  old_range: Tuple[Number, Number],
+                  new_range: Tuple[Number, Number]
+                  ) -> np.ndarray:
     """
     Scale values to new range
 
-    :param values: coordinate
+    :param values: value/s to be scaled
     :param old_range: old range
     :param new_range: new range
     :return: scaled value

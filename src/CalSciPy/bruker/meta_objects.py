@@ -2,10 +2,13 @@ from __future__ import annotations
 from typing import Tuple
 from abc import abstractmethod
 from xml.etree import ElementTree
-import numpy as np
 from collections import ChainMap
+
+import numpy as np
 from PPVD.style import TerminalStyle
 from scipy.spatial import ConvexHull
+
+from ..roi_tools import calculate_mask
 
 
 class _BrukerMeta:
@@ -202,7 +205,7 @@ class ROIMeta:
         radii = (
             self.parameters.get("spiral_height") * height / 2, self.parameters.get("spiral_width") * width / 2, )
         # calculate mask
-        return generate_photostimulation_mask(center, radii, (height, width))
+        return calculate_mask(center, radii, (height, width))
 
     def _pull_parameters_to_upper_level(self) -> ROIMeta:
         params = []

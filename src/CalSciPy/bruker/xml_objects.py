@@ -13,6 +13,7 @@ from .validation import validate_fields
 
 
 # These require python 3.10?
+# TODO: include backport of python 3.10 dataclass implementation, or at least one containing kw_only
 @dataclass(kw_only=True)
 class _BrukerObject:
     """
@@ -103,7 +104,7 @@ class MarkPointSeriesElements(_BrukerObject):
     """
     Dataclass for a sequence of photostimulations
     """
-    #: Tuple[object]: series of mark point elements
+    #: Tuple[MarkPointElement]: series of mark point elements
     marks: Tuple[object]
     #: int: number of times this series is iterated
     iterations: int = field(default=1, metadata={"range": (1, inf)})
@@ -122,7 +123,7 @@ class MarkPointElement(_BrukerObject):
     """
     Dataclass for a specific marked point in a sequence of photostimulations
     """
-    #: object: Tuple of galvo point elements
+    #: Tuple[GalvoPointElement]: Tuple of galvo point elements
     points: Tuple[object]
     #: int: repetitions of this stimulation event
     repetitions: int = field(default=1, metadata={"range": (1, inf)})
@@ -205,12 +206,17 @@ class Point(_BrukerObject):
 @dataclass(kw_only=True)
 class GalvoPointList(_BrukerObject):
     """
-    Dataclass for a list of galvo points
+    Dataclass for a list of :class:`GalvoPoint`'s & :class:`GalvoPointGroup`'s
 
     """
+    #: Tuple[Union[GalvoPoint, GalvoPointGroup]]
     galvo_points: Tuple[object]
 
     def __post_init__(self):
+        """
+        check that the galvo_points are correct classes
+
+        """
         for idx, point in enumerate(self.galvo_points):
             if not isinstance(point, (GalvoPoint, GalvoPointGroup)):
                 raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
@@ -230,7 +236,7 @@ class GalvoPointGroup(_BrukerObject):
     Dataclass for a group of points during galvo-stimulation
 
     """
-    #: Tuple[int]: a tuple indexing the galvo points to be stimulated as part of this group
+    #: Tuple[int]: a tuple indexing the :class:`GalvoPoint`'s to be stimulated as part of this group
     indices: Tuple[int] = (0, )
     #: str: name of the group
     name: str = "Group 0"
@@ -254,7 +260,7 @@ class GalvoPointGroup(_BrukerObject):
     z: float = field(default=0.0, metadata={"range": (-21500.0, 21500.0)})
 
     @staticmethod
-    def __name__():
+    def __name__() -> str:
         return "GalvoPointGroup"
 
 
