@@ -169,7 +169,7 @@ class GalvoPointElement(_BrukerObject):
     #: str: id from galvo point list
     points: str = "Point 0"
     #: int: index from galvo point list
-    indices: int = field(default=0, metadata={"range": (0, inf)})
+    indices: Tuple[int] = (0, )
 
     @staticmethod
     def __name__() -> str:
