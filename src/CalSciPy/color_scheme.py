@@ -61,6 +61,18 @@ class _TerminalScheme:
     # on some terminals (e.g., PyCharm)
     RESET = "\033[0m"
 
+    def __new__(cls: _TerminalScheme) -> _TerminalScheme:
+        """
+        Force color scheme as singleton
+
+        """
+        if not hasattr(cls, "instance"):
+            cls.instance = super(_TerminalScheme, cls).__new__(cls)
+        return cls.instance
+
+    def __str__(self):
+        return "Scheme for CalSciPy terminal printing"
+
     @property
     def type(self) -> str:
         """
@@ -85,21 +97,9 @@ class _TerminalScheme:
         """
         return self.BOLD + self.UNDERLINE + self.YELLOW
 
-    def __new__(cls: _TerminalScheme) -> _TerminalScheme:
-        """
-        Force color scheme as singleton
-
-        """
-        if not hasattr(cls, "instance"):
-            cls.instance = super(_TerminalScheme, cls).__new__(cls)
-        return cls.instance
-
     @staticmethod
-    def __name__():
+    def __name__() -> str:
         return "Terminal Scheme"
-
-    def __str__(self):
-        return "Scheme for CalSciPy terminal printing"
 
     def __repr__(self):
         return "Scheme for CalSciPy terminal printing"

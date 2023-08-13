@@ -1,6 +1,5 @@
 from __future__ import annotations
-from typing import Tuple, Any, Sequence, Union, Optional
-from numbers import Number
+from typing import Tuple, Sequence, Union, Optional, Mapping, List
 from pathlib import Path
 from collections import ChainMap
 from copy import deepcopy
@@ -15,7 +14,7 @@ from . import CONSTANTS
 from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
     GalvoPointElement, MarkPointElement
 from .factories import BrukerXMLFactory
-from ..optogenetics import Photostimulation, Group
+from ..optogenetics import Photostimulation, StimulationGroup
 from ..roi_tools import ROI
 from ..misc import min_max_scale
 
@@ -72,7 +71,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                                               parameters=parameters)
                         for index, group in zip(range(start_index, start_index + photostimulation.groups),
                                                 groups)]
-        galvo_points = tuple(chain.from_iterable([point for point in [galvo_rois, galvo_groups]]))
+        galvo_points = tuple(chain.from_iterable([point for point in [galvo_points, galvo_groups]]))  # noqa: C416
 
     # instance galvo point list
     galvo_point_list = GalvoPointList(galvo_points=galvo_points)
@@ -99,6 +98,14 @@ def generate_marked_points_protocol(photostimulation: Photostimulation,
                                     file_path=file_path,
                                     name=name,
                                     z_offset=z_offset)
+
+    mpl = _generate_mark_point_series(photostimulation,
+                                      targets_only,
+                                      parameters,
+                                      file_path,
+                                      name)
+
+    return mpl, gpl
 
 
 @validate_filename(pos=1)
@@ -162,7 +169,7 @@ def _convert_parameters_relative_to_galvo_voltage(parameters: dict,
 
 def _format_photostim(photostimulation: Photostimulation,
                       targets_only: bool = False
-                      ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
+                      ) -> Tuple[List[int], List[int], List[ROI], List[StimulationGroup]]:
     """
     Formats the relevant data such that we have an index from 0 to the number of included rois,
     the actual point relative to the group of total rois, (included & not included), a sequence of included rois,
@@ -177,7 +184,7 @@ def _format_photostim(photostimulation: Photostimulation,
     if targets_only:
         points = photostimulation.stimulated_neurons
         indices = list(range(photostimulation.targets))
-        rois = [roi for roi in photostimulation.remapped_rois.values()]
+        rois = [photostimulation.rois.get(roi) for roi in photostimulation.remapped_rois.values()]
         groups = photostimulation.remapped_groups
     else:
         indices = np.arange(photostimulation.neurons).tolist()
@@ -187,7 +194,11 @@ def _format_photostim(photostimulation: Photostimulation,
     return indices, points, rois, groups
 
 
-def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping] = None) -> GalvoPointGroup:
+def _generate_galvo_group(index: int,
+                          group: StimulationGroup,
+                          parameters: Optional[Mapping] = None,
+                          z_offset: Optional[Union[float, Sequence[float]]] = None,
+                          ) -> GalvoPointGroup:
 
     indices = tuple(group.ordered_index)
 
@@ -220,12 +231,6 @@ def _generate_galvo_group(index: int, group: Group, parameters: Optional[Mapping
 
 
 def _generate_galvo_point(roi: ROI,
-                          pixels_per_micron: float = CONSTANTS.PIXELS_PER_MICRON,
-                          power_scale: Tuple[float] = CONSTANTS.POWER_SCALE,
-                          reference_shape: Tuple[int, int] = CONSTANTS.FIELD_OF_VIEW_PIXELS,
-                          spiral_scale: Tuple[float] = CONSTANTS.SPIRAL_SCALE,
-                          x_range: Tuple[float, float] = CONSTANTS.X_GALVO_VOLTAGE_RANGE,
-                          y_range: Tuple[float, float] = CONSTANTS.Y_GALVO_VOLTAGE_RANGE,
                           index: Optional[int] = None,
                           name: Optional[str] = None,
                           parameters: Optional[Mapping] = None,
@@ -283,23 +288,21 @@ def _generate_galvo_point(roi: ROI,
 
 
 def _generate_mark_point_series(photostimulation: Photostimulation,
-                                targets_only,
-                                parameters,
-                                file_path,
-                                name,
-                                z_offset):
+                                targets_only: bool,
+                                parameters: dict,
+                                file_path: Path,
+                                name: str
+                                ) -> MarkPointSeriesElements:
 
     # format for easy construction
-    indices, points, rois, groups = _format_photostim(photostimulation, targets_only)
+    _, _, _, groups = _format_photostim(photostimulation, targets_only)
 
     # make mark point / galvo point elements
     for group in groups:
-        pass
-
-    # make mark point element
+        mark_point_elements = tuple([_generate_mark_point_element(group, parameters) for group in groups])
 
     # make mark point series
-    mark_point_series = MarkPointSeriesElements(marks=None,
+    mark_point_series = MarkPointSeriesElements(marks=mark_point_elements,
                                                 iterations=photostimulation.sequence.repetitions,
                                                 iteration_delay=photostimulation.sequence.delay)
 
@@ -307,8 +310,69 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
     if file_path is not None:
         write_protocol(mark_point_series, file_path, ".xml", name)
 
+    return mark_point_series
 
-def _offset_z(parameters: dict, z_offset: float = None):
+
+def _generate_galvo_point_element(group: StimulationGroup,
+                                  parameters: Optional[Mapping] = None,
+                                  ) -> GalvoPointElement:
+    indices = tuple(group.ordered_index)
+
+    name = group.name
+    if name is None:
+        tag = f"{indices}"[1:-1]
+        name = "Group" + tag
+
+    initial_delay = group.delay
+
+    inter_point_delay = group.point_interval
+
+    group_properties = dict(zip(
+        ["indices", "points", "initial_delay", "inter_point_delay"],
+        [indices, name, initial_delay, inter_point_delay]
+    ))
+
+    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
+    parameters = deepcopy(parameters)
+
+    # make sure we only pass expected parameters since type checking will flag the unexpected
+    parameters = _validate_keys(GalvoPointElement, parameters)
+
+    # merge and allow parameters to override roi properties
+    parameters = ChainMap(parameters, group_properties)
+
+    return GalvoPointElement(**parameters)
+
+
+def _generate_mark_point_element(group: StimulationGroup,
+                                 parameters: Optional[Mapping] = None
+                                 ) -> MarkPointElement:
+    # get number of repetitions
+    repetitions = group.repetitions
+
+    galvo_point_element = _generate_galvo_point_element(group, parameters)
+
+    mark_point_properties = dict(zip(
+        ["repetitions", "points"],
+        [repetitions, (galvo_point_element, )]
+    ))
+
+    # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
+    parameters = deepcopy(parameters)
+
+    # make sure we only pass expected parameters since type checking will flag the unexpected
+    parameters = _validate_keys(MarkPointElement, parameters)
+
+    # convert values
+    _convert_parameters_relative_to_galvo_voltage(parameters)
+
+    # merge and allow parameters to override roi properties
+    parameters = ChainMap(parameters, mark_point_properties)
+
+    return MarkPointElement(**parameters)
+
+
+def _offset_z(parameters: dict, z_offset: float = None) -> dict:
 
     if z_offset is not None:
         if "z" in parameters:

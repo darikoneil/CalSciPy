@@ -17,7 +17,7 @@ class PatternMatching:
         self.comparison_expressions = self._coerce_iterable(comparison_expressions)
 
     @staticmethod
-    def _coerce_iterable(comparison_expression):
+    def _coerce_iterable(comparison_expression: Any) -> Iterable[Any]:
         if isinstance(comparison_expression, Iterable):
             return comparison_expression
         else:

@@ -1,8 +1,9 @@
 from __future__ import annotations
-from typing import Optional, Tuple, Union, Sequence, Iterable
+from typing import Optional, Tuple, Union, Sequence, Iterable, Any
 from numbers import Number
 from functools import partial, cached_property
 from abc import abstractmethod
+from pathlib import Path
 
 import numpy as np
 from scipy.spatial import ConvexHull
@@ -305,22 +306,6 @@ class ROIHandler:
 
     """
 
-    @classmethod
-    def load(cls: ROIHandler, *args, **kwargs) -> Tuple[dict, np.ndarray]:
-        """
-        Method that loads rois and generates reference image
-
-        :returns: a dictionary in which each key is an integer indexing an ROI object and a reference image
-        """
-
-        rois_data_structure, reference_image_data_structure = cls.from_file(*args, **kwargs)
-
-        reference_image = cls.generate_reference_image(reference_image_data_structure)
-
-        rois = cls.import_rois(rois_data_structure, reference_image.shape)
-
-        return rois, reference_image
-
     @staticmethod
     @abstractmethod
     def convert_one_roi(roi: Any, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
@@ -375,6 +360,22 @@ class ROIHandler:
         converter = partial(cls.convert_one_roi, reference_shape=reference_shape)
         return dict(enumerate([converter(element) for element in rois]))
 
+    @classmethod
+    def load(cls: ROIHandler, *args, **kwargs) -> Tuple[dict, np.ndarray]:
+        """
+        Method that loads rois and generates reference image
+
+        :returns: a dictionary in which each key is an integer indexing an ROI object and a reference image
+        """
+
+        rois_data_structure, reference_image_data_structure = cls.from_file(*args, **kwargs)
+
+        reference_image = cls.generate_reference_image(reference_image_data_structure)
+
+        rois = cls.import_rois(rois_data_structure, reference_image.shape)
+
+        return rois, reference_image
+
 
 class Suite2PHandler(ROIHandler):
     @staticmethod
@@ -393,7 +394,7 @@ class Suite2PHandler(ROIHandler):
         return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=reference_shape, xpix=xpix, ypix=ypix)
 
     @staticmethod
-    def from_file(folder, *args, **kwargs) -> Tuple[np.ndarray, dict]:
+    def from_file(folder: Path, *args, **kwargs) -> Tuple[np.ndarray, dict]:  # noqa: U100
         """
 
         :keyword folder: folder containing suite2p data. The folder must contain the associated "stat.npy"
@@ -436,7 +437,7 @@ class Suite2PHandler(ROIHandler):
         # Load Vcorr as our reference image
         try:
             reference_image = data_structure.get("Vcorr")
-            assert(reference_image is not None)
+            assert (reference_image is not None)
         except (KeyError, AssertionError):
             reference_image = np.ones(true_shape)
 

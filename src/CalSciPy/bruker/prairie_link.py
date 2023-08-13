@@ -9,8 +9,8 @@ from enum import Enum
 from memoization import cached
 
 try:
-    import win32com
-    import win32com.client as client
+    import win32com  # noqa: F401
+    import win32com.client as client  # noqa: F401
     from win32com.client import CDispatch  # noqa: F401
 except ImportError:
     print("Unable to locate pywin32 installation")

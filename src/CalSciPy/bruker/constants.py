@@ -3,6 +3,7 @@ from configparser import ConfigParser
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Tuple
+from numbers import Number
 
 
 """Configuration constants that describe the user's PrairieView setup"""
@@ -16,9 +17,13 @@ _config = _config_parser.read(_path)
 
 _OBJECTIVE_FLAG = _config_parser.get("OBJECTIVE", "OBJECTIVE")
 
+_PIXELS_PER_MICRON = _config_parser.get(_OBJECTIVE_FLAG, "PIXELS_PER_MICRON")
+
+_MAGNIFICATION = _config_parser.get(_OBJECTIVE_FLAG, "MAGNIFICATION")
+
 
 def _calculate_field_of_view(value: Number,
-                             pixels_per_micron: float = _config_parser.get(_OBJECTIVE_FLAG, "PIXELS_PER_MICRON")
+                             pixels_per_micron: float = _PIXELS_PER_MICRON
                              ) -> float:
     """
     Calculate FOV using number of pixels per micron
@@ -51,7 +56,7 @@ def _format_amplitude_range(value: Number) -> Tuple[float, float]:
 
 
 def _scale_to_magnification(value: Number,
-                            magnification: float = _config_parser.get(_OBJECTIVE_FLAG, "MAGNIFICATION")
+                            magnification: float = _MAGNIFICATION
                             ) -> float:
     """
     Scales some value according to the magnification
