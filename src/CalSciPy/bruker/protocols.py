@@ -14,7 +14,7 @@ from . import CONSTANTS
 from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
     GalvoPointElement, MarkPointElement
 from .factories import BrukerXMLFactory
-from ..optogenetics import Photostimulation, Group
+from ..optogenetics import Photostimulation, StimulationGroup
 from ..roi_tools import ROI
 from ..misc import min_max_scale
 
@@ -169,7 +169,7 @@ def _convert_parameters_relative_to_galvo_voltage(parameters: dict,
 
 def _format_photostim(photostimulation: Photostimulation,
                       targets_only: bool = False
-                      ) -> Tuple[List[int], List[int], List[ROI], List[Group]]:
+                      ) -> Tuple[List[int], List[int], List[ROI], List[StimulationGroup]]:
     """
     Formats the relevant data such that we have an index from 0 to the number of included rois,
     the actual point relative to the group of total rois, (included & not included), a sequence of included rois,
@@ -184,7 +184,7 @@ def _format_photostim(photostimulation: Photostimulation,
     if targets_only:
         points = photostimulation.stimulated_neurons
         indices = list(range(photostimulation.targets))
-        rois = list(photostimulation.remapped_rois.values())
+        rois = [photostimulation.rois.get(roi) for roi in photostimulation.remapped_rois.values()]
         groups = photostimulation.remapped_groups
     else:
         indices = np.arange(photostimulation.neurons).tolist()
@@ -195,7 +195,7 @@ def _format_photostim(photostimulation: Photostimulation,
 
 
 def _generate_galvo_group(index: int,
-                          group: Group,
+                          group: StimulationGroup,
                           parameters: Optional[Mapping] = None,
                           z_offset: Optional[Union[float, Sequence[float]]] = None,
                           ) -> GalvoPointGroup:
@@ -310,8 +310,10 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
     if file_path is not None:
         write_protocol(mark_point_series, file_path, ".xml", name)
 
+    return mark_point_series
 
-def _generate_galvo_point_element(group: Group,
+
+def _generate_galvo_point_element(group: StimulationGroup,
                                   parameters: Optional[Mapping] = None,
                                   ) -> GalvoPointElement:
     indices = tuple(group.ordered_index)
@@ -342,7 +344,7 @@ def _generate_galvo_point_element(group: Group,
     return GalvoPointElement(**parameters)
 
 
-def _generate_mark_point_element(group: Group,
+def _generate_mark_point_element(group: StimulationGroup,
                                  parameters: Optional[Mapping] = None
                                  ) -> MarkPointElement:
     # get number of repetitions
@@ -352,14 +354,14 @@ def _generate_mark_point_element(group: Group,
 
     mark_point_properties = dict(zip(
         ["repetitions", "points"],
-        [repetitions, galvo_point_element]
+        [repetitions, (galvo_point_element, )]
     ))
 
     # make sure parameters is not mutated, accomplished by breaking reference using deepcopy
     parameters = deepcopy(parameters)
 
     # make sure we only pass expected parameters since type checking will flag the unexpected
-    parameters = _validate_keys(GalvoPointElement, parameters)
+    parameters = _validate_keys(MarkPointElement, parameters)
 
     # convert values
     _convert_parameters_relative_to_galvo_voltage(parameters)

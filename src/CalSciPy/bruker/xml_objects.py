@@ -124,7 +124,7 @@ class MarkPointElement(_BrukerObject):
     Dataclass for a specific marked point in a sequence of photostimulations
     """
     #: Tuple[GalvoPointElement]: Tuple of galvo point elements
-    points: Tuple[object]
+    points: tuple[object]
     #: int: repetitions of this stimulation event
     repetitions: int = field(default=1, metadata={"range": (1, inf)})
     #: str: identity of uncaging laser

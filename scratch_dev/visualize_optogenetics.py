@@ -40,13 +40,25 @@ def view_roi_overlay(photostimulation: Photostimulation):
             _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
 
 
-def view_target_overlay(photostimulation: Photostimulation, group: Optional[int] = None):
+def view_target_overlay(photostimulation: Photostimulation, targets):
 
     with plt.style.context("CalSciPy.main"):
 
+        reference_image = photostimulation.reference_image
         reference_shape = photostimulation.reference_image.shape
+        vi, vm = _reference_image_cutoffs(reference_image)
 
         fig, ax = _initialize_figure(reference_shape)
+
+        ax.imshow(reference_image, cmap="Spectral_r", vmin=vi, vmax=vm, interpolation="gaussian")
+
+        default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
+
+        for idx, roi in enumerate(photostimulation.rois.values()):
+            if idx in default_list:
+                _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
+            else:
+                _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.red)
 
 
 def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
@@ -59,7 +71,7 @@ def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
 
         ax.imshow(background_image)
 
-        colors = _generate_colormap_spectrum(photostimulation.neurons, colormap=colormap, alpha=0.75)
+        colors = _generate_colormap_spectrum(photostimulation.total_neurons, colormap=colormap, alpha=0.75)
 
         for idx, roi in enumerate(photostimulation.rois.values()):
             _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=colors[idx])
@@ -73,17 +85,17 @@ def view_targets(photostimulation: Photostimulation, targets):
 
         reference_shape = photostimulation.reference_image.shape
 
-        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        # background_image = np.ones((*reference_shape, 3)) * COLORS.background
 
         fig, ax = _initialize_figure(reference_shape)
 
-        ax.imshow(background_image)
+        # ax.imshow(background_image)
 
         ax.grid(color=COLORS.black, ls="--")
 
         # colors = _generate_colormap_spectrum(photostimulation.neurons, colormap=colormap, alpha=0.75)
 
-        default_list = np.setdiff1d(np.arange(photostimulation.neurons), targets).tolist()
+        default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
 
         for idx, roi in enumerate(photostimulation.rois.values()):
             if idx in default_list:
