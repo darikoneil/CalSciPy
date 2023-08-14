@@ -201,8 +201,7 @@ def view_masked_targets(photostimulation: Photostimulation, targets=None):
 
 
 def view_spiral_targets(photostimulation: Photostimulation,
-                        targets=None):
-
+                        targets=None):\
 
     with plt.style.context("CalSciPy.main"):
 

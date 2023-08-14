@@ -37,7 +37,6 @@ dependencies = [
     "pillow <= 9.4.0",
     "PPVD",
     "PyQt5",
-    # "pywin32",
     "seaborn",
     "scikit-learn",
     "scipy",

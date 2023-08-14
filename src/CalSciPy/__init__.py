@@ -1,15 +1,18 @@
 __all__ = [
     "bruker",
+    "color_scheme"
     "event_processing",
     "imaging_processing",
-    "interactive_visuals",
+    "interactive",
     "io_tools",
+    "meadowlark",
     "misc",
     "optogenetics",
     "reorganization",
     "roi_tools",
     "trace_processing",
-    "version"
+    "version",
+    "visuals"
 ]
 
 from .version import author, name, maintainer, version

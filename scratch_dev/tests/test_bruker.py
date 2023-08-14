@@ -3,13 +3,13 @@ import numpy as np
 from pathlib import Path
 from shutil import rmtree
 from tests.helpers import BlockPrinting, read_descriptions
-from tests.conftest import SAMPLES_DATASETS_DIRECTORY
+from tests.conftest import DATA_DIR
 from CalSciPy.io_tools import load_images
 from CalSciPy.bruker.data import determine_imaging_content, load_bruker_tifs, repackage_bruker_tifs
 
 
 DATASET = pytest.mark.datafiles(
-    SAMPLES_DATASETS_DIRECTORY,
+    DATA_DIR,
     keep_top_dir=False,
     on_duplicate="ignore",
 )
