@@ -253,8 +253,11 @@ class BrukerXMLFactory:
             else:
                 tag += f'"{value}"'
         elif isinstance(value, tuple):
-            # special case, remove spaces and parenthesis in the tuple
-            tag_ = f"{value}"[1:-1]
+            # special case, remove spaces and parenthesis in the tuple, check if only comma & drop it
+            if len(value) == 1:
+                tag_ = f"{value}"[1:-2]
+            else:
+                tag_ = f"{value}"[1:-1]
             tag_ = tag_.replace(" ", "")
             tag_ = '"' + tag_ + '"'
             tag += tag_

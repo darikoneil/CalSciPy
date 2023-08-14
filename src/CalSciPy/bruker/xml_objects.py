@@ -142,7 +142,7 @@ class MarkPointElement(_BrukerObject):
     #: str: name of voltage output experiment
     voltage_output_category_name: str = "None"
     #: str: name of voltage recording experiment
-    voltage_rec_category_name: str = "Current"
+    voltage_rec_category_name: str = "None"
     #: str: id of parameter set
     parameter_set: str = "CurrentSettings"
 
@@ -252,7 +252,8 @@ class GalvoPointGroup(_BrukerObject):
     duration: float = field(default=100.0, metadata={"range": (0.0, inf)})
     #: bool: whether stimulation pattern is a spiral scan
     is_spiral: bool = True
-    #: float: diameter of the spiral scaled to the number of x-pixels if spiral scan
+    #: float: diameter of the spiral scaled to the number of x-pixels if spiral scan (radius?)
+    #: TODO: DIAMETER OR RADIUS ???
     spiral_size: float = field(default=0.0, metadata={"range": (0.0, 2048.0)})
     #: float: number of spiral revolutions if spiral scan
     spiral_revolutions: float = field(default=0.01, metadata={"range": (0.0, inf)})

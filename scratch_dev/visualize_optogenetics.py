@@ -14,14 +14,6 @@ from matplotlib.patches import Polygon  # noqa: E402
 import seaborn as sns  # noqa: E402
 
 
-def multiple_group_without_replacement(sample_population, group_size, num_groups):
-    selections = []
-    for group in range(num_groups):
-        selections.append(np.random.choice(sample_population, size=group_size, replace=False))
-        sample_population = np.setdiff1d(sample_population, np.hstack(selections))
-    return selections
-
-
 def view_roi_overlay(photostimulation: Photostimulation):
 
     with plt.style.context("CalSciPy.main"):
@@ -37,10 +29,10 @@ def view_roi_overlay(photostimulation: Photostimulation):
         ax.imshow(reference_image, cmap="Spectral_r", vmin=vi, vmax=vm, interpolation="gaussian")
 
         for roi in photostimulation.rois.values():
-            _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
+            _generate_roi(roi, ax, lw=1.5, fill=False, edgecolor=COLORS.black)
 
 
-def view_target_overlay(photostimulation: Photostimulation, targets):
+def view_target_overlay(photostimulation: Photostimulation, targets=None):
 
     with plt.style.context("CalSciPy.main"):
 
@@ -52,13 +44,40 @@ def view_target_overlay(photostimulation: Photostimulation, targets):
 
         ax.imshow(reference_image, cmap="Spectral_r", vmin=vi, vmax=vm, interpolation="gaussian")
 
-        default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
+        ax.grid(ls="--")
 
-        for idx, roi in enumerate(photostimulation.rois.values()):
-            if idx in default_list:
-                _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
-            else:
-                _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.red)
+        if targets is None:
+
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+                                        list(photostimulation.stimulated_neurons)
+                                        ).tolist()
+
+            colors = _generate_colormap_spectrum(len(photostimulation.sequence), colormap="magma", alpha=.75)
+
+            for idx, group in enumerate(photostimulation.sequence):
+                _plot_targets(photostimulation,
+                              group.ordered_index,
+                              ax,
+                              lw=1.5,
+                              fill=False,
+                              edgecolor=colors[idx]
+                              )
+
+            _plot_unstimulated(photostimulation,
+                               default_list,
+                               ax,
+                               lw=1.5,
+                               fill=False,
+                               )
+
+        else:
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
+
+            for idx, roi in enumerate(photostimulation.rois.values()):
+                if idx in default_list:
+                    _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
+                else:
+                    _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.red)
 
 
 def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
@@ -77,7 +96,7 @@ def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
             _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=colors[idx])
 
 
-def view_targets(photostimulation: Photostimulation, targets):
+def view_targets(photostimulation: Photostimulation, targets=None):
 
     with plt.style.context("CalSciPy.main"):
 
@@ -85,23 +104,202 @@ def view_targets(photostimulation: Photostimulation, targets):
 
         reference_shape = photostimulation.reference_image.shape
 
-        # background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        background_image = np.ones((*reference_shape, 3)) * COLORS.background
 
         fig, ax = _initialize_figure(reference_shape)
 
-        # ax.imshow(background_image)
+        ax.imshow(background_image)
 
         ax.grid(color=COLORS.black, ls="--")
 
-        # colors = _generate_colormap_spectrum(photostimulation.neurons, colormap=colormap, alpha=0.75)
+        if targets is None:
 
-        default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+                                        list(photostimulation.stimulated_neurons)
+                                        ).tolist()
 
-        for idx, roi in enumerate(photostimulation.rois.values()):
-            if idx in default_list:
-                _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.white)
-            else:
-                _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.blue)
+            colors = _generate_colormap_spectrum(len(photostimulation.sequence), alpha=0.75)
+
+            for idx,group in enumerate(photostimulation.sequence):
+                _plot_targets(photostimulation,
+                              group.ordered_index,
+                              ax,
+                              lw=1,
+                              edgecolor=COLORS.black,
+                              facecolor=colors[idx]
+                              )
+
+            _plot_unstimulated(photostimulation,
+                               default_list,
+                               ax,
+                               lw=1,
+                               edgecolor=COLORS.black,
+                               facecolor=COLORS.white
+                               )
+
+        else:
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+                                        list(targets)
+                                        ).tolist()
+
+            for idx, roi in enumerate(photostimulation.rois.values()):
+                if idx in default_list:
+                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.white)
+                else:
+                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.blue)
+
+
+def view_masked_targets(photostimulation: Photostimulation, targets=None):
+
+    with plt.style.context("CalSciPy.main"):
+
+        reference_shape = photostimulation.reference_image.shape
+
+        reference_shape = photostimulation.reference_image.shape
+
+        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+
+        fig, ax = _initialize_figure(reference_shape)
+
+        ax.imshow(background_image)
+
+        ax.grid(color=COLORS.black, ls="--")
+
+        if targets is None:
+
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+                                        list(photostimulation.stimulated_neurons)
+                                        ).tolist()
+
+            colors = _generate_colormap_spectrum(len(photostimulation.sequence), alpha=0.75)
+
+            for idx, group in enumerate(photostimulation.sequence):
+                _plot_targets(photostimulation,
+                              group.ordered_index,
+                              ax,
+                              lw=1,
+                              edgecolor=COLORS.black,
+                              facecolor=colors[idx]
+                              )
+
+            _plot_unstimulated(photostimulation,
+                               default_list,
+                               ax,
+                               lw=1,
+                               edgecolor=COLORS.black,
+                               facecolor=COLORS.white
+                               )
+
+            for group in photostimulation.sequence:
+                _plot_bound_mask(photostimulation,
+                                 group.ordered_index,
+                                 ax,
+                                 lw=0,
+                                 fill=True,
+                                 facecolor=(*COLORS.black, 0.5)
+                                 )
+
+
+def view_spiral_targets(photostimulation: Photostimulation,
+                        targets=None):
+
+
+    with plt.style.context("CalSciPy.main"):
+
+        reference_shape = photostimulation.reference_image.shape
+
+        reference_shape = photostimulation.reference_image.shape
+
+        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+
+        fig, ax = _initialize_figure(reference_shape)
+
+        ax.imshow(background_image)
+
+        ax.grid(color=COLORS.black, ls="--")
+
+        if targets is None:
+
+            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+                                        list(photostimulation.stimulated_neurons)
+                                        ).tolist()
+
+            colors = _generate_colormap_spectrum(len(photostimulation.sequence), alpha=0.75)
+
+            for idx, group in enumerate(photostimulation.sequence):
+                _plot_targets(photostimulation,
+                              group.ordered_index,
+                              ax,
+                              lw=1,
+                              edgecolor=COLORS.black,
+                              facecolor=colors[idx]
+                              )
+
+            _plot_unstimulated(photostimulation,
+                               default_list,
+                               ax,
+                               lw=1,
+                               edgecolor=COLORS.black,
+                               facecolor=COLORS.white
+                               )
+
+            for group in photostimulation.sequence:
+                _plot_spiral(photostimulation,
+                             group.ordered_index,
+                             ax,
+                             color=(*COLORS.black, 0.5),
+                             lw=1
+                             )
+
+
+def _plot_spiral(photostimulation,
+                 target_index,
+                 axes,
+                 **kwargs):
+    for target in target_index:
+        roi = photostimulation.rois.get(target)
+        radius = roi.mask.bound_radius
+        x, y = _make_spiral(*roi.coordinates[::-1], radius=radius)
+        axes.plot(x, y, **kwargs)
+
+
+def _make_spiral(x0, y0, theta=1000, radius=5.0):
+    r = np.linspace(0, radius, 360)
+    t = np.linspace(0, theta, 360)
+    x = r * np.cos(np.radians(t))
+    y = r * np.sin(np.radians(t))
+    x += x0
+    y += y0
+    return x, y
+
+
+def _plot_bound_mask(photostimulation,
+                     target_index,
+                     axes,
+                     **kwargs):
+    for target in target_index:
+        roi = photostimulation.rois.get(target)
+        pg = Polygon(roi.mask.bound_xy_vert, **kwargs)
+        axes.add_patch(pg)
+
+
+def _plot_targets(photostimulation, target_index, axes, **kwargs):
+    for target in target_index:
+        _generate_roi(photostimulation.rois.get(target),
+                      axes,
+                      **kwargs
+                      )
+
+
+def _plot_unstimulated(photostimulation,
+                       default_list,
+                       axes,
+                       **kwargs):
+    for neuron in default_list:
+        _generate_roi(photostimulation.rois.get(neuron),
+                      axes,
+                      **kwargs
+                      )
 
 
 def _initialize_figure(reference_shape, title: str = "ROIs", x_label: str = "", y_label: str = ""):

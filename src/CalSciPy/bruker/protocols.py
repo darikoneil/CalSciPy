@@ -65,11 +65,11 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
 
     # generate galvo point for each group if exists
     if photostimulation.groups > 0:
-        start_index = len(indices)
+        index = [len(indices) for _ in range(photostimulation.groups)]
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)
-                        for index, group in zip(range(start_index, start_index + photostimulation.groups),
+                        for index, group in zip(index,
                                                 groups)]
         galvo_points = tuple(chain.from_iterable([point for point in [galvo_points, galvo_groups]]))  # noqa: C416
 
@@ -187,9 +187,9 @@ def _format_photostim(photostimulation: Photostimulation,
         rois = [photostimulation.rois.get(roi) for roi in photostimulation.remapped_rois.values()]
         groups = photostimulation.remapped_groups
     else:
-        indices = np.arange(photostimulation.neurons).tolist()
-        points = np.arange(photostimulation.neurons).tolist()
-        rois = photostimulation.rois
+        indices = np.arange(photostimulation.total_neurons).tolist()
+        points = np.arange(photostimulation.total_neurons).tolist()
+        rois = [photostimulation.rois.get(roi) for roi in photostimulation.rois.keys()]
         groups = photostimulation.sequence
     return indices, points, rois, groups
 
@@ -297,20 +297,25 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
     # format for easy construction
     _, _, _, groups = _format_photostim(photostimulation, targets_only)
 
-    # make mark point / galvo point elements
-    for group in groups:
-        mark_point_elements = tuple([_generate_mark_point_element(group, parameters) for group in groups])
+    if len(groups) > 1:
+        # make mark point / galvo point elements
+        for group in groups:
+            mark_point_elements = tuple([_generate_mark_point_element(group, parameters) for group in groups])
 
-    # make mark point series
-    mark_point_series = MarkPointSeriesElements(marks=mark_point_elements,
-                                                iterations=photostimulation.sequence.repetitions,
-                                                iteration_delay=photostimulation.sequence.delay)
+        # make mark point series
+        # noinspection PyUnboundLocalVariable
+        mark_point_series = MarkPointSeriesElements(marks=mark_point_elements,
+                                                    iterations=photostimulation.sequence.repetitions,
+                                                    iteration_delay=photostimulation.sequence.delay)
 
-    # write to file if requested
-    if file_path is not None:
-        write_protocol(mark_point_series, file_path, ".xml", name)
+        # write to file if requested
+        if file_path is not None:
+            write_protocol(mark_point_series, file_path, ".xml", name)
 
-    return mark_point_series
+        return mark_point_series
+
+    else:
+        raise ValueError("Stimulation protocols must include at least one stimulation group")
 
 
 def _generate_galvo_point_element(group: StimulationGroup,
