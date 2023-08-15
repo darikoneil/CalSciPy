@@ -76,7 +76,9 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
     :param path: a file containing images or a folder containing several imaging stacks
     :return: numpy array (frames, y-pixels, x-pixels)
     """
-    if path.is_file():
+    if not path.exists():
+        raise FileNotFoundError("Unable to locate files")
+    elif path.is_file():
         return _load_single_tif(path)
     else:
         return _load_many_tif(path)
@@ -120,7 +122,8 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = "binary_
 def save_images(path: Union[str, Path],
                 images: np.ndarray,
                 name: str = "images",
-                size_cap: float = 3.9,) -> int:
+                size_cap: float = 3.9
+                ) -> int:
     """
     Save a numpy array to a single .tif file. If size > 4GB then saved as a series of files. If path is not a file and
     already exists the default filename will be *images*.
@@ -165,6 +168,9 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     """
     files = list(folder.glob("*tif"))
     images = [_load_single_tif(file) for file in files]
+
+    if len(images) == 0:
+        raise FileNotFoundError("Could not locate any imaging files")
 
     for image in images:
         assert (image.shape[1:] == images[0].shape[1:]), "Images don't maintain consistent shape"
