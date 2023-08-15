@@ -2,7 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 import numpy as np
 
-from CalSciPy._interactive_visuals import COLORS
+from CalSciPy.color_scheme import COLORS
 from CalSciPy.optogenetics import Photostimulation
 
 import matplotlib
