@@ -21,7 +21,7 @@ This test suite is designed to test the io-tools module
 """
 JUSTIFICATION FOR CODE WITHOUT DIRECT TESTING:
     * _Metadata is sufficiently tested through direct calls from load/save binary
-    * _check_filepath is sufficiently tested through calls from every save function
+    * check_filepath is sufficiently tested through calls from every save function
 """
 
 

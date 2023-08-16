@@ -7,7 +7,7 @@ __all__ = [
     "io_tools",
     "meadowlark",
     "misc",
-    "optogenetics",
+    "opto.py",
     "reorganization",
     "roi_tools",
     "trace_processing",

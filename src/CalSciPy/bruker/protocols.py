@@ -14,7 +14,7 @@ from . import CONSTANTS
 from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
     GalvoPointElement, MarkPointElement
 from .factories import BrukerXMLFactory
-from ..optogenetics import Photostimulation, StimulationGroup
+from ..opto import Photostimulation, StimulationGroup
 from ..roi_tools import ROI
 from ..misc import min_max_scale
 
