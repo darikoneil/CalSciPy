@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.3.7"
+version = "0.3.8"
 description = "A toolbox for analyzing, designing, and visualizing multiphoton imaging & optogenetics experiments."
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -29,6 +29,8 @@ classifiers = [
 ]
 
 dependencies = [
+    "imageio",
+    "imageio-ffmpeg",
     "joblib",
     "matplotlib",
     "numba",

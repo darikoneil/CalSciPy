@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Callable
+from typing import Callable, Any
 
 import pytest
 from tests.conftest import retrieve_dataset_ids
@@ -10,7 +10,7 @@ import numpy as np
 
 # noinspection PyProtectedMember
 from CalSciPy.io_tools import load_images, _load_single_tif, _load_many_tif, save_images, _save_single_tif, \
-    _save_many_tif, load_binary, save_binary
+    _save_many_tif, load_binary, save_binary, load_video, save_video
 
 
 """
@@ -21,6 +21,7 @@ This test suite is designed to test the io-tools module
 """
 JUSTIFICATION FOR CODE WITHOUT DIRECT TESTING:
     * _Metadata is sufficiently tested through direct calls from load/save binary
+    * _check_filepath is sufficiently tested through calls from every save function
 """
 
 
@@ -41,8 +42,10 @@ class IO:
             np.fromfile(self.directory.joinpath("binary").joinpath("binary_video").with_suffix(".bin"), dtype=np.uint16)
         self.data = np.reshape(self.data, self.descriptions[2:])
 
-    def check_data(self, image: np.ndarray, subset: Tuple[int, int] = None):
-        if subset is not None:
+    def check_data(self, image: np.ndarray, subset: Tuple[int, int] = None, dtype: Any = None):
+        if dtype:
+            np.testing.assert_allclose(self.data.astype(dtype), image, atol=1.1)
+        elif subset is not None:
             np.testing.assert_array_equal(self.data[subset[0]:subset[1], ...], image)
         else:
             np.testing.assert_array_equal(self.data, image)
@@ -89,6 +92,9 @@ class TestIO:
         # standard load
         test_data = load_binary(io_helper.directory.joinpath("binary"))
         io_helper.check_data(test_data)
+        # standard load but with exact file name
+        test_data = load_binary(io_helper.directory.joinpath("binary").joinpath("binary_video"))
+        io_helper.check_data(test_data)
         # memory map load
         test_data = load_binary(io_helper.directory.joinpath("binary"), mapped=True)
         io_helper.check_data(test_data)
@@ -103,8 +109,14 @@ class TestIO:
     def test_save_binary(self, io_helper):
         # normal save
         save_binary(io_helper.outputs, io_helper.data)
+        # overwrite folder
+        save_binary(io_helper.outputs, io_helper.data)
         # exact save
         save_binary(io_helper.outputs, io_helper.data, "exact_filename")
+        # overwrite exact save
+        save_binary(io_helper.outputs.joinpath("exact_filename").with_suffix(".bin"), io_helper.data)
+        # save to folder that doesn't exist yet
+        save_binary(io_helper.outputs.joinpath("slartibartfast"), io_helper.data)
 
     def test_mutation_binary(self, io_helper):
         # standard load-save with check for mutation
@@ -145,8 +157,12 @@ class TestIO:
         io_helper.check_data(test_data, subset=(0, 1))
 
     def test_save_single_image(self, io_helper):
-        # implementation
+        # implementation (1, ...) shape for frames x height x width
         _save_single_tif(io_helper.outputs.joinpath("single_page"), io_helper.data[0:1, ...])
+        # implementation (...) shape for height x width
+        _save_single_tif(io_helper.outputs.joinpath("single_page"), np.reshape(io_helper.data[0:1, ...],
+                                                                               io_helper.data.shape[1:])
+                         )
         # standard
         save_images(io_helper.outputs.joinpath("single_page"), io_helper.data[0:1, ...])
         # exact
@@ -201,14 +217,14 @@ class TestIO:
 
     def test_save_multi_stack(self, io_helper):
         # test implementation function
-        _save_many_tif(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.01)
+        _save_many_tif(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.005)
         # test standard function
-        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.01)
+        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.005)
         # test exact
-        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, "exact_filename", size_cap=0.01)
+        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, "exact_filename", size_cap=0.005)
 
     def test_mutation_multi_stack(self, io_helper):
-        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.01)
+        save_images(io_helper.outputs.joinpath("multi_stack"), io_helper.data, size_cap=0.005)
         test_data = load_images(io_helper.outputs.joinpath("multi_stack"))
         io_helper.check_data(test_data)
 
@@ -216,3 +232,20 @@ class TestIO:
         # Redundant, included to organizational purposes
         io_helper.load_validator(load_images)
         io_helper.save_validator(save_images)
+
+    def test_load_video(self, io_helper):
+        test_data = load_video(io_helper.directory.joinpath("video").joinpath("video.mp4"))
+        io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
+
+    def test_save_video(self, io_helper):
+        save_video(io_helper.outputs.joinpath("video"), io_helper.data)
+
+    def test_mutation_video(self, io_helper):
+        save_video(io_helper.outputs.joinpath("video"), io_helper.data)
+        test_data = load_video(io_helper.outputs.joinpath("video").joinpath("video"))
+        io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
+
+    def test_video_exceptions(self, io_helper):
+        # Redundant, included to organizational purposes
+        io_helper.load_validator(load_video)
+        io_helper.save_validator(save_video)
