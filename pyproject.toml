@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.3.6"
+version = "0.3.8"
 description = "A toolbox for analyzing, designing, and visualizing multiphoton imaging & optogenetics experiments."
 readme = "README.md"
 requires-python = ">=3.7, <4"
@@ -29,6 +29,8 @@ classifiers = [
 ]
 
 dependencies = [
+    "imageio",
+    "imageio-ffmpeg",
     "joblib",
     "matplotlib",
     "numba",
@@ -37,7 +39,6 @@ dependencies = [
     "pillow <= 9.4.0",
     "PPVD",
     "PyQt5",
-    # "pywin32",
     "seaborn",
     "scikit-learn",
     "scipy",
@@ -63,7 +64,6 @@ development = [
     "flake8-html",
     "flake8-unused-arguments",
     "pytest",
-    "pytest-datafiles==2.0.1",
     "pytest-lazy-fixture",
     "pytest-sugar",
     "pytest-clarity",
@@ -74,6 +74,10 @@ development = [
 
 gpu = [
     "cupy"
+]
+
+prairielink = [
+    "pywin32"
 ]
 
 [tool.pytest.ini_options]

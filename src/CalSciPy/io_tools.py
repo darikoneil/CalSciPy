@@ -2,7 +2,10 @@ from __future__ import annotations
 from typing import Union, Optional, Mapping
 from pathlib import Path
 from json import load, dump
+from numbers import Number
+from operator import eq
 
+from imageio import mimwrite, mimread
 from PIL import Image
 import numpy as np
 import cv2
@@ -10,7 +13,7 @@ from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
 from .misc import generate_blocks, calculate_frames_per_file, zero_pad_num_to_string
-
+from ._backports import PatternMatching
 
 """
 A collection of functions for loading, saving & converting imaging files. Stable as of version 3.5
@@ -76,7 +79,9 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
     :param path: a file containing images or a folder containing several imaging stacks
     :return: numpy array (frames, y-pixels, x-pixels)
     """
-    if path.is_file():
+    if not path.exists():
+        raise FileNotFoundError("Unable to locate files")
+    elif path.is_file():
         return _load_single_tif(path)
     else:
         return _load_many_tif(path)
@@ -84,7 +89,30 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
 
 @validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def save_binary(path: Union[str, Path], images: np.ndarray, name: str = "binary_video") -> int:
+def load_video(path: Union[str, Path]) -> np.ndarray:
+    """
+    Load video (.mp4) as numpy array.
+
+    :param path: absolute filepath
+    :return: numpy array (frames, y-pixels, x-pixels, color)
+    """
+
+    path = path.with_suffix(".mp4")
+    r = []
+    g = []
+    b = []
+
+    for image in mimread(path):
+        r.append(image[:, :, 0])
+        g.append(image[:, :, 1])
+        b.append(image[:, :, 2])
+
+    return np.stack([r, g, b], axis=-1)
+
+
+@validate_filename(pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) -> int:
     """
     Save images to language-agnostic binary format. Ideal for optimal read/write speeds and highly-robust to corruption.
     However, the downside is that the images and their metadata are split into two separate files. Images are saved with
@@ -94,18 +122,18 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = "binary_
     systems--even if they are collected at 12 or 13-bit.
 
     :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension. If
-    | no filename is provided then the default filename is *binary_video*.
+        no filename is provided then the default filename is *binary_video*.
     :param images: images to save (frames, y-pixels, x-pixels)
     :param name: specify filename for produced files
     :returns: 0 if successful
     """
-    # make folder if it doesn't exist
-    if not path.exists():
-        path.mkdir(parents=True, exist_ok=True)
+    default_name = "binary_video"
+    extension = ".bin"
+    path = _check_filepath(path, name, extension, default_name)
 
     # add extensions
-    imaging_filename = path.joinpath(name).with_suffix(".bin")
-    metadata_filename = path.joinpath(name).with_suffix(".json")
+    imaging_filename = path.with_suffix(".bin")
+    metadata_filename = path.with_suffix(".json")
 
     # save metadata
     metadata = _Metadata(images)
@@ -114,13 +142,16 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = "binary_
     # save images
     images.tofile(imaging_filename)
 
+    return 0
+
 
 @validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def save_images(path: Union[str, Path],
                 images: np.ndarray,
-                name: str = "images",
-                size_cap: float = 3.9,) -> int:
+                name: str = None,
+                size_cap: float = 3.9
+                ) -> int:
     """
     Save a numpy array to a single .tif file. If size > 4GB then saved as a series of files. If path is not a file and
     already exists the default filename will be *images*.
@@ -131,16 +162,81 @@ def save_images(path: Union[str, Path],
     :param size_cap: maximum size per file
     :returns: returns 0 if successful
     """
-    if not Path.exists(path):
-        Path.mkdir(path, parents=True, exist_ok=True)
+    default_name = "images"
+    extension = ".tif"
+    path = _check_filepath(path, name, extension, default_name)
 
     file_size = images.nbytes * 1e-9  # convert to GB
     if file_size <= size_cap:  # crop at 3.9 to be saved
-        filename = path.joinpath(name).with_suffix(".tif")
-        _save_single_tif(filename, images)
+        _save_single_tif(path, images)
     else:
-        filename = path.joinpath(name)
-        _save_many_tif(filename, images, size_cap)
+        _save_many_tif(path.with_suffix(""), images, size_cap)
+
+    return 0
+
+
+@validate_filename(pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def save_video(path: Union[str, Path],
+               images: np.ndarray,
+               frame_rate: Number = 30,
+               name: str = None
+               ) -> int:
+    """
+    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype. If no name is provided than the
+    default is "video"
+
+    :param path: absolute filepath or filename
+    :param images: numpy array (frames, y-pixels, x-pixels)
+    :param frame_rate: frame rate for saved video
+    :param name: filename for saving images
+    :return: Zero if successful
+    """
+
+    default_name = "video"
+    extension = ".mp4"
+    path = _check_filepath(path, name, extension, default_name)
+
+    if images.dtype.type != np.uint8:
+        print(f"Forcing {images.dtype} to unsigned 8-bit")
+        images = images.astype(np.uint8)
+
+    mimwrite(path, images, fps=frame_rate, quality=10, macro_block_size=4)
+
+    return 0
+
+
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def _check_filepath(path: Union[str, Path], name: str = None, extension: str = None, default_name: str = None) -> Path:
+    """
+    Process provide filepath and ensure appropriate for saving (e.g., create folder)
+
+    :param path: path provided
+    :param name: name provided
+    :param extension: desired extension
+    :param default_name: default name
+    :return:
+    """
+    if name is None:
+        name = default_name
+
+    with PatternMatching(
+            [path.suffix, path.exists()],
+            [eq, eq]
+    ) as case:
+        # if file and exists
+        if case([extension, True]):
+            return path.with_suffix(extension)
+        # if file and does not exist
+        elif case([extension, False]):
+            return path.with_suffix(extension)
+        # if folder and exists:
+        elif case([False, True]):
+            return path.joinpath(name).with_suffix(extension)
+        # if folder and does not exist
+        else:
+            path.mkdir(parents=True, exist_ok=True)
+            return path.joinpath(name).with_suffix(extension)
 
 
 @validate_extension(required_extension=".tif", pos=0)
@@ -165,6 +261,9 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     """
     files = list(folder.glob("*tif"))
     images = [_load_single_tif(file) for file in files]
+
+    if len(images) == 0:
+        raise FileNotFoundError("Could not locate any imaging files")
 
     for image in images:
         assert (image.shape[1:] == images[0].shape[1:]), "Images don't maintain consistent shape"
