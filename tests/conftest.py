@@ -60,7 +60,7 @@ def retrieve_dataset_ids() -> Path:
     return [data.name for data in data_dir.glob("*")]
 
 
-# HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY TESTS
+# HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
 def matrix(request):
     sample_matrix = np.full((5, 100), 1)
