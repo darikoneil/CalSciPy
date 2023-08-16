@@ -4,8 +4,33 @@ from numbers import Number
 import numpy as np
 from .misc import generate_blocks, wrap_cupy_block
 
+try:
+    import cupy  # noqa: F401
+    import cupyx.scipy.ndimage  # noqa: F401
+    USE_GPU = True
+except ModuleNotFoundError:
+    import scipy.ndimage  # noqa: F401
+    USE_GPU = False
 
-_USE_GPU, _gaussian_filter, _median_filter = _set_gpu_flag()
+
+def _set_gpu_func(use_gpu: bool) -> Tuple[Callable, Callable]:
+    """
+    Sets appropriate filter implementations
+
+    :returns: flag indicating whether gpu is being used, gaussian filter implementation
+        median filter implementation
+    """
+    if use_gpu:
+        _gaussian_filter = _gaussian_filter_gpu
+        _median_filter = _median_filter_gpu
+    else:
+        _gaussian_filter = _gaussian_filter_cpu
+        _median_filter = _median_filter_cpu
+
+    return _gaussian_filter, _median_filter
+
+
+_gaussian_filter, _median_filter = _set_gpu_func(USE_GPU)
 
 _DEFAULT_MASK = np.ones((3, 3, 3))
 
@@ -129,28 +154,3 @@ def _median_filter_cpu(images: np.ndarray, mask: np.ndarray) -> np.ndarray:
     :returns: filtered numpy array
     """
     return scipy.ndimage.median_filter(images, footprint=mask)  # noqa: F821
-
-
-def _set_gpu_flag() -> Tuple[bool, Callable, Callable]:
-    """
-    Sets appropriate filter implementations
-
-    :returns: flag indicating whether gpu is being used, gaussian filter implementation
-        median filter implementation
-    """
-    try:
-        import cupy  # noqa: F401
-        import cupyx.scipy.ndimage  # noqa: F401
-        USE_GPU = True
-    except ModuleNotFoundError:
-        import scipy.ndimage  # noqa: F401
-        USE_GPU = False
-    finally:
-        if USE_GPU:
-            _gaussian_filter = _gaussian_filter_gpu
-            _median_filter = _median_filter_gpu
-        else:
-            _gaussian_filter = _gaussian_filter_cpu
-            _median_filter = _median_filter_cpu
-
-    return USE_GPU, _gaussian_filter, _median_filter
