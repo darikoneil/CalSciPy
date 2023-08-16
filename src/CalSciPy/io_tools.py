@@ -3,7 +3,6 @@ from typing import Union, Optional, Mapping
 from pathlib import Path
 from json import load, dump
 from numbers import Number
-from operator import eq
 
 from imageio import mimwrite, mimread
 from PIL import Image
@@ -12,7 +11,7 @@ import cv2
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
-from .misc import generate_blocks
+from ._calculations import generate_blocks
 from ._files import calculate_frames_per_file, check_filepath, zero_pad_num_to_string
 
 

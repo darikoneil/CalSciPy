@@ -52,4 +52,5 @@ exclude =
     sam_io,
     scratch,
     share,
-    scratch_dev
+    scratch_dev,
+    dev

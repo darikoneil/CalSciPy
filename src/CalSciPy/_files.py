@@ -2,6 +2,7 @@ from __future__ import  annotations
 from typing import Union
 from pathlib import Path
 from numbers import Number
+from operator import eq
 
 import numpy as np
 from PPVD.parsing import convert_permitted_types_to_required
