@@ -49,7 +49,11 @@ class IO:
 
     def load_validator(self, function: Callable):
 
-        # must fail general validation tests
+        # Try folder that exists but has no imaging files
+        with pytest.raises(FileNotFoundError):
+            function(Path.cwd())
+
+        # must also fail general validation tests
         with pytest.raises(FileNotFoundError):
             function(Path.cwd().joinpath("arthur_dent"))
         with pytest.raises(ValueError):
@@ -136,6 +140,9 @@ class TestIO:
         # standard
         test_data = load_images(io_helper.directory.joinpath("single_page"))
         io_helper.check_data(test_data, subset=(0, 1))
+        # exact
+        test_data = load_images(io_helper.directory.joinpath("single_page").joinpath("images.tif"))
+        io_helper.check_data(test_data, subset=(0, 1))
 
     def test_save_single_image(self, io_helper):
         # implementation
@@ -161,6 +168,9 @@ class TestIO:
         io_helper.check_data(test_data)
         # test standard load
         test_data = load_images(io_helper.directory.joinpath("single_stack"))
+        io_helper.check_data(test_data)
+        # exact
+        test_data = load_images(io_helper.directory.joinpath("single_stack").joinpath("images.tif"))
         io_helper.check_data(test_data)
 
     def test_save_single_stack(self, io_helper):
