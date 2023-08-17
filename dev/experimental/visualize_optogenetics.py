@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 
 from CalSciPy.color_scheme import COLORS
-from CalSciPy.optogenetics import Photostimulation
+from CalSciPy.opto import Photostimulation
 
 import matplotlib
 matplotlib.use("Qt5Agg")

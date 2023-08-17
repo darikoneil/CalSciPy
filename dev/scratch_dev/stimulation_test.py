@@ -4,7 +4,7 @@ from typing import Tuple, Iterable
 import numpy as np
 from pathlib import Path
 
-from CalSciPy.optogenetics import Photostimulation
+from CalSciPy.opto import Photostimulation
 from CalSciPy.bruker.protocols import generate_marked_points_protocol
 
 

@@ -3,7 +3,7 @@ import numpy as np
 from collections import ChainMap
 
 
-from CalSciPy.optogenetics import Photostimulation, Group
+from CalSciPy.opto import Photostimulation, Group
 from CalSciPy.bruker.factories import BrukerXMLFactory
 from CalSciPy.bruker.xml_objects import MarkPointSeriesElements, MarkPointElement, GalvoPointElement
 

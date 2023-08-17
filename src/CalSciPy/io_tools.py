@@ -3,7 +3,6 @@ from typing import Union, Optional, Mapping
 from pathlib import Path
 from json import load, dump
 from numbers import Number
-from operator import eq
 
 from imageio import mimwrite, mimread
 from PIL import Image
@@ -12,11 +11,12 @@ import cv2
 from PPVD.validation import validate_extension, validate_filename
 from PPVD.parsing import convert_permitted_types_to_required
 
-from .misc import generate_blocks, calculate_frames_per_file, zero_pad_num_to_string
-from ._backports import PatternMatching
+from ._calculations import generate_blocks
+from ._files import calculate_frames_per_file, check_filepath, zero_pad_num_to_string
+
 
 """
-A collection of functions for loading, saving & converting imaging files. Stable as of version 3.5
+A collection of functions for loading, saving & converting imaging files. Stable user syntax as of version 3.5
 """
 
 
@@ -98,6 +98,7 @@ def load_video(path: Union[str, Path]) -> np.ndarray:
     """
 
     path = path.with_suffix(".mp4")
+
     r = []
     g = []
     b = []
@@ -129,7 +130,7 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) ->
     """
     default_name = "binary_video"
     extension = ".bin"
-    path = _check_filepath(path, name, extension, default_name)
+    path = check_filepath(path, name, extension, default_name)
 
     # add extensions
     imaging_filename = path.with_suffix(".bin")
@@ -164,7 +165,7 @@ def save_images(path: Union[str, Path],
     """
     default_name = "images"
     extension = ".tif"
-    path = _check_filepath(path, name, extension, default_name)
+    path = check_filepath(path, name, extension, default_name)
 
     file_size = images.nbytes * 1e-9  # convert to GB
     if file_size <= size_cap:  # crop at 3.9 to be saved
@@ -195,7 +196,7 @@ def save_video(path: Union[str, Path],
 
     default_name = "video"
     extension = ".mp4"
-    path = _check_filepath(path, name, extension, default_name)
+    path = check_filepath(path, name, extension, default_name)
 
     if images.dtype.type != np.uint8:
         print(f"Forcing {images.dtype} to unsigned 8-bit")
@@ -204,39 +205,6 @@ def save_video(path: Union[str, Path],
     mimwrite(path, images, fps=frame_rate, quality=10, macro_block_size=4)
 
     return 0
-
-
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def _check_filepath(path: Union[str, Path], name: str = None, extension: str = None, default_name: str = None) -> Path:
-    """
-    Process provide filepath and ensure appropriate for saving (e.g., create folder)
-
-    :param path: path provided
-    :param name: name provided
-    :param extension: desired extension
-    :param default_name: default name
-    :return:
-    """
-    if name is None:
-        name = default_name
-
-    with PatternMatching(
-            [path.suffix, path.exists()],
-            [eq, eq]
-    ) as case:
-        # if file and exists
-        if case([extension, True]):
-            return path.with_suffix(extension)
-        # if file and does not exist
-        elif case([extension, False]):
-            return path.with_suffix(extension)
-        # if folder and exists:
-        elif case([False, True]):
-            return path.joinpath(name).with_suffix(extension)
-        # if folder and does not exist
-        else:
-            path.mkdir(parents=True, exist_ok=True)
-            return path.joinpath(name).with_suffix(extension)
 
 
 @validate_extension(required_extension=".tif", pos=0)
