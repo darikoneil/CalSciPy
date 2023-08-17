@@ -3,9 +3,12 @@ from typing import Tuple
 from numbers import Number
 
 import numpy as np
-from slmsuite.holography.algorithms import Hologram
+from numpy.typing import NDArray
+from slmsuite.holography.algorithms import Hologram as _Hologram
 from slmsuite.hardware.slms.slm import SLM as _SLM
 
+from ..roi_tools import ROI
+from.opto_objects import StimulationSequence, StimulationGroup
 
 """
 Functions related to computer-generated holography. Generally this module wraps
@@ -17,6 +20,30 @@ Jargon notes:
     * near-field -> the SLM surface
     * far-field -> where you are actually imaging/stimulating
 """
+
+
+def generate_target_mask(group: StimulationGroup, method: str = "bound_rc") -> NDArray[bool]:
+
+    rois = [getattr(roi.mask, method) for roi in group.rois]
+
+    shape = group.shape
+
+    masks = []
+    for coordinates in rois:
+        one_mask = np.zeros(shape, dtype=bool)
+        for pt in range(coordinates.shape[0]):
+            one_mask[coordinates[pt, 0], coordinates[pt, 1]] = True
+        masks.append(one_mask)
+
+    if group.point_interval == 0:
+        masks = np.sum(masks, axis=0)
+
+    return masks
+
+
+class Hologram(_Hologram):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class SLM(_SLM):

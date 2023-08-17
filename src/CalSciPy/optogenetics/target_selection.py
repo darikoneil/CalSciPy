@@ -1,8 +1,10 @@
 from __future__ import annotations
 from typing import Tuple, Iterable, Union
+from .opto_objects import StimulationSequence
 
 import numpy as np
 
+from .._calculations import multiple_random_groups_without_replacement
 
 def randomize_targets(target_vector: Union[Iterable, np.ndarray],
                       neurons_per_target: int = 1,
@@ -21,18 +23,6 @@ def randomize_targets(target_vector: Union[Iterable, np.ndarray],
     :return:
     """
     return tuple(
-        [multiple_group_without_replacement(target_vector, neurons_per_target, num_targets) for _ in range(trials)]
+        [multiple_random_groups_without_replacement(target_vector, neurons_per_target, num_targets)
+         for _ in range(trials)]
     )
-
-
-def multiple_group_without_replacement(sample_population, group_size, num_groups) -> Tuple:
-
-    sample_population = np.asarray(sample_population)
-
-    selections = []
-
-    for group in range(num_groups):
-        selections.append(np.random.choice(sample_population, size=group_size, replace=False).tolist())
-        sample_population = np.setdiff1d(sample_population, np.hstack(selections))
-
-    return tuple([tuple(target) for target in selections])

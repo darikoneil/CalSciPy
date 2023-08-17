@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Iterator, Callable, Union, Tuple
+from typing import Iterable, Iterator, Callable, Union, Tuple, Any
 from collections import deque
 from pathlib import Path
 from numbers import Number
@@ -153,6 +153,28 @@ def min_max_scale(values: Union[Number, Iterable[Number], np.ndarray],
     old_min, old_max = old_range
     new_min, new_max = new_range
     return new_min + ((np.asarray(values) - old_min) * (new_max - new_min)) / (old_max - old_min)
+
+def multiple_random_groups_without_replacement(sample_population: Union[np.ndarray, Sequence],
+                                       group_size: int,
+                                       num_groups: int) -> Tuple:
+    """
+    Randomly select multiple groups from a population without replacement
+
+    :param sample_population: the population to sample from
+    :param group_size: the size of each group drawn
+    :param num_groups: the number of groups to draw
+    :return: a 1xN tuple containing each group in the order drawn
+    """
+
+    sample_population = np.asarray(sample_population)
+
+    selections = []
+
+    for group in range(num_groups):
+        selections.append(np.random.choice(sample_population, size=group_size, replace=False).tolist())
+        sample_population = np.setdiff1d(sample_population, np.hstack(selections))
+
+    return tuple([tuple(target) for target in selections])
 
 
 def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:

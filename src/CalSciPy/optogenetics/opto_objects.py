@@ -93,6 +93,22 @@ class Photostimulation:
         return self._roi_to_target_map.get(roi_index)
 
     @property
+    def shape(self) -> Tuple[int, int]:
+        """
+        Shape of reference image
+
+        """
+        shapes = [roi.shape for roi in self.rois.values()]
+        try:
+            assert(len(set(shapes)) <= 1)
+            return shapes[0]
+        except AssertionError:
+            print("Inconsistent shape detected, selecting largest dimension for each axis")
+            x_shape = max({x for _, x in shapes})
+            y_shape = min({y for y, _ in shapes})
+            return y_shape, x_shape
+
+    @property
     def stimulated_neurons(self) -> set:
         """
         The :class:`ROI`'s stimulated in the stimulation sequence
@@ -183,15 +199,39 @@ class StimulationGroup:
         #: int: the number of times to repeat the stimulation group
         self.repetitions = repetitions
         #: Sequence[ROIs]: this is a reference copy injected from the ROIs in photostimulation
-        self._rois = rois
+        self.rois = rois
 
     def __str__(self):
         return f'Photostimulation group "{self.name}" containing {len(self.ordered_index)} targets with a ' \
-               f'{self.point_interval} inter-point interval repeated {self.repetitions} times.'
+               f'{self.point_interval} ms inter-point interval repeated {self.repetitions} times.'
 
     @staticmethod
     def __name__() -> str:
         return "Photostimulation StimulationGroup"
+
+    @property
+    def num_targets(self) -> int:
+        """
+        Number of roi targets in group
+
+        """
+        return len(self.rois)
+
+    @property
+    def shape(self) -> Tuple[int, int]:
+        """
+        Shape of reference image
+
+        """
+        shapes = [roi.shape for roi in self.rois]
+        try:
+            assert(len(set(shapes)) <= 1)
+            return shapes[0]
+        except AssertionError:
+            print("Inconsistent shape detected, selecting largest dimension for each axis")
+            x_shape = max({x for _, x in shapes})
+            y_shape = min({y for y, _ in shapes})
+            return y_shape, x_shape
 
     def __repr__(self):
         return "StimulationGroup(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"

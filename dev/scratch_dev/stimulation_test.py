@@ -76,9 +76,11 @@ def literal_mask(t, roi):
     return t
 
 
-rois = [photostimulation.rois.get(value) for key, value in photostimulation.target_to_roi.items()]
+rois = [roi for roi in photostimulation.
 
-# rois = [photostimulation.rois.get(22)]
+    photostimulation.rois.get(value) for key, value in photostimulation.target_to_roi.items()]
+
+rois = [photostimulation.rois.get(22)]
 
 target_size = (512, 512)
 

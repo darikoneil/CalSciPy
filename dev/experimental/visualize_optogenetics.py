@@ -282,7 +282,7 @@ def _plot_bound_mask(photostimulation,
         axes.add_patch(pg)
 
 
-def _plot_targets(rois, target_index, axes, **kwargs):
+def _plot_targets(photostimulation, target_index, axes, **kwargs):
     for target in target_index:
         _generate_roi(photostimulation.rois.get(target),
                       axes,
