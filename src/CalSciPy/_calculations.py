@@ -113,35 +113,6 @@ def generate_overlapping_blocks(sequence: Iterable, block_size: int, block_buffe
             raise StopIteration
 
 
-def wrap_cupy_block(cupy_function: Callable) -> Callable:
-    """
-    Wraps a cupy function such that incoming numpy arrays are converting to cupy arrays and swapped back on return
-
-    :param cupy_function: any cupy function that accepts numpy arrays
-    :return: wrapped function
-    """
-    @wraps(cupy_function)
-    def decorator(*args, **kwargs) -> Callable:
-        args = list(args)
-        if isinstance(args[0], np.ndarray):
-            args[0] = cupy.asarray(args[0])
-        args = tuple(args)
-        return cupy_function(*args, **kwargs).get()
-    return decorator
-
-
-def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:
-    window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
-    sequence_length = sequence.shape[-1] - window_length + 1
-    slider = partial(function, *args, **kwargs)
-    values = Parallel(n_jobs=-1, backend="loky", verbose=0)(delayed(slider)(sequence[..., window])
-                                                            for window in tqdm(window_gen,
-                                                                               total=sequence_length,
-                                                                               desc="Calculating sliding windows")
-                                                            )
-    return np.asarray(values)
-
-
 def generate_sliding_window(sequence: Iterable, window_length: int, step_size: int = 1) -> np.ndarray:
 
     window = deque(maxlen=window_length)
@@ -182,3 +153,32 @@ def min_max_scale(values: Union[Number, Iterable[Number], np.ndarray],
     old_min, old_max = old_range
     new_min, new_max = new_range
     return new_min + ((np.asarray(values) - old_min) * (new_max - new_min)) / (old_max - old_min)
+
+
+def sliding_window(sequence: np.ndarray, window_length: int, function: Callable, *args, **kwargs) -> np.ndarray:
+    window_gen = generate_sliding_window(range(sequence.shape[-1]), window_length, 1)
+    sequence_length = sequence.shape[-1] - window_length + 1
+    slider = partial(function, *args, **kwargs)
+    values = Parallel(n_jobs=-1, backend="loky", verbose=0)(delayed(slider)(sequence[..., window])
+                                                            for window in tqdm(window_gen,
+                                                                               total=sequence_length,
+                                                                               desc="Calculating sliding windows")
+                                                            )
+    return np.asarray(values)
+
+
+def wrap_cupy_block(cupy_function: Callable) -> Callable:
+    """
+    Wraps a cupy function such that incoming numpy arrays are converting to cupy arrays and swapped back on return
+
+    :param cupy_function: any cupy function that accepts numpy arrays
+    :return: wrapped function
+    """
+    @wraps(cupy_function)
+    def decorator(*args, **kwargs) -> Callable:
+        args = list(args)
+        if isinstance(args[0], np.ndarray):
+            args[0] = cupy.asarray(args[0])
+        args = tuple(args)
+        return cupy_function(*args, **kwargs).get()
+    return decorator

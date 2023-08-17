@@ -98,6 +98,7 @@ def load_video(path: Union[str, Path]) -> np.ndarray:
     """
 
     path = path.with_suffix(".mp4")
+
     r = []
     g = []
     b = []

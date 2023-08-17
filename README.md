@@ -12,33 +12,49 @@
 [![Contributors](https://img.shields.io/github/contributors-anon/darikoneil/CalSciPy)](https://github.com/darikoneil/CalSciPy/graphs/contributors)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/darikoneil/CalSciPy/calscipy_lint_test_action.yml)
 
-This python packages contains a variety of useful tools for handling, processing, visualizing, & designing calcium 
-imaging experiments. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
+CalSciPy is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from 
+interactive visualization of data to computer-generated holography for "read/write" experiments, and 
+everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be 
+considered useful to others. Its inspiration is to solve the following issues:
+
+1. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
 environments. I wrote this so ~I don't have to~ you don't have to. It's intended to be a collection of useful, 
 well-documented functions often used in boilerplate code alongside software packages such as 
 [Caiman](https://github.com/flatironinstitute/CaImAn), [SIMA](https://github.com/losonczylab/sima), 
-and [Suite2P](https://github.com/MouseLand/suite2p), as well as a collection of more bespoke software designed for use 
-with Bruker's PrairieView Imaging Software and MeadowLark Spatial Light Modulators. Essentially, it's a collection of 
-code written for my imaging experiments that might be considered useful to others.
+and [Suite2P](https://github.com/MouseLand/suite2p). Examples of such tasks include compiling imaging stacks, 
+normalizing signals to baselines, reorganizing data, and common data visualizations.
+
+2. I want generic, interactive visualization tools. I want to assess the quality of spike inference, I want to sort 
+through ROIs, and I want to explore population activity, and I want to do so directly from the relevant 
+data--independent of the software used to analyze it. I want to have my delicious cake and eat it too.
+
+3. I want tools for holographic optogenetics & "read/write" experimentation in python. I want them written for 
+neuroscientists to use...not for optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
+It's 2023.
+
+4. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
+metadata, generating protocols programmatically (I'm lazy), and aligning collected data.
+
+5. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
+
 
 #### Active Development
-The current implementation is unstable and should be considered an open beta.
+The current implementation is unstable, partially untested, partially finished, and should be considered an open 
+alpha/beta. Please be patient, this is a pet-project and I have to graduate.
 
 
 #### Stable Modules
-These modules' current implementation is stable and have >90% test coverage
+Until things are more stable, I'll explicitly note which modules' are stable, have >90% test coverage, and are
+ready-to-use.
 * io_tools
 
 
-#### Highlights
-* Assign unique colormaps to subsets of ROIs to generate rich, informative videos
-* Perona-Malik diffusion for edge-preserving denoising
-* Fast, convenient functions for handling, aligning, and compiling data collected in Bruker's PrairieView software
-* Functions for generating protocols for use in Bruker's Prairieview.
-* Interactive visualization of data
-
 #### Installation
+Eventually I will break things up into sub-packages so you don't have to install everything together...
 `pip install CalSciPy`
+
+#### Contributions
+Save me from myself
 
 #### Documentation
 Hosted at [ReadtheDocs](https://calscipy.readthedocs.io/en/latest/index.html#).
