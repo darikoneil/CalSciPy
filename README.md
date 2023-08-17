@@ -40,8 +40,7 @@ metadata, generating protocols programmatically (I'm lazy), and aligning collect
 
 #### Active Development
 The current implementation is unstable, partially untested, partially finished, and should be considered an open 
-alpha/beta. Sometimes I procrastinate by refactoring. Sometimes I procrastinate by not refactoring. 
-Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point.
+alpha/beta. Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point.
 
 
 #### Stable Modules
