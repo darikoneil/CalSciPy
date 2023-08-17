@@ -47,13 +47,13 @@ class SLM(_SLM):
 
         wavelength = self._format_wavelength(wavelength)
 
-        settle_time =  self._format_settle_time(settle_time)
+        settle_time = self._format_settle_time(settle_time)
 
         super().__init__(width=width,
                          height=height,
                          wav_um=wavelength,
-                         dx_um = pixel_pitch_x,
-                         dy_um = pixel_pitch_y,
+                         dx_um=pixel_pitch_x,
+                         dy_um=pixel_pitch_y,
                          settle_time_s=settle_time,
                          **kwargs)
 
@@ -66,7 +66,3 @@ class SLM(_SLM):
     def _format_settle_time(settle_time_in_ms):
         settle_time_in_s = settle_time_in_ms / 1000
         return settle_time_in_s
-
-
-
-

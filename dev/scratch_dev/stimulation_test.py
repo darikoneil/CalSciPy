@@ -8,6 +8,7 @@ from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.bruker.protocols import generate_marked_points_protocol
 
 from CalSciPy.optogenetics.cgh import SLM
+from slmsuite.holography.algorithms import Hologram
 
 from dev.experimental.visualize_optogenetics import *
 
@@ -56,7 +57,7 @@ data_folder = protocol_folder
 # create experiment
 photostimulation = Photostimulation.import_rois(folder=data_folder)
 
-targets = randomize_targets(np.arange(photostimulation.total_neurons),
+targets = randomize_targets(np.arange(photostimulation.num_neurons),
                             num_targets=5,
                             trials=1)[0]
 
@@ -66,21 +67,34 @@ for idx, target in enumerate(targets):
 
 view_spiral_targets(photostimulation)
 
+
+def literal_mask(t, roi):
+    rc = roi.rc
+    for pt in range(rc.shape[0]):
+        y, x = rc[pt, :]
+        t[y, x] = 1
+    return t
+
+
+rois = [photostimulation.rois.get(value) for key, value in photostimulation.target_to_roi.items()]
+
+# rois = [photostimulation.rois.get(22)]
+
 target_size = (512, 512)
 
 target = np.zeros(target_size)
 
-
-def literal_mask(t, roi):
-    rc = roi.mask.bound_rc
-    for pt in range(rc.shape[0]):
-        y, x = rc[pt, :]
-        t[y, x] = 1
-        return t
-
-
-target = literal_mask(target, photostimulation.rois.get(list(photostimulation.stimulated_neurons)[2]))
+for roi in rois:
+    target = literal_mask(target, roi)
 
 hologram = Hologram(target, slm_shape=(512, 512))
 
 zoombox = hologram.plot_farfield(source=hologram.target, cbar=True)
+
+# Run 5 iterations of GS.
+hologram.optimize(method='GS', maxiter=5)
+
+# Look at the associated near- and far- fields
+hologram.plot_nearfield(cbar=True)
+hologram.plot_farfield(limits=zoombox, cbar=True, title='FF Amp')
+
