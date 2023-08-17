@@ -6,7 +6,7 @@ from copy import deepcopy
 
 import numpy as np
 
-from .roi_tools import ROIHandler, Suite2PHandler
+from ..roi_tools import ROIHandler, Suite2PHandler
 
 
 """
