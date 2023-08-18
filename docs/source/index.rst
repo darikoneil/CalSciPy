@@ -11,6 +11,7 @@ Welcome to CalSciPy's documentation!
    :caption: Contents:
 
    Introduction
+   Limitations
    Installation
    CalSciPy.io_tools
 
