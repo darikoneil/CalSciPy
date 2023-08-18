@@ -23,7 +23,7 @@ class _ColorScheme:
     black: Tuple[float, float, float] = (0 / 255, 0 / 255, 0 / 255)
     white: Tuple[float, float, float] = (255 / 255, 255 / 255, 255 / 255)
     background: Tuple[float, float, float] = (245 / 255, 245 / 255, 245 / 255)
-    mapping = list(enumerate([red, green, blue, orange, purple, yellow, black, dark, medium, light, background, white]))
+    mapping = list(enumerate([red, green, blue, orange, purple, yellow, black, medium, dark, light]))
 
     def __new__(cls: _ColorScheme) -> _ColorScheme:
         """
@@ -34,6 +34,14 @@ class _ColorScheme:
             cls.instance = super(_ColorScheme, cls).__new__(cls)
         return cls.instance
 
+    @property
+    def colors(self) -> set:
+        return {key for key in dir(COLORS) if "__" not in key and "instance" not in key and "mapping" not in key}
+
+    @property
+    def num_colors(self) -> int:
+        return len(self.colors)
+
     def __call__(self, value: Union[int, str], *args, **kwargs) -> Tuple[float, float, float]:
         """
         Call for next color in scheme
@@ -42,8 +50,8 @@ class _ColorScheme:
         :returns: tuple of RGB values
         """
         if isinstance(value, int):
-            if value >= len(self.mapping):
-                value = len(self.mapping) % value
+            if value >= self.num_colors:
+                value -= self.num_colors * (value // self.num_colors)
             return self.mapping[value][1]
         elif isinstance(value, str):
             return getattr(self, value)
