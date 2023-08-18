@@ -11,7 +11,3 @@ ready-to-use.
 Contributions
 *************
 Save me from myself
-
-I only want the X, why do I need to install Y?
-**********************************************
-Sorry, when things are stable I'll break off 3/4/5 into optional subpackages

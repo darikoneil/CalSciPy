@@ -7,16 +7,8 @@
 
    </strike>
 
-Introduction
-============
-**CalSciPy** is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from
-interactive visualization of data to computer-generated holography for "read/write" experiments, and
-everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be
-considered useful to others.
-
 Motivation
 **********
-I noticed the following issues while conducting my own research, and was inspired to upload my own code to solve them.
 
 1. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
 environments. I wrote this so |ss| I don't have to |se| you don't have to. It's intended to be a collection of useful,
@@ -39,3 +31,6 @@ It's 2023.
 metadata, generating protocols programmatically (I'm lazy), and aligning collected data.
 
 5. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
+
+I was inspired to upload my own code to solve these issues--or at least create neat package my friends and I could use
+to easily analyze data across various environments and computers.
