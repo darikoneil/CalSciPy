@@ -6,6 +6,7 @@ import numpy as np
 
 from .._calculations import multiple_random_groups_without_replacement
 
+
 def randomize_targets(target_vector: Union[Iterable, np.ndarray],
                       neurons_per_target: int = 1,
                       num_targets: int = 1,

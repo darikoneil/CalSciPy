@@ -67,7 +67,8 @@ def check_filepath(path: Union[str, Path], name: str = None, extension: str = No
 
 
 def generate_padded_filename(output_folder: Path,
-                             ndex: int, base: str = "images",
+                             index: int,
+                             base: str = "images",
                              digits: int = 2,
                              ext: str = ".tif"
                              ) -> Path:

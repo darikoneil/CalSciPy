@@ -154,9 +154,11 @@ def min_max_scale(values: Union[Number, Iterable[Number], np.ndarray],
     new_min, new_max = new_range
     return new_min + ((np.asarray(values) - old_min) * (new_max - new_min)) / (old_max - old_min)
 
+
 def multiple_random_groups_without_replacement(sample_population: Union[np.ndarray, Sequence],
-                                       group_size: int,
-                                       num_groups: int) -> Tuple:
+                                               group_size: int,
+                                               num_groups: int
+                                               ) -> Tuple:
     """
     Randomly select multiple groups from a population without replacement
 

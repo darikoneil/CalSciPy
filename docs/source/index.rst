@@ -12,15 +12,7 @@ Welcome to CalSciPy's documentation!
 
    Introduction
    Installation
-   CalSciPy.bruker
-   CalSciPy.coloring
-   CalSciPy.event_processing
-   CalSciPy.image_processing
-   CalSciPy.interactive_visuals
    CalSciPy.io_tools
-   CalSciPy.misc
-   CalSciPy.reorganization
-   CalSciPy.trace_processing
 
 
 Indices and tables

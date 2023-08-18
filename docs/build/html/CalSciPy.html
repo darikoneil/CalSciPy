@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalSciPy package &mdash; CalSciPy 0.3.5 documentation</title>
+  <title>CalSciPy package &mdash; CalSciPy 0.3.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -43,14 +43,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.trace_processing.html">CalSciPy.trace_processing module</a></li>
 </ul>
 
         </div>
@@ -93,17 +86,41 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#submodules">Submodules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.configuration_values.html">CalSciPy.bruker.configuration_values module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.data.html">CalSciPy.bruker.data module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html">CalSciPy.bruker.factories module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.constants.html">CalSciPy.bruker.constants module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS"><code class="docutils literal notranslate"><span class="pre">CONSTANTS</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.data.html">CalSciPy.bruker.data module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.DEFAULT_PRAIRIEVIEW_VERSION"><code class="docutils literal notranslate"><span class="pre">DEFAULT_PRAIRIEVIEW_VERSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.align_data"><code class="docutils literal notranslate"><span class="pre">align_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.determine_imaging_content"><code class="docutils literal notranslate"><span class="pre">determine_imaging_content()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.extract_frame_times"><code class="docutils literal notranslate"><span class="pre">extract_frame_times()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.generate_bruker_naming_convention"><code class="docutils literal notranslate"><span class="pre">generate_bruker_naming_convention()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">load_bruker_tifs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_mark_points"><code class="docutils literal notranslate"><span class="pre">load_mark_points()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_voltage_output"><code class="docutils literal notranslate"><span class="pre">load_voltage_output()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_voltage_recording"><code class="docutils literal notranslate"><span class="pre">load_voltage_recording()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.repackage_bruker_tifs"><code class="docutils literal notranslate"><span class="pre">repackage_bruker_tifs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.factories.html">CalSciPy.bruker.factories module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BRUKER_XML_OBJECT_MODULES"><code class="docutils literal notranslate"><span class="pre">BRUKER_XML_OBJECT_MODULES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerElementFactory"><code class="docutils literal notranslate"><span class="pre">BrukerElementFactory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory"><code class="docutils literal notranslate"><span class="pre">BrukerXMLFactory</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html">CalSciPy.bruker.meta_objects module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.GroupMeta"><code class="docutils literal notranslate"><span class="pre">GroupMeta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.PhotostimulationMeta"><code class="docutils literal notranslate"><span class="pre">PhotostimulationMeta</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta"><code class="docutils literal notranslate"><span class="pre">ROIMeta</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.prairie_link.html">CalSciPy.bruker.prairie_link module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.protocols.html">CalSciPy.bruker.protocols module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.protocols.html">CalSciPy.bruker.protocols module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_galvo_point_list"><code class="docutils literal notranslate"><span class="pre">generate_galvo_point_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_marked_points_protocol"><code class="docutils literal notranslate"><span class="pre">generate_marked_points_protocol()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.write_protocol"><code class="docutils literal notranslate"><span class="pre">write_protocol()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.validation.html">CalSciPy.bruker.validation module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusException"><code class="docutils literal notranslate"><span class="pre">DingusException</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger"><code class="docutils literal notranslate"><span class="pre">DingusLogger</span></code></a></li>
@@ -116,6 +133,7 @@
 <li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html">CalSciPy.bruker.xml_objects module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint"><code class="docutils literal notranslate"><span class="pre">GalvoPoint</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement"><code class="docutils literal notranslate"><span class="pre">GalvoPointElement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup"><code class="docutils literal notranslate"><span class="pre">GalvoPointGroup</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointList"><code class="docutils literal notranslate"><span class="pre">GalvoPointList</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement"><code class="docutils literal notranslate"><span class="pre">MarkPointElement</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements"><code class="docutils literal notranslate"><span class="pre">MarkPointSeriesElements</span></code></a></li>
@@ -124,7 +142,134 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#module-CalSciPy.bruker">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.bruker.html#module-CalSciPy.bruker">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS"><code class="docutils literal notranslate"><span class="pre">CONSTANTS</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.BRUKER_XML_OBJECT_MODULES"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.BRUKER_XML_OBJECT_MODULES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.FIELD_OF_VIEW_MICRONS"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.FIELD_OF_VIEW_MICRONS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.FIELD_OF_VIEW_PIXELS"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.FIELD_OF_VIEW_PIXELS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.MAGNIFICATION"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.MAGNIFICATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.OBJECTIVE"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.OBJECTIVE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.PIXELS_PER_MICRON"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.PIXELS_PER_MICRON</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.POWER_SCALE"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.POWER_SCALE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.SPIRAL_SCALE"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.SPIRAL_SCALE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.X_GALVO_VOLTAGE_RANGE"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.X_GALVO_VOLTAGE_RANGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.Y_GALVO_VOLTAGE_RANGE"><code class="docutils literal notranslate"><span class="pre">CONSTANTS.Y_GALVO_VOLTAGE_RANGE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.events.html">CalSciPy.events package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.events.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.events.event_visuals.html">CalSciPy.events.event_visuals module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot"><code class="docutils literal notranslate"><span class="pre">SpikePlot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot"><code class="docutils literal notranslate"><span class="pre">TrialPlot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.plot_spikes"><code class="docutils literal notranslate"><span class="pre">plot_spikes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.plot_trials"><code class="docutils literal notranslate"><span class="pre">plot_trials()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.events.firing_rates.html">CalSciPy.events.firing_rates module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.calculate_instantaneous_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_instantaneous_firing_rates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.calculate_mean_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_mean_firing_rates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.normalize_firing_rates"><code class="docutils literal notranslate"><span class="pre">normalize_firing_rates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.events.html#module-CalSciPy.events">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.events.html#CalSciPy.events.calculate_instantaneous_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_instantaneous_firing_rates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.events.html#CalSciPy.events.calculate_mean_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_mean_firing_rates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.events.html#CalSciPy.events.normalize_firing_rates"><code class="docutils literal notranslate"><span class="pre">normalize_firing_rates()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.images.html">CalSciPy.images package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.images.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.images.image_processing.html">CalSciPy.images.image_processing module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.images.html#module-CalSciPy.images">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.optogenetics.html">CalSciPy.optogenetics package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.cgh.html">CalSciPy.optogenetics.cgh module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.Hologram"><code class="docutils literal notranslate"><span class="pre">Hologram</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.SLM"><code class="docutils literal notranslate"><span class="pre">SLM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.generate_target_mask"><code class="docutils literal notranslate"><span class="pre">generate_target_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.opto_objects.html">CalSciPy.optogenetics.opto_objects module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation"><code class="docutils literal notranslate"><span class="pre">Photostimulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup"><code class="docutils literal notranslate"><span class="pre">StimulationGroup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationSequence"><code class="docutils literal notranslate"><span class="pre">StimulationSequence</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.target_selection.html">CalSciPy.optogenetics.target_selection module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.target_selection.html#CalSciPy.optogenetics.target_selection.randomize_targets"><code class="docutils literal notranslate"><span class="pre">randomize_targets()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#module-CalSciPy.optogenetics">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation"><code class="docutils literal notranslate"><span class="pre">Photostimulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.add_photostimulation_group"><code class="docutils literal notranslate"><span class="pre">Photostimulation.add_photostimulation_group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.import_rois"><code class="docutils literal notranslate"><span class="pre">Photostimulation.import_rois()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_groups"><code class="docutils literal notranslate"><span class="pre">Photostimulation.num_groups</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_neurons"><code class="docutils literal notranslate"><span class="pre">Photostimulation.num_neurons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_targets"><code class="docutils literal notranslate"><span class="pre">Photostimulation.num_targets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.reference_image"><code class="docutils literal notranslate"><span class="pre">Photostimulation.reference_image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.remapped_sequence"><code class="docutils literal notranslate"><span class="pre">Photostimulation.remapped_sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.roi_to_target"><code class="docutils literal notranslate"><span class="pre">Photostimulation.roi_to_target()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.rois"><code class="docutils literal notranslate"><span class="pre">Photostimulation.rois</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.sequence"><code class="docutils literal notranslate"><span class="pre">Photostimulation.sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.shape"><code class="docutils literal notranslate"><span class="pre">Photostimulation.shape</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.stimulated_neurons"><code class="docutils literal notranslate"><span class="pre">Photostimulation.stimulated_neurons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.target_to_roi"><code class="docutils literal notranslate"><span class="pre">Photostimulation.target_to_roi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup"><code class="docutils literal notranslate"><span class="pre">StimulationGroup</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.delay"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.delay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.name"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.num_targets"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.num_targets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.ordered_index"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.ordered_index</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.point_interval"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.point_interval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.repetitions"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.repetitions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.rois"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.rois</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.shape"><code class="docutils literal notranslate"><span class="pre">StimulationGroup.shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence"><code class="docutils literal notranslate"><span class="pre">StimulationSequence</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.delay"><code class="docutils literal notranslate"><span class="pre">StimulationSequence.delay</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.interval"><code class="docutils literal notranslate"><span class="pre">StimulationSequence.interval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.repetitions"><code class="docutils literal notranslate"><span class="pre">StimulationSequence.repetitions</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.randomize_targets"><code class="docutils literal notranslate"><span class="pre">randomize_targets()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.traces.html">CalSciPy.traces package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.traces.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.traces.trace_processing.html">CalSciPy.traces.trace_processing module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_dfof"><code class="docutils literal notranslate"><span class="pre">calculate_dfof()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_standardized_noise"><code class="docutils literal notranslate"><span class="pre">calculate_standardized_noise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.detrend_polynomial"><code class="docutils literal notranslate"><span class="pre">detrend_polynomial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.perona_malik_diffusion"><code class="docutils literal notranslate"><span class="pre">perona_malik_diffusion()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.traces.trace_visuals.html">CalSciPy.traces.trace_visuals module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot"><code class="docutils literal notranslate"><span class="pre">TracePlot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.plot_traces"><code class="docutils literal notranslate"><span class="pre">plot_traces()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.traces.html#module-CalSciPy.traces">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -135,85 +280,13 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.color_scheme.html">CalSciPy.color_scheme module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.bin_data"><code class="docutils literal notranslate"><span class="pre">bin_data()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.calculate_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_firing_rates()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.calculate_mean_firing_rates"><code class="docutils literal notranslate"><span class="pre">calculate_mean_firing_rates()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.collect_waveforms"><code class="docutils literal notranslate"><span class="pre">collect_waveforms()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.convert_tau"><code class="docutils literal notranslate"><span class="pre">convert_tau()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_event_onset_intensities"><code class="docutils literal notranslate"><span class="pre">get_event_onset_intensities()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_inter_event_intervals"><code class="docutils literal notranslate"><span class="pre">get_inter_event_intervals()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_num_events"><code class="docutils literal notranslate"><span class="pre">get_num_events()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.identify_events"><code class="docutils literal notranslate"><span class="pre">identify_events()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.normalize_firing_rates"><code class="docutils literal notranslate"><span class="pre">normalize_firing_rates()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.event_processing.html#CalSciPy.event_processing.scale_waveforms"><code class="docutils literal notranslate"><span class="pre">scale_waveforms()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.image_processing.html#CalSciPy.image_processing.gaussian_filter"><code class="docutils literal notranslate"><span class="pre">gaussian_filter()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.image_processing.html#CalSciPy.image_processing.median_filter"><code class="docutils literal notranslate"><span class="pre">median_filter()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_spikes"><code class="docutils literal notranslate"><span class="pre">plot_spikes()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_traces"><code class="docutils literal notranslate"><span class="pre">plot_traces()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_trials"><code class="docutils literal notranslate"><span class="pre">plot_trials()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_binary"><code class="docutils literal notranslate"><span class="pre">load_binary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_images"><code class="docutils literal notranslate"><span class="pre">load_images()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_video"><code class="docutils literal notranslate"><span class="pre">load_video()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_binary"><code class="docutils literal notranslate"><span class="pre">save_binary()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_images"><code class="docutils literal notranslate"><span class="pre">save_images()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.PatternMatching"><code class="docutils literal notranslate"><span class="pre">PatternMatching</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.calculate_frames_per_file"><code class="docutils literal notranslate"><span class="pre">calculate_frames_per_file()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.generate_blocks"><code class="docutils literal notranslate"><span class="pre">generate_blocks()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.generate_overlapping_blocks"><code class="docutils literal notranslate"><span class="pre">generate_overlapping_blocks()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.generate_padded_filename"><code class="docutils literal notranslate"><span class="pre">generate_padded_filename()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.generate_sliding_window"><code class="docutils literal notranslate"><span class="pre">generate_sliding_window()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.generate_time_vector"><code class="docutils literal notranslate"><span class="pre">generate_time_vector()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.sliding_window"><code class="docutils literal notranslate"><span class="pre">sliding_window()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.wrap_cupy_block"><code class="docutils literal notranslate"><span class="pre">wrap_cupy_block()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.misc.html#CalSciPy.misc.zero_pad_num_to_string"><code class="docutils literal notranslate"><span class="pre">zero_pad_num_to_string()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.optogenetics.html">CalSciPy.optogenetics module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Group"><code class="docutils literal notranslate"><span class="pre">Group</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_radius"><code class="docutils literal notranslate"><span class="pre">Mask.bound_radius</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_rc"><code class="docutils literal notranslate"><span class="pre">Mask.bound_rc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_rc_vert"><code class="docutils literal notranslate"><span class="pre">Mask.bound_rc_vert</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_xy"><code class="docutils literal notranslate"><span class="pre">Mask.bound_xy</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_xy_vert"><code class="docutils literal notranslate"><span class="pre">Mask.bound_xy_vert</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.rc"><code class="docutils literal notranslate"><span class="pre">Mask.rc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.rc_vert"><code class="docutils literal notranslate"><span class="pre">Mask.rc_vert</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.xy"><code class="docutils literal notranslate"><span class="pre">Mask.xy</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.xy_vert"><code class="docutils literal notranslate"><span class="pre">Mask.xy_vert</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation"><code class="docutils literal notranslate"><span class="pre">Photostimulation</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.convert_suite2p_rois"><code class="docutils literal notranslate"><span class="pre">Photostimulation.convert_suite2p_rois()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.generate_galvo_point"><code class="docutils literal notranslate"><span class="pre">Photostimulation.generate_galvo_point()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.generate_galvo_point_list"><code class="docutils literal notranslate"><span class="pre">Photostimulation.generate_galvo_point_list()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.import_suite2p"><code class="docutils literal notranslate"><span class="pre">Photostimulation.import_suite2p()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.targets"><code class="docutils literal notranslate"><span class="pre">Photostimulation.targets</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI"><code class="docutils literal notranslate"><span class="pre">ROI</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.adj_radii"><code class="docutils literal notranslate"><span class="pre">ROI.adj_radii</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.rc"><code class="docutils literal notranslate"><span class="pre">ROI.rc</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.rc_vert"><code class="docutils literal notranslate"><span class="pre">ROI.rc_vert</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.xy"><code class="docutils literal notranslate"><span class="pre">ROI.xy</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.xy_vert"><code class="docutils literal notranslate"><span class="pre">ROI.xy_vert</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_bounding_radius"><code class="docutils literal notranslate"><span class="pre">calculate_bounding_radius()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_centroid"><code class="docutils literal notranslate"><span class="pre">calculate_centroid()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_mask"><code class="docutils literal notranslate"><span class="pre">calculate_mask()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_vertices"><code class="docutils literal notranslate"><span class="pre">calculate_vertices()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_video"><code class="docutils literal notranslate"><span class="pre">save_video()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a><ul>
@@ -223,11 +296,46 @@
 <li class="toctree-l2"><a class="reference internal" href="CalSciPy.reorganization.html#CalSciPy.reorganization.merge_tensor"><code class="docutils literal notranslate"><span class="pre">merge_tensor()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.trace_processing.html">CalSciPy.trace_processing module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.calculate_dfof"><code class="docutils literal notranslate"><span class="pre">calculate_dfof()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.calculate_standardized_noise"><code class="docutils literal notranslate"><span class="pre">calculate_standardized_noise()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.detrend_polynomial"><code class="docutils literal notranslate"><span class="pre">detrend_polynomial()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.perona_malik_diffusion"><code class="docutils literal notranslate"><span class="pre">perona_malik_diffusion()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.roi_tools.html">CalSciPy.roi_tools module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask"><code class="docutils literal notranslate"><span class="pre">Mask</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_radius"><code class="docutils literal notranslate"><span class="pre">Mask.bound_radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_rc"><code class="docutils literal notranslate"><span class="pre">Mask.bound_rc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_rc_vert"><code class="docutils literal notranslate"><span class="pre">Mask.bound_rc_vert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_xy"><code class="docutils literal notranslate"><span class="pre">Mask.bound_xy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_xy_vert"><code class="docutils literal notranslate"><span class="pre">Mask.bound_xy_vert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.rc"><code class="docutils literal notranslate"><span class="pre">Mask.rc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.rc_vert"><code class="docutils literal notranslate"><span class="pre">Mask.rc_vert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.xy"><code class="docutils literal notranslate"><span class="pre">Mask.xy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.xy_vert"><code class="docutils literal notranslate"><span class="pre">Mask.xy_vert</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI"><code class="docutils literal notranslate"><span class="pre">ROI</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.adj_radii"><code class="docutils literal notranslate"><span class="pre">ROI.adj_radii</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc"><code class="docutils literal notranslate"><span class="pre">ROI.rc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc_vert"><code class="docutils literal notranslate"><span class="pre">ROI.rc_vert</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy"><code class="docutils literal notranslate"><span class="pre">ROI.xy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy_vert"><code class="docutils literal notranslate"><span class="pre">ROI.xy_vert</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler"><code class="docutils literal notranslate"><span class="pre">ROIHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.convert_one_roi"><code class="docutils literal notranslate"><span class="pre">ROIHandler.convert_one_roi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.from_file"><code class="docutils literal notranslate"><span class="pre">ROIHandler.from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.generate_reference_image"><code class="docutils literal notranslate"><span class="pre">ROIHandler.generate_reference_image()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.import_rois"><code class="docutils literal notranslate"><span class="pre">ROIHandler.import_rois()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.load"><code class="docutils literal notranslate"><span class="pre">ROIHandler.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler"><code class="docutils literal notranslate"><span class="pre">Suite2PHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.convert_one_roi"><code class="docutils literal notranslate"><span class="pre">Suite2PHandler.convert_one_roi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.from_file"><code class="docutils literal notranslate"><span class="pre">Suite2PHandler.from_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.generate_reference_image"><code class="docutils literal notranslate"><span class="pre">Suite2PHandler.generate_reference_image()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_bounding_radius"><code class="docutils literal notranslate"><span class="pre">calculate_bounding_radius()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_centroid"><code class="docutils literal notranslate"><span class="pre">calculate_centroid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_distance_from_centroid"><code class="docutils literal notranslate"><span class="pre">calculate_distance_from_centroid()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_mask"><code class="docutils literal notranslate"><span class="pre">calculate_mask()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.identify_vertices"><code class="docutils literal notranslate"><span class="pre">identify_vertices()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.version.html">CalSciPy.version module</a></li>

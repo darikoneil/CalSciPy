@@ -8,7 +8,7 @@ from slmsuite.holography.algorithms import Hologram as _Hologram
 from slmsuite.hardware.slms.slm import SLM as _SLM
 
 from ..roi_tools import ROI
-from.opto_objects import StimulationSequence, StimulationGroup
+from .opto_objects import StimulationSequence, StimulationGroup
 
 """
 Functions related to computer-generated holography. Generally this module wraps

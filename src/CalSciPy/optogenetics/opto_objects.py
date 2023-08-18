@@ -1,11 +1,12 @@
 from __future__ import annotations
-from typing import Sequence
+from typing import Sequence, Tuple
 from collections import UserList
 from itertools import chain
 from copy import deepcopy
 
 import numpy as np
 from numpy.typing import NDArray
+
 from ..roi_tools import ROIHandler, Suite2PHandler
 
 

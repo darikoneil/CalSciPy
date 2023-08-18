@@ -33,6 +33,7 @@ dependencies = [
     "imageio-ffmpeg",
     "joblib",
     "matplotlib",
+    "memoization",
     "numba",
     "numpy",
     "opencv-python",
@@ -42,6 +43,7 @@ dependencies = [
     "seaborn",
     "scikit-learn",
     "scipy",
+    "slmsuite",
     "tqdm"
 ]
 

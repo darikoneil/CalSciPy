@@ -4,7 +4,7 @@ __all__ = [
     "events",
     "images",
     "io_tools",
-    "optogeneteics",
+    "optogenetics",
     "reorganization",
     "roi_tools",
     "traces",
