@@ -46,7 +46,7 @@ alpha/beta. Please be patient, refactoring my code for public use is a pet-proje
 #### Stable Modules
 Until things are more stable, I'll explicitly note which modules' are stable, have >90% test coverage, and are
 ready-to-use.
-* io_tools - as of version 0.40
+* io_tools as of version 0.4.0
 
 
 #### Installation
