@@ -50,7 +50,7 @@ ready-to-use.
 
 
 #### Installation
-Eventually I will break things up into sub-packages so you don't have to install everything together...
+Eventually I will break things up into sub-packages so you don't have to install everything together...         
 `pip install CalSciPy`
 
 #### Contributions

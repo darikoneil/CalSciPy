@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 
 from CalSciPy.color_scheme import COLORS
-from CalSciPy.opto import Photostimulation
+from CalSciPy.optogenetics import Photostimulation
 
 import matplotlib
 matplotlib.use("Qt5Agg")
@@ -48,7 +48,7 @@ def view_target_overlay(photostimulation: Photostimulation, targets=None):
 
         if targets is None:
 
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons),
                                         list(photostimulation.stimulated_neurons)
                                         ).tolist()
 
@@ -71,7 +71,7 @@ def view_target_overlay(photostimulation: Photostimulation, targets=None):
                                )
 
         else:
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons), list(targets)).tolist()
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons), list(targets)).tolist()
 
             for idx, roi in enumerate(photostimulation.rois.values()):
                 if idx in default_list:
@@ -90,7 +90,7 @@ def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
 
         ax.imshow(background_image)
 
-        colors = _generate_colormap_spectrum(photostimulation.total_neurons, colormap=colormap, alpha=0.75)
+        colors = _generate_colormap_spectrum(photostimulation.num_neurons, colormap=colormap, alpha=0.75)
 
         for idx, roi in enumerate(photostimulation.rois.values()):
             _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=colors[idx])
@@ -114,7 +114,7 @@ def view_targets(photostimulation: Photostimulation, targets=None):
 
         if targets is None:
 
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons),
                                         list(photostimulation.stimulated_neurons)
                                         ).tolist()
 
@@ -138,7 +138,7 @@ def view_targets(photostimulation: Photostimulation, targets=None):
                                )
 
         else:
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons),
                                         list(targets)
                                         ).tolist()
 
@@ -149,7 +149,7 @@ def view_targets(photostimulation: Photostimulation, targets=None):
                     _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.blue)
 
 
-def view_masked_targets(photostimulation: Photostimulation, targets=None):
+def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None):
 
     with plt.style.context("CalSciPy.main"):
 
@@ -167,7 +167,7 @@ def view_masked_targets(photostimulation: Photostimulation, targets=None):
 
         if targets is None:
 
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons),
                                         list(photostimulation.stimulated_neurons)
                                         ).tolist()
 
@@ -219,7 +219,7 @@ def view_spiral_targets(photostimulation: Photostimulation,
 
         if targets is None:
 
-            default_list = np.setdiff1d(np.arange(photostimulation.total_neurons),
+            default_list = np.setdiff1d(np.arange(photostimulation.num_neurons),
                                         list(photostimulation.stimulated_neurons)
                                         ).tolist()
 

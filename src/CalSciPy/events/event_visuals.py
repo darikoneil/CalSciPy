@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Any
 import numpy as np
 from .._interactive import InteractivePlot
 
@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt  # noqa: E402
 import seaborn as sns
 
 from .._visual import generate_time_vector  # noqa: E402
-from .color_scheme import COLORS  # noqa: E402
+from ..color_scheme import COLORS  # noqa: E402
 
 
 class SpikePlot(InteractivePlot):

@@ -4,11 +4,13 @@ from typing import Tuple, Iterable
 import numpy as np
 from pathlib import Path
 
-from CalSciPy.opto import Photostimulation
+from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.bruker.protocols import generate_marked_points_protocol
 
+from CalSciPy.optogenetics.cgh import SLM
+from slmsuite.holography.algorithms import Hologram
 
-from scratch_dev.visualize_optogenetics import *
+from dev.experimental.visualize_optogenetics import *
 
 
 def randomize_targets(target_vector: Union[Iterable, np.ndarray],
@@ -48,14 +50,14 @@ def multiple_group_without_replacement(sample_population, group_size, num_groups
 test_number = 2
 
 # parameters
-protocol_folder = Path("Z:\\Uncaging_Photostimulation_Tests\\08_14_2023").joinpath(f"test_{test_number}")
+protocol_folder = Path(".\\tests\\testing_samples\\suite2p\\plane0")
 
-data_folder = protocol_folder.joinpath("suite2p")
+data_folder = protocol_folder
 
 # create experiment
 photostimulation = Photostimulation.import_rois(folder=data_folder)
 
-targets = randomize_targets(np.arange(photostimulation.total_neurons),
+targets = randomize_targets(np.arange(photostimulation.num_neurons),
                             num_targets=5,
                             trials=1)[0]
 
@@ -65,12 +67,36 @@ for idx, target in enumerate(targets):
 
 view_spiral_targets(photostimulation)
 
-parameters = {"uncaging_laser_power": 1000, "spiral_revolutions": 0.01, "duration": 250.0}
 
-mpl, gpl = generate_marked_points_protocol(photostimulation,
-                                           targets_only=False,
-                                           parameters=parameters,
-                                           file_path=protocol_folder,
-                                           name="test_protocol",
-                                           z_offset=19.96
-                                           )
+def literal_mask(t, roi):
+    rc = roi.rc
+    for pt in range(rc.shape[0]):
+        y, x = rc[pt, :]
+        t[y, x] = 1
+    return t
+
+
+rois = [roi for roi in photostimulation.
+
+    photostimulation.rois.get(value) for key, value in photostimulation.target_to_roi.items()]
+
+rois = [photostimulation.rois.get(22)]
+
+target_size = (512, 512)
+
+target = np.zeros(target_size)
+
+for roi in rois:
+    target = literal_mask(target, roi)
+
+hologram = Hologram(target, slm_shape=(512, 512))
+
+zoombox = hologram.plot_farfield(source=hologram.target, cbar=True)
+
+# Run 5 iterations of GS.
+hologram.optimize(method='GS', maxiter=5)
+
+# Look at the associated near- and far- fields
+hologram.plot_nearfield(cbar=True)
+hologram.plot_farfield(limits=zoombox, cbar=True, title='FF Amp')
+

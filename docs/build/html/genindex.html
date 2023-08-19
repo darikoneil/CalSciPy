@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; CalSciPy 0.3.5 documentation</title>
+  <title>Index &mdash; CalSciPy 0.3.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -40,16 +40,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Motivation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html#stable-modules">Stable Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html#contributions">Contributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.trace_processing.html">CalSciPy.trace_processing module</a></li>
 </ul>
 
         </div>
@@ -83,12 +79,15 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -105,12 +104,24 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.activity_type">activity_type (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.activity_type">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
 </li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger.add_exception">add_exception() (CalSciPy.bruker.validation.DingusLogger method)</a>
 </li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.add_photostimulation_group">add_photostimulation_group() (CalSciPy.optogenetics.opto_objects.Photostimulation method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.add_photostimulation_group">(CalSciPy.optogenetics.Photostimulation method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.adj_radii">adj_radii (CalSciPy.optogenetics.ROI property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.adj_radii">adj_radii (CalSciPy.roi_tools.ROI property)</a>
+</li>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.align_data">align_data() (in module CalSciPy.bruker.data)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.all_points_at_once">all_points_at_once (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
@@ -122,19 +133,29 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.bin_data">bin_data() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_radius">bound_radius (CalSciPy.roi_tools.Mask property)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_radius">bound_radius (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_rc">bound_rc (CalSciPy.roi_tools.Mask property)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_rc">bound_rc (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_rc_vert">bound_rc_vert (CalSciPy.roi_tools.Mask property)</a>
+</li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_xy">bound_xy (CalSciPy.roi_tools.Mask property)</a>
+</li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.bound_xy_vert">bound_xy_vert (CalSciPy.roi_tools.Mask property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_rc_vert">bound_rc_vert (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.BRUKER_XML_OBJECT_MODULES">BRUKER_XML_OBJECT_MODULES (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.BRUKER_XML_OBJECT_MODULES">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_xy">bound_xy (CalSciPy.optogenetics.Mask property)</a>
+        <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BRUKER_XML_OBJECT_MODULES">(in module CalSciPy.bruker.factories)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.bound_xy_vert">bound_xy_vert (CalSciPy.optogenetics.Mask property)</a>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerElementFactory">BrukerElementFactory (class in CalSciPy.bruker.factories)</a>
+</li>
+      <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory">BrukerXMLFactory (class in CalSciPy.bruker.factories)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -144,23 +165,29 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.calc_funct_map">calc_funct_map (CalSciPy.bruker.xml_objects.MarkPointSeriesElements attribute)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_bounding_radius">calculate_bounding_radius() (in module CalSciPy.optogenetics)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_bounding_radius">calculate_bounding_radius() (in module CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_centroid">calculate_centroid() (in module CalSciPy.optogenetics)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_centroid">calculate_centroid() (in module CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.calculate_dfof">calculate_dfof() (in module CalSciPy.trace_processing)</a>
+      <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_dfof">calculate_dfof() (in module CalSciPy.traces.trace_processing)</a>
 </li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.calculate_firing_rates">calculate_firing_rates() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_distance_from_centroid">calculate_distance_from_centroid() (in module CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.calculate_frames_per_file">calculate_frames_per_file() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.events.html#CalSciPy.events.calculate_instantaneous_firing_rates">calculate_instantaneous_firing_rates() (in module CalSciPy.events)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.calculate_instantaneous_firing_rates">(in module CalSciPy.events.firing_rates)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_mask">calculate_mask() (in module CalSciPy.optogenetics)</a>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_mask">calculate_mask() (in module CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.calculate_mean_firing_rates">calculate_mean_firing_rates() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.events.html#CalSciPy.events.calculate_mean_firing_rates">calculate_mean_firing_rates() (in module CalSciPy.events)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.calculate_mean_firing_rates">(in module CalSciPy.events.firing_rates)</a>
 </li>
-      <li><a href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.calculate_standardized_noise">calculate_standardized_noise() (in module CalSciPy.trace_processing)</a>
-</li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.calculate_vertices">calculate_vertices() (in module CalSciPy.optogenetics)</a>
+      </ul></li>
+      <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_standardized_noise">calculate_standardized_noise() (in module CalSciPy.traces.trace_processing)</a>
 </li>
       <li>
     CalSciPy
@@ -174,6 +201,27 @@
 
       <ul>
         <li><a href="CalSciPy.bruker.html#module-CalSciPy.bruker">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.bruker.constants
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#module-CalSciPy.bruker.constants">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.bruker.data
+
+      <ul>
+        <li><a href="CalSciPy.bruker.data.html#module-CalSciPy.bruker.data">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.bruker.factories
+
+      <ul>
+        <li><a href="CalSciPy.bruker.factories.html#module-CalSciPy.bruker.factories">module</a>
 </li>
       </ul></li>
       <li>
@@ -211,8 +259,6 @@
         <li><a href="CalSciPy.bruker.xml_mappings.xml_mapping.html#module-CalSciPy.bruker.xml_mappings.xml_mapping">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     CalSciPy.bruker.xml_objects
 
@@ -228,24 +274,40 @@
 </li>
       </ul></li>
       <li>
-    CalSciPy.event_processing
+    CalSciPy.events
 
       <ul>
-        <li><a href="CalSciPy.event_processing.html#module-CalSciPy.event_processing">module</a>
+        <li><a href="CalSciPy.events.html#module-CalSciPy.events">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    CalSciPy.events.event_visuals
+
+      <ul>
+        <li><a href="CalSciPy.events.event_visuals.html#module-CalSciPy.events.event_visuals">module</a>
 </li>
       </ul></li>
       <li>
-    CalSciPy.image_processing
+    CalSciPy.events.firing_rates
 
       <ul>
-        <li><a href="CalSciPy.image_processing.html#module-CalSciPy.image_processing">module</a>
+        <li><a href="CalSciPy.events.firing_rates.html#module-CalSciPy.events.firing_rates">module</a>
 </li>
       </ul></li>
       <li>
-    CalSciPy.interactive_visuals
+    CalSciPy.images
 
       <ul>
-        <li><a href="CalSciPy.interactive_visuals.html#module-CalSciPy.interactive_visuals">module</a>
+        <li><a href="CalSciPy.images.html#module-CalSciPy.images">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.images.image_processing
+
+      <ul>
+        <li><a href="CalSciPy.images.image_processing.html#module-CalSciPy.images.image_processing">module</a>
 </li>
       </ul></li>
       <li>
@@ -256,17 +318,31 @@
 </li>
       </ul></li>
       <li>
-    CalSciPy.misc
-
-      <ul>
-        <li><a href="CalSciPy.misc.html#module-CalSciPy.misc">module</a>
-</li>
-      </ul></li>
-      <li>
     CalSciPy.optogenetics
 
       <ul>
         <li><a href="CalSciPy.optogenetics.html#module-CalSciPy.optogenetics">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.optogenetics.cgh
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.cgh.html#module-CalSciPy.optogenetics.cgh">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.optogenetics.opto_objects
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#module-CalSciPy.optogenetics.opto_objects">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.optogenetics.target_selection
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.target_selection.html#module-CalSciPy.optogenetics.target_selection">module</a>
 </li>
       </ul></li>
       <li>
@@ -277,10 +353,31 @@
 </li>
       </ul></li>
       <li>
-    CalSciPy.trace_processing
+    CalSciPy.roi_tools
 
       <ul>
-        <li><a href="CalSciPy.trace_processing.html#module-CalSciPy.trace_processing">module</a>
+        <li><a href="CalSciPy.roi_tools.html#module-CalSciPy.roi_tools">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.traces
+
+      <ul>
+        <li><a href="CalSciPy.traces.html#module-CalSciPy.traces">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.traces.trace_processing
+
+      <ul>
+        <li><a href="CalSciPy.traces.trace_processing.html#module-CalSciPy.traces.trace_processing">module</a>
+</li>
+      </ul></li>
+      <li>
+    CalSciPy.traces.trace_visuals
+
+      <ul>
+        <li><a href="CalSciPy.traces.trace_visuals.html#module-CalSciPy.traces.trace_visuals">module</a>
 </li>
       </ul></li>
       <li>
@@ -290,24 +387,60 @@
         <li><a href="CalSciPy.version.html#module-CalSciPy.version">module</a>
 </li>
       </ul></li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.collect_waveforms">collect_waveforms() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.conditions">conditions (CalSciPy.events.event_visuals.TrialPlot property)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.convert_suite2p_rois">convert_suite2p_rois() (CalSciPy.optogenetics.Photostimulation class method)</a>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS">CONSTANTS (class in CalSciPy.bruker)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS">(class in CalSciPy.bruker.constants)</a>
 </li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.convert_tau">convert_tau() (in module CalSciPy.event_processing)</a>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.construct_element">construct_element() (CalSciPy.bruker.factories.BrukerXMLFactory method)</a>
 </li>
+      <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerElementFactory.constructor">constructor() (CalSciPy.bruker.factories.BrukerElementFactory method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.constructor">(CalSciPy.bruker.factories.BrukerXMLFactory method)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.convert_one_roi">convert_one_roi() (CalSciPy.roi_tools.ROIHandler static method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.convert_one_roi">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.detrend_polynomial">detrend_polynomial() (in module CalSciPy.trace_processing)</a>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION">DEFAULT_PRAIRIEVIEW_VERSION (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+        <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.DEFAULT_PRAIRIEVIEW_VERSION">(in module CalSciPy.bruker.data)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.delay">delay (CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationSequence.delay">(CalSciPy.optogenetics.opto_objects.StimulationSequence attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.delay">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.delay">(CalSciPy.optogenetics.StimulationSequence attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.determine_imaging_content">determine_imaging_content() (in module CalSciPy.bruker.data)</a>
+</li>
+      <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.detrend_polynomial">detrend_polynomial() (in module CalSciPy.traces.trace_processing)</a>
 </li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusException">DingusException</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger">DingusLogger (class in CalSciPy.bruker.validation)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.duration">duration (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
@@ -315,19 +448,53 @@
       <ul>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.duration">(CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.duration">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.extract_frame_times">extract_frame_times() (in module CalSciPy.bruker.data)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.FIELD_OF_VIEW_MICRONS">FIELD_OF_VIEW_MICRONS (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.FIELD_OF_VIEW_MICRONS">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.FIELD_OF_VIEW_PIXELS">FIELD_OF_VIEW_PIXELS (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.FIELD_OF_VIEW_PIXELS">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.field_validator">field_validator() (in module CalSciPy.bruker.validation)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.format_fields">format_fields() (in module CalSciPy.bruker.validation)</a>
 </li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.frames">frames (CalSciPy.events.event_visuals.SpikePlot property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.frames">(CalSciPy.traces.trace_visuals.TracePlot property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.from_file">from_file() (CalSciPy.roi_tools.ROIHandler static method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.from_file">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -340,45 +507,45 @@
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement">GalvoPointElement (class in CalSciPy.bruker.xml_objects)</a>
 </li>
+      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup">GalvoPointGroup (class in CalSciPy.bruker.xml_objects)</a>
+</li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointList">GalvoPointList (class in CalSciPy.bruker.xml_objects)</a>
 </li>
-      <li><a href="CalSciPy.image_processing.html#CalSciPy.image_processing.gaussian_filter">gaussian_filter() (in module CalSciPy.image_processing)</a>
-</li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.generate_blocks">generate_blocks() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.generate_bruker_naming_convention">generate_bruker_naming_convention() (in module CalSciPy.bruker.data)</a>
 </li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_coordinates">generate_coordinates() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.generate_galvo_point">generate_galvo_point() (CalSciPy.optogenetics.Photostimulation method)</a>
-</li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.generate_galvo_point_list">generate_galvo_point_list() (CalSciPy.optogenetics.Photostimulation method)</a>
-</li>
-      <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_hull_vertices">generate_hull_vertices() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
-</li>
-      <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_mask">generate_mask() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
+      <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_galvo_point_list">generate_galvo_point_list() (in module CalSciPy.bruker.protocols)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.generate_overlapping_blocks">generate_overlapping_blocks() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_hull_vertices">generate_hull_vertices() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.generate_padded_filename">generate_padded_filename() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_marked_points_protocol">generate_marked_points_protocol() (in module CalSciPy.bruker.protocols)</a>
+</li>
+      <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_mask">generate_mask() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
       <li><a href="CalSciPy.reorganization.html#CalSciPy.reorganization.generate_raster">generate_raster() (in module CalSciPy.reorganization)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.generate_sliding_window">generate_sliding_window() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.generate_reference_image">generate_reference_image() (CalSciPy.roi_tools.ROIHandler static method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.generate_reference_image">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.generate_target_mask">generate_target_mask() (in module CalSciPy.optogenetics.cgh)</a>
 </li>
       <li><a href="CalSciPy.reorganization.html#CalSciPy.reorganization.generate_tensor">generate_tensor() (in module CalSciPy.reorganization)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.generate_time_vector">generate_time_vector() (in module CalSciPy.misc)</a>
-</li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_event_onset_intensities">get_event_onset_intensities() (in module CalSciPy.event_processing)</a>
-</li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_inter_event_intervals">get_inter_event_intervals() (in module CalSciPy.event_processing)</a>
-</li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.get_num_events">get_num_events() (in module CalSciPy.event_processing)</a>
-</li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Group">Group (class in CalSciPy.optogenetics)</a>
-</li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.GroupMeta">GroupMeta (class in CalSciPy.bruker.meta_objects)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.Hologram">Hologram (class in CalSciPy.optogenetics.cgh)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -386,27 +553,47 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.identify_events">identify_events() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.identify_vertices">identify_vertices() (in module CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.import_suite2p">import_suite2p() (CalSciPy.optogenetics.Photostimulation class method)</a>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.import_rois">import_rois() (CalSciPy.optogenetics.opto_objects.Photostimulation class method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.import_rois">(CalSciPy.optogenetics.Photostimulation class method)</a>
 </li>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.import_rois">(CalSciPy.roi_tools.ROIHandler class method)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.index">index (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
 
       <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.index">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.index">(CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.indices">indices (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.indices">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.initial_delay">initial_delay (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.inter_point_delay">inter_point_delay (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationSequence.interval">interval (CalSciPy.optogenetics.opto_objects.StimulationSequence attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.interval">(CalSciPy.optogenetics.StimulationSequence attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.is_spiral">is_spiral (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
 
       <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.is_spiral">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.is_spiral">(CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       </ul></li>
@@ -420,29 +607,53 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.load">load() (CalSciPy.roi_tools.ROIHandler class method)</a>
+</li>
       <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_binary">load_binary() (in module CalSciPy.io_tools)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_bruker_tifs">load_bruker_tifs() (in module CalSciPy.bruker.data)</a>
+</li>
       <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_images">load_images() (in module CalSciPy.io_tools)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_mappings.xml_mapping.html#CalSciPy.bruker.xml_mappings.xml_mapping.load_mapping">load_mapping() (in module CalSciPy.bruker.xml_mappings.xml_mapping)</a>
 </li>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_mark_points">load_mark_points() (in module CalSciPy.bruker.data)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_video">load_video() (in module CalSciPy.io_tools)</a>
+</li>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_voltage_output">load_voltage_output() (in module CalSciPy.bruker.data)</a>
+</li>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.load_voltage_recording">load_voltage_recording() (in module CalSciPy.bruker.data)</a>
+</li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.loop">loop() (CalSciPy.events.event_visuals.SpikePlot method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.loop">(CalSciPy.events.event_visuals.TrialPlot method)</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.loop">(CalSciPy.traces.trace_visuals.TracePlot method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.MAGNIFICATION">MAGNIFICATION (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.MAGNIFICATION">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement">MarkPointElement (class in CalSciPy.bruker.xml_objects)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements">MarkPointSeriesElements (class in CalSciPy.bruker.xml_objects)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.marks">marks (CalSciPy.bruker.xml_objects.MarkPointSeriesElements attribute)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask">Mask (class in CalSciPy.optogenetics)</a>
-</li>
-      <li><a href="CalSciPy.image_processing.html#CalSciPy.image_processing.median_filter">median_filter() (in module CalSciPy.image_processing)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask">Mask (class in CalSciPy.roi_tools)</a>
 </li>
       <li><a href="CalSciPy.reorganization.html#CalSciPy.reorganization.merge_factorized_matrices">merge_factorized_matrices() (in module CalSciPy.reorganization)</a>
 </li>
@@ -455,6 +666,12 @@
         <li><a href="CalSciPy.html#module-CalSciPy">CalSciPy</a>
 </li>
         <li><a href="CalSciPy.bruker.html#module-CalSciPy.bruker">CalSciPy.bruker</a>
+</li>
+        <li><a href="CalSciPy.bruker.constants.html#module-CalSciPy.bruker.constants">CalSciPy.bruker.constants</a>
+</li>
+        <li><a href="CalSciPy.bruker.data.html#module-CalSciPy.bruker.data">CalSciPy.bruker.data</a>
+</li>
+        <li><a href="CalSciPy.bruker.factories.html#module-CalSciPy.bruker.factories">CalSciPy.bruker.factories</a>
 </li>
         <li><a href="CalSciPy.bruker.meta_objects.html#module-CalSciPy.bruker.meta_objects">CalSciPy.bruker.meta_objects</a>
 </li>
@@ -470,21 +687,35 @@
 </li>
         <li><a href="CalSciPy.color_scheme.html#module-CalSciPy.color_scheme">CalSciPy.color_scheme</a>
 </li>
-        <li><a href="CalSciPy.event_processing.html#module-CalSciPy.event_processing">CalSciPy.event_processing</a>
+        <li><a href="CalSciPy.events.html#module-CalSciPy.events">CalSciPy.events</a>
 </li>
-        <li><a href="CalSciPy.image_processing.html#module-CalSciPy.image_processing">CalSciPy.image_processing</a>
+        <li><a href="CalSciPy.events.event_visuals.html#module-CalSciPy.events.event_visuals">CalSciPy.events.event_visuals</a>
 </li>
-        <li><a href="CalSciPy.interactive_visuals.html#module-CalSciPy.interactive_visuals">CalSciPy.interactive_visuals</a>
+        <li><a href="CalSciPy.events.firing_rates.html#module-CalSciPy.events.firing_rates">CalSciPy.events.firing_rates</a>
+</li>
+        <li><a href="CalSciPy.images.html#module-CalSciPy.images">CalSciPy.images</a>
+</li>
+        <li><a href="CalSciPy.images.image_processing.html#module-CalSciPy.images.image_processing">CalSciPy.images.image_processing</a>
 </li>
         <li><a href="CalSciPy.io_tools.html#module-CalSciPy.io_tools">CalSciPy.io_tools</a>
 </li>
-        <li><a href="CalSciPy.misc.html#module-CalSciPy.misc">CalSciPy.misc</a>
-</li>
         <li><a href="CalSciPy.optogenetics.html#module-CalSciPy.optogenetics">CalSciPy.optogenetics</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.cgh.html#module-CalSciPy.optogenetics.cgh">CalSciPy.optogenetics.cgh</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#module-CalSciPy.optogenetics.opto_objects">CalSciPy.optogenetics.opto_objects</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.target_selection.html#module-CalSciPy.optogenetics.target_selection">CalSciPy.optogenetics.target_selection</a>
 </li>
         <li><a href="CalSciPy.reorganization.html#module-CalSciPy.reorganization">CalSciPy.reorganization</a>
 </li>
-        <li><a href="CalSciPy.trace_processing.html#module-CalSciPy.trace_processing">CalSciPy.trace_processing</a>
+        <li><a href="CalSciPy.roi_tools.html#module-CalSciPy.roi_tools">CalSciPy.roi_tools</a>
+</li>
+        <li><a href="CalSciPy.traces.html#module-CalSciPy.traces">CalSciPy.traces</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_processing.html#module-CalSciPy.traces.trace_processing">CalSciPy.traces.trace_processing</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_visuals.html#module-CalSciPy.traces.trace_visuals">CalSciPy.traces.trace_visuals</a>
 </li>
         <li><a href="CalSciPy.version.html#module-CalSciPy.version">CalSciPy.version</a>
 </li>
@@ -496,11 +727,71 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.name">name (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.name">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
 </li>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.name">(CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.name">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.neurons">neurons (CalSciPy.events.event_visuals.SpikePlot property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.neurons">(CalSciPy.traces.trace_visuals.TracePlot property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.events.html#CalSciPy.events.normalize_firing_rates">normalize_firing_rates() (in module CalSciPy.events)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.firing_rates.html#CalSciPy.events.firing_rates.normalize_firing_rates">(in module CalSciPy.events.firing_rates)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.normalize_firing_rates">normalize_firing_rates() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.num_groups">num_groups (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_groups">(CalSciPy.optogenetics.Photostimulation property)</a>
 </li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.num_neurons">num_neurons (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_neurons">(CalSciPy.optogenetics.Photostimulation property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.num_targets">num_targets (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.num_targets">(CalSciPy.optogenetics.opto_objects.StimulationGroup property)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.num_targets">(CalSciPy.optogenetics.Photostimulation property)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.num_targets">(CalSciPy.optogenetics.StimulationGroup property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.OBJECTIVE">OBJECTIVE (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.OBJECTIVE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.ordered_index">ordered_index (CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.ordered_index">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -509,28 +800,56 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.parameter_set">parameter_set (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.PatternMatching">PatternMatching (class in CalSciPy.misc)</a>
-</li>
-      <li><a href="CalSciPy.trace_processing.html#CalSciPy.trace_processing.perona_malik_diffusion">perona_malik_diffusion() (in module CalSciPy.trace_processing)</a>
+      <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.perona_malik_diffusion">perona_malik_diffusion() (in module CalSciPy.traces.trace_processing)</a>
 </li>
       <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation">Photostimulation (class in CalSciPy.optogenetics)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation">(class in CalSciPy.optogenetics.opto_objects)</a>
 </li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.PhotostimulationMeta">PhotostimulationMeta (class in CalSciPy.bruker.meta_objects)</a>
 </li>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.PIXELS_PER_MICRON">PIXELS_PER_MICRON (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.PIXELS_PER_MICRON">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.plot">plot() (CalSciPy.events.event_visuals.SpikePlot method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.plot">(CalSciPy.events.event_visuals.TrialPlot method)</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.plot">(CalSciPy.traces.trace_visuals.TracePlot method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_spikes">plot_spikes() (in module CalSciPy.interactive_visuals)</a>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.plot_spikes">plot_spikes() (in module CalSciPy.events.event_visuals)</a>
 </li>
-      <li><a href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_traces">plot_traces() (in module CalSciPy.interactive_visuals)</a>
+      <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.plot_traces">plot_traces() (in module CalSciPy.traces.trace_visuals)</a>
 </li>
-      <li><a href="CalSciPy.interactive_visuals.html#CalSciPy.interactive_visuals.plot_trials">plot_trials() (in module CalSciPy.interactive_visuals)</a>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.plot_trials">plot_trials() (in module CalSciPy.events.event_visuals)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point">Point (class in CalSciPy.bruker.xml_objects)</a>
 </li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.point_interval">point_interval (CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.point_interval">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.points">points (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 
       <ul>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.points">(CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.POWER_SCALE">POWER_SCALE (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.POWER_SCALE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -541,26 +860,74 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger.raise_exceptions">raise_exceptions() (CalSciPy.bruker.validation.DingusLogger method)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.rc">rc (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.randomize_targets">randomize_targets() (in module CalSciPy.optogenetics)</a>
 
       <ul>
-        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.rc">(CalSciPy.optogenetics.ROI property)</a>
+        <li><a href="CalSciPy.optogenetics.target_selection.html#CalSciPy.optogenetics.target_selection.randomize_targets">(in module CalSciPy.optogenetics.target_selection)</a>
 </li>
       </ul></li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.rc_vert">rc_vert (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.rc">rc (CalSciPy.roi_tools.Mask property)</a>
 
       <ul>
-        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.rc_vert">(CalSciPy.optogenetics.ROI property)</a>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.rc_vert">rc_vert (CalSciPy.roi_tools.Mask property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc_vert">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.reference_image">reference_image (CalSciPy.optogenetics.opto_objects.Photostimulation attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.reference_image">(CalSciPy.optogenetics.Photostimulation attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.remapped_sequence">remapped_sequence (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.remapped_sequence">(CalSciPy.optogenetics.Photostimulation property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.repackage_bruker_tifs">repackage_bruker_tifs() (in module CalSciPy.bruker.data)</a>
+</li>
+      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.repetitions">repetitions (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.repetitions">(CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationSequence.repetitions">(CalSciPy.optogenetics.opto_objects.StimulationSequence attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.repetitions">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.repetitions">(CalSciPy.optogenetics.StimulationSequence attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.repetitions">repetitions (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI">ROI (class in CalSciPy.roi_tools)</a>
 </li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI">ROI (class in CalSciPy.optogenetics)</a>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.roi_to_target">roi_to_target() (CalSciPy.optogenetics.opto_objects.Photostimulation method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.roi_to_target">(CalSciPy.optogenetics.Photostimulation method)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler">ROIHandler (class in CalSciPy.roi_tools)</a>
 </li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta">ROIMeta (class in CalSciPy.bruker.meta_objects)</a>
 </li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.rois">rois (CalSciPy.optogenetics.opto_objects.Photostimulation attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.rois">(CalSciPy.optogenetics.opto_objects.StimulationGroup attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.rois">(CalSciPy.optogenetics.Photostimulation attribute)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.rois">(CalSciPy.optogenetics.StimulationGroup attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -571,25 +938,91 @@
 </li>
       <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_images">save_images() (in module CalSciPy.io_tools)</a>
 </li>
-      <li><a href="CalSciPy.event_processing.html#CalSciPy.event_processing.scale_waveforms">scale_waveforms() (in module CalSciPy.event_processing)</a>
+      <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.save_video">save_video() (in module CalSciPy.io_tools)</a>
 </li>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.sliding_window">sliding_window() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.sequence">sequence (CalSciPy.optogenetics.opto_objects.Photostimulation attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.sequence">(CalSciPy.optogenetics.Photostimulation attribute)</a>
 </li>
-      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_height">spiral_height (CalSciPy.bruker.xml_objects.Point attribute)</a>
+      </ul></li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.set_limits">set_limits() (CalSciPy.events.event_visuals.SpikePlot method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.set_limits">(CalSciPy.events.event_visuals.TrialPlot method)</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.set_limits">(CalSciPy.traces.trace_visuals.TracePlot method)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.set_time">set_time() (CalSciPy.events.event_visuals.SpikePlot method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.set_time">(CalSciPy.events.event_visuals.TrialPlot method)</a>
+</li>
+        <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.set_time">(CalSciPy.traces.trace_visuals.TracePlot method)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.shape">shape (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup.shape">(CalSciPy.optogenetics.opto_objects.StimulationGroup property)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.shape">(CalSciPy.optogenetics.Photostimulation property)</a>
+</li>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.shape">(CalSciPy.optogenetics.StimulationGroup property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.cgh.html#CalSciPy.optogenetics.cgh.SLM">SLM (class in CalSciPy.optogenetics.cgh)</a>
+</li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot">SpikePlot (class in CalSciPy.events.event_visuals)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_height">spiral_height (CalSciPy.bruker.xml_objects.Point attribute)</a>
+</li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.spiral_revolutions">spiral_revolutions (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
 
       <ul>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.spiral_revolutions">(CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.spiral_revolutions">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.SPIRAL_SCALE">SPIRAL_SCALE (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.SPIRAL_SCALE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
       </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.spiral_size">spiral_size (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.spiral_size">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
 </li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_size_in_microns">spiral_size_in_microns (CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.spiral_width">spiral_width (CalSciPy.bruker.xml_objects.Point attribute)</a>
+</li>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.stimulated_neurons">stimulated_neurons (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.stimulated_neurons">(CalSciPy.optogenetics.Photostimulation property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup">StimulationGroup (class in CalSciPy.optogenetics)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationGroup">(class in CalSciPy.optogenetics.opto_objects)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence">StimulationSequence (class in CalSciPy.optogenetics)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.StimulationSequence">(class in CalSciPy.optogenetics.opto_objects)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler">Suite2PHandler (class in CalSciPy.roi_tools)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -597,12 +1030,22 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.targets">targets (CalSciPy.optogenetics.Photostimulation property)</a>
+      <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.target_to_roi">target_to_roi() (CalSciPy.optogenetics.opto_objects.Photostimulation method)</a>
+
+      <ul>
+        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.target_to_roi">(CalSciPy.optogenetics.Photostimulation method)</a>
 </li>
-      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_count">trigger_count (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
+      </ul></li>
+      <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot">TracePlot (class in CalSciPy.traces.trace_visuals)</a>
+</li>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot">TrialPlot (class in CalSciPy.events.event_visuals)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.trials_per_condition">trials_per_condition (CalSciPy.events.event_visuals.TrialPlot property)</a>
+</li>
+      <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_count">trigger_count (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
+</li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_frequency">trigger_frequency (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.trigger_selection">trigger_selection (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
@@ -618,6 +1061,8 @@
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.uncaging_laser">uncaging_laser (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
 
       <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.uncaging_laser">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.uncaging_laser">(CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
 </li>
       </ul></li>
@@ -626,6 +1071,8 @@
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.uncaging_laser_power">uncaging_laser_power (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
 
       <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.uncaging_laser_power">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.uncaging_laser_power">(CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
 </li>
       </ul></li>
@@ -635,6 +1082,8 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.validate_element">validate_element() (CalSciPy.bruker.factories.BrukerXMLFactory class method)</a>
+</li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.validate_fields">validate_fields() (in module CalSciPy.bruker.validation)</a>
 </li>
   </ul></td>
@@ -649,11 +1098,11 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.wrap_cupy_block">wrap_cupy_block() (in module CalSciPy.misc)</a>
+      <li><a href="CalSciPy.bruker.xml_mappings.xml_mapping.html#CalSciPy.bruker.xml_mappings.xml_mapping.write_mapping">write_mapping() (in module CalSciPy.bruker.xml_mappings.xml_mapping)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.bruker.xml_mappings.xml_mapping.html#CalSciPy.bruker.xml_mappings.xml_mapping.write_mapping">write_mapping() (in module CalSciPy.bruker.xml_mappings.xml_mapping)</a>
+      <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.write_protocol">write_protocol() (in module CalSciPy.bruker.protocols)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -667,18 +1116,24 @@
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.x">(CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       </ul></li>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.xy">xy (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.X_GALVO_VOLTAGE_RANGE">X_GALVO_VOLTAGE_RANGE (CalSciPy.bruker.CONSTANTS attribute)</a>
 
       <ul>
-        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.xy">(CalSciPy.optogenetics.ROI property)</a>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.X_GALVO_VOLTAGE_RANGE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Mask.xy_vert">xy_vert (CalSciPy.optogenetics.Mask property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.xy">xy (CalSciPy.roi_tools.Mask property)</a>
 
       <ul>
-        <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.ROI.xy_vert">(CalSciPy.optogenetics.ROI property)</a>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Mask.xy_vert">xy_vert (CalSciPy.roi_tools.Mask property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy_vert">(CalSciPy.roi_tools.ROI property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -694,17 +1149,25 @@
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.Y_GALVO_VOLTAGE_RANGE">Y_GALVO_VOLTAGE_RANGE (CalSciPy.bruker.CONSTANTS attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.Y_GALVO_VOLTAGE_RANGE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
 </tr></table>
 
 <h2 id="Z">Z</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.z">z (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.z">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.misc.html#CalSciPy.misc.zero_pad_num_to_string">zero_pad_num_to_string() (in module CalSciPy.misc)</a>
-</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 

@@ -6,7 +6,8 @@ from scipy.signal import firwin, filtfilt
 from scipy.ndimage.filters import gaussian_filter1d
 from numba import njit
 from tqdm import tqdm
-from .misc import sliding_window
+
+from .._calculations import sliding_window
 
 
 def calculate_dfof(traces: np.ndarray,

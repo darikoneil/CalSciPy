@@ -3,7 +3,7 @@ from typing import Callable, Any
 
 import pytest
 from tests.conftest import retrieve_dataset_ids
-from tests.helpers import read_descriptions, generate_dummy_file_name, generate_dummy_output_folder
+from tests.helpers import read_descriptions, generate_dummy_file_name, generate_dummy_output_folder, BlockPrinting
 
 from pathlib import Path
 import numpy as np
@@ -238,10 +238,12 @@ class TestIO:
         io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
 
     def test_save_video(self, io_helper):
-        save_video(io_helper.outputs.joinpath("video"), io_helper.data)
+        with BlockPrinting():
+            save_video(io_helper.outputs.joinpath("video"), io_helper.data)
 
     def test_mutation_video(self, io_helper):
-        save_video(io_helper.outputs.joinpath("video"), io_helper.data)
+        with BlockPrinting():
+            save_video(io_helper.outputs.joinpath("video"), io_helper.data)
         test_data = load_video(io_helper.outputs.joinpath("video").joinpath("video"))
         io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
 

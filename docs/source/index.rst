@@ -3,24 +3,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CalSciPy's documentation!
+CalSciPy
 ====================================
+**CalSciPy** is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from
+interactive visualization of data to computer-generated holography for "read/write" experiments, and
+everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be
+considered useful to others.
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    Introduction
+   Limitations
    Installation
-   CalSciPy.bruker
-   CalSciPy.coloring
-   CalSciPy.event_processing
-   CalSciPy.image_processing
-   CalSciPy.interactive_visuals
    CalSciPy.io_tools
-   CalSciPy.misc
-   CalSciPy.reorganization
-   CalSciPy.trace_processing
 
 
 Indices and tables

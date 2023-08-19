@@ -1,5 +1,6 @@
 from __future__ import annotations
 import sys
+from typing import Any
 
 import numpy as np
 
@@ -9,8 +10,8 @@ from matplotlib import pyplot as plt  # noqa: E402
 import seaborn as sns
 
 from .._interactive import InteractivePlot
-from ._visual import generate_time_vector  # noqa: E402
-from .color_scheme import COLORS  # noqa: E402
+from .._visual import generate_time_vector  # noqa: E402
+from ..color_scheme import COLORS  # noqa: E402
 
 
 class TracePlot(InteractivePlot):

@@ -14,9 +14,9 @@ from . import CONSTANTS
 from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
     GalvoPointElement, MarkPointElement
 from .factories import BrukerXMLFactory
-from ..opto import Photostimulation, StimulationGroup
+from ..optogenetics import Photostimulation, StimulationGroup
 from ..roi_tools import ROI
-from ..misc import min_max_scale
+from .._calculations import min_max_scale
 
 
 """
@@ -64,8 +64,8 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
                     for index, point, roi in zip(indices, points, rois)]
 
     # generate galvo point for each group if exists
-    if photostimulation.groups > 0:
-        index = [len(indices) for _ in range(photostimulation.groups)]
+    if photostimulation.num_groups > 0:
+        index = [len(indices) for _ in range(photostimulation.num_groups)]
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)
@@ -183,12 +183,12 @@ def _format_photostim(photostimulation: Photostimulation,
     # if we only want target roi's included
     if targets_only:
         points = photostimulation.stimulated_neurons
-        indices = list(range(photostimulation.targets))
-        rois = [photostimulation.rois.get(roi) for roi in photostimulation.remapped_rois.values()]
-        groups = photostimulation.remapped_groups
+        indices = list(range(photostimulation.num_targets))
+        rois = [photostimulation.rois.get(roi) for roi in photostimulation.target_to_roi.values()]
+        groups = photostimulation.remapped_sequence
     else:
-        indices = np.arange(photostimulation.total_neurons).tolist()
-        points = np.arange(photostimulation.total_neurons).tolist()
+        indices = np.arange(photostimulation.num_neurons).tolist()
+        points = np.arange(photostimulation.num_neurons).tolist()
         rois = [photostimulation.rois.get(roi) for roi in photostimulation.rois.keys()]
         groups = photostimulation.sequence
     return indices, points, rois, groups

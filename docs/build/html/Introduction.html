@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; CalSciPy 0.3.5 documentation</title>
+  <title>Motivation &mdash; CalSciPy 0.3.8 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation" href="Installation.html" />
-    <link rel="prev" title="Welcome to CalSciPy’s documentation!" href="index.html" /> 
+    <link rel="next" title="Limitations" href="Limitations.html" />
+    <link rel="prev" title="CalSciPy" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,20 +43,19 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#motivation">Motivation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Motivation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#turn-one-liners-into-one-liners">Turn “one-liners” into one-liners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-centric-interactive-visualizations">Data-centric interactive visualizations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optics-for-neuroscientists">Optics for neuroscientists</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pythonizing-prairieview">Pythonizing PrairieView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simplified-data-organization-analysis">Simplified data organization &amp; analysis</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html">Limitations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html#stable-modules">Stable Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Limitations.html#contributions">Contributions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.bruker.html">CalSciPy.bruker package</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.event_processing.html">CalSciPy.event_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.image_processing.html">CalSciPy.image_processing module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.interactive_visuals.html">CalSciPy.interactive_visuals module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">CalSciPy.io_tools module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.misc.html">CalSciPy.misc module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.reorganization.html">CalSciPy.reorganization module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CalSciPy.trace_processing.html">CalSciPy.trace_processing module</a></li>
 </ul>
 
         </div>
@@ -73,7 +72,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Introduction</li>
+      <li class="breadcrumb-item active">Motivation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/Introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,23 +82,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
-<p><strong>CalSciPy</strong> contains a variety of useful methods for handling, processing, and visualizing calcium imaging data.
-It’s intended to be a collection of useful, well-documented functions often used in boilerplate code alongside software
-packages such as <a class="reference external" href="https://github.com/flatironinstitute/CaImAn">Caiman</a>, <a class="reference external" href="https://github.com/losonczylab/sima">SIMA</a>,
-and <a class="reference external" href="https://github.com/MouseLand/suite2p">Suite2P</a>.</p>
-<section id="motivation">
-<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h2>
-<p>I noticed I was often re-writing or copy/pasting a lot of code between environments when working with calcium imaging
-data. I started this package <strike> so I don’t have to </strike> so you don’t have to. No more wasting time writing 6 lines to simply
-preview your tiff stack, extract a particular channel, or bin some spikes. No more vague exceptions or incomplete
-documentation when re-using a hastily-made function from 2 months ago. Alongside these time-savers, I’ve also included
-some more non-trivial methods that are particularly useful.</p>
+  <section id="motivation">
+<h1>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading"></a></h1>
+<section id="turn-one-liners-into-one-liners">
+<h2>Turn “one-liners” into one-liners<a class="headerlink" href="#turn-one-liners-into-one-liners" title="Permalink to this heading"></a></h2>
+<p>I noticed I was constantly re-writing boilerplate, “one-liners”, and copy/pasting code between
+environments. I wrote this so <strike> I don’t have to </strike> you don’t have to. It’s intended to be a collection of useful,
+well-documented functions often used in boilerplate code alongside software packages such as
+<a class="reference external" href="https://github.com/flatironinstitute/CaImAn">Caiman</a>, <a class="reference external" href="https://github.com/losonczylab/sima">SIMA</a>,
+and <a class="reference external" href="https://github.com/MouseLand/suite2p">Suite2P</a>. Examples of such tasks include compiling imaging stacks,
+normalizing signals to baselines, reorganizing data, and common data visualizations. No more wasting time writing 6
+lines to simply preview your tiff stack, extract a particular channel, or bin some spikes. No more vague tracebacks or
+incomplete documentation when re-using a hastily-made function from 2 months ago.</p>
 </section>
-<section id="limitations">
-<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h2>
-<p>The current distribution for the package is incomplete and partially tested. There may be breaking changes between versions.</p>
+<section id="data-centric-interactive-visualizations">
+<h2>Data-centric interactive visualizations<a class="headerlink" href="#data-centric-interactive-visualizations" title="Permalink to this heading"></a></h2>
+<p>Most scientific software these days have GUIs. But if you want to visualize your data after performing some arbitrary
+transformation? <em>Womp womp</em>. Maybe you use different tools to extract the same sorts of data, and just
+want one darn gui to look at the both? <em>Womp womp</em> Well, I want generic, interactive visualization tools. I want to
+assess the quality of spike inference from recently published spike-finder number #12, I want to sort through ROIs,
+and I want to explore population activity, and I want to do so directly from the relevant data–independent of the
+software used to collect or analyze it. I want to have my delicious cake and eat it too. So I made some interactive
+visualization tools that require only the exact information that ought to be required to plot them.</p>
+</section>
+<section id="optics-for-neuroscientists">
+<h2>Optics for neuroscientists<a class="headerlink" href="#optics-for-neuroscientists" title="Permalink to this heading"></a></h2>
+<p>I want tools for holographic optogenetics &amp; “read/write” experimentation in python. I want them written for
+neuroscientists to use…not for optical or imaging experts. I want them to be tested, documented, and easy-to-use.
+It’s 2023.</p>
+</section>
+<section id="pythonizing-prairieview">
+<h2>Pythonizing PrairieView<a class="headerlink" href="#pythonizing-prairieview" title="Permalink to this heading"></a></h2>
+<p>4I needed some more bespoke software for use with Bruker’s PrairieView imaging software for tasks such as parsing
+metadata, generating protocols programmatically (I’m lazy), and aligning collected data.</p>
+</section>
+<section id="simplified-data-organization-analysis">
+<h2>Simplified data organization &amp; analysis<a class="headerlink" href="#simplified-data-organization-analysis" title="Permalink to this heading"></a></h2>
+<p>Finally, I wanted a flexible &amp; extensible system for neatly organizing data, timestamping analysis, &amp; single-step
+analysis.</p>
+<p>I was inspired to upload my own code to solve these issues–or at least create neat package my friends and I could use
+to easily analyze data across various environments and computers.</p>
 </section>
 </section>
 
@@ -107,8 +129,8 @@ some more non-trivial methods that are particularly useful.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to CalSciPy’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="CalSciPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Limitations.html" class="btn btn-neutral float-right" title="Limitations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -64,5 +64,6 @@ def retrieve_dataset_ids() -> Path:
 @pytest.fixture(scope="function")
 def matrix(request):
     sample_matrix = np.full((5, 100), 1)
-    sample_matrix[0, :] = np.arange(100)
+    for row in range(0, 5, 2):
+        sample_matrix[row, :] = np.arange(100)
     return sample_matrix
