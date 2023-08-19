@@ -30,6 +30,10 @@ def test_color_scheme():
     new_color_scheme = _ColorScheme()
     assert(new_color_scheme.__repr__() == COLORS.__repr__())
 
+    # check argument exception
+    with pytest.raises(TypeError):
+        COLORS({42, "42"})
+
 
 def test_terminal_scheme():
 

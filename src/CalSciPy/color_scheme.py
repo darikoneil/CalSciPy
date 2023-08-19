@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 from operator import eq
 
 from ._backports import PatternMatching
@@ -24,6 +24,7 @@ class _ColorScheme:
     WHITE: Tuple[float, float, float] = (255 / 255, 255 / 255, 255 / 255)
     BACKGROUND: Tuple[float, float, float] = (245 / 255, 245 / 255, 245 / 255)
     colors = ("red", "green", "blue", "orange", "purple", "yellow", "black", "medium", "dark", "light")
+
     def __new__(cls: _ColorScheme) -> _ColorScheme:
         """
         Force color scheme as singleton
@@ -34,7 +35,7 @@ class _ColorScheme:
         return cls.instance
 
     @property
-    def mapping(self):
+    def mapping(self) -> List[Tuple[int, Tuple[float, float, float]]]:
         return list(enumerate(self.colors))
 
     @property
@@ -54,6 +55,8 @@ class _ColorScheme:
             return self.mapping[value][1]
         elif isinstance(value, str):
             return getattr(self, value)
+        else:
+            raise TypeError("color scheme accepts int or str args only")
 
 
 class _TerminalScheme:
