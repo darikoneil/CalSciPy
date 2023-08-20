@@ -258,7 +258,7 @@ def _generate_galvo_point(roi: ROI,
         name = f"Point {index}"
 
     # Retrieve and scale coordinates
-    y, x = roi.coordinates
+    y, x = roi.centroid
 
     # Retrieve spiral size
     spiral_size = roi.mask.bound_radius

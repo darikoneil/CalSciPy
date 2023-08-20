@@ -59,12 +59,12 @@ class ROI:
         self.properties = ChainMap(kwargs, properties)
 
         self.vertices = identify_vertices(self.xpix, self.ypix)
-        self.coordinates = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
-        self.radius = calculate_radius(self.coordinates, self.rc, method="mean") # requires vertices + centroid!!!
-        self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, None, self.reference_shape)  # requires vertices!!!
+        self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
+        self.radius = calculate_radius(self.centroid, self.rc, method="mean") # requires vertices + centroid!!!
+        self.mask = Mask(self.centroid, self.rc_vert, self.adj_radii, None, self.reference_shape)  # requires vertices!!!
 
     def __str__(self):
-        return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
+        return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
 
     @property
     def xy(self) -> np.ndarray:
@@ -461,11 +461,11 @@ def calculate_centroid(roi: Union[np.ndarray, Sequence[int]],
                        ypix: Optional[Union[np.ndarray, Sequence[int]]] = None
                        ) -> Tuple[float, float]:
     """
-    Calculates the centroid of a polygonal roi given an Nx2 numpy array containing the coordinates of the
+    Calculates the centroid of a polygonal roi given an Nx2 numpy array containing the centroid of the
     roi.The vertices of the roi's approximate convex hull are calculated (if necessary) and the centroid estimated
     from these vertices using the shoelace formula.
 
-    :param roi: an Nx2 numpy array containing the coordinates of the roi (x, y)
+    :param roi: an Nx2 numpy array containing the centroid of the roi (x, y)
         or the vertices of its approximate convex hull (x, y) OR a 1D numpy array or Sequence indicating
         the x-pixels of the roi
     :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi if and only if roi is 1D
@@ -592,7 +592,7 @@ def identify_vertices(roi: Union[np.ndarray, Sequence[int]],
 
 
     :param roi: a 1D numpy array or Sequence indicating the x-pixels of the roi
-        or an Nx2 numpy array containing the coordinates of the roi (x, y)
+        or an Nx2 numpy array containing the centroid of the roi (x, y)
     :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi if and only if roi is 1D
     :return:  a 1D tuple indexing the vertices of the approximate convex hull of the roi
         (alternatively, may be considered an index of the pixels that form the boundaries of the roi)
