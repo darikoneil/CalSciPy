@@ -63,7 +63,7 @@ class ROI:
         self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
         self.radius = calculate_radius(self.centroid, self.rc, method="mean") # requires vertices + centroid!!!
 
-        self.approximation = None
+        self.approximation = ApproximateROI(self, method="bound")
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
