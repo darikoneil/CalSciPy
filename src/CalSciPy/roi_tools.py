@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Optional, Tuple, Union, Sequence, Iterable, Any
+from typing import Optional, Tuple, Union, Sequence, Iterable, Any, Mapping
 from numbers import Number
+from collections import ChainMap
 from functools import partial, cached_property
 from abc import abstractmethod
 from pathlib import Path
@@ -10,79 +11,60 @@ from scipy.spatial import ConvexHull
 from scipy.spatial.distance import pdist
 
 
+"""
+Object-oriented approach to organizing ROI-data
+"""
+
+
 class ROI:
     """
     ROI object containing the relevant properties of some specific ROI.
 
-    :param aspect_ratio: ratio of the short-to-long radius of the roi
-    :param radius: approximate radius of the ROI
-    :type radius: float
-    :param shape: the shape of the image from which the roi was generated
-    :type shape: Tuple[int, int]
-    :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
-    :type xpix: numpy.ndarray
-    :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-    :type ypix: numpy.ndarray
-    :ivar mask: approximate mask for the roi
-    :type mask: Mask
-    :ivar vertices: a 1D tuple indexing the convex hull of the roi (alternatively, may be considered an index of
-        the pixels that form the boundaries of the roi
-    :type vertices: Tuple[int]
-    :ivar coordinates: the centroid of the roi (y, x) calculated using the shoelace approximation
-    :type coordinates: Tuple[ float, float]
-    :ivar adj_radii: The long and short radii of the roi (long, short)
-    :type adj_radii: Tuple[float, float]
-    :ivar xy: Nx2 array containing x,y coordinate pairs for the roi
-    :type xy: numpy.ndarray
-    :ivar xy_vert: Nx2 array containing the x,y coordinate pairs comprising the roi's convex hull approximation
-    :type xy_vert: numpy.ndarray
-    :ivar rc: Nx2 array containing the r,c coordinate pairs for the roi
-    :type rc: numpy.ndarray
-    :ivar rc_vert: Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
     """
     def __init__(self,
                  xpix: Union[np.ndarray, Sequence[int]],
                  ypix: Union[np.ndarray, Sequence[int]],
-                 aspect_ratio: float = 1.0,
-                 plane: int = 0,
-                 radius: float = 1.0,
-                 shape: Tuple[float, float] = (512, 512)):
+                 reference_shape: Tuple[float, float] = (512, 512),
+                 plane: Optional[int] = None,
+                 properties: Optional[Mapping] = None,
+                 zpix: Optional[Union[np.ndarray, Sequence[int]]] = None,
+                 **kwargs
+                 ):
         """
         ROI object containing the relevant properties of some specific ROI for using in generating photostimulation
         protocols.
 
         :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-        :param aspect_ratio: ratio of the short-to-long radius of the roi
-        :param plane: index of the imaging plane
-        :param power: laser power specific to this roi
-        :param radius: approximate radius of the ROI
-        :param shape: the shape of the image from which the roi was generated
+        :param reference_shape: the shape of the image from which the roi was generated
+        :param plane: index of the imaging plane (if multi-plane)
+        :param properties: optional properties to include
+        :param zpix: a 1D numpy array or Sequence indicating the z-pixels of the roi (if volumetric)
 
         """
-        self.aspect_ratio = aspect_ratio
-        self.plane = plane
-        self.radius = radius
-        self.shape = shape
+        # required
         self.xpix = xpix
         self.ypix = ypix
 
+        # required with default
+        self.reference_shape = reference_shape
+
+        # optional
+        self.plane = plane
+        self.zpix = zpix
+
+        # user-defined, using chainmap is O(N) worst-case while dict construction / update
+        # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
+        # with unknown number of parameters, so this is relevant
+        self.properties = ChainMap(kwargs, properties)
+
         self.vertices = identify_vertices(self.xpix, self.ypix)
         self.coordinates = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
-        self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, None, self.shape)  # requires vertices!!!
+        self.radius = calculate_radius(self.coordinates, self.rc, method="mean") # requires vertices + centroid!!!
+        self.mask = Mask(self.coordinates, self.rc_vert, self.adj_radii, None, self.reference_shape)  # requires vertices!!!
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.coordinates])}"
-
-    @property
-    def adj_radii(self) -> Tuple[float, float]:
-        """
-        The long and short radii of the roi (long, short)
-
-        """
-        short_radius = (2 * self.radius) / (self.aspect_ratio + 1)
-        long_radius = self.aspect_ratio * short_radius
-        return long_radius, short_radius
 
     @property
     def xy(self) -> np.ndarray:
@@ -137,7 +119,7 @@ class Mask:
     :type radii: Tuple[float, float]
     :param theta: angle of the long axis of the roi with respective to the y-axis
     :type theta: float
-    :param shape: the shape of the image from which the roi was generated
+    :param shape: the reference_shape of the image from which the roi was generated
     :type shape: Tuple[int, int]
 
     :ivar xy: Nx2 array containing x,y coordinate pairs for the mask
@@ -172,7 +154,7 @@ class Mask:
         :param rc_vert: Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
         :param radii: the long and short radii of the roi (long, short)
         :param theta: angle of the long axis of the roi with respective to the y-axis
-        :param shape: the shape of the image from which the roi was generated
+        :param shape: the reference_shape of the image from which the roi was generated
 
         """
 
@@ -189,7 +171,7 @@ class Mask:
     @cached_property
     def _mask(self) -> np.ndarray:
         """
-        Photostimulation mask calculated using centroid, long/short radii, and theta constrained to lie within shape
+        Photostimulation mask calculated using centroid, long/short radii, and theta constrained to lie within reference_shape
 
         """
         y, x = calculate_mask(self.centroid, self.radii, self.shape, self.theta)
@@ -209,12 +191,12 @@ class Mask:
         Radius used for constraining the bound mask
 
         """
-        return calculate_bounding_radius(self.centroid, self.rc_vert)
+        return calculate_radius(self.centroid, self.rc_vert)
 
     @cached_property
     def _bound_mask(self) -> np.ndarray:
         """
-        Bound photostimulation mask calculated using center, the bound radius, and constrained to lie within shape
+        Bound photostimulation mask calculated using center, the bound radius, and constrained to lie within reference_shape
 
         """
         y, x = calculate_mask(self.centroid, self.bound_radius, self.shape, self.theta)
@@ -313,7 +295,7 @@ class ROIHandler:
         Abstract method for converting one roi in an ROI object
 
         :param roi: some sort of roi data structure
-        :param reference_shape: the shape of the image containing the rois
+        :param reference_shape: the reference_shape of the image containing the rois
         :return: a single ROI object
         """
         ...
@@ -349,7 +331,7 @@ class ROIHandler:
 
         :param rois: some sort of data structure iterating over all rois or a numpy array which will be converted to
             an Iterable
-        :param reference_shape: the shape of the image containing the rois
+        :param reference_shape: the reference_shape of the image containing the rois
         :return: dictionary containing in which the keys are integers indexing the roi and each roi is an ROI object
         """
 
@@ -384,14 +366,14 @@ class Suite2PHandler(ROIHandler):
         Generates ROI from suite2p stat array
 
         :param roi: dictionary containing one suite2p roi
-        :param reference_shape: shape of the reference image containing the roi
+        :param reference_shape: reference_shape of the reference image containing the roi
         :return: ROI instance for the roi
         """
         aspect_ratio = roi.get("aspect_ratio")
         radius = roi.get("radius")
         xpix = roi.get("xpix")[~roi.get("overlap")]
         ypix = roi.get("ypix")[~roi.get("overlap")]
-        return ROI(aspect_ratio=aspect_ratio, radius=radius, shape=reference_shape, xpix=xpix, ypix=ypix)
+        return ROI(aspect_ratio=aspect_ratio, radius=radius, reference_shape=reference_shape, xpix=xpix, ypix=ypix)
 
     @staticmethod
     def from_file(folder: Path, *args, **kwargs) -> Tuple[np.ndarray, dict]:  # noqa: U100
@@ -452,17 +434,27 @@ class Suite2PHandler(ROIHandler):
             return reference_image
 
 
-def calculate_bounding_radius(centroid: Sequence[Number, Number], vertices: np.ndarray) -> float:
+def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, method="mean") -> float:
     """
     Calculates the bounding radius of the roi, defined as the shortest distance between the centroid and the vertices of
     the approximate convex hull.
 
     :param centroid: centroid of the roi in row-column format (y, x)
     :param vertices: Nx2 array containing the vertices of the convex hull approximation
-    :return: bounding radius
+    :param method: method to use when calculating radius ("mean", "bound", "unbound")
+    :return: radius
     """
     func_handle = partial(calculate_distance_from_centroid, centroid=centroid)
-    return np.min([func_handle(point=vertices[point, :]) for point in range(vertices.shape[0])])
+    radii = [func_handle(point=vertices[point, :]) for point in range(vertices.shape[0])]
+
+    if method == "mean":
+        return np.mean(radii)
+    elif method == "bound":
+        return  np.min(radii)
+    elif method == "unbound":
+        return  np.max(radii)
+    else:
+        raise NotImplementedError(f"Request method {method} is not supported")
 
 
 def calculate_centroid(roi: Union[np.ndarray, Sequence[int]],
@@ -532,7 +524,7 @@ def calculate_mask(centroid: Sequence[Number, Number],
                    ) -> np.ndarray:
     """
     Calculates an approximate mask for an elliptical roi at center with radii at theta with respect to the y-axis
-    and constrained to lie within the dimensions imposed by shape
+    and constrained to lie within the dimensions imposed by reference_shape
 
     :param centroid: centroid of the roi in row-column form (y, x)
     :param radii: radius of the roi. can provide one radius for a symmetrical roi or a long and short radius.
@@ -562,7 +554,7 @@ def calculate_mask(centroid: Sequence[Number, Number],
         np.floor(centroid + radii).astype(int),
     ])
 
-    # constrain to within the shape of the image, if necessary
+    # constrain to within the reference_shape of the image, if necessary
     if shape is not None:
         bounding_rect[:, 0] = bounding_rect[:, 0].clip(0, shape[0] - 1)
         bounding_rect[:, 1] = bounding_rect[:, 1].clip(0, shape[-1] - 1)
