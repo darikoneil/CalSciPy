@@ -7,6 +7,7 @@ from abc import abstractmethod
 from pathlib import Path
 
 import numpy as np
+from numpy.typing import NDArray
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import pdist
 
@@ -61,12 +62,21 @@ class ROI:
         self.vertices = identify_vertices(self.xpix, self.ypix)
         self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
         self.radius = calculate_radius(self.centroid, self.rc, method="mean") # requires vertices + centroid!!!
-        self.mask = Mask(self.centroid, self.rc_vert, self.adj_radii, None, self.reference_shape)  # requires vertices!!!
+
+        self.approximation = None
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
 
-    @property
+    @cached_property
+    def mask(self) -> NDArray[np.bool_]:
+        mask = np.zeros(self.reference_shape, dtype=np.bool_)
+        for pair in range(self.rc.shape[0]):
+            y, x = self.rc[pair, :]
+            mask[y, x] = True
+        return mask
+
+    @cached_property
     def xy(self) -> np.ndarray:
         """
         Nx2 array containing x,y coordinate pairs for the roi
@@ -74,7 +84,7 @@ class ROI:
         """
         return np.vstack([self.xpix, self.ypix]).T
 
-    @property
+    @cached_property
     def xy_vert(self) -> np.ndarray:
         """
         Nx2 array containing the x,y coordinate pairs comprising the roi's convex hull approximation
@@ -82,7 +92,7 @@ class ROI:
         """
         return self.xy[self.vertices, :]
 
-    @property
+    @cached_property
     def rc(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs for the roi
@@ -90,7 +100,7 @@ class ROI:
         """
         return np.vstack([self.ypix, self.xpix]).T
 
-    @property
+    @cached_property
     def rc_vert(self) -> np.ndarray:
         """
         Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
@@ -104,6 +114,11 @@ class ROI:
 
     def __repr__(self):
         return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+
+
+class ApproximateROI(ROI):
+    def __init__(self, roi: ROI, style="literal"):
+        super().__init__()
 
 
 class Mask:
