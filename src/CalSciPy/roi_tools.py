@@ -17,7 +17,7 @@ Object-oriented approach to organizing ROI-data
 """
 
 
-class ROI:
+class _ROIBase:
     """
     ROI object containing the relevant properties of some specific ROI.
 
@@ -54,16 +54,20 @@ class ROI:
         self.plane = plane
         self.zpix = zpix
 
+        # cover non-implemented optionals
+        if self.plane is not None or self.zpix is not None:
+            raise NotImplementedError
+
         # user-defined, using chainmap is O(N) worst-case while dict construction / update
         # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
         # with unknown number of parameters, so this is relevant
         self.properties = ChainMap(kwargs, properties)
 
         self.vertices = identify_vertices(self.xpix, self.ypix)
-        self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
-        self.radius = calculate_radius(self.centroid, self.rc, method="mean") # requires vertices + centroid!!!
-
-        self.approximation = ApproximateROI(self, method="bound")
+        # requires vertices!!!
+        self.centroid = calculate_centroid(self.xy_vert)[::-1]
+        # requires vertices + centroid!!!
+        self.radius = calculate_radius(self.centroid, self.rc, method="mean")
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
@@ -116,22 +120,78 @@ class ROI:
         return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
 
-class ApproximateROI(ROI):
+class ROI(_ROIBase):
+    """
+    ROI object containing the relevant properties of some specific ROI.
+
+    """
+    def __init__(self,
+                 xpix: Union[np.ndarray, Sequence[int]],
+                 ypix: Union[np.ndarray, Sequence[int]],
+                 reference_shape: Tuple[float, float] = (512, 512),
+                 method: str = "literal",
+                 plane: Optional[int] = None,
+                 properties: Optional[Mapping] = None,
+                 zpix: Optional[Union[np.ndarray, Sequence[int]]] = None,
+                 **kwargs):
+
+        # initialize new attr
+        self._method = None
+        self.approximation = None
+
+        # initialize parent attr
+        super().__init__(xpix, ypix, reference_shape, plane, properties, zpix, **kwargs)
+
+        # initialize approximation
+        self.approx_method = method
+
+    @property
+    def approx_method(self) -> str:
+        return self._method
+
+    @approx_method.setter
+    def approx_method(self, method: str = "literal") -> ROI:
+        if method != self._method:
+            self.approximation = ApproximateROI(self, method)
+            self._method = method
+
+
+class ApproximateROI(_ROIBase):
     def __init__(self,
                  roi: ROI,
-                 method: str ="literal"):
-        radius = calculate_radius(roi.centroid, roi.rc_vert, method=method)
-        xpix, ypix = calculate_mask(roi.centroid,
-                                    radius,
-                                    roi.reference_shape)
-        super().__init__(xpix, ypix, roi.reference_shape)
+                 method: str = "literal"):
+
+        # initialize new attr
+        self._method = method
+
+        # initialize parent attr
+        super().__init__(
+            *self.__pre_init__(roi, method)
+        )
 
     def __str__(self):
         return f"ROI approximation centered at {self.centroid} with radius {self.radius}"
 
+    @property
+    def method(self) -> str:
+        return self._method
+
     @staticmethod
     def __name__() -> str:
         return "ROI Approximation"
+
+    @classmethod
+    def __pre_init__(cls: ApproximateROI,
+                     roi: ROI,
+                     method: str = "literal"
+                     ) -> Tuple[np.ndarray, np.ndarray, Tuple[int, int]]:
+        if method == "literal":
+            xpix = roi.xpix
+            ypix = roi.ypix
+        else:
+            radius = calculate_radius(roi.centroid, roi.rc_vert, method=method)
+            ypix, xpix = calculate_mask(roi.centroid, radius, roi.reference_shape)
+        return xpix, ypix, roi.reference_shape
 
     def __repr__(self):
         return "ROI Approximation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
@@ -289,7 +349,7 @@ class Suite2PHandler(ROIHandler):
             return reference_image
 
 
-def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, method="mean") -> float:
+def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, method: str = "mean") -> float:
     """
     Calculates the bounding radius of the roi, defined as the shortest distance between the centroid and the vertices of
     the approximate convex hull.
@@ -305,9 +365,9 @@ def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, m
     if method == "mean":
         return np.mean(radii)
     elif method == "bound":
-        return  np.min(radii)
+        return np.min(radii)
     elif method == "unbound":
-        return  np.max(radii)
+        return np.max(radii)
     else:
         raise NotImplementedError(f"Request method {method} is not supported")
 
