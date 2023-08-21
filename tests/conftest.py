@@ -60,6 +60,18 @@ def retrieve_dataset_ids() -> Path:
     return [data.name for data in data_dir.glob("*")]
 
 
+def retrieve_roi() -> dict:
+    """
+    Generator that yields the next sample roi in the data directory sample set
+    """
+    sample_rois_file = _TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_rois.npy")
+
+    sample_rois = np.load(sample_rois_file, allow_pickle=True).item()
+
+    for roi in sample_rois.values():
+        yield roi
+
+
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
 def matrix(request):

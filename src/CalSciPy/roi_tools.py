@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 from numpy.typing import NDArray
 from scipy.spatial import ConvexHull
-from scipy.spatial.distance import pdist
+from scipy.spatial.distance import cdist
 
 
 """
@@ -67,7 +67,7 @@ class _ROIBase:
         # requires vertices!!!
         self.centroid = calculate_centroid(self.xy_vert)[::-1]
         # requires vertices + centroid!!!
-        self.radius = calculate_radius(self.centroid, self.rc, method="mean")
+        self.radius = calculate_radius(self.centroid, self.rc_vert, method="mean")
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
@@ -113,8 +113,9 @@ class _ROIBase:
         return self.rc[self.vertices, :]
 
     @staticmethod
-    def __name__() -> str:
-        return "ROI"
+    @abstractmethod
+    def __name__():
+        ...
 
     def __repr__(self):
         return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
@@ -154,6 +155,10 @@ class ROI(_ROIBase):
         if method != self._method:
             self.approximation = ApproximateROI(self, method)
             self._method = method
+
+    @staticmethod
+    def __name__() -> str:
+        return "ROI"
 
 
 class ApproximateROI(_ROIBase):
@@ -351,7 +356,7 @@ class Suite2PHandler(ROIHandler):
 
 def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, method: str = "mean") -> float:
     """
-    Calculates the bounding radius of the roi, defined as the shortest distance between the centroid and the vertices of
+    Calculates the radius of the roi, defined as the distance between the centroid and the vertices of
     the approximate convex hull.
 
     :param centroid: centroid of the roi in row-column format (y, x)
@@ -359,8 +364,10 @@ def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, m
     :param method: method to use when calculating radius ("mean", "bound", "unbound")
     :return: radius
     """
-    func_handle = partial(calculate_distance_from_centroid, centroid=centroid)
-    radii = [func_handle(point=vertices[point, :]) for point in range(vertices.shape[0])]
+
+    center = np.asarray(centroid)
+    center = np.reshape(center, (1, 2))
+    radii = cdist(center, vertices)
 
     if method == "mean":
         return np.mean(radii)
@@ -368,6 +375,8 @@ def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, m
         return np.min(radii)
     elif method == "unbound":
         return np.max(radii)
+    elif method == "all":
+        return radii
     else:
         raise NotImplementedError(f"Request method {method} is not supported")
 
@@ -415,21 +424,6 @@ def calculate_centroid(roi: Union[np.ndarray, Sequence[int]],
     center_y /= (6 * signed_area)
 
     return center_x, center_y
-
-
-def calculate_distance_from_centroid(centroid: Sequence[Number, Number], point: np.ndarray) -> float:
-    """
-    Calculates the euclidean distance between the centroid and a specific point by wrapping scipy's
-    pdist implementation
-
-    :param centroid: the center of the roi in row-column form (y, x)
-    :param point: a specific point row-column form (y, x)
-    :return: the distance between the center and the point
-    """
-    coordinate_pair = np.empty((2, 2))
-    coordinate_pair[0, :] = centroid
-    coordinate_pair[1, :] = point
-    return pdist(coordinate_pair, metric="euclidean")
 
 
 def calculate_mask(centroid: Sequence[Number, Number],
