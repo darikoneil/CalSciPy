@@ -114,7 +114,7 @@ class _ROIBase:
 
     @staticmethod
     @abstractmethod
-    def __name__():
+    def __name__() -> str:
         ...
 
     def __repr__(self):
@@ -146,6 +146,10 @@ class ROI(_ROIBase):
         # initialize approximation
         self.approx_method = method
 
+    @staticmethod
+    def __name__() -> str:
+        return "ROI"
+
     @property
     def approx_method(self) -> str:
         return self._method
@@ -155,10 +159,6 @@ class ROI(_ROIBase):
         if method != self._method:
             self.approximation = ApproximateROI(self, method)
             self._method = method
-
-    @staticmethod
-    def __name__() -> str:
-        return "ROI"
 
 
 class ApproximateROI(_ROIBase):

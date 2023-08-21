@@ -1,6 +1,6 @@
 import pytest
 from tests.conftest import retrieve_roi
-from copy import  deepcopy
+from copy import deepcopy
 
 import numpy as np
 
