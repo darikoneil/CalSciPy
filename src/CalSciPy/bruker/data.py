@@ -395,11 +395,11 @@ def _print_image_description(channels: int,
     :param width: x-pixels
     """
     msg = f"\nTotal Images Detected: {channels * planes * frames}"
-    msg += f"\nChannels\t{channels}"
-    msg += f"\nPlanes\t{planes}"
-    msg += f"\nFrames\t{frames}"
-    msg += f"\nHeight\t{height}"
-    msg += f"\nWidth\t{width}"
+    msg += f"\nChannels\t\t{channels}"
+    msg += f"\nPlanes\t\t{planes}"
+    msg += f"\nFrames\t\t{frames}"
+    msg += f"\nHeight\t\t{height}"
+    msg += f"\nWidth\t\t{width}"
     msg += "\n"
 
     print(msg)
