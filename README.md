@@ -28,12 +28,10 @@ normalizing signals to baselines, reorganizing data, and common data visualizati
 through ROIs, and I want to explore population activity, and I want to do so directly from the relevant 
 data--independent of the software used to analyze it. I want to have my delicious cake and eat it too.
 
-3. I want tools for holographic optogenetics & "read/write" experimentation in python. I want them written for 
-neuroscientists to use...not for optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
-It's 2023.
+3. I want tools for holographic optogenetics & "read/write" experimentation in python. I want them written and abstracted enough for neuroscientists to use...not for only the optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
 
 4. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
-metadata, generating protocols programmatically (I'm lazy), and aligning collected data.
+metadata, generating protocols programmatically, and aligning collected data.
 
 5. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
 
