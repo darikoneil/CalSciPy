@@ -5,11 +5,14 @@ from collections import ChainMap
 from functools import partial, cached_property
 from abc import abstractmethod
 from pathlib import Path
+from operator import eq, le
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
+
+from CalSciPy._backports import PatternMatching
 
 
 """
@@ -27,7 +30,7 @@ class _ROIBase:
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
-                 ypix: Union[NDArray[int], Sequence[int]],
+                 ypixels: Union[NDArray[int], Sequence[int]],
                  reference_shape: Sequence[float, float] = (512, 512),
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
@@ -40,11 +43,11 @@ class _ROIBase:
         to be instanced and thus it contains the abstract method for protection. Note that the properties
         are only calculated once.
 
-        :param pixels: An Nx2 array of x and y-pixel pairs in xy strictly in rc form.
+        :param pixels: An Nx2 array of x and y-pixel pairs **strictly** in rc form.
             If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
             The matching y-pixels must be then be providedas an additional argument.
 
-        :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional.
+        :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
         :param reference_shape: the shape of the reference image from which the roi was generated
 
@@ -56,9 +59,11 @@ class _ROIBase:
 
         """
         #: NDArray[int]: the x-pixels of the roi (column-wise)
-        self.xpix = np.asarray(pixels)
+        self.xpix = None
         #: NDArray[int]: the y-pixels of the roi (row-wise)
-        self.ypix = np.asarray(ypix)
+        self.ypix = None
+
+        self.ypix, self.xpix = _validate_pixels(pixels, ypixels)
 
         # required with default
         #: Tuple[float, float]: the shape of the imaage from which the roi was generated
@@ -71,7 +76,7 @@ class _ROIBase:
         self.zpix = np.asarray(zpix)
         
         # cover non-implemented optionals
-        if self.plane is not None or self.zpix is not None:
+        if plane is not None or zpix is not None:
             raise NotImplementedError
 
         # user-defined, using chainmap is O(N) worst-case while dict construction / update
@@ -144,7 +149,7 @@ class _ROIBase:
         ...
 
     def __repr__(self):
-        return "ROI(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
+        return "ROI(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
 
 
 class ROI(_ROIBase):
@@ -434,29 +439,29 @@ def calculate_radius(centroid: Sequence[Number, Number],
         raise NotImplementedError(f"Request method {method} is not supported")
 
 
-def calculate_centroid(roi: Union[NDArray[int], Sequence[int]],
-                       ypix: Optional[Union[NDArray[int], Sequence[int, ...]]] = None
+def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
+                       ypixels: Optional[Union[NDArray[int], Sequence[int, ...]]] = None
                        ) -> Tuple[float, float]:
     """
     Calculates the centroid of a polygonal roi .The vertices of the roi's approximate convex hull are calculated
     (if necessary) and the centroid estimated from these vertices using the shoelace formula.
 
-    :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+    :param pixels: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional.
+    :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
     :returns: a tuple containing the centroid of the roi. Whether the centroid is in xy or rc form is dependent on the
         form of the arguments
     """
     # if ypix is provided and xpix is one dimensional
     # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
-    if ypix is not None and sum(roi.shape) <= max(roi,shape) + 1:
-        roi = np.vstack([roi, ypix]).T
+    ypixels, pixels = _validate_pixels(pixels, ypixels)
+    pixels = np.vstack([pixels, ypixels]).T
 
     # calculate convex hull (if necessary)
-    vertices = roi[identify_vertices(roi), :]
+    vertices = pixels[identify_vertices(pixels), :]
 
     center_x = 0
     center_y = 0
@@ -561,8 +566,8 @@ def calculate_mask(centroid: Sequence[Number, Number],
     return yy, xx
 
 
-def identify_vertices(roi: Union[NDArray[int], Sequence[int]],
-                      ypix: Optional[Union[NDArray[int], Sequence[int]]] = None
+def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
+                      ypixels: Optional[Union[NDArray[int], Sequence[int]]] = None
                       ) -> Tuple[int, ...]:
     """
     Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
@@ -570,26 +575,38 @@ def identify_vertices(roi: Union[NDArray[int], Sequence[int]],
     and easy alternative to actually determining the "true" boundary vertices given the assumption that cellular ROIs are
     convex (i.e., cellular rois ought to be roughly elliptical).
 
-    :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+    :param pixels: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional. 
+    :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
     
     :returns: A tuple indexing which points form the vertices of the approximate convex hull.
         It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the
         boundaries of the roi, though this only holds if the polygon doesn't have any concave portions. 
     """
-    # if not numpy array, convert
-    roi = np.asarray(roi)
 
-    # if ypix is provided and xpix is one dimensional
-    # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
-    if ypix is not None and sum(roi.shape) <= max(roi,shape) + 1:
-        roi = np.vstack([roi, ypix]).T
+    # if not numpy array, convert
+    pixels = np.asarray(pixels)
+
+    ypixels, pixels = _validate_pixels(pixels, ypixels)
+    pixels = np.vstack([pixels, ypixels]).T
 
     # approximate convex hull
-    hull = ConvexHull(roi)
+    hull = ConvexHull(pixels)
 
     # return the vertices
     return hull.vertices
+
+def _validate_pixels(pixels: Union[NDArray[int], Sequence[int]],
+                     ypixels: Optional[Union[NDArray[int], Sequence[int]]]
+                     ) -> Tuple[NDArray[int], NDArray[int]]:
+
+    pixels = np.asarray(pixels)
+    if ypixels is None:
+        assert(sum(pixels.shape) <=  max(pixels.shape) + 1)
+        return pixels[:, 0], pixels[:, 1]
+    else:
+        ypixels = np.asarray(ypixels)
+        assert(ypixels.shape == pixels.shape)
+        return ypixels, pixels
