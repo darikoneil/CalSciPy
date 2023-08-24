@@ -21,11 +21,12 @@ class _ROIBase:
     """
     An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
     the only abstract method is __name__, and thus it isn't *really* abstract, but it is not meant
-    to be instanced and thus it contains the abstract method for protection. 
+    to be instanced and thus it contains the abstract method for protection. Note that the properties
+    are only calculated once.
 
     """
     def __init__(self,
-                 xpix: Union[NDArray[int], Sequence[int]],
+                 pixels: Union[NDArray[int], Sequence[int]],
                  ypix: Union[NDArray[int], Sequence[int]],
                  reference_shape: Sequence[float, float] = (512, 512),
                  plane: Optional[int] = None,
@@ -34,19 +35,28 @@ class _ROIBase:
                  **kwargs
                  ):
         """
-        See above
+        An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
+        the only abstract method is __name__, and thus it isn't *really* abstract, but it is not meant
+        to be instanced and thus it contains the abstract method for protection. Note that the properties
+        are only calculated once.
 
-        :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
-        :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-        :param reference_shape: the shape of the image from which the roi was generated
+        :param pixels: An Nx2 array of x and y-pixel pairs in xy strictly in rc form.
+            If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
+            The matching y-pixels must be then be providedas an additional argument.
+
+        :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional.
+
+        :param reference_shape: the shape of the reference image from which the roi was generated
+
         :param plane: index of the imaging plane (if multi-plane)
+
         :param properties: optional properties to include
-        :param zpix: a 1D numpy array or Sequence indicating the z-pixels of the roi (if volumetric)
+
+        :param zpix: The z-pixels of the roi (if volumetric)
 
         """
-        # required
         #: NDArray[int]: the x-pixels of the roi (column-wise)
-        self.xpix = np.asarray(xpix)
+        self.xpix = np.asarray(pixels)
         #: NDArray[int]: the y-pixels of the roi (row-wise)
         self.ypix = np.asarray(ypix)
 
@@ -69,11 +79,14 @@ class _ROIBase:
         # with unknown number of parameters, so this is relevant
         #: ChainMap: a mapping of properties containing any relevant information about the ROI
         self.properties = ChainMap(kwargs, properties)
+
         #: Tuple[int, ...]: a tuple indexing the vertices of the approximate convex hull of the roi
         self.vertices = identify_vertices(self.xpix, self.ypix)
+
         # requires vertices!!!
         #: Tuple[float, float]: the centroid of the roi
         self.centroid = calculate_centroid(self.xy_vert)[::-1]
+
         # requires vertices + centroid!!!
         #: float: the radius of the ROI
         self.radius = calculate_radius(self.centroid, self.rc_vert, method="mean")
@@ -82,7 +95,11 @@ class _ROIBase:
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
 
     @cached_property
-    def mask(self) -> NDArray[np.bool_]:
+    def mask(self) -> NDArray[bool]:
+        """
+        Boolean mask with the dimensions of the reference image indicating the pixels of the ROI
+
+        """
         mask = np.zeros(self.reference_shape, dtype=np.bool_)
         for pair in range(self.rc.shape[0]):
             y, x = self.rc[pair, :]
@@ -90,7 +107,7 @@ class _ROIBase:
         return mask
 
     @cached_property
-    def xy(self) -> np.ndarray:
+    def xy(self) -> NDArray[int]:
         """
         Nx2 array containing x,y coordinate pairs for the roi
 
@@ -98,15 +115,15 @@ class _ROIBase:
         return np.vstack([self.xpix, self.ypix]).T
 
     @cached_property
-    def xy_vert(self) -> np.ndarray:
+    def xy_vert(self) -> NDArray[int]:
         """
-        Nx2 array containing the x,y coordinate pairs comprising the roi's convex hull approximation
+        Nx2 array containing the x,y coordinate pairs comprising the roi's approximate convex hull
 
         """
         return self.xy[self.vertices, :]
 
     @cached_property
-    def rc(self) -> np.ndarray:
+    def rc(self) -> NDArray[int]:
         """
         Nx2 array containing the r,c coordinate pairs for the roi
 
@@ -114,9 +131,9 @@ class _ROIBase:
         return np.vstack([self.ypix, self.xpix]).T
 
     @cached_property
-    def rc_vert(self) -> np.ndarray:
+    def rc_vert(self) -> NDArray[int]:
         """
-        Nx2 array containing the r,c coordinate pairs comprising the roi's convex hull approximation
+        Nx2 array containing the r,c coordinate pairs comprising the roi's approximate convex hull
 
         """
         return self.rc[self.vertices, :]
@@ -132,7 +149,15 @@ class _ROIBase:
 
 class ROI(_ROIBase):
     """
-    ROI object containing the relevant properties of some specific ROI.
+    An ROI object containing the base characteristics & properties of an ROI.Note that the properties are only
+    calculated once.
+
+    :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
+    :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
+    :param reference_shape: the shape of the image from which the roi was generated
+    :param plane: index of the imaging plane (if multi-plane)
+    :param properties: optional properties to include
+    :param zpix: a 1D numpy array or Sequence indicating the z-pixels of the roi (if volumetric)
 
     """
     def __init__(self,
@@ -146,16 +171,14 @@ class ROI(_ROIBase):
                  **kwargs):
 
         # initialize new attr
+        #: str: method used to generate roi approximation
         self._method = None
+
         #: ApproximateROI: an approximation of the roi
         self.approximation = None
 
         # initialize parent attr
         super().__init__(xpix, ypix, reference_shape, plane, properties, zpix, **kwargs)
-
-        # initialize approximation
-        #: str: method used to generate roi approximation
-        self.approx_method = method
 
     @staticmethod
     def __name__() -> str:
@@ -163,6 +186,10 @@ class ROI(_ROIBase):
 
     @property
     def approx_method(self) -> str:
+        """
+        Method used for approximating the roi
+
+        """
         return self._method
 
     @approx_method.setter
@@ -423,8 +450,9 @@ def calculate_centroid(roi: Union[NDArray[int], Sequence[int]],
     :returns: a tuple containing the centroid of the roi. Whether the centroid is in xy or rc form is dependent on the
         form of the arguments
     """
-    # format if necessary
-    if ypix is not None:
+    # if ypix is provided and xpix is one dimensional
+    # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
+    if ypix is not None and sum(roi.shape) <= max(roi,shape) + 1:
         roi = np.vstack([roi, ypix]).T
 
     # calculate convex hull (if necessary)
