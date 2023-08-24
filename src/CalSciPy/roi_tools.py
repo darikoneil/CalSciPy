@@ -458,7 +458,9 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
     # if ypix is provided and xpix is one dimensional
     # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
     ypixels, pixels = _validate_pixels(pixels, ypixels)
-    pixels = np.vstack([pixels, ypixels]).T
+
+    # we need RC
+    pixels = np.vstack([ypixels, pixels]).T
 
     # calculate convex hull (if necessary)
     vertices = pixels[identify_vertices(pixels), :]
@@ -467,7 +469,7 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
     center_y = 0
     sigma_signed_area = 0
 
-    points = roi.shape[0]
+    points = pixels.shape[0]
     for pt in range(points):
         if pt < points - 1:
             trapezoid_area = (vertices[pt, 0] * vertices[pt + 1, 1]) - (vertices[pt + 1, 0] * vertices[pt, 1])
@@ -590,7 +592,7 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
     pixels = np.asarray(pixels)
 
     ypixels, pixels = _validate_pixels(pixels, ypixels)
-    pixels = np.vstack([pixels, ypixels]).T
+    pixels = np.vstack([ypixels, pixels]).T
 
     # approximate convex hull
     hull = ConvexHull(pixels)
@@ -604,7 +606,7 @@ def _validate_pixels(pixels: Union[NDArray[int], Sequence[int]],
 
     pixels = np.asarray(pixels)
     if ypixels is None:
-        assert(sum(pixels.shape) <=  max(pixels.shape) + 1)
+        assert(sum(pixels.shape) >=  max(pixels.shape) + 1)
         return pixels[:, 0], pixels[:, 1]
     else:
         ypixels = np.asarray(ypixels)
