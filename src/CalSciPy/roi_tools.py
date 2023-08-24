@@ -19,21 +19,22 @@ Object-oriented approach to organizing ROI-data
 
 class _ROIBase:
     """
-    ROI object containing the relevant properties of some specific ROI.
+    An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
+    the only abstract method is __name__, and thus it isn't *really* abstract, but it is not meant
+    to be instanced and thus it contains the abstract method for protection. 
 
     """
     def __init__(self,
-                 xpix: Union[np.ndarray, Sequence[int]],
-                 ypix: Union[np.ndarray, Sequence[int]],
-                 reference_shape: Tuple[float, float] = (512, 512),
+                 xpix: Union[NDArray[int], Sequence[int]],
+                 ypix: Union[NDArray[int], Sequence[int]],
+                 reference_shape: Sequence[float, float] = (512, 512),
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
-                 zpix: Optional[Union[np.ndarray, Sequence[int]]] = None,
+                 zpix: Optional[Union[NDArray[int], Sequence[int]]] = None,
                  **kwargs
                  ):
         """
-        ROI object containing the relevant properties of some specific ROI for using in generating photostimulation
-        protocols.
+        See above
 
         :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
         :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
@@ -44,16 +45,21 @@ class _ROIBase:
 
         """
         # required
-        self.xpix = xpix
-        self.ypix = ypix
+        #: NDArray[int]: the x-pixels of the roi (column-wise)
+        self.xpix = np.asarray(xpix)
+        #: NDArray[int]: the y-pixels of the roi (row-wise)
+        self.ypix = np.asarray(ypix)
 
         # required with default
-        self.reference_shape = reference_shape
+        #: Tuple[float, float]: the shape of the imaage from which the roi was generated
+        self.reference_shape = tuple(reference_shape)
 
         # optional
+        #: Optional[int]: index of the imaging plane (if multiplane)
         self.plane = plane
-        self.zpix = zpix
-
+        #: Optional[NDArray[int]]: z-pixels of the roi if volumetric
+        self.zpix = np.asarray(zpix)
+        
         # cover non-implemented optionals
         if self.plane is not None or self.zpix is not None:
             raise NotImplementedError
@@ -61,12 +67,15 @@ class _ROIBase:
         # user-defined, using chainmap is O(N) worst-case while dict construction / update
         # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
         # with unknown number of parameters, so this is relevant
+        #: ChainMap: a mapping of properties containing any relevant information about the ROI
         self.properties = ChainMap(kwargs, properties)
-
+        #: Tuple[int, ...]: a tuple indexing the vertices of the approximate convex hull of the roi
         self.vertices = identify_vertices(self.xpix, self.ypix)
         # requires vertices!!!
+        #: Tuple[float, float]: the centroid of the roi
         self.centroid = calculate_centroid(self.xy_vert)[::-1]
         # requires vertices + centroid!!!
+        #: float: the radius of the ROI
         self.radius = calculate_radius(self.centroid, self.rc_vert, method="mean")
 
     def __str__(self):
@@ -127,23 +136,25 @@ class ROI(_ROIBase):
 
     """
     def __init__(self,
-                 xpix: Union[np.ndarray, Sequence[int]],
-                 ypix: Union[np.ndarray, Sequence[int]],
+                 xpix: Union[NDArray[int], Sequence[int]],
+                 ypix: Union[NDArray[int], Sequence[int]],
                  reference_shape: Tuple[float, float] = (512, 512),
                  method: str = "literal",
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
-                 zpix: Optional[Union[np.ndarray, Sequence[int]]] = None,
+                 zpix: Optional[Union[NDArray[int], Sequence[int]]] = None,
                  **kwargs):
 
         # initialize new attr
         self._method = None
+        #: ApproximateROI: an approximation of the roi
         self.approximation = None
 
         # initialize parent attr
         super().__init__(xpix, ypix, reference_shape, plane, properties, zpix, **kwargs)
 
         # initialize approximation
+        #: str: method used to generate roi approximation
         self.approx_method = method
 
     @staticmethod
@@ -492,20 +503,26 @@ def calculate_mask(centroid: Sequence[Number, Number],
     return yy, xx
 
 
-def identify_vertices(roi: Union[np.ndarray, Sequence[int]],
-                      ypix: Optional[Union[np.ndarray, Sequence[int]]] = None
-                      ) -> Tuple[int]:
+def identify_vertices(roi: Union[NDArray[int], Sequence[int]],
+                      ypix: Optional[Union[NDArray[int], Sequence[int]]] = None
+                      ) -> Tuple[int, ...]:
     """
-    Calculate the index of points comprising the approximate convex hull the polygon. Wraps scipy's ConvexHull,
-    which is itself an implementation of QtHull
+    Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
+    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_.
+    
 
-
-    :param roi: a 1D numpy array or Sequence indicating the x-pixels of the roi
-        or an Nx2 numpy array containing the centroid of the roi (x, y)
-    :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi if and only if roi is 1D
-    :return:  a 1D tuple indexing the vertices of the approximate convex hull of the roi
-        (alternatively, may be considered an index of the pixels that form the boundaries of the roi)
+    :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        as an additional argument.
+    :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional. 
+    :returns: A tuple indexing which points form the vertices of the approximate convex hull.
+        It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the
+        boundaries of the roi, though this only holds if the polygon doesn't have any concave portions.
     """
+    # if not numpy array, convert
+    roi = np.asarray(roi)
+
+    # if ypix is provided
     if ypix is not None:
         roi = np.vstack([roi, ypix]).T
 
