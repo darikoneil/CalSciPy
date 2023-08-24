@@ -439,19 +439,24 @@ def calculate_centroid(roi: Union[np.ndarray, Sequence[int]],
 
 def calculate_mask(centroid: Sequence[Number, Number],
                    radii: Union[Number, Sequence[Number, Number]],
-                   shape: Union[Number, Sequence[Number, Number]] = None,
+                   reference_shape: Union[Number, Sequence[Number, Number]] = None,
                    theta: Number = None
-                   ) -> np.ndarray:
+                   ) -> NDArray[np.bool_]:
     """
-    Calculates an approximate mask for an elliptical roi at center with radii at theta with respect to the y-axis
-    and constrained to lie within the dimensions imposed by reference_shape
+    Calculates a boolean mask for an elliptical roi constrained to lie within the dimensions imposed by the reference shape.
+    The major-axis is considered to have angle theta with respect to the y-axis of the reference image. 
 
     :param centroid: centroid of the roi in row-column form (y, x)
-    :param radii: radius of the roi. can provide one radius for a symmetrical roi or a long and short radius.
-    :param shape: dimensions of the image the roi lies within. If only one value is provided it is considered
+
+    :param radii: radius of the roi. Only one radius is required if the roi is symmetrical (i.e., circular).
+        For an elliptical roi both a long and short radius can be provided.
+    
+    :param reference_shape: dimensions of the reference image the roi lies within. If only one value is provided it is considered
         symmetrical.
-    :param theta: angle of the long-radius with respect to the y-axis
-    :return: photostimulation mask
+
+    :param theta: angle of the long-radius with respect to the y-axis of the reference image
+    
+    :return: a boolean mask
     """
 
     if theta is not None:
@@ -481,7 +486,7 @@ def calculate_mask(centroid: Sequence[Number, Number],
 
     # adjust center
     centroid -= bounding_rect[0, :]
-
+    
     bounding = bounding_rect[1, :] - bounding_rect[0, :] + 1
 
     y_grid, x_grid = np.ogrid[0:float(bounding[0]), 0:float(bounding[1])]
@@ -508,24 +513,31 @@ def identify_vertices(roi: Union[NDArray[int], Sequence[int]],
                       ) -> Tuple[int, ...]:
     """
     Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
-    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_.
+    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_. It's a fast
+    and easy alternative to actually determining the "true" boundary vertices given the assumption that cellular ROIs are
+    convex (i.e., cellular rois ought to be roughly elliptical).
     
 
     :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
+
     :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional. 
+    
     :returns: A tuple indexing which points form the vertices of the approximate convex hull.
         It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the
-        boundaries of the roi, though this only holds if the polygon doesn't have any concave portions.
+        boundaries of the roi, though this only holds if the polygon doesn't have any concave portions. 
     """
     # if not numpy array, convert
     roi = np.asarray(roi)
 
-    # if ypix is provided
-    if ypix is not None:
+    # if ypix is provided and xpix is one dimensional
+    # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
+    if ypix is not None and sum(roi.shape) <= max(roi,shape) + 1:
         roi = np.vstack([roi, ypix]).T
 
+    # approximate convex hull
     hull = ConvexHull(roi)
 
+    # return the vertices
     return hull.vertices
