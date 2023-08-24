@@ -365,20 +365,34 @@ class Suite2PHandler(ROIHandler):
             return reference_image
 
 
-def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, method: str = "mean") -> float:
+def calculate_radius(centroid: Sequence[Number, Number],
+                     vertices_coordinates: NDArray[int],
+                     method: str = "mean"
+                     ) -> Union[float, Tuple[Tuple[float, float], float]]:
     """
-    Calculates the radius of the roi, defined as the distance between the centroid and the vertices of
-    the approximate convex hull.
+    Calculates the radius of the roi using one of the following methods:
+        #   "mean": a symmetrical radius calculated as the average distance between the centroid and the vertices of
+            the approximate convex hull
+        #   "bound": a symmetrical radius calculated as the minimum distance between the centroid and the vertices of
+            the approximate convex hull
+        #   "unbound": a symmetrical radius calculated as the maximumal distance between the centroid and the vertices
+            of the approximate convex hull
+        #   "ellipse" : an asymmetrical set of radii whose major-axis radius forms the angle theta with respect to the
+            y-axis of the reference image
 
     :param centroid: centroid of the roi in row-column format (y, x)
-    :param vertices: Nx2 array containing the vertices of the convex hull approximation
-    :param method: method to use when calculating radius ("mean", "bound", "unbound")
-    :return: radius
+
+    :param vertices_coordinates: Nx2 array containing the pixels that form the vertices of the approximate convex hull
+
+    :param method: method to use when calculating radius ("mean", "bound", "unbound", "ellipse")
+
+    :returns: the radius of the roi for symmetrical radi;
+        the major & minor radii and the value of theta for asymmetrical radii
     """
 
     center = np.asarray(centroid)
     center = np.reshape(center, (1, 2))
-    radii = cdist(center, vertices)
+    radii = cdist(center, vertices_coordinates)
 
     if method == "mean":
         return np.mean(radii)
@@ -386,25 +400,28 @@ def calculate_radius(centroid: Sequence[Number, Number], vertices: np.ndarray, m
         return np.min(radii)
     elif method == "unbound":
         return np.max(radii)
+    # secret for debugs
     elif method == "all":
         return radii
     else:
         raise NotImplementedError(f"Request method {method} is not supported")
 
 
-def calculate_centroid(roi: Union[np.ndarray, Sequence[int]],
-                       ypix: Optional[Union[np.ndarray, Sequence[int]]] = None
+def calculate_centroid(roi: Union[NDArray[int], Sequence[int]],
+                       ypix: Optional[Union[NDArray[int], Sequence[int, ...]]] = None
                        ) -> Tuple[float, float]:
     """
-    Calculates the centroid of a polygonal roi given an Nx2 numpy array containing the centroid of the
-    roi.The vertices of the roi's approximate convex hull are calculated (if necessary) and the centroid estimated
-    from these vertices using the shoelace formula.
+    Calculates the centroid of a polygonal roi .The vertices of the roi's approximate convex hull are calculated
+    (if necessary) and the centroid estimated from these vertices using the shoelace formula.
 
-    :param roi: an Nx2 numpy array containing the centroid of the roi (x, y)
-        or the vertices of its approximate convex hull (x, y) OR a 1D numpy array or Sequence indicating
-        the x-pixels of the roi
-    :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi if and only if roi is 1D
-    :return: a tuple containing the centroid of the roi (x, y)
+    :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        as an additional argument.
+
+    :param ypix: The y-pixels of the roi if and only if the first argument is one-dimensional.
+
+    :returns: a tuple containing the centroid of the roi. Whether the centroid is in xy or rc form is dependent on the
+        form of the arguments
     """
     # format if necessary
     if ypix is not None:
@@ -441,22 +458,22 @@ def calculate_mask(centroid: Sequence[Number, Number],
                    radii: Union[Number, Sequence[Number, Number]],
                    reference_shape: Union[Number, Sequence[Number, Number]] = None,
                    theta: Number = None
-                   ) -> NDArray[np.bool_]:
+                   ) -> NDArray[bool]:
     """
-    Calculates a boolean mask for an elliptical roi constrained to lie within the dimensions imposed by the reference shape.
-    The major-axis is considered to have angle theta with respect to the y-axis of the reference image. 
+    Calculates a boolean mask for an elliptical roi constrained to lie within the dimensions imposed by the reference
+    shape.The major-axis is considered to have angle theta with respect to the y-axis of the reference image.
 
     :param centroid: centroid of the roi in row-column form (y, x)
 
     :param radii: radius of the roi. Only one radius is required if the roi is symmetrical (i.e., circular).
         For an elliptical roi both a long and short radius can be provided.
     
-    :param reference_shape: dimensions of the reference image the roi lies within. If only one value is provided it is considered
-        symmetrical.
+    :param reference_shape: dimensions of the reference image the roi lies within. If only one value is provided
+        it is considered symmetrical.
 
     :param theta: angle of the long-radius with respect to the y-axis of the reference image
     
-    :return: a boolean mask
+    :returns: a boolean mask identifying which pixels contain the roi within the reference image
     """
 
     if theta is not None:
@@ -486,21 +503,29 @@ def calculate_mask(centroid: Sequence[Number, Number],
 
     # adjust center
     centroid -= bounding_rect[0, :]
-    
-    bounding = bounding_rect[1, :] - bounding_rect[0, :] + 1
 
+    # bounding  shape
+    bounding = bounding_rect[1, :] - bounding_rect[0, :] + 1
     y_grid, x_grid = np.ogrid[0:float(bounding[0]), 0:float(bounding[1])]
 
+    #origin
     y, x = centroid
     r_rad, c_rad = radii
+
+    #         ((x * cos(alpha) + y * sin(alpha)) / x_radius) ** 2 +
+    #         ((x * sin(alpha) - y * cos(alpha)) / y_radius) ** 2 = 1
+
     r, c = (y_grid - y), (x_grid - x)
     distances = (r / r_rad)**2 + (c / c_rad)**2
 
+    # collect
     yy, xx = np.nonzero(distances < 1)
 
+    # adj bounds
     yy += bounding_rect[0, 0]
     xx += bounding_rect[0, 1]
 
+    # constrain to within the reference_shape of the image, if necessary
     if shape is not None:
         yy.clip(0, shape[0] - 1)
         xx.clip(0, shape[-1] - 1)
@@ -516,7 +541,6 @@ def identify_vertices(roi: Union[NDArray[int], Sequence[int]],
     :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_. It's a fast
     and easy alternative to actually determining the "true" boundary vertices given the assumption that cellular ROIs are
     convex (i.e., cellular rois ought to be roughly elliptical).
-    
 
     :param roi: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
