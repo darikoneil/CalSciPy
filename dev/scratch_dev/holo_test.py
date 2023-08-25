@@ -20,7 +20,7 @@ photostimulation = Photostimulation.import_rois(folder=data_folder)
 
 # create targets
 targets = randomize_targets(np.arange(photostimulation.num_neurons),
-                            neurons_per_target=1,
+                            neurons_per_target=4,
                             num_targets=1,
                             trials=1)[0]
 

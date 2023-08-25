@@ -99,12 +99,12 @@ class Photostimulation:
         Shape of reference image
 
         """
-        shapes = [roi.shape for roi in self.rois.values()]
+        shapes = [roi.reference_shape for roi in self.rois.values()]
         try:
             assert(len(set(shapes)) <= 1)
             return shapes[0]
         except AssertionError:
-            print("Inconsistent shape detected, selecting largest dimension for each axis")
+            print("Inconsistent reference_shape detected, selecting largest dimension for each axis")
             x_shape = max({x for _, x in shapes})
             y_shape = min({y for y, _ in shapes})
             return y_shape, x_shape
@@ -224,12 +224,12 @@ class StimulationGroup:
         Shape of reference image
 
         """
-        shapes = [roi.shape for roi in self.rois]
+        shapes = [roi.reference_shape for roi in self.rois]
         try:
             assert(len(set(shapes)) <= 1)
             return shapes[0]
         except AssertionError:
-            print("Inconsistent shape detected, selecting largest dimension for each axis")
+            print("Inconsistent reference_shape detected, selecting largest dimension for each axis")
             x_shape = max({x for _, x in shapes})
             y_shape = min({y for y, _ in shapes})
             return y_shape, x_shape

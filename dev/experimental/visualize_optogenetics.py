@@ -29,7 +29,7 @@ def view_roi_overlay(photostimulation: Photostimulation):
         ax.imshow(reference_image, cmap="Spectral_r", vmin=vi, vmax=vm, interpolation="gaussian")
 
         for roi in photostimulation.rois.values():
-            _generate_roi(roi, ax, lw=1.5, fill=False, edgecolor=COLORS.black)
+            _generate_roi(roi, ax, lw=1.5, fill=False, edgecolor=COLORS.BLACK)
 
 
 def view_target_overlay(photostimulation: Photostimulation, targets=None):
@@ -75,7 +75,7 @@ def view_target_overlay(photostimulation: Photostimulation, targets=None):
 
             for idx, roi in enumerate(photostimulation.rois.values()):
                 if idx in default_list:
-                    _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.black)
+                    _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.BLACK)
                 else:
                     _generate_roi(roi, ax, lw=1, fill=False, edgecolor=COLORS.red)
 
@@ -85,7 +85,7 @@ def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
     with plt.style.context("CalSciPy.main"):
 
         reference_shape = photostimulation.reference_image.shape
-        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        background_image = np.ones((*reference_shape, 3)) * COLORS.BACKGROUND
         fig, ax = _initialize_figure(reference_shape)
 
         ax.imshow(background_image)
@@ -93,7 +93,7 @@ def view_rois(photostimulation: Photostimulation, colormap="Spectral_r"):
         colors = _generate_colormap_spectrum(photostimulation.num_neurons, colormap=colormap, alpha=0.75)
 
         for idx, roi in enumerate(photostimulation.rois.values()):
-            _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=colors[idx])
+            _generate_roi(roi, ax, lw=1, edgecolor=COLORS.BLACK, facecolor=colors[idx])
 
 
 def view_targets(photostimulation: Photostimulation, targets=None):
@@ -104,13 +104,13 @@ def view_targets(photostimulation: Photostimulation, targets=None):
 
         reference_shape = photostimulation.reference_image.shape
 
-        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        background_image = np.ones((*reference_shape, 3)) * COLORS.BACKGROUND
 
         fig, ax = _initialize_figure(reference_shape)
 
         ax.imshow(background_image)
 
-        ax.grid(color=COLORS.black, ls="--")
+        ax.grid(color=COLORS.BLACK, ls="--")
 
         if targets is None:
 
@@ -125,7 +125,7 @@ def view_targets(photostimulation: Photostimulation, targets=None):
                               group.ordered_index,
                               ax,
                               lw=1,
-                              edgecolor=COLORS.black,
+                              edgecolor=COLORS.BLACK,
                               facecolor=colors[idx]
                               )
 
@@ -133,8 +133,8 @@ def view_targets(photostimulation: Photostimulation, targets=None):
                                default_list,
                                ax,
                                lw=1,
-                               edgecolor=COLORS.black,
-                               facecolor=COLORS.white
+                               edgecolor=COLORS.BLACK,
+                               facecolor=COLORS.WHITE
                                )
 
         else:
@@ -144,9 +144,9 @@ def view_targets(photostimulation: Photostimulation, targets=None):
 
             for idx, roi in enumerate(photostimulation.rois.values()):
                 if idx in default_list:
-                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.white)
+                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.BLACK, facecolor=COLORS.WHITE)
                 else:
-                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.black, facecolor=COLORS.blue)
+                    _generate_roi(roi, ax, lw=1, edgecolor=COLORS.BLACK, facecolor=COLORS.BLUE)
 
 
 def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None):
@@ -157,13 +157,13 @@ def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None
 
         reference_shape = photostimulation.reference_image.shape
 
-        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        background_image = np.ones((*reference_shape, 3)) * COLORS.BACKGROUND
 
         fig, ax = _initialize_figure(reference_shape)
 
         ax.imshow(background_image)
 
-        ax.grid(color=COLORS.black, ls="--")
+        ax.grid(color=COLORS.BLACK, ls="--")
 
         if targets is None:
 
@@ -178,7 +178,7 @@ def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None
                               group.ordered_index,
                               ax,
                               lw=1,
-                              edgecolor=COLORS.black,
+                              edgecolor=COLORS.BLACK,
                               facecolor=colors[idx]
                               )
 
@@ -186,8 +186,8 @@ def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None
                                default_list,
                                ax,
                                lw=1,
-                               edgecolor=COLORS.black,
-                               facecolor=COLORS.white
+                               edgecolor=COLORS.BLACK,
+                               facecolor=COLORS.WHITE
                                )
 
             for group in photostimulation.sequence:
@@ -196,7 +196,7 @@ def _view_spiral_masked_targets(photostimulation: Photostimulation, targets=None
                                  ax,
                                  lw=0,
                                  fill=True,
-                                 facecolor=(*COLORS.black, 0.5)
+                                 facecolor=(*COLORS.BLACK, 0.5)
                                  )
 
 
@@ -209,13 +209,13 @@ def view_spiral_targets(photostimulation: Photostimulation,
 
         reference_shape = photostimulation.reference_image.shape
 
-        background_image = np.ones((*reference_shape, 3)) * COLORS.background
+        background_image = np.ones((*reference_shape, 3)) * COLORS.BACKGROUND
 
         fig, ax = _initialize_figure(reference_shape)
 
         ax.imshow(background_image)
 
-        ax.grid(color=COLORS.black, ls="--")
+        ax.grid(color=COLORS.BLACK, ls="--")
 
         if targets is None:
 
@@ -230,7 +230,7 @@ def view_spiral_targets(photostimulation: Photostimulation,
                               group.ordered_index,
                               ax,
                               lw=1,
-                              edgecolor=COLORS.black,
+                              edgecolor=COLORS.BLACK,
                               facecolor=colors[idx]
                               )
 
@@ -238,15 +238,15 @@ def view_spiral_targets(photostimulation: Photostimulation,
                                default_list,
                                ax,
                                lw=1,
-                               edgecolor=COLORS.black,
-                               facecolor=COLORS.white
+                               edgecolor=COLORS.BLACK,
+                               facecolor=COLORS.WHITE
                                )
 
             for group in photostimulation.sequence:
                 _plot_spiral(photostimulation,
                              group.ordered_index,
                              ax,
-                             color=(*COLORS.black, 0.5),
+                             color=(*COLORS.BLACK, 0.5),
                              lw=1
                              )
 

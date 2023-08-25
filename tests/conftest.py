@@ -60,6 +60,29 @@ def retrieve_dataset_ids() -> Path:
     return [data.name for data in data_dir.glob("*")]
 
 
+def retrieve_roi() -> dict:
+    """
+    Generator that yields the next sample roi in the data directory sample set
+    """
+    sample_rois_file = _TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_rois.npy")
+
+    sample_rois = np.load(sample_rois_file, allow_pickle=True).item()
+
+    for roi in sample_rois.values():
+        yield roi
+
+
+def retrieve_suite2p() -> Path:
+    """
+    Generator that yields the next dataset in the suite2p sample set
+    """
+    # get the sub-folder containing data directory samples
+    suite2p_dir = _TEMPORARY_DIRECTORY.joinpath("suite2p")
+
+    # generator for testing
+    return [suite2p_folder.name for suite2p_folder in suite2p_dir.glob("*")]
+
+
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
 def matrix(request):

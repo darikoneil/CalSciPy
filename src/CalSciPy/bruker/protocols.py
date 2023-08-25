@@ -246,7 +246,7 @@ def _generate_galvo_point(roi: ROI,
     :param parameters: stimulation parameters to override the galvo point defaults
     :param pixels_per_micron: number of pixels per micron for calculating spiral size
     :param power_scale: scaling factor used for calculating laser power
-    :param reference_shape: reference shape used for scaling roi coordinates (x, y)
+    :param reference_shape: reference reference_shape used for scaling roi coordinates (x, y)
     :param spiral_scale: scaling factor used for calculating spiral size
     :param x_range: voltage amplitude range of the x-galvo
     :param y_range: voltage amplitude range of the y-galvo
@@ -258,7 +258,7 @@ def _generate_galvo_point(roi: ROI,
         name = f"Point {index}"
 
     # Retrieve and scale coordinates
-    y, x = roi.coordinates
+    y, x = roi.centroid
 
     # Retrieve spiral size
     spiral_size = roi.mask.bound_radius
