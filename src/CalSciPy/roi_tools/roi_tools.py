@@ -40,8 +40,8 @@ class _ROIBase(metaclass=ABCMeta):
         are only calculated once.
 
         :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.
-            If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
-            The matching y-pixels must be then be provided as an additional argument.
+            | If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
+            | The matching y-pixels must be then be provided as an additional argument.
 
         :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 

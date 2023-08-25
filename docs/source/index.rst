@@ -12,18 +12,39 @@ considered useful to others.
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: INTRODUCTION:
 
-   Introduction
+   Motivation
    Limitations
+   Contributions
    Installation
+
+.. toctree::
+   :maxdepth: 1
+   :caption: MAIN:
+
+   Introduction <Main_Introduction>
+   Loading and Saving Data<io_tools>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: INTERACTIVE VISUALS
+
+.. toctree::
+   :maxdepth: 1
+   :caption: BRUKER PRAIRIEVIEW
+
+.. toctree::
+   :maxdepth: 1
+   :caption: OPTOGENETICS
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ORGANIZATION
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API REFERENCE
+
    CalSciPy.io_tools
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

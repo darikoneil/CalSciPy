@@ -136,7 +136,7 @@ class TestROI:
 
     def test_mask(self, sample_roi):
         test_roi = sample_roi.generate_test_roi_x_and_y_args()
-        _ = test_roi.mask  # why am i not being registered as called during tests?
+        _ = test_roi.mask  # why am I not being registered as called during tests?
 
     def test_magic(self, sample_roi):
         with BlockPrinting():
@@ -160,7 +160,7 @@ class Handler:
         ...
 
     @abstractmethod
-    def test_from_file(self,handler_folder):
+    def test_from_file(self, handler_folder):
         ...
 
     @abstractmethod

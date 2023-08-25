@@ -1,5 +1,5 @@
 Installation
-============
+############
 Eventually I will break things up into sub-packages so you don't have to install everything together...
 
 Full Install
