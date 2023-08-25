@@ -261,7 +261,7 @@ def _generate_galvo_point(roi: ROI,
     y, x = roi.centroid
 
     # Retrieve spiral size
-    spiral_size = roi.mask.bound_radius
+    spiral_size = roi.approximation.radius
 
     # Collect and merge with passed parameters. Allows overlap of things like spiral_size
     roi_properties = dict(zip(
