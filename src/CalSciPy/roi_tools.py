@@ -215,9 +215,19 @@ class ROI(_ROIBase):
 
 
 class ApproximateROI(_ROIBase):
+    """
+    An ROI object approximated using 'method'. Like :class:`ROI`, contains the base characteristics & properties of
+    an ROI. Note that the properties are only calculated once.
+
+    """
     def __init__(self,
                  roi: ROI,
                  method: str = "literal"):
+        """
+        An ROI object approximated using 'method'. Like :class:`ROI`, contains the base characteristics & properties of
+        an ROI. Note that the properties are only calculated once.
+
+        """
 
         # cover unimplemented
         if method == "ellipse":
