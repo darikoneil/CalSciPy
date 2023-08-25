@@ -6,6 +6,7 @@ from functools import partial, cached_property
 from abc import abstractmethod
 from pathlib import Path
 from operator import eq, le
+from math import ceil
 
 import numpy as np
 from numpy.typing import NDArray
@@ -30,11 +31,11 @@ class _ROIBase:
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
-                 ypixels: Union[NDArray[int], Sequence[int]],
+                 y_pixels: Union[NDArray[int], Sequence[int]],
                  reference_shape: Sequence[float, float] = (512, 512),
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
-                 zpix: Optional[Union[NDArray[int], Sequence[int]]] = None,
+                 z_pixels: Optional[Union[NDArray[int], Sequence[int]]] = None,
                  **kwargs
                  ):
         """
@@ -47,7 +48,7 @@ class _ROIBase:
             If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
             The matching y-pixels must be then be provided as an additional argument.
 
-        :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
+        :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
         :param reference_shape: the shape of the reference image from which the roi was generated
 
@@ -55,16 +56,16 @@ class _ROIBase:
 
         :param properties: optional properties to include
 
-        :param zpix: The z-pixels of the roi (if volumetric)
+        :param z_pixels: The z-pixels of the roi (if volumetric)
 
         """
         #: NDArray[int]: the x-pixels of the roi (column-wise)
-        self.xpix = None
+        self.x_pixels = None
         #: NDArray[int]: the y-pixels of the roi (row-wise)
-        self.ypix = None
+        self.y_pixels = None
 
         # put pixels in proper format
-        self.ypix, self.xpix = _validate_pixels(pixels, ypixels)
+        self.y_pixels, self.x_pixels = _validate_pixels(pixels, y_pixels)
 
         #: Tuple[float, float, ...]: the shape of the image from which the roi was generated
         self.reference_shape = tuple(reference_shape)
@@ -72,10 +73,10 @@ class _ROIBase:
         #: Optional[int]: index of the imaging plane (if multiplane)
         self.plane = plane
         #: Optional[NDArray[int]]: z-pixels of the roi if volumetric
-        self.zpix = np.asarray(zpix)
+        self.z_pixels = z_pixels
         
         # cover non-implemented optionals
-        if plane is not None or zpix is not None:
+        if plane is not None or z_pixels is not None:
             raise NotImplementedError
 
         #: ChainMap: a mapping of properties containing any relevant information about the ROI
@@ -85,7 +86,7 @@ class _ROIBase:
         # with unknown number of parameters, so this is relevant
 
         #: Tuple[int, ...]: a tuple indexing the vertices of the approximate convex hull of the roi
-        self.vertices = identify_vertices(self.xpix, self.ypix)
+        self.vertices = identify_vertices(self.x_pixels, self.y_pixels)
 
         #: Tuple[float, float, ...]: the centroid of the roi
         self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
@@ -114,7 +115,7 @@ class _ROIBase:
         Nx2 array containing x,y coordinate pairs for the roi
 
         """
-        return np.vstack([self.xpix, self.ypix]).T
+        return np.vstack([self.x_pixels, self.y_pixels]).T
 
     @cached_property
     def xy_vert(self) -> NDArray[int]:
@@ -130,7 +131,7 @@ class _ROIBase:
         Nx2 array containing the r,c coordinate pairs for the roi
 
         """
-        return np.vstack([self.ypix, self.xpix]).T
+        return np.vstack([self.y_pixels, self.x_pixels]).T
 
     @cached_property
     def rc_vert(self) -> NDArray[int]:
@@ -154,22 +155,31 @@ class ROI(_ROIBase):
     An ROI object containing the base characteristics & properties of an ROI. Note that the properties are only
     calculated once.
 
-    :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
-    :param ypix: a 1D numpy array or Sequence indicating the y-pixels of the roi (row-wise)
-    :param reference_shape: the shape of the image from which the roi was generated
-    :param plane: index of the imaging plane (if multi-plane)
-    :param properties: optional properties to include
-    :param zpix: a 1D numpy array or Sequence indicating the z-pixels of the roi (if volumetric)
+        :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.
+            If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
+            The matching y-pixels must be then be provided as an additional argument.
 
+        :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
+
+        :param reference_shape: the shape of the reference image from which the roi was generated
+
+        :param method: the method utilized for generating an approximation of the roi
+            ("mean", "bound", "unbound", "ellipse")
+
+        :param plane: index of the imaging plane (if multi-plane)
+
+        :param properties: optional properties to include
+
+        :param zpix: The z-pixels of the roi (if volumetric)
     """
     def __init__(self,
-                 xpix: Union[NDArray[int], Sequence[int]],
-                 ypix: Union[NDArray[int], Sequence[int]],
+                 pixels: Union[NDArray[int], Sequence[int]],
+                 y_pixels: Optional[Union[NDArray[int], Sequence[int]]] = None,
                  reference_shape: Tuple[float, float] = (512, 512),
                  method: str = "literal",
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
-                 zpix: Optional[Union[NDArray[int], Sequence[int]]] = None,
+                 z_pixels: Optional[Union[NDArray[int], Sequence[int]]] = None,
                  **kwargs):
 
         # initialize new attr
@@ -180,7 +190,10 @@ class ROI(_ROIBase):
         self.approximation = None
 
         # initialize parent attr
-        super().__init__(xpix, ypix, reference_shape, plane, properties, zpix, **kwargs)
+        super().__init__(pixels, y_pixels, reference_shape, plane, properties, z_pixels, **kwargs)
+
+        # set method
+        self.approx_method = method
 
     @staticmethod
     def __name__() -> str:
@@ -205,6 +218,10 @@ class ApproximateROI(_ROIBase):
     def __init__(self,
                  roi: ROI,
                  method: str = "literal"):
+
+        # cover unimplemented
+        if method == "ellipse":
+            raise NotImplementedError
 
         # initialize new attr
         self._method = method
@@ -231,12 +248,12 @@ class ApproximateROI(_ROIBase):
                      method: str = "literal"
                      ) -> Tuple[np.ndarray, np.ndarray, Tuple[int, int]]:
         if method == "literal":
-            xpix = roi.xpix
-            ypix = roi.ypix
+            x_pixels = roi.x_pixels
+            y_pixels = roi.y_pixels
         else:
             radius = calculate_radius(roi.centroid, roi.rc_vert, method=method)
-            ypix, xpix = calculate_mask(roi.centroid, radius, roi.reference_shape)
-        return xpix, ypix, roi.reference_shape
+            y_pixels, x_pixels = calculate_mask(roi.centroid, radius, roi.reference_shape)
+        return x_pixels, y_pixels, roi.reference_shape
 
     def __repr__(self):
         return "ROI Approximation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
@@ -333,7 +350,11 @@ class Suite2PHandler(ROIHandler):
         radius = roi.get("radius")
         xpix = roi.get("xpix")[~roi.get("overlap")]
         ypix = roi.get("ypix")[~roi.get("overlap")]
-        return ROI(aspect_ratio=aspect_ratio, radius=radius, reference_shape=reference_shape, xpix=xpix, ypix=ypix)
+        return ROI(pixels=xpix,
+                   y_pixels=ypix,
+                   reference_shape=reference_shape,
+                   properties=roi
+                   )
 
     @staticmethod
     def from_file(folder: Path, *args, **kwargs) -> Tuple[np.ndarray, dict]:  # noqa: U100
@@ -403,9 +424,9 @@ def calculate_radius(centroid: Sequence[Number, Number],
         #   "mean": a symmetrical radius calculated as the average distance between the centroid and the vertices of
             the approximate convex hull
         #   "bound": a symmetrical radius calculated as the minimum distance between the centroid and the vertices of
-            the approximate convex hull
-        #   "unbound": a symmetrical radius calculated as the maximal distance between the centroid and the vertices
-            of the approximate convex hull
+            the approximate convex hull - 1
+        #   "unbound": a symmetrical radius calculated as 1 + the maximal distance between the centroid and the
+            vertices of the approximate convex hull
         #   "ellipse" : an asymmetrical set of radii whose major-axis radius forms the angle theta with respect to the
             y-axis of the reference image
 
@@ -426,9 +447,9 @@ def calculate_radius(centroid: Sequence[Number, Number],
     if method == "mean":
         return np.mean(radii)
     elif method == "bound":
-        return np.min(radii)
+        return np.min(radii) - 1
     elif method == "unbound":
-        return np.max(radii)
+        return np.max(radii) + 1
     # secret for debugs
     elif method == "all":
         return radii
@@ -437,7 +458,7 @@ def calculate_radius(centroid: Sequence[Number, Number],
 
 
 def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
-                       ypixels: Optional[Union[NDArray[int], Sequence[int, ...]]] = None
+                       y_pixels: Optional[Union[NDArray[int], Sequence[int, ...]]] = None
                        ) -> Tuple[float, float]:
     """
     Calculates the centroid of a polygonal roi .The vertices of the roi's approximate convex hull are calculated
@@ -447,17 +468,17 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
+    :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
     :returns: a tuple containing the centroid of the roi. Whether the centroid is in xy or rc form is dependent on the
         form of the arguments
     """
     # if ypix is provided and xpix is one dimensional
     # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
-    ypixels, pixels = _validate_pixels(pixels, ypixels)
+    y_pixels, pixels = _validate_pixels(pixels, y_pixels)
 
     # we need RC
-    pixels = np.vstack([ypixels, pixels]).T
+    pixels = np.vstack([y_pixels, pixels]).T
 
     # calculate convex hull (if necessary)
     vertices = pixels[identify_vertices(pixels), :]
@@ -529,9 +550,9 @@ def calculate_mask(centroid: Sequence[Number, Number],
     ])
 
     # constrain to within the reference_shape of the image, if necessary
-    if shape is not None:
-        bounding_rect[:, 0] = bounding_rect[:, 0].clip(0, shape[0] - 1)
-        bounding_rect[:, 1] = bounding_rect[:, 1].clip(0, shape[-1] - 1)
+    if reference_shape is not None:
+        bounding_rect[:, 0] = bounding_rect[:, 0].clip(0, reference_shape[0] - 1)
+        bounding_rect[:, 1] = bounding_rect[:, 1].clip(0, reference_shape[-1] - 1)
 
     # adjust center
     centroid -= bounding_rect[0, :]
@@ -558,15 +579,15 @@ def calculate_mask(centroid: Sequence[Number, Number],
     xx += bounding_rect[0, 1]
 
     # constrain to within the reference_shape of the image, if necessary
-    if shape is not None:
-        yy.clip(0, shape[0] - 1)
-        xx.clip(0, shape[-1] - 1)
+    if reference_shape is not None:
+        yy.clip(0, reference_shape[0] - 1)
+        xx.clip(0, reference_shape[-1] - 1)
 
     return yy, xx
 
 
 def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
-                      ypixels: Optional[Union[NDArray[int], Sequence[int]]] = None
+                      y_pixels: Optional[Union[NDArray[int], Sequence[int]]] = None
                       ) -> Tuple[int, ...]:
     """
     Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
@@ -579,7 +600,7 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
+    :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
     
     :returns: A tuple indexing which points form the vertices of the approximate convex hull.
         It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the
@@ -589,8 +610,8 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
     # if not numpy array, convert
     pixels = np.asarray(pixels)
 
-    ypixels, pixels = _validate_pixels(pixels, ypixels)
-    pixels = np.vstack([ypixels, pixels]).T
+    y_pixels, pixels = _validate_pixels(pixels, y_pixels)
+    pixels = np.vstack([y_pixels, pixels]).T
 
     # approximate convex hull
     hull = ConvexHull(pixels)
@@ -600,14 +621,14 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
 
 
 def _validate_pixels(pixels: Union[NDArray[int], Sequence[int]],
-                     ypixels: Optional[Union[NDArray[int], Sequence[int]]]
+                     y_pixels: Optional[Union[NDArray[int], Sequence[int]]]
                      ) -> Tuple[NDArray[int], NDArray[int]]:
 
     pixels = np.asarray(pixels)
-    if ypixels is None:
+    if y_pixels is None:
         assert(sum(pixels.shape) >= max(pixels.shape) + 1)
         return pixels[:, 0], pixels[:, 1]
     else:
-        ypixels = np.asarray(ypixels)
-        assert(ypixels.shape == pixels.shape)
-        return ypixels, pixels
+        ypixels = np.asarray(y_pixels)
+        assert(y_pixels.shape == pixels.shape)
+        return y_pixels, pixels
