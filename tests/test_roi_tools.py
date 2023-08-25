@@ -1,11 +1,19 @@
 import pytest
-from tests.conftest import retrieve_roi
+from tests.conftest import retrieve_roi, retrieve_suite2p
+from tests.helpers import BlockPrinting
+
 from copy import deepcopy
 from math import ceil
 from operator import ge, le
+from abc import abstractmethod
+
 import numpy as np
 
-from CalSciPy.roi_tools import ROI
+# noinspection PyProtectedMember
+from CalSciPy.roi_tools import ROI, Suite2PHandler, ROIHandler
+
+# noinspection PyProtectedMember
+from CalSciPy.roi_tools.roi_tools import _ROIBase
 
 
 """
@@ -68,7 +76,7 @@ class SampleROI:
                 # check mask
                 if attr == "mask":
                     print("mask!")
-                    y, x = np.where(getattr(test_roi, attr))
+                    y, x = np.where(test_roi.mask)
                     assert(np.testing.assert_equal(y, self.y_pixels))
                     assert(np.testing.assert_equal(x, self.x_pixels))
 
@@ -87,7 +95,7 @@ class SampleROI:
 @pytest.fixture()
 def sample_roi(request):
     """
-    Fixture for the helper class
+    Fixture for the roi helper class
 
     """
     return SampleROI(request.param)
@@ -109,6 +117,7 @@ class TestROI:
 
     def test_literal(self, sample_roi):
         test_roi = sample_roi.generate_test_roi_x_and_y_args()
+        test_roi.approx_method = "literal"
         literal_roi = test_roi.approximation
         sample_roi.validate_attrs(literal_roi)
 
@@ -124,3 +133,84 @@ class TestROI:
 
     def test_exceptions(self, sample_roi):
         sample_roi.validate_exceptions()
+
+    def test_mask(self, sample_roi):
+        test_roi = sample_roi.generate_test_roi_x_and_y_args()
+        _ = test_roi.mask  # why am i not being registered as called during tests?
+
+    def test_magic(self, sample_roi):
+        with BlockPrinting():
+            test_roi = sample_roi.generate_test_roi_x_and_y_args()
+            print(test_roi.__str__())
+            print(test_roi.__repr__())
+            print(test_roi.__name__())
+            print(test_roi.approximation.__str__())
+            print(test_roi.approximation.__repr__())
+            print(test_roi.approximation.__name__())
+
+    def test_abstract(self, sample_roi):
+        with pytest.raises(TypeError):
+            roi_base = _ROIBase(pixels=sample_roi.x_pixels, y_pixels=sample_roi.y_pixels)
+
+
+class Handler:
+
+    @abstractmethod
+    def from_file(self, handler_folder):
+        ...
+
+    @abstractmethod
+    def test_from_file(self,handler_folder):
+        ...
+
+    @abstractmethod
+    def test_reference_image(self, handler_folder):
+        ...
+
+    @abstractmethod
+    def test_conversion(self, handler_folder):
+        ...
+
+    @abstractmethod
+    def test_import_rois(self, handler_folder):
+        ...
+
+    @abstractmethod
+    def test_load(self, handler_folder):
+        ...
+
+
+@pytest.fixture()
+def handler_folder(request, temp_path):
+    """
+    Fixture for the handler helper class
+
+    """
+    return temp_path.joinpath("suite2p").joinpath(request.param)
+
+
+@pytest.mark.parametrize("handler_folder", [folder for folder in retrieve_suite2p()], indirect=["handler_folder"])
+class TestSuite2PHandler:
+
+    def from_file(self, handler_folder):
+        return Suite2PHandler.from_file(handler_folder)
+
+    def test_from_file(self, handler_folder):
+        assert len(self.from_file(handler_folder)) == 2
+
+    def test_reference_image(self, handler_folder):
+        _, ops = self.from_file(handler_folder)
+        _ = Suite2PHandler.generate_reference_image(ops)
+
+    def test_conversion(self, handler_folder):
+        stat, _ = self.from_file(handler_folder)
+        roi = stat[0]
+        _ = Suite2PHandler.convert_one_roi(roi)
+
+    def test_import_rois(self, handler_folder):
+        stat, ops = self.from_file(handler_folder)
+        reference_shape = Suite2PHandler.generate_reference_image(ops).shape
+        _ = Suite2PHandler.import_rois(stat, reference_shape)
+
+    def test_load(self, handler_folder):
+        _ = Suite2PHandler.load(handler_folder)

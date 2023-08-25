@@ -72,6 +72,17 @@ def retrieve_roi() -> dict:
         yield roi
 
 
+def retrieve_suite2p() -> Path:
+    """
+    Generator that yields the next dataset in the suite2p sample set
+    """
+    # get the sub-folder containing data directory samples
+    suite2p_dir = _TEMPORARY_DIRECTORY.joinpath("suite2p")
+
+    # generator for testing
+    return [suite2p_folder.name for suite2p_folder in suite2p_dir.glob("*")]
+
+
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
 def matrix(request):

@@ -3,17 +3,12 @@ from typing import Optional, Tuple, Union, Sequence, Iterable, Any, Mapping
 from numbers import Number
 from collections import ChainMap
 from functools import partial, cached_property
-from abc import abstractmethod
-from pathlib import Path
-from operator import eq, le
-from math import ceil
+from abc import abstractmethod, ABCMeta
 
 import numpy as np
 from numpy.typing import NDArray
 from scipy.spatial import ConvexHull
 from scipy.spatial.distance import cdist
-
-from CalSciPy._backports import PatternMatching
 
 
 """
@@ -21,7 +16,7 @@ Object-oriented approach to organizing ROI-data
 """
 
 
-class _ROIBase:
+class _ROIBase(metaclass=ABCMeta):
     """
     An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
     the only abstract method is __name__. Therefore, it isn't *really* abstract, but it is not meant
@@ -31,7 +26,7 @@ class _ROIBase:
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
-                 y_pixels: Union[NDArray[int], Sequence[int]],
+                 y_pixels: Union[NDArray[int], Sequence[int]] = None,
                  reference_shape: Sequence[float, float] = (512, 512),
                  plane: Optional[int] = None,
                  properties: Optional[Mapping] = None,
@@ -74,7 +69,7 @@ class _ROIBase:
         self.plane = plane
         #: Optional[NDArray[int]]: z-pixels of the roi if volumetric
         self.z_pixels = z_pixels
-        
+
         # cover non-implemented optionals
         if plane is not None or z_pixels is not None:
             raise NotImplementedError
@@ -195,10 +190,6 @@ class ROI(_ROIBase):
         # set method
         self.approx_method = method
 
-    @staticmethod
-    def __name__() -> str:
-        return "ROI"
-
     @property
     def approx_method(self) -> str:
         """
@@ -206,6 +197,10 @@ class ROI(_ROIBase):
 
         """
         return self._method
+
+    @staticmethod
+    def __name__() -> str:
+        return "ROI"
 
     @approx_method.setter
     def approx_method(self, method: str = "literal") -> ROI:
@@ -277,13 +272,13 @@ class ROIHandler:
 
     @staticmethod
     @abstractmethod
-    def convert_one_roi(roi: Any, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
+    def convert_one_roi(roi: Any, reference_shape: Sequence[int, int] = (512, 512)) -> ROI:
         """
         Abstract method for converting one roi in an ROI object
 
         :param roi: some sort of roi data structure
         :param reference_shape: the reference_shape of the image containing the rois
-        :return: a single ROI object
+        :returns: a single ROI object
         """
         ...
 
@@ -304,14 +299,14 @@ class ROIHandler:
         Abstract method to generate a reference image from some data structure
 
         :param data_structure: some data structure from which the reference image can be derived
-        :return: reference image
+        :returns: reference image
         """
         ...
 
     @classmethod
     def import_rois(cls: ROIHandler,
                     rois: Union[Iterable, np.ndarray],
-                    reference_shape: Tuple[int, int] = (512, 512)
+                    reference_shape: Sequence[int, int] = (512, 512)
                     ) -> dict:
         """
         Abstract method for importing rois
@@ -319,7 +314,7 @@ class ROIHandler:
         :param rois: some sort of data structure iterating over all rois or a numpy array which will be converted to
             an Iterable
         :param reference_shape: the reference_shape of the image containing the rois
-        :return: dictionary containing in which the keys are integers indexing the roi and each roi is an ROI object
+        :returns: dictionary containing in which the keys are integers indexing the roi and each roi is an ROI object
         """
 
         # Convert numpy array if provided
@@ -344,85 +339,6 @@ class ROIHandler:
         rois = cls.import_rois(rois_data_structure, reference_image.shape)
 
         return rois, reference_image
-
-
-class Suite2PHandler(ROIHandler):
-    @staticmethod
-    def convert_one_roi(roi: Any, reference_shape: Tuple[int, int] = (512, 512)) -> ROI:
-        """
-        Generates ROI from suite2p stat array
-
-        :param roi: dictionary containing one suite2p roi
-        :param reference_shape: reference_shape of the reference image containing the roi
-        :return: ROI instance for the roi
-        """
-        aspect_ratio = roi.get("aspect_ratio")
-        radius = roi.get("radius")
-        xpix = roi.get("xpix")[~roi.get("overlap")]
-        ypix = roi.get("ypix")[~roi.get("overlap")]
-        return ROI(pixels=xpix,
-                   y_pixels=ypix,
-                   reference_shape=reference_shape,
-                   properties=roi
-                   )
-
-    @staticmethod
-    def from_file(folder: Path, *args, **kwargs) -> Tuple[np.ndarray, dict]:  # noqa: U100
-        """
-
-        :keyword folder: folder containing suite2p data. The folder must contain the associated "stat.npy"
-            & "ops.npy" files, though it is recommended the folder also contain the "iscell.npy" file.
-        :returns: "stat" and "ops"
-        """
-
-        # append suite2p + plane if necessary
-        if "suite2p" not in str(folder):
-            folder = folder.joinpath("suite2p")
-
-        if "plane" not in str(folder):
-            folder = folder.joinpath("plane0")
-
-        stat = np.load(folder.joinpath("stat.npy"), allow_pickle=True)
-
-        # use only neuronal rois if iscell is provided
-        try:
-            iscell = np.load(folder.joinpath("iscell.npy"), allow_pickle=True)
-        except FileNotFoundError:
-            stat[:] = stat
-        else:
-            stat = stat[np.where(iscell[:, 0] == 1)[0]]
-
-        ops = np.load(folder.joinpath("ops.npy"), allow_pickle=True).item()
-
-        return stat, ops
-
-    @staticmethod
-    def generate_reference_image(data_structure: Any) -> np.ndarray:
-        """
-         Generates an appropriate reference image from suite2p ops dictionary
-
-        :param data_structure: ops dictionary
-        :return: reference image
-        """
-
-        true_shape = (data_structure.get("Ly"), data_structure.get("Lx"))
-
-        # Load Vcorr as our reference image
-        try:
-            reference_image = data_structure.get("Vcorr")
-            assert (reference_image is not None)
-        except (KeyError, AssertionError):
-            reference_image = np.ones(true_shape)
-
-        # If motion correction cropped Vcorr, append minimum around edges
-        if reference_image.shape != true_shape:
-            true_reference_image = np.ones(true_shape) * np.min(reference_image)
-            x_range = data_structure.get("xrange")
-            y_range = data_structure.get("yrange")
-            true_reference_image[y_range[0]: y_range[-1], x_range[0]:x_range[-1]] = reference_image
-            return true_reference_image
-        else:
-            return reference_image
 
 
 def calculate_radius(centroid: Sequence[Number, Number],
@@ -530,12 +446,12 @@ def calculate_mask(centroid: Sequence[Number, Number],
 
     :param radii: radius of the roi. Only one radius is required if the roi is symmetrical (i.e., circular).
         For an elliptical roi both a long and short radius can be provided.
-    
+
     :param reference_shape: dimensions of the reference image the roi lies within. If only one value is provided
         it is considered symmetrical.
 
     :param theta: angle of the long-radius with respect to the y-axis of the reference image
-    
+
     :returns: a boolean mask identifying which pixels contain the roi within the reference image
     """
 
@@ -600,21 +516,20 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
                       y_pixels: Optional[Union[NDArray[int], Sequence[int]]] = None
                       ) -> Tuple[int, ...]:
     """
-    Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
-
-    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_. It's a
-        fast and easy alternative to actually determining the "true" boundary vertices given the assumption that
-        cellular ROIs are convex (i.e., cellular rois ought to be roughly elliptical).
+    Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function
+    wraps :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_.
+    It's a fast and easy alternative to actually determining the "true" boundary vertices given the assumption that
+    cellular ROIs are convex (i.e., cellular rois ought to be roughly elliptical).
 
     :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
     :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
-    
+
     :returns: A tuple indexing which points form the vertices of the approximate convex hull.
         It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the
-        boundaries of the roi, though this only holds if the polygon doesn't have any concave portions. 
+        boundaries of the roi, though this only holds if the polygon doesn't have any concave portions.
     """
 
     # if not numpy array, convert
@@ -636,9 +551,9 @@ def _validate_pixels(pixels: Union[NDArray[int], Sequence[int]],
 
     pixels = np.asarray(pixels)
     if y_pixels is None:
-        assert(sum(pixels.shape) >= max(pixels.shape) + 1)
+        assert (sum(pixels.shape) >= max(pixels.shape) + 1)
         return pixels[:, 0], pixels[:, 1]
     else:
-        ypixels = np.asarray(y_pixels)
-        assert(y_pixels.shape == pixels.shape)
+        y_pixels = np.asarray(y_pixels)
+        assert (y_pixels.shape == pixels.shape)
         return y_pixels, pixels
