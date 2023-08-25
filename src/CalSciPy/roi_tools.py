@@ -570,9 +570,10 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
                       ) -> Tuple[int, ...]:
     """
     Identifies the points of a given polygon which form the vertices of the approximate convex hull. This function wraps 
-    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_. It's a fast
-    and easy alternative to actually determining the "true" boundary vertices given the assumption that cellular ROIs are
-    convex (i.e., cellular rois ought to be roughly elliptical).
+
+    :class:`scipy.spatial.ConvexHull`, which is an ultimately a wrapper for `QHull <https://www.qhull.org>`_. It's a
+        fast and easy alternative to actually determining the "true" boundary vertices given the assumption that
+        cellular ROIs are convex (i.e., cellular rois ought to be roughly elliptical).
 
     :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
