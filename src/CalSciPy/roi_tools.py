@@ -461,8 +461,8 @@ def calculate_radius(centroid: Sequence[Number, Number],
     elif method == "unbound":
         return np.max(radii) + 1
     # secret for debugs
-    elif method == "all":
-        return radii
+    # elif method == "all":
+    #    return radii
     else:
         raise NotImplementedError(f"Request method {method} is not supported")
 

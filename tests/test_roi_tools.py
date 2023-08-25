@@ -67,9 +67,21 @@ class SampleROI:
             else:
                 # check mask
                 if attr == "mask":
+                    print("mask!")
                     y, x = np.where(getattr(test_roi, attr))
                     assert(np.testing.assert_equal(y, self.y_pixels))
                     assert(np.testing.assert_equal(x, self.x_pixels))
+
+    def validate_exceptions(self):
+        # plane is not yet implemented
+        with pytest.raises(NotImplementedError):
+            ROI(self.x_pixels, self.y_pixels, plane=0)
+        # z_pixels is not yet implemented
+        with pytest.raises(NotImplementedError):
+            ROI(self.x_pixels, self.y_pixels, z_pixels=np.ones_like(self.x_pixels))
+        # approximation ellipse not yet implemented
+        with pytest.raises(NotImplementedError):
+            ROI(self.x_pixels, self.y_pixels, method="ellipse")
 
 
 @pytest.fixture()
@@ -109,3 +121,6 @@ class TestROI:
         test_roi = sample_roi.generate_test_roi_x_and_y_args()
         test_roi.approx_method = "unbound"
         sample_roi.validate_approximations(ge, test_roi.approximation, test_roi)
+
+    def test_exceptions(self, sample_roi):
+        sample_roi.validate_exceptions()
