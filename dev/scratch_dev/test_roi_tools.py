@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pytest
+# noinspection PyProtectedMember
 from CalSciPy.roi_tools import ROI, _ROIBase, ApproximateROI, ROIHandler, Sequence, calculate_mask, calculate_radius, \
     calculate_centroid, identify_vertices, _validate_pixels
 
@@ -49,22 +50,10 @@ roi = sample_rois.get(7)
 test_roi = ROI(roi.get("xpix"), roi.get("ypix"), reference_shape=roi.get("reference_shape"))
 
 from matplotlib.patches import Polygon  # noqa: E402
-fig, ax = plt.subplots(1,1)
+fig, ax = plt.subplots(1, 1)
 ax.imshow(test_roi.mask)
 ax.add_patch(Polygon(test_roi.xy_vert, fill=False, color="black"))
 test_roi.approx_method = "bound"
 ax.add_patch(Polygon(test_roi.approximation.xy_vert, fill=False, color="blue"))
-test_roi.approx_method="unbound"
+test_roi.approx_method = "unbound"
 ax.add_patch(Polygon(test_roi.approximation.xy_vert, fill=False, color="red"))
-
-literal = {}
-bound = {}
-unbound = {}
-
-
-# important stuff
-keys = ("centroid", "radius", "vertices", "x_pixels", "y_pixels")
-
-for key in key:
-
-
