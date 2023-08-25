@@ -23,8 +23,8 @@ Object-oriented approach to organizing ROI-data
 class _ROIBase:
     """
     An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
-    the only abstract method is __name__, and thus it isn't *really* abstract, but it is not meant
-    to be instanced and thus it contains the abstract method for protection. Note that the properties
+    the only abstract method is __name__. Therefore, it isn't *really* abstract, but it is not meant
+    to be instanced; it contains the abstract method for protection. Note that the properties
     are only calculated once.
 
     """
@@ -39,13 +39,13 @@ class _ROIBase:
                  ):
         """
         An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
-        the only abstract method is __name__, and thus it isn't *really* abstract, but it is not meant
-        to be instanced and thus it contains the abstract method for protection. Note that the properties
+        the only abstract method is __name__. Therefore, it isn't *really* abstract, and it is not meant
+        to be instanced; it contains the abstract method for protection. Note that the properties
         are only calculated once.
 
-        :param pixels: An Nx2 array of x and y-pixel pairs **strictly** in rc form.
+        :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.
             If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
-            The matching y-pixels must be then be providedas an additional argument.
+            The matching y-pixels must be then be provided as an additional argument.
 
         :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
@@ -63,13 +63,12 @@ class _ROIBase:
         #: NDArray[int]: the y-pixels of the roi (row-wise)
         self.ypix = None
 
+        # put pixels in proper format
         self.ypix, self.xpix = _validate_pixels(pixels, ypixels)
 
-        # required with default
-        #: Tuple[float, float]: the shape of the imaage from which the roi was generated
+        #: Tuple[float, float, ...]: the shape of the image from which the roi was generated
         self.reference_shape = tuple(reference_shape)
 
-        # optional
         #: Optional[int]: index of the imaging plane (if multiplane)
         self.plane = plane
         #: Optional[NDArray[int]]: z-pixels of the roi if volumetric
@@ -79,22 +78,20 @@ class _ROIBase:
         if plane is not None or zpix is not None:
             raise NotImplementedError
 
+        #: ChainMap: a mapping of properties containing any relevant information about the ROI
+        self.properties = ChainMap(kwargs, properties)
         # user-defined, using chainmap is O(N) worst-case while dict construction / update
         # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
         # with unknown number of parameters, so this is relevant
-        #: ChainMap: a mapping of properties containing any relevant information about the ROI
-        self.properties = ChainMap(kwargs, properties)
 
         #: Tuple[int, ...]: a tuple indexing the vertices of the approximate convex hull of the roi
         self.vertices = identify_vertices(self.xpix, self.ypix)
 
-        # requires vertices!!!
-        #: Tuple[float, float]: the centroid of the roi
-        self.centroid = calculate_centroid(self.xy_vert)[::-1]
+        #: Tuple[float, float, ...]: the centroid of the roi
+        self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
 
-        # requires vertices + centroid!!!
         #: float: the radius of the ROI
-        self.radius = calculate_radius(self.centroid, self.rc_vert, method="mean")
+        self.radius = calculate_radius(self.centroid, self.rc_vert, method="mean")  # requires vertices + centroid!!!
 
     def __str__(self):
         return f"ROI centered at {tuple([round(val) for val in self.centroid])}"
@@ -154,7 +151,7 @@ class _ROIBase:
 
 class ROI(_ROIBase):
     """
-    An ROI object containing the base characteristics & properties of an ROI.Note that the properties are only
+    An ROI object containing the base characteristics & properties of an ROI. Note that the properties are only
     calculated once.
 
     :param xpix: a 1D numpy array or Sequence indicating the x-pixels of the roi (column-wise)
@@ -407,7 +404,7 @@ def calculate_radius(centroid: Sequence[Number, Number],
             the approximate convex hull
         #   "bound": a symmetrical radius calculated as the minimum distance between the centroid and the vertices of
             the approximate convex hull
-        #   "unbound": a symmetrical radius calculated as the maximumal distance between the centroid and the vertices
+        #   "unbound": a symmetrical radius calculated as the maximal distance between the centroid and the vertices
             of the approximate convex hull
         #   "ellipse" : an asymmetrical set of radii whose major-axis radius forms the angle theta with respect to the
             y-axis of the reference image
@@ -446,7 +443,7 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
     Calculates the centroid of a polygonal roi .The vertices of the roi's approximate convex hull are calculated
     (if necessary) and the centroid estimated from these vertices using the shoelace formula.
 
-    :param pixels: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+    :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
@@ -469,7 +466,7 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
     center_y = 0
     sigma_signed_area = 0
 
-    points = pixels.shape[0]
+    points = vertices.shape[0]
     for pt in range(points):
         if pt < points - 1:
             trapezoid_area = (vertices[pt, 0] * vertices[pt + 1, 1]) - (vertices[pt + 1, 0] * vertices[pt, 1])
@@ -543,7 +540,7 @@ def calculate_mask(centroid: Sequence[Number, Number],
     bounding = bounding_rect[1, :] - bounding_rect[0, :] + 1
     y_grid, x_grid = np.ogrid[0:float(bounding[0]), 0:float(bounding[1])]
 
-    #origin
+    # origin
     y, x = centroid
     r_rad, c_rad = radii
 
@@ -577,7 +574,7 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
     and easy alternative to actually determining the "true" boundary vertices given the assumption that cellular ROIs are
     convex (i.e., cellular rois ought to be roughly elliptical).
 
-    :param pixels: An Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
+    :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
@@ -600,13 +597,14 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
     # return the vertices
     return hull.vertices
 
+
 def _validate_pixels(pixels: Union[NDArray[int], Sequence[int]],
                      ypixels: Optional[Union[NDArray[int], Sequence[int]]]
                      ) -> Tuple[NDArray[int], NDArray[int]]:
 
     pixels = np.asarray(pixels)
     if ypixels is None:
-        assert(sum(pixels.shape) >=  max(pixels.shape) + 1)
+        assert(sum(pixels.shape) >= max(pixels.shape) + 1)
         return pixels[:, 0], pixels[:, 1]
     else:
         ypixels = np.asarray(ypixels)

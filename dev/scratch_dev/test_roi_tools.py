@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import pytest
-from CalSciPy.roi_tools import *
+from CalSciPy.roi_tools import ROI, _ROIBase, ApproximateROI, ROIHandler, Sequence, calculate_mask, calculate_radius, \
+    calculate_centroid, identify_vertices, _validate_pixels
 
 import numpy as np
 from pathlib import Path
@@ -12,7 +13,7 @@ from matplotlib import pyplot as plt
 
 from itertools import chain
 
-file = Path(".//tests//testing_samples//variables//sample_roi.npy")
+file = Path(".//tests//testing_samples//variables//sample_rois.npy")
 
 
 """
@@ -40,15 +41,3 @@ np.save(file, sample_rois, allow_pickle=True)
 
 
 sample_rois = np.load(file, allow_pickle=True).item()
-
-test_rois = {}
-
-for neuron in range(8):
-    sample = sample_rois.get(neuron)
-    test_rois[neuron] = ROI(sample.get("xpix"), sample.get("ypix"), sample.get("reference_shape"))
-
-
-fig, ax = plt.subplots(1, 1)
-ax.imshow(roi.mask)
-
-radius = calculate_radius(roi.centroid, roi.rc_vert, method="all")

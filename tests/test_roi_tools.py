@@ -1,6 +1,7 @@
 import pytest
 from tests.conftest import retrieve_roi
 from copy import deepcopy
+from math import ceil
 
 import numpy as np
 
@@ -32,7 +33,13 @@ class SampleROI:
                 true_attr = getattr(self, attr)
 
                 if isinstance(test_attr, (float, np.ndarray)):
-                    np.testing.assert_allclose(test_attr, true_attr, atol=0.75)
+
+                    # true radius is an int but pixels are discrete. we might be slightly lower when calculating
+                    # from image. therefore we take the larger of the two nearest integers
+                    if attr == "radius":
+                        test_attr = ceil(test_attr)
+
+                    np.testing.assert_equal(test_attr, true_attr)
                 else:
                     assert(getattr(self, attr) == getattr(self.test_roi, attr))
 
