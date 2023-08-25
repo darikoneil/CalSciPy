@@ -22,18 +22,20 @@ Jargon notes:
 """
 
 
-def generate_target_mask(group: StimulationGroup, method: str = "bound_rc") -> NDArray[bool]:
+def generate_target_mask(group: StimulationGroup, method: str = "radius") -> NDArray[bool]:
 
-    rois = [getattr(roi.mask, method) for roi in group.rois]
+    #rois = [getattr(roi.mask, method) for roi in group.rois]
+    rois = [roi for roi in group.rois]
 
     shape = group.shape
 
-    masks = []
-    for coordinates in rois:
-        one_mask = np.zeros(shape, dtype=bool)
-        for pt in range(coordinates.shape[0]):
-            one_mask[coordinates[pt, 0], coordinates[pt, 1]] = True
-        masks.append(one_mask)
+    masks = [roi.mask for roi in rois]
+
+    #for roi in rois:
+        #one_mask = np.zeros(shape, dtype=bool)
+        #for pt in range(coordinates.shape[0]):
+            #one_mask[coordinates[pt, 0], coordinates[pt, 1]] = True
+        #masks.append()
 
     if group.point_interval == 0:
         masks = np.sum(masks, axis=0)
