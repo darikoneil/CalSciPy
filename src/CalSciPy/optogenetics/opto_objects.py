@@ -94,7 +94,7 @@ class Photostimulation:
         return self._roi_to_target_map.get(roi_index)
 
     @property
-    def shape(self) -> Tuple[int, int]:
+    def reference_shape(self) -> Tuple[int, int]:
         """
         Shape of reference image
 
@@ -137,7 +137,7 @@ class Photostimulation:
     @classmethod
     def import_rois(cls: Photostimulation, handler: ROIHandler = Suite2PHandler, *args, **kwargs) -> Photostimulation:
         """
-        Class method that builds a :class:`Photostimulation` instance using the specificed :class:`ROIHandler`.
+        Class method that builds a :class:`Photostimulation` instance using the specified :class:`ROIHandler`.
         Any additional arguments or keyword arguments are passed to the :class:`ROIHandler`
 
         :param handler: desired ROIHandler
@@ -219,7 +219,7 @@ class StimulationGroup:
         return len(self.rois)
 
     @property
-    def shape(self) -> Tuple[int, int]:
+    def reference_shape(self) -> Tuple[int, int]:
         """
         Shape of reference image
 
