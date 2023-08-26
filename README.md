@@ -17,7 +17,7 @@ interactive visualization of data to computer-generated holography for "read/wri
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be 
 considered useful to others. Its inspiration is to solve the following issues:
 
-Motivation: I was inspired to upload my own code to solve some of these issues--or at least create neat package my friends and I 
+Motivation: I was inspired to upload my own code to solve some of these issues--or at least create a neat package my friends and I 
 could use to easily analyze data across various environments and computers.
 
 1. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
