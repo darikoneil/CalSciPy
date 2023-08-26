@@ -31,20 +31,22 @@ incomplete documentation when re-using a hastily-made function from 2 months ago
 
 2. Most scientific software these days have GUIs. But if you want to visualize your data after performing some arbitrary
 transformation? *Womp womp*. Maybe you use different tools to extract the same sorts of data, and just
-want one darn gui to look at the both? *Womp womp* Well, I want generic, interactive visualization tools. I want to
+want one darn gui to look at them both? *Womp womp* Well, I want generic, interactive visualization tools. I want to
 assess the quality of spike inference from recently published spike-finder number #12, I want to sort through ROIs,
-and I want to explore population activity, and I want to do so directly from the relevant data--independent of the
+and I want to explore population activity. I want to do so directly from the relevant data--independent of the
 software used to collect or analyze it. I want to have my delicious cake and eat it too. So I made some interactive
 visualization tools that require only the exact information that ought to be required to plot them.
 
 3. I needed tools for holographic optogenetics & "read/write" experimentation in python for my own experiments.
 Since I was already doing it, why not make them abstracted enough for all neuroscientists to use...not for only the
-optical or imaging experts. I want them to be tested, documented, and easy-to-use.I want tools for holographic optogenetics & "read/write" experimentation in python. I want them written and abstracted enough for neuroscientists to use...not for only the optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
+optical or imaging experts. I want them to be tested, documented, and easy-to-use.I want tools for holographic optogenetics &
+"read/write" experimentation in python. I want them written and abstracted enough for neuroscientists to use...not for only
+the optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
 
-4. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
+5. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
 metadata, generating protocols programmatically, and aligning collected data.
 
-5. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
+6. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
 
 
 #### Active Development
