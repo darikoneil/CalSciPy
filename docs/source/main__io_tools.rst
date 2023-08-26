@@ -18,41 +18,152 @@ numpy arrays with shape frames x height x width. It requires the path to the ima
 
    images = load_images("single_image.tif")
 
-**Loading a 3D-stack**
+.. centered:: **Loading a 3D-stack**
 
 .. code-block:: python
 
    images = load_images("imaging_stack.tif")
 
-**Loading entire folders**
+.. centered:: **Loading entire folders**
 
 .. code-block:: python
 
    images = load_images("imaging_folder")
 
-Easy, eh?
+Easy, huh?
 
 Saving
 ``````
-CalScipy also offers a single, simple function for saving images with the .tif file format. To save images, simply pass the file and a :class:`numpy array <numpy.ndarray>` as arguments to
+CalScipy also offers a single, simple function for saving images with the .tif file format. To save images,
+simply pass the file and a :class:`numpy array <numpy.ndarray>` as arguments to
 :func:`save_images <CalSciPy.io_tools.save_images>`
 
-**Saving images**
+.. centered:: **Saving images to file**
 
 .. code-block:: python
 
-   images = save_images("single_image.tif", images)
+   save_images("single_image.tif", images)
 
+.. centered:: **Saving images to a folder**
 
+.. code-block:: python
+
+   save_images("desired_folder", images)
+
+.. centered:: **Saving images as multiple stacks**
+
+.. code-block:: python
+
+    save_images("desired_folder", images, size_cap=0.01)
+
+.. centered:: **Saving images to a folder with specified name**
+
+.. code-block:: python
+
+   save_images("desired_folder", images, name="example_images")
 
 Binary (Recommended)
 ********************
-Binary
+CalScipy offers functions for loading and saving images as binary. This language-agnostic format is ideal for optimal
+read/write speeds, larger-than-memory data, and is highly-robust to corruption. However, the downside is that the
+images and their metadata are split into two separate files: ".bin" and ".json" respectively.
+
+Loading
+```````
+Binary data in CalSciPy can be loaded using the :func:`load_binary <CalSciPy.io_tools.load_binary>` function.
+The path to the binary data is required as an argument.
+
+.. centered:: **Loading binary data directly from file**
+
+.. code-block:: python
+
+    images = load_binary("binary.bin")
+
+.. centered:: **Loading binary data directly from a folder**
+
+.. code-block:: python
+
+    images = load_binary("desired_folder")
+
+.. centered:: **Loading memory mapped binary data**
+
+.. code-block:: python
+
+    images = load_binary("desired_folder", mapped=True, mode="r")
+
+.. centered:: **Loading binary data with missing metadata**
+
+.. code-block:: python
+
+    missing_metadata = {"frames": 100, "y": 100, "dtype": int}
+    images = load_binary("desired_folder", missing_metadata=missing_metadata)
+
+Saving
+``````
+Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function.
+
+.. centered:: **Saving binary to file**
+
+.. code-block:: python
+
+    save_binary("binary_file.bin", images)
+
+.. centered:: **Saving binary to folder**
+
+.. code-block:: python
+
+    save_binary("desired_folder", images)
+
+.. centered:: **Saving binary to folder with specified name**
+
+.. code-block:: python
+
+    save_binary("desired_folder", images, name="example_binary")
 
 Video (.mp4)
 ************
-Videos
+CalSciPy also provides simple functions to load and save .mp4 files.
 
-Animations (.gif)
-*****************
-Animations
+Loading
+```````
+Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function.
+
+.. centered:: **Loading video from file**
+
+.. code-block:: python
+
+    images = load_video("video_file.mp4")
+
+.. centered:: **Loading video from folder**
+
+.. code-block:: python
+
+    images = load_video("desired_folder")
+
+Saving
+``````
+Saving .mp4's uses the :func:`save_video <CalSciPy.io_tools.save_video>` function.
+
+.. centered:: **Saving video to file**
+
+.. code-block:: python
+
+    save_video("video_file.mp4", images)
+
+.. centered:: **Saving video to folder**
+
+.. code-block:: python
+
+    save_video("desired_folder", images)
+
+.. centered:: **Saving video to folder with specified name**
+
+.. code-block:: python
+
+    save_video("desired_folder", images, name="example_binary")
+
+.. centered:: **Saving video to folder with specified framerate**
+
+.. code-block:: python
+
+    save_video("video_file.mp4", images, frame_rate=90.0)
