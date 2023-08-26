@@ -35,9 +35,13 @@ def load_binary(path: Union[str, Path],
     number of frames, y-pixels, x-pixels, and the datatype (:class:`numpy.dtype`)
 
     :param path: folder containing binary file
+
     :param mapped: boolean indicating whether to load image using memory-mapping
+
     :param mode: indicates the level of access permitted to the original binary
+
     :param missing_metadata: if you have lost the metadata or otherwise wish to manually provide it
+
     :returns: image (frames, y-pixels, x-pixels)
     """
     # If path is a folder and not just the filepath without an extension
@@ -77,7 +81,8 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
     compiled to a single array.
 
     :param path: a file containing images or a folder containing several imaging stacks
-    :return: numpy array (frames, y-pixels, x-pixels)
+
+    :returns: numpy array (frames, y-pixels, x-pixels)
     """
     if not path.exists():
         raise FileNotFoundError("Unable to locate files")
@@ -94,7 +99,8 @@ def load_video(path: Union[str, Path]) -> np.ndarray:
     Load video (.mp4) as numpy array.
 
     :param path: absolute filepath
-    :return: numpy array (frames, y-pixels, x-pixels, color)
+
+    :returns: numpy array (frames, y-pixels, x-pixels, color)
     """
 
     path = path.with_suffix(".mp4")
@@ -124,8 +130,11 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) ->
 
     :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension. If
         no filename is provided then the default filename is *binary_video*.
+
     :param images: images to save (frames, y-pixels, x-pixels)
+
     :param name: specify filename for produced files
+
     :returns: 0 if successful
     """
     default_name = "binary_video"
@@ -158,10 +167,14 @@ def save_images(path: Union[str, Path],
     already exists the default filename will be *images*.
 
     :param path: filename or absolute path
+
     :param images: numpy array (frames, y pixels, x pixels)
+
     :param name: filename for saving images
-    :param size_cap: maximum size per file
-    :returns: returns 0 if successful
+
+    :param size_cap: maximum size per file (in GB)
+
+    :returns: 0 if successful
     """
     default_name = "images"
     extension = ".tif"
@@ -188,10 +201,14 @@ def save_video(path: Union[str, Path],
     default is "video"
 
     :param path: absolute filepath or filename
+
     :param images: numpy array (frames, y-pixels, x-pixels)
-    :param frame_rate: frame rate for saved video
+
+    :param frame_rate: frame rate for saved video (frames per second)
+
     :param name: filename for saving images
-    :return: Zero if successful
+
+    :returns: 0 if successful
     """
 
     default_name = "video"
@@ -214,7 +231,8 @@ def _load_single_tif(file: Union[str, Path]) -> np.ndarray:
     Load a single .tif as a numpy array (implementation function)
 
     :param file: absolute filename
-    :return: numpy array (frames, y-pixels, x-pixels)
+
+    :returns: numpy array (frames, y-pixels, x-pixels)
     """
     return np.array(cv2.imreadmulti(file, flags=-1)[1])
 
@@ -225,7 +243,8 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     Loads all .tif's within a folder into a single numpy array (implementation function)
 
     :param folder: folder containing a sequence of tiff stacks
-    :returns: a numpy array containing the images (frames, y-pixels, x-pixels)
+
+    :returns: numpy array (frames, y-pixels, x-pixels)
     """
     files = list(folder.glob("*tif"))
     images = [_load_single_tif(file) for file in files]
@@ -249,8 +268,10 @@ def _save_single_tif(path: Union[str, Path], images: np.ndarray) -> int:
     Implementation function for saving a single tif
 
     :param path: path to save at
+
     :param images: images
-    :return: 0 if successful
+
+    :returns: 0 if successful
     """
     # if single page save direct
     if len(images.shape) == 2:
@@ -272,8 +293,10 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
     Implementation function for saving many tif
 
     :param path: path to save at
+
     :param images: images
-    :return: 0 if successful
+
+    :returns: 0 if successful
     """
     frames_per_file = calculate_frames_per_file(*images.shape[1:], size_cap=size_cap)
     frames = list(range(images.shape[0]))
@@ -316,14 +339,22 @@ class _Metadata:
         Metadata object used for saving/loading binary images
 
         :param images: images in numpy array (frames, y-pixels, x-pixels)
+
         :param frames: number of frames
+
         :param y: number of y pixels
+
         :param x: number of x pixels
+
         :param dtype: type of data
         """
+        #: int: number of frames
         self.frames = frames
+        #: int: height of each frame
         self.y = y
+        #: int: width of each frame
         self.x = x
+        #: np.dtype: datatype
         self.dtype = dtype
 
         if images is not None:

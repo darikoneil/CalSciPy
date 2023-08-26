@@ -45,6 +45,6 @@ I needed some more bespoke software for use with Bruker's PrairieView imaging so
 metadata, generating protocols programmatically (I'm lazy), and aligning collected data.
 
 Simplified data organization & analysis
-````````````````````````````````````
+```````````````````````````````````````
 Finally, I wanted a flexible & extensible system for neatly organizing data, timestamping analysis, & single-step
 analysis.

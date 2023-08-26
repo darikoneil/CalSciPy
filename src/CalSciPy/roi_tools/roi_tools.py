@@ -16,7 +16,7 @@ Object-oriented approach to organizing ROI-data
 """
 
 
-class _ROIBase(metaclass=ABCMeta):
+class ROIBase(metaclass=ABCMeta):
     """
     An abstract ROI object containing the base characteristics & properties of an ROI. Technically,
     the only abstract method is __name__. Therefore, it isn't *really* abstract, but it is not meant
@@ -39,9 +39,9 @@ class _ROIBase(metaclass=ABCMeta):
         to be instanced; it contains the abstract method for protection. Note that the properties
         are only calculated once.
 
-        :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.
-            | If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
-            | The matching y-pixels must be then be provided as an additional argument.
+        :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.If this argument is one-dimensional,
+            it will be considered as an ordered sequence of x-pixels.The matching y-pixels must be then be provided
+            as an additional argument.
 
         :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
@@ -54,10 +54,13 @@ class _ROIBase(metaclass=ABCMeta):
         :param z_pixels: The z-pixels of the roi (if volumetric)
 
         """
-        #: NDArray[int]: the x-pixels of the roi (column-wise)
-        self.x_pixels = None
-        #: NDArray[int]: the y-pixels of the roi (row-wise)
-        self.y_pixels = None
+        # true x pixels
+        self._x_pixels = None
+        # true y pixels
+        self._y_pixels = None
+        # flag if pixels already set
+        self._x_set = False
+        self._y_set = False
 
         # put pixels in proper format
         self.y_pixels, self.x_pixels = _validate_pixels(pixels, y_pixels)
@@ -67,6 +70,7 @@ class _ROIBase(metaclass=ABCMeta):
 
         #: Optional[int]: index of the imaging plane (if multiplane)
         self.plane = plane
+
         #: Optional[NDArray[int]]: z-pixels of the roi if volumetric
         self.z_pixels = z_pixels
 
@@ -136,6 +140,38 @@ class _ROIBase(metaclass=ABCMeta):
         """
         return self.rc[self.vertices, :]
 
+    @property
+    def x_pixels(self) -> NDArray[int]:
+        """
+        The x-pixels of the roi (column-wise)
+
+        """
+        return self._x_pixels
+
+    @x_pixels.setter
+    def x_pixels(self, value: Union[NDArray[int], Sequence[int]]):
+        if self._x_set:
+            raise PermissionError("Changing the pixel-coordinates after instantiation is not permitted!")
+        else:
+            self._x_pixels = value
+            self._x_set = True
+
+    @property
+    def y_pixels(self) -> NDArray[int]:
+        """
+        The y-pixels of the roi (row-wise)
+
+        """
+        return self._y_pixels
+
+    @y_pixels.setter
+    def y_pixels(self, value: Union[NDArray[int], Sequence[int]]):
+        if self._y_set:
+            raise PermissionError("Changing the pixel-coordinates after instantiation is not permitted!")
+        else:
+            self._y_pixels = value
+            self._y_set = True
+
     @staticmethod
     @abstractmethod
     def __name__() -> str:
@@ -145,27 +181,27 @@ class _ROIBase(metaclass=ABCMeta):
         return "ROI(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
 
 
-class ROI(_ROIBase):
+class ROI(ROIBase):
     """
     An ROI object containing the base characteristics & properties of an ROI. Note that the properties are only
     calculated once.
 
-        :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form.
-            If this argument is one-dimensional, it will be considered as an ordered sequence of x-pixels.
-            The matching y-pixels must be then be provided as an additional argument.
+    :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form. If this argument is one-dimensional,
+        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        as an additional argument.
 
-        :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
+    :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
-        :param reference_shape: the shape of the reference image from which the roi was generated
+    :param reference_shape: the shape of the reference image from which the roi was generated
 
-        :param method: the method utilized for generating an approximation of the roi
-            ("mean", "bound", "unbound", "ellipse")
+    :param method: the method utilized for generating an approximation of the roi
+        ("mean", "bound", "unbound", "ellipse")
 
-        :param plane: index of the imaging plane (if multi-plane)
+    :param plane: index of the imaging plane (if multi-plane)
 
-        :param properties: optional properties to include
+    :param properties: optional properties to include
 
-        :param zpix: The z-pixels of the roi (if volumetric)
+    :param zpix: The z-pixels of the roi (if volumetric)
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
@@ -209,7 +245,7 @@ class ROI(_ROIBase):
             self._method = method
 
 
-class ApproximateROI(_ROIBase):
+class ApproximateROI(ROIBase):
     """
     An ROI object approximated using 'method'. Like :class:`ROI`, contains the base characteristics & properties of
     an ROI. Note that the properties are only calculated once.
@@ -277,7 +313,9 @@ class ROIHandler:
         Abstract method for converting one roi in an ROI object
 
         :param roi: some sort of roi data structure
+
         :param reference_shape: the reference_shape of the image containing the rois
+
         :returns: a single ROI object
         """
         ...
@@ -299,6 +337,7 @@ class ROIHandler:
         Abstract method to generate a reference image from some data structure
 
         :param data_structure: some data structure from which the reference image can be derived
+
         :returns: reference image
         """
         ...
@@ -314,6 +353,7 @@ class ROIHandler:
         :param rois: some sort of data structure iterating over all rois or a numpy array which will be converted to
             an Iterable
         :param reference_shape: the reference_shape of the image containing the rois
+
         :returns: dictionary containing in which the keys are integers indexing the roi and each roi is an ROI object
         """
 

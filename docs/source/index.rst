@@ -20,7 +20,8 @@ considered useful to others.
    :caption: MAIN:
 
    Introduction <main__introduction>
-   Loading and Saving Data<main__io_tools>
+   Loading and Saving Data <main__io_tools>
+   Regions of Interest <main__roi_tools>
 
 .. toctree::
    :maxdepth: 1
@@ -39,7 +40,8 @@ considered useful to others.
    :caption: ORGANIZATION
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: API REFERENCE
 
    io_tools <CalSciPy.io_tools>
+   roi_tools <CalSciPy.roi_tools>

@@ -1,6 +1,6 @@
 Loading and Saving Data
 =======================
-Using CalSciPy you can load, convert, and save your imaging data using very simple syntax through functions in the
+You can load, convert, and save your imaging data using very simple syntax through functions in the
 :mod:`io_tools <CalSciPy.io_tools>` module.
 
 Images (.tif)
@@ -36,7 +36,7 @@ Easy, huh?
 Saving
 ``````
 CalScipy also offers a single, simple function for saving images with the .tif file format. To save images,
-simply pass the file and a :class:`numpy array <numpy.ndarray>` as arguments to
+simply pass the desired location and a :class:`numpy array <numpy.ndarray>` as arguments to
 :func:`save_images <CalSciPy.io_tools.save_images>`
 
 .. centered:: **Saving images to file**
@@ -67,7 +67,8 @@ Binary (Recommended)
 ********************
 CalScipy offers functions for loading and saving images as binary. This language-agnostic format is ideal for optimal
 read/write speeds, larger-than-memory data, and is highly-robust to corruption. However, the downside is that the
-images and their metadata are split into two separate files: ".bin" and ".json" respectively.
+images and their metadata are split into two separate files: ".bin" and ".json" respectively. If you happen to lose the
+metadata file, fear not! As long as you have the datatype and 2 of the 3 dimensions you can still load the data.
 
 Loading
 ```````
@@ -102,8 +103,8 @@ with shape frames x height x width.
 
 Saving
 ``````
-Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function with the file path
-and a :class:`numpy array <numpy.ndarray>` as arguments
+Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function with the
+file path and a :class:`numpy array <numpy.ndarray>` as arguments
 
 .. centered:: **Saving binary to file**
 
@@ -130,7 +131,7 @@ CalSciPy also provides simple functions to load and save .mp4 files.
 Loading
 ```````
 Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
-a :class:`numpy array <numpy.ndarray>` with shape frames x height x width.
+a :class:`numpy array <numpy.ndarray>` with shape frames x height x width x color channel
 
 .. centered:: **Loading video from file**
 
