@@ -1,8 +1,3 @@
-.. CalSciPy documentation master file, created by
-   sphinx-quickstart on Sun Jan 22 18:33:42 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 CalSciPy
 ====================================
 **CalSciPy** is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from
@@ -15,17 +10,17 @@ considered useful to others.
    :maxdepth: 1
    :caption: INTRODUCTION:
 
-   Motivation
-   Limitations
-   Contributions
-   Installation
+   Motivation <introduction__motivation>
+   Limitations <introduction__limitations>
+   Contributions <introduction__contributions>
+   Installation <introduction__installation>
 
 .. toctree::
    :maxdepth: 1
    :caption: MAIN:
 
-   Introduction <Main_Introduction>
-   Loading and Saving Data<io_tools>
+   Introduction <main__introduction>
+   Loading and Saving Data<main__io_tools>
 
 .. toctree::
    :maxdepth: 1
@@ -47,4 +42,4 @@ considered useful to others.
    :maxdepth: 1
    :caption: API REFERENCE
 
-   CalSciPy.io_tools
+   io_tools <CalSciPy.io_tools>

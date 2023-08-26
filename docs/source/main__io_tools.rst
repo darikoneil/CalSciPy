@@ -12,7 +12,7 @@ CalScipy offers a single, simple function for loading images with the .tif file 
 formats like .ome.tiff. The :func:`load_images <CalSciPy.io_tools.load_images>` function loads .tif images into
 numpy arrays with shape frames x height x width. It requires the path to the images as an argument.
 
-**Loading a 2D-image**
+.. centered:: **Loading a 2D-image**
 
 .. code-block:: python
 
