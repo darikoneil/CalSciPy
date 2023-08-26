@@ -57,4 +57,4 @@ typehints_use_signature_return = True
 
 todo_include_todos = True
 
-autodoc_mock_import = ["win32com", "pywin32"]
+autodoc_mock_import = ["win32com", "pywin32", "cupy"]
