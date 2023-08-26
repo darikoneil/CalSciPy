@@ -1,7 +1,7 @@
 Loading and Saving Data
 =======================
-Using CalSciPy you can load, convert, and save your imaging data using very simple syntax.
-
+Using CalSciPy you can load, convert, and save your imaging data using very simple syntax through functions in the
+:mod:`io_tools <CalSciPy.io_tools>` module.
 
 Images (.tif)
 *************
@@ -10,7 +10,8 @@ Loading
 ```````
 CalScipy offers a single, simple function for loading images with the .tif file format and other closely associated
 formats like .ome.tiff. The :func:`load_images <CalSciPy.io_tools.load_images>` function loads .tif images into
-numpy arrays with shape frames x height x width. It requires the path to the images as an argument.
+:class:`numpy arrays <numpy.ndarray>` with shape frames x height x width.
+It requires the path to the images as an argument.
 
 .. centered:: **Loading a 2D-image**
 
@@ -71,7 +72,8 @@ images and their metadata are split into two separate files: ".bin" and ".json" 
 Loading
 ```````
 Binary data in CalSciPy can be loaded using the :func:`load_binary <CalSciPy.io_tools.load_binary>` function.
-The path to the binary data is required as an argument.
+The path to the binary data is required as an argument and the data is returned as a :class:`numpy array <numpy.ndarray>`
+with shape frames x height x width.
 
 .. centered:: **Loading binary data directly from file**
 
@@ -100,7 +102,8 @@ The path to the binary data is required as an argument.
 
 Saving
 ``````
-Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function.
+Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function with the file path
+and a :class:`numpy array <numpy.ndarray>` as arguments
 
 .. centered:: **Saving binary to file**
 
@@ -126,7 +129,8 @@ CalSciPy also provides simple functions to load and save .mp4 files.
 
 Loading
 ```````
-Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function.
+Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
+a :class:`numpy array <numpy.ndarray>` with shape frames x height x width.
 
 .. centered:: **Loading video from file**
 
@@ -142,7 +146,8 @@ Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` functi
 
 Saving
 ``````
-Saving .mp4's uses the :func:`save_video <CalSciPy.io_tools.save_video>` function.
+Saving .mp4's uses the :func:`save_video <CalSciPy.io_tools.save_video>` function with a file path and
+a :class:`numpy array <numpy.ndarray>` as arguments.
 
 .. centered:: **Saving video to file**
 
