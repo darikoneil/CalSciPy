@@ -10,10 +10,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=c1cae59a"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -50,10 +51,12 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="main__introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main__io_tools.html">Loading and Saving Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="main__roi_tools.html">Regions of Interest</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">API REFERENCE</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="CalSciPy.io_tools.html">io_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CalSciPy.roi_tools.html">roi_tools</a></li>
 </ul>
 
         </div>
@@ -125,30 +128,18 @@
         <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.add_photostimulation_group">(CalSciPy.optogenetics.Photostimulation method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.data.html#CalSciPy.bruker.data.align_data">align_data() (in module CalSciPy.bruker.data)</a>
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointElement.all_points_at_once">all_points_at_once (CalSciPy.bruker.xml_objects.GalvoPointElement attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.approx_method">approx_method (CalSciPy.roi_tools.ROI property)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROI.approx_method">(CalSciPy.roi_tools.roi_tools.ROI property)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI">ApproximateROI (class in CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ApproximateROI">(class in CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.approximation">approximation (CalSciPy.roi_tools.ROI attribute)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROI.approximation">(CalSciPy.roi_tools.roi_tools.ROI attribute)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.async_sync_frequency">async_sync_frequency (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
 </li>
   </ul></td>
@@ -180,11 +171,7 @@
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.calc_funct_map">calc_funct_map (CalSciPy.bruker.xml_objects.MarkPointSeriesElements attribute)</a>
 </li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_centroid">calculate_centroid() (in module CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.calculate_centroid">(in module CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_dfof">calculate_dfof() (in module CalSciPy.traces.trace_processing)</a>
 </li>
       <li><a href="CalSciPy.events.html#CalSciPy.events.calculate_instantaneous_firing_rates">calculate_instantaneous_firing_rates() (in module CalSciPy.events)</a>
@@ -194,11 +181,7 @@
 </li>
       </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_mask">calculate_mask() (in module CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.calculate_mask">(in module CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.events.html#CalSciPy.events.calculate_mean_firing_rates">calculate_mean_firing_rates() (in module CalSciPy.events)</a>
 
       <ul>
@@ -206,11 +189,7 @@
 </li>
       </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.calculate_radius">calculate_radius() (in module CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.calculate_radius">(in module CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.traces.trace_processing.html#CalSciPy.traces.trace_processing.calculate_standardized_noise">calculate_standardized_noise() (in module CalSciPy.traces.trace_processing)</a>
 </li>
       <li>
@@ -377,20 +356,6 @@
 </li>
       </ul></li>
       <li>
-    CalSciPy.roi_tools.roi_tools
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#module-CalSciPy.roi_tools.roi_tools">module</a>
-</li>
-      </ul></li>
-      <li>
-    CalSciPy.roi_tools.suite2p_handler
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#module-CalSciPy.roi_tools.suite2p_handler">module</a>
-</li>
-      </ul></li>
-      <li>
     CalSciPy.traces
 
       <ul>
@@ -418,6 +383,12 @@
         <li><a href="CalSciPy.version.html#module-CalSciPy.version">module</a>
 </li>
       </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.centroid">centroid (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.centroid">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.TrialPlot.conditions">conditions (CalSciPy.events.event_visuals.TrialPlot property)</a>
 </li>
       <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS">CONSTANTS (class in CalSciPy.bruker)</a>
@@ -434,13 +405,9 @@
         <li><a href="CalSciPy.bruker.factories.html#CalSciPy.bruker.factories.BrukerXMLFactory.constructor">(CalSciPy.bruker.factories.BrukerXMLFactory method)</a>
 </li>
       </ul></li>
-      <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler.convert_one_roi">convert_one_roi() (CalSciPy.roi_tools.roi_tools.ROIHandler static method)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.convert_one_roi">convert_one_roi() (CalSciPy.roi_tools.ROIHandler static method)</a>
 
       <ul>
-        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.convert_one_roi">(CalSciPy.roi_tools.ROIHandler static method)</a>
-</li>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#CalSciPy.roi_tools.suite2p_handler.Suite2PHandler.convert_one_roi">(CalSciPy.roi_tools.suite2p_handler.Suite2PHandler static method)</a>
-</li>
         <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.convert_one_roi">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
 </li>
       </ul></li>
@@ -514,23 +481,19 @@
       </ul></li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.field_validator">field_validator() (in module CalSciPy.bruker.validation)</a>
 </li>
-      <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.format_fields">format_fields() (in module CalSciPy.bruker.validation)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.format_fields">format_fields() (in module CalSciPy.bruker.validation)</a>
+</li>
       <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.frames">frames (CalSciPy.events.event_visuals.SpikePlot property)</a>
 
       <ul>
         <li><a href="CalSciPy.traces.trace_visuals.html#CalSciPy.traces.trace_visuals.TracePlot.frames">(CalSciPy.traces.trace_visuals.TracePlot property)</a>
 </li>
       </ul></li>
-      <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler.from_file">from_file() (CalSciPy.roi_tools.roi_tools.ROIHandler static method)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.from_file">from_file() (CalSciPy.roi_tools.ROIHandler static method)</a>
 
       <ul>
-        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.from_file">(CalSciPy.roi_tools.ROIHandler static method)</a>
-</li>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#CalSciPy.roi_tools.suite2p_handler.Suite2PHandler.from_file">(CalSciPy.roi_tools.suite2p_handler.Suite2PHandler static method)</a>
-</li>
         <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.from_file">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
 </li>
       </ul></li>
@@ -554,23 +517,19 @@
 </li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_coordinates">generate_coordinates() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
-      <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_galvo_point_list">generate_galvo_point_list() (in module CalSciPy.bruker.protocols)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_galvo_point_list">generate_galvo_point_list() (in module CalSciPy.bruker.protocols)</a>
+</li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_hull_vertices">generate_hull_vertices() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
       <li><a href="CalSciPy.bruker.protocols.html#CalSciPy.bruker.protocols.generate_marked_points_protocol">generate_marked_points_protocol() (in module CalSciPy.bruker.protocols)</a>
 </li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta.generate_mask">generate_mask() (CalSciPy.bruker.meta_objects.ROIMeta method)</a>
 </li>
-      <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler.generate_reference_image">generate_reference_image() (CalSciPy.roi_tools.roi_tools.ROIHandler static method)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.generate_reference_image">generate_reference_image() (CalSciPy.roi_tools.ROIHandler static method)</a>
 
       <ul>
-        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.generate_reference_image">(CalSciPy.roi_tools.ROIHandler static method)</a>
-</li>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#CalSciPy.roi_tools.suite2p_handler.Suite2PHandler.generate_reference_image">(CalSciPy.roi_tools.suite2p_handler.Suite2PHandler static method)</a>
-</li>
         <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.generate_reference_image">(CalSciPy.roi_tools.Suite2PHandler static method)</a>
 </li>
       </ul></li>
@@ -593,19 +552,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.identify_vertices">identify_vertices() (in module CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.identify_vertices">(in module CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.import_rois">import_rois() (CalSciPy.optogenetics.opto_objects.Photostimulation class method)</a>
 
       <ul>
         <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.Photostimulation.import_rois">(CalSciPy.optogenetics.Photostimulation class method)</a>
 </li>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler.import_rois">(CalSciPy.roi_tools.roi_tools.ROIHandler class method)</a>
-</li>
         <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.import_rois">(CalSciPy.roi_tools.ROIHandler class method)</a>
+</li>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.import_rois">(CalSciPy.roi_tools.Suite2PHandler class method)</a>
 </li>
       </ul></li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPoint.index">index (CalSciPy.bruker.xml_objects.GalvoPoint attribute)</a>
@@ -652,10 +607,10 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler.load">load() (CalSciPy.roi_tools.roi_tools.ROIHandler class method)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.load">load() (CalSciPy.roi_tools.ROIHandler class method)</a>
 
       <ul>
-        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler.load">(CalSciPy.roi_tools.ROIHandler class method)</a>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler.load">(CalSciPy.roi_tools.Suite2PHandler class method)</a>
 </li>
       </ul></li>
       <li><a href="CalSciPy.io_tools.html#CalSciPy.io_tools.load_binary">load_binary() (in module CalSciPy.io_tools)</a>
@@ -702,12 +657,14 @@
 </li>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointSeriesElements.marks">marks (CalSciPy.bruker.xml_objects.MarkPointSeriesElements attribute)</a>
 </li>
-      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.method">method (CalSciPy.roi_tools.ApproximateROI property)</a>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.mask">mask (CalSciPy.roi_tools.ApproximateROI property)</a>
 
       <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ApproximateROI.method">(CalSciPy.roi_tools.roi_tools.ApproximateROI property)</a>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.mask">(CalSciPy.roi_tools.ROI property)</a>
 </li>
       </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.method">method (CalSciPy.roi_tools.ApproximateROI property)</a>
+</li>
       <li>
     module
 
@@ -757,10 +714,6 @@
         <li><a href="CalSciPy.optogenetics.target_selection.html#module-CalSciPy.optogenetics.target_selection">CalSciPy.optogenetics.target_selection</a>
 </li>
         <li><a href="CalSciPy.roi_tools.html#module-CalSciPy.roi_tools">CalSciPy.roi_tools</a>
-</li>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#module-CalSciPy.roi_tools.roi_tools">CalSciPy.roi_tools.roi_tools</a>
-</li>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#module-CalSciPy.roi_tools.suite2p_handler">CalSciPy.roi_tools.suite2p_handler</a>
 </li>
         <li><a href="CalSciPy.traces.html#module-CalSciPy.traces">CalSciPy.traces</a>
 </li>
@@ -867,6 +820,12 @@
         <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.PIXELS_PER_MICRON">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
 </li>
       </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.plane">plane (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.plane">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.events.event_visuals.html#CalSciPy.events.event_visuals.SpikePlot.plot">plot() (CalSciPy.events.event_visuals.SpikePlot method)</a>
 
       <ul>
@@ -903,18 +862,42 @@
         <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.POWER_SCALE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
 </li>
       </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.properties">properties (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.properties">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.radius">radius (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.radius">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
+      </ul></li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.DingusLogger.raise_exceptions">raise_exceptions() (CalSciPy.bruker.validation.DingusLogger method)</a>
 </li>
       <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.randomize_targets">randomize_targets() (in module CalSciPy.optogenetics)</a>
 
       <ul>
         <li><a href="CalSciPy.optogenetics.target_selection.html#CalSciPy.optogenetics.target_selection.randomize_targets">(in module CalSciPy.optogenetics.target_selection)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.rc">rc (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.rc_vert">rc_vert (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.rc_vert">(CalSciPy.roi_tools.ROI property)</a>
 </li>
       </ul></li>
       <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.reference_image">reference_image (CalSciPy.optogenetics.opto_objects.Photostimulation attribute)</a>
@@ -932,7 +915,13 @@
 </li>
         <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationGroup.reference_shape">(CalSciPy.optogenetics.StimulationGroup property)</a>
 </li>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.reference_shape">(CalSciPy.roi_tools.ApproximateROI attribute)</a>
+</li>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.reference_shape">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.remapped_sequence">remapped_sequence (CalSciPy.optogenetics.opto_objects.Photostimulation property)</a>
 
       <ul>
@@ -953,14 +942,8 @@
         <li><a href="CalSciPy.optogenetics.html#CalSciPy.optogenetics.StimulationSequence.repetitions">(CalSciPy.optogenetics.StimulationSequence attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI">ROI (class in CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROI">(class in CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.roi_to_target">roi_to_target() (CalSciPy.optogenetics.opto_objects.Photostimulation method)</a>
 
       <ul>
@@ -968,11 +951,7 @@
 </li>
       </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROIHandler">ROIHandler (class in CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.roi_tools.html#CalSciPy.roi_tools.roi_tools.ROIHandler">(class in CalSciPy.roi_tools.roi_tools)</a>
 </li>
-      </ul></li>
       <li><a href="CalSciPy.bruker.meta_objects.html#CalSciPy.bruker.meta_objects.ROIMeta">ROIMeta (class in CalSciPy.bruker.meta_objects)</a>
 </li>
       <li><a href="CalSciPy.optogenetics.opto_objects.html#CalSciPy.optogenetics.opto_objects.Photostimulation.rois">rois (CalSciPy.optogenetics.opto_objects.Photostimulation attribute)</a>
@@ -1070,11 +1049,7 @@
 </li>
       </ul></li>
       <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.Suite2PHandler">Suite2PHandler (class in CalSciPy.roi_tools)</a>
-
-      <ul>
-        <li><a href="CalSciPy.roi_tools.suite2p_handler.html#CalSciPy.roi_tools.suite2p_handler.Suite2PHandler">(class in CalSciPy.roi_tools.suite2p_handler)</a>
 </li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1137,6 +1112,12 @@
 </li>
       <li><a href="CalSciPy.bruker.validation.html#CalSciPy.bruker.validation.validate_fields">validate_fields() (in module CalSciPy.bruker.validation)</a>
 </li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.vertices">vertices (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.vertices">(CalSciPy.roi_tools.ROI attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.MarkPointElement.voltage_output_category_name">voltage_output_category_name (CalSciPy.bruker.xml_objects.MarkPointElement attribute)</a>
@@ -1167,12 +1148,30 @@
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.x">(CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.X_GALVO_VOLTAGE_RANGE">X_GALVO_VOLTAGE_RANGE (CalSciPy.bruker.CONSTANTS attribute)</a>
 
       <ul>
         <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.X_GALVO_VOLTAGE_RANGE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.x_pixels">x_pixels (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.x_pixels">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.xy">xy (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy">(CalSciPy.roi_tools.ROI property)</a>
+</li>
+      </ul></li>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.xy_vert">xy_vert (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.xy_vert">(CalSciPy.roi_tools.ROI property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1187,12 +1186,18 @@
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.Point.y">(CalSciPy.bruker.xml_objects.Point attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="CalSciPy.bruker.html#CalSciPy.bruker.CONSTANTS.Y_GALVO_VOLTAGE_RANGE">Y_GALVO_VOLTAGE_RANGE (CalSciPy.bruker.CONSTANTS attribute)</a>
 
       <ul>
         <li><a href="CalSciPy.bruker.constants.html#CalSciPy.bruker.constants.CONSTANTS.Y_GALVO_VOLTAGE_RANGE">(CalSciPy.bruker.constants.CONSTANTS attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.y_pixels">y_pixels (CalSciPy.roi_tools.ApproximateROI property)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.y_pixels">(CalSciPy.roi_tools.ROI property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1205,6 +1210,14 @@
 
       <ul>
         <li><a href="CalSciPy.bruker.xml_objects.html#CalSciPy.bruker.xml_objects.GalvoPointGroup.z">(CalSciPy.bruker.xml_objects.GalvoPointGroup attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ApproximateROI.z_pixels">z_pixels (CalSciPy.roi_tools.ApproximateROI attribute)</a>
+
+      <ul>
+        <li><a href="CalSciPy.roi_tools.html#CalSciPy.roi_tools.ROI.z_pixels">(CalSciPy.roi_tools.ROI attribute)</a>
 </li>
       </ul></li>
   </ul></td>

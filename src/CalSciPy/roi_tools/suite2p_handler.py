@@ -11,11 +11,20 @@ class Suite2PHandler(ROIHandler):
     @staticmethod
     def convert_one_roi(roi: Any, reference_shape: Sequence[int, int] = (512, 512)) -> ROI:
         """
-        Generates ROI from suite2p stat array
+        Generates :class:`ROI <CalSciPy.roi_tools.ROI>` from `suite2p <https://www.suite2p.org>`_
+        stat array
 
         :param roi: dictionary containing one suite2p roi
-        :param reference_shape: reference_shape of the reference image containing the roi
-        :return: ROI instance for the roi
+
+        :type roi: :class:`Any <typing.Any>`
+
+        :param reference_shape: Reference_shape of the reference image containing the roi
+
+        :type reference_shape: :class:`Sequence <typing.Sequence>` [ :class:`int`, :class:`int` ] = (512, 512)
+
+        :returns: ROI instance for the roi
+
+        :rtype: :class:`ROI <CalSciPy.roi_tools.ROI>`
         """
         xpix = roi.get("xpix")[~roi.get("overlap")]
         ypix = roi.get("ypix")[~roi.get("overlap")]
@@ -28,11 +37,17 @@ class Suite2PHandler(ROIHandler):
     @staticmethod
     def from_file(folder: Path, *args, **kwargs) -> Sequence[np.ndarray, dict]:  # noqa: U100
         """
+         Loads stat and ops from file
 
-        :param folder: folder containing suite2p data. The folder must contain the associated "stat.npy"
-            & "ops.npy" files, though it is recommended the folder also contain the "iscell.npy" file.
+        :param folder: Folder containing `suite2p <https://www.suite2p.org>`_ data. The folder must contain the
+            associated *stat.npy* & *ops.npy* files, though it is recommended the folder also contain the *iscell.npy*
+            file.
 
-        :returns: "stat" and "ops"
+        :type folder: :class:`Path <pathlib.Path>`
+
+        :returns: Stat and ops
+
+        :rtype: :class:`Sequence <typing.Sequence>` [ :class:`ndarray <numpy.ndarray>` , :class:`dict` ]
         """
 
         # append suite2p + plane if necessary
@@ -59,10 +74,11 @@ class Suite2PHandler(ROIHandler):
     @staticmethod
     def generate_reference_image(data_structure: Any) -> np.ndarray:
         """
-         Generates an appropriate reference image from suite2p ops dictionary
+         Generates an appropriate reference image from `suite2p <https://www.suite2p.org>`_ ops dictionary
 
-        :param data_structure: ops dictionary
-        :return: reference image
+        :param data_structure: Ops dictionary
+
+        :returns: Reference image
         """
 
         true_shape = (data_structure.get("Ly"), data_structure.get("Lx"))

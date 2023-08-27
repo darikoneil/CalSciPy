@@ -1,15 +1,6 @@
 CalSciPy.roi\_tools package
 ===========================
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   CalSciPy.roi_tools.roi_tools
-   CalSciPy.roi_tools.suite2p_handler
-
 Module contents
 ---------------
 
@@ -17,3 +8,4 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:
