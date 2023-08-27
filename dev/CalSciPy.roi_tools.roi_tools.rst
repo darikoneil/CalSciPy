@@ -5,3 +5,4 @@ CalSciPy.roi\_tools.roi\_tools module
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:

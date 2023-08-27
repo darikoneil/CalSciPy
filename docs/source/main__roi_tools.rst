@@ -5,7 +5,7 @@ to represent regions of interest in your imaging data. By having this standardiz
 arbitrary data structure. That is, we can load ROIs from any analysis software we want. A dictionary of ROIs can be
 easily formed using the default or custom :class:`ROI Handlers <CalSciPy.roi_tools.ROIHandler>`. Software-specific
 :class:`ROI Handlers <CalSciPy.roi_tools.ROIHandler>` are available for many major calcium imaging software packages
-and a :class:`metaclass <CalSciPy.roi_tools.ROIBase>` is provided for customizing your own.
+and a :class:`metaclass <CalSciPy.roi_tools.ROIHandler>` is provided for customizing your own.
 
 ROI instances
 `````````````
@@ -24,14 +24,14 @@ ROIs and can be adapted to handle any arbitrary data structure your ROIs may be 
 containing a dictionary of :class:`ROIs <CalSciPy.roi_tools.ROI>` and a reference image in the form of
 a :class:`numpy array <numpy.ndarray>` with shape height x width. Each key of the dictionary is an integer indexing
 the ROI and its value-pair is the associated :class:`ROI <CalSciPy.roi_tools.ROI>`.
-:class:`ROI Handlers <CalSciPy.roi_tools.ROIHandler> for common analysis software are provided.
+:class:`ROI Handlers <CalSciPy.roi_tools.ROIHandler>` for common analysis software are provided.
 
 Suite2P
 ```````
 The :class:`Suite2P Handler <CalSciPy.roi_tools.suite2p_handler.Suite2PHandler>` is provided for loading
-:ref:`suite2p <https://www.suite2p.org/>` data. It requires the path to a folder containing suite2p data
-as its only argument. The folder ought to contain at least the "stat.npy" and "ops.npy" files, although the
-"iscell.npy" file is also recommended.
+`suite2p <https://www.suite2p.org>`_ data. It requires the path to a folder containing suite2p data
+as its only argument. The folder ought to contain at least the *stat.npy* and *ops.npy* files, although the
+*iscell.npy* file is also recommended.
 
 .. code-block:: python
 

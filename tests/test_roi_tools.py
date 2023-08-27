@@ -13,7 +13,7 @@ import numpy as np
 from CalSciPy.roi_tools import ROI, Suite2PHandler, ROIHandler
 
 # noinspection PyProtectedMember
-from CalSciPy.roi_tools.roi_tools import ROIBase
+from CalSciPy.roi_tools.roi_tools import _ROIBase
 
 
 """
@@ -150,7 +150,7 @@ class TestROI:
 
     def test_abstract(self, sample_roi):
         with pytest.raises(TypeError):
-            roi_base = ROIBase(pixels=sample_roi.x_pixels, y_pixels=sample_roi.y_pixels)
+            roi_base = _ROIBase(pixels=sample_roi.x_pixels, y_pixels=sample_roi.y_pixels)
 
 
 class Handler:

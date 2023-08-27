@@ -82,7 +82,7 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
 
     :param path: a file containing images or a folder containing several imaging stacks
 
-    :returns: numpy array (frames, y-pixels, x-pixels)
+    :returns: image (frames, y-pixels, x-pixels)
     """
     if not path.exists():
         raise FileNotFoundError("Unable to locate files")
@@ -100,7 +100,7 @@ def load_video(path: Union[str, Path]) -> np.ndarray:
 
     :param path: absolute filepath
 
-    :returns: numpy array (frames, y-pixels, x-pixels, color)
+    :returns: image (frames, y-pixels, x-pixels, color)
     """
 
     path = path.with_suffix(".mp4")

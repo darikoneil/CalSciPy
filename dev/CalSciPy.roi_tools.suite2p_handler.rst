@@ -5,3 +5,4 @@ CalSciPy.roi\_tools.suite2p\_handler module
    :members:
    :undoc-members:
    :show-inheritance:
+   :inherited-members:

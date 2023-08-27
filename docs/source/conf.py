@@ -18,6 +18,7 @@ today = f"{date.today().year}"
 authors = package_details.get("authors")[0].get("name")
 author = f"{authors}"  # f-string because maybe weird sphinx stuff if it gets list, not sure
 project = package_details.get("name")
+# noinspection PyShadowingBuiltins
 copyright = "".join([today, author])
 release = package_details.get("version")
 
@@ -28,7 +29,8 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx_autodoc_typehints']
+    'sphinx_autodoc_typehints',
+    ]
 
 typehints_defaults = "comma"
 
@@ -51,9 +53,9 @@ pygments_style = "sphinx"
 
 latex_engine = "pdflatex"
 
-typehints_use_signature = True
+typehints_use_signature = False
 
-typehints_use_signature_return = True
+typehints_use_signature_return = False
 
 todo_include_todos = True
 
