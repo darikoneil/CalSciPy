@@ -43,14 +43,14 @@ class _ROIBase(metaclass=ABCMeta):
             it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
             as an additional argument.
 
-        :type pixels: :class:`Union <typing.Union>` [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]
+        :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\], :class:`Sequence <typing.Sequence>`\[:class:`int`\]]
 
         :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
-        :type y_pixels: :class:`Optional <typing.Optional>` [ :class:`Union <typing.Union>`
-            [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>` [ :class:`int`
-            ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]], default: None
+        :type y_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\
+            [ :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]
+            , :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
 
         :param reference_shape: The shape of the reference image from which the roi was generated
 
@@ -60,9 +60,9 @@ class _ROIBase(metaclass=ABCMeta):
 
         :param z_pixels: The z-pixels of the roi (if volumetric)
 
-        :type z_pixels: :class:`Optional <typing.Optional>` [ :class:`Union <typing.Union>`
-            [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>`
-            [ :class:`int` ]], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]], default: None
+        :type z_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`
+            [\:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`
+            [:class:`int`\]], :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
         """
         # true x pixels
         self._x_pixels = None
@@ -75,20 +75,24 @@ class _ROIBase(metaclass=ABCMeta):
         # put pixels in proper format
         self.y_pixels, self.x_pixels = _validate_pixels(pixels, y_pixels)
 
-        #: :class:`Tuple <typing.Tuple>` [ :class:`float` , :class:`float` , ... ]: the shape of the image from which the roi was generated
+        #: :class:`Tuple <typing.Tuple>`\[:class:`float`\, :class:`float`\, ...]: the shape of the image from
+        #: which the roi was generated
         self.reference_shape = tuple(reference_shape)
 
-        #: :class:`Optional <typing.Optional>` [ :class:`int` ]: index of the imaging plane (if multiplane)
+        #: :class:`Optional <typing.Optional>`\[:class:`int`\]: index of the imaging plane (if multiplane)
         self.plane = plane
 
-        #: :class:`Optional <typing.Optional>` [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>` [ :class:`int` ]]]: z-pixels of the roi if volumetric
+        #: :class:`Optional <typing.Optional>`\[ :class:`ndarray <numpy.ndarray>`
+        #: [:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]]]: z-pixels
+        #: of the roi if volumetric
         self.z_pixels = z_pixels
 
         # cover non-implemented optionals
         if plane is not None or z_pixels is not None:
             raise NotImplementedError
 
-        #: :class:`ChainMap <collections.ChainMap>`: a mapping of properties containing any relevant information about the ROI
+        #: :class:`ChainMap <collections.ChainMap>`: a mapping of properties containing
+        #: any relevant information about the ROI
         self.properties = ChainMap(kwargs, properties)
         # user-defined, using chainmap is O(N) worst-case while dict construction / update
         # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
@@ -97,7 +101,7 @@ class _ROIBase(metaclass=ABCMeta):
         #: :class:`Tuple <typing.Tuple>` [ :class:`int` , ... ]: a tuple indexing the vertices of the approximate convex hull of the roi
         self.vertices = identify_vertices(self.x_pixels, self.y_pixels)
 
-        #: :class:`Tuple <typing.Tuple>` [ :class:`float` , :class:`float` , ... ]: the centroid of the roi
+        #: :class:`Tuple <typing.Tuple>`\[:class:`float`\, :class:`float`\, ...]: the centroid of the roi
         self.centroid = calculate_centroid(self.xy_vert)[::-1]  # requires vertices!!!
 
         #: :class:`float`: the radius of the ROI
@@ -176,14 +180,6 @@ class _ROIBase(metaclass=ABCMeta):
         """
         return self._x_pixels
 
-    @x_pixels.setter
-    def x_pixels(self, value: Union[NDArray[int], Sequence[int]]):
-        if self._x_set:
-            raise PermissionError("Changing the pixel-coordinates after instantiation is not permitted!")
-        else:
-            self._x_pixels = value
-            self._x_set = True
-
     @property
     def y_pixels(self) -> NDArray[int]:
         """
@@ -196,18 +192,26 @@ class _ROIBase(metaclass=ABCMeta):
         """
         return self._y_pixels
 
+    @staticmethod
+    @abstractmethod
+    def __name__() -> str:
+        ...
+
+    @x_pixels.setter
+    def x_pixels(self, value: Union[NDArray[int], Sequence[int]]) -> _ROIBase:
+        if self._x_set:
+            raise PermissionError("Changing the pixel-coordinates after instantiation is not permitted!")
+        else:
+            self._x_pixels = value
+            self._x_set = True
+
     @y_pixels.setter
-    def y_pixels(self, value: Union[NDArray[int], Sequence[int]]):
+    def y_pixels(self, value: Union[NDArray[int], Sequence[int]]) -> _ROIBase:
         if self._y_set:
             raise PermissionError("Changing the pixel-coordinates after instantiation is not permitted!")
         else:
             self._y_pixels = value
             self._y_set = True
-
-    @staticmethod
-    @abstractmethod
-    def __name__() -> str:
-        ...
 
     def __repr__(self):
         return "ROI(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
@@ -224,6 +228,10 @@ class ROI(_ROIBase):
 
     :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
+    :type ypixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
+        :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\],
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
+
     :param reference_shape: the shape of the reference image from which the roi was generated
 
     :param method: the method utilized for generating an approximation of the roi
@@ -234,6 +242,10 @@ class ROI(_ROIBase):
     :param properties: optional properties to include
 
     :param zpix: The z-pixels of the roi (if volumetric)
+
+    :type zpix: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
+        :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]],
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]]
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
@@ -285,15 +297,22 @@ class ApproximateROI(_ROIBase):
     characteristics & properties of an ROI. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, the properties of this class
     are only calculated once.
 
+    :param roi: ROI instance
+
+    :type roi: :class:`ROI <CalSciPy.roi_tools.ROI>`
+
+    :param method: method used to calculate radius
+
+    :type method: :class:`str` , default: 'literal'
     """
     def __init__(self,
                  roi: ROI,
                  method: str = "literal"):
         """
-        An approximation of an ROI. The approximated ROI is formed by generating an ellipse at the specified centroid with
-        a radius calculated by the **method** parameter. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, contains the base
-        characteristics & properties of an ROI. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, the properties of this class
-        are only calculated once.
+        An approximation of an ROI. The approximated ROI is formed by generating an ellipse at the specified centroid
+        with a radius calculated by the **method** parameter. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, contains the
+        base characteristics & properties of an ROI. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, the properties of this
+        class are only calculated once.
 
         """
 
