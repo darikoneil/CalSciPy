@@ -73,7 +73,6 @@ class _ROIBase(metaclass=ABCMeta):
         # flag if pixels already set
         self._x_set = False
         self._y_set = False
-
         # put pixels in proper format
         self.y_pixels, self.x_pixels = _validate_pixels(pixels, y_pixels)
 

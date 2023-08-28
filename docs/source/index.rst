@@ -21,7 +21,9 @@ considered useful to others.
 
    Introduction <main__introduction>
    Loading and Saving Data <main__io_tools>
+   Events and Spiking <main__events>
    Regions of Interest <main__roi_tools>
+   Visuals <main__visuals>
 
 .. toctree::
    :maxdepth: 1
@@ -43,5 +45,7 @@ considered useful to others.
    :maxdepth: 2
    :caption: API REFERENCE
 
+   color_scheme <CalSciPy.color_scheme>
    io_tools <CalSciPy.io_tools>
    roi_tools <CalSciPy.roi_tools>
+   version <CalSciPy.version>
