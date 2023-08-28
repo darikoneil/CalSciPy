@@ -39,6 +39,8 @@ class _ROIBase(metaclass=ABCMeta):
         to be instanced; it contains the abstract method for protection. Note that the properties
         are only calculated once.
 
+        :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
+
         :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
             it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
             as an additional argument.
@@ -50,7 +52,7 @@ class _ROIBase(metaclass=ABCMeta):
 
         :type y_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\
             [ :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]
-            , :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
+            , :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
 
         :param reference_shape: The shape of the reference image from which the roi was generated
 
@@ -60,9 +62,9 @@ class _ROIBase(metaclass=ABCMeta):
 
         :param z_pixels: The z-pixels of the roi (if volumetric)
 
-        :type z_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`
-            [\:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`
-            [:class:`int`\]], :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
+        :type z_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
+            :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]],
+            :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
         """
         # true x pixels
         self._x_pixels = None
@@ -79,12 +81,13 @@ class _ROIBase(metaclass=ABCMeta):
         #: which the roi was generated
         self.reference_shape = tuple(reference_shape)
 
-        #: :class:`Optional <typing.Optional>`\[:class:`int`\]: index of the imaging plane (if multiplane)
+        #: :class:`Optional <typing.Optional>`\[:class:`int`\], default: ``None``: index of the imaging plane
+        #: (if multiplane)
         self.plane = plane
 
-        #: :class:`Optional <typing.Optional>`\[ :class:`ndarray <numpy.ndarray>`
-        #: [:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]]]: z-pixels
-        #: of the roi if volumetric
+        #: :class:`Optional <typing.Optional>`\
+        #: [:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+        #: :class:`dtype <numpy.dtype>`\[:class:`int`\]]], default: ``None``: z-pixels of the roi if volumetric
         self.z_pixels = z_pixels
 
         # cover non-implemented optionals
@@ -98,7 +101,8 @@ class _ROIBase(metaclass=ABCMeta):
         # is O(NM) worst-case. Likely to see use in situations with thousands of constructions
         # with unknown number of parameters, so this is relevant
 
-        #: :class:`Tuple <typing.Tuple>` [ :class:`int` , ... ]: a tuple indexing the vertices of the approximate convex hull of the roi
+        #: :class:`Tuple <typing.Tuple>`\[:class:`int`\, ...]: a tuple indexing the vertices of the approximate
+        #: convex hull of the roi
         self.vertices = identify_vertices(self.x_pixels, self.y_pixels)
 
         #: :class:`Tuple <typing.Tuple>`\[:class:`float`\, :class:`float`\, ...]: the centroid of the roi
@@ -114,8 +118,8 @@ class _ROIBase(metaclass=ABCMeta):
     def mask(self) -> NDArray[bool]:
         """
         :Getter: Boolean mask with the dimensions of the reference image indicating the pixels of the ROI
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: This property cannot be set
         """
         mask = np.zeros(self.reference_shape, dtype=np.bool_)
@@ -128,8 +132,8 @@ class _ROIBase(metaclass=ABCMeta):
     def xy(self) -> NDArray[int]:
         """
         :Getter: Nx2 array containing the x,y coordinate pairs for the roi
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: This property cannot be set
         """
         return np.vstack([self.x_pixels, self.y_pixels]).T
@@ -140,8 +144,8 @@ class _ROIBase(metaclass=ABCMeta):
         :Getter: Nx2 array containing the x,y coordinate pairs comprising the roi's approximate convex hull. Can be
             considered *approximately* the outline of the ROI considering the assumption that the ROI has no
             concavities.
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: This property cannot be set
         """
         return self.xy[self.vertices, :]
@@ -150,8 +154,8 @@ class _ROIBase(metaclass=ABCMeta):
     def rc(self) -> NDArray[int]:
         """
         :Getter: Nx2 array containing the r,c coordinate pairs for the roi
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: This property cannot be set
         """
         return np.vstack([self.y_pixels, self.x_pixels]).T
@@ -162,8 +166,8 @@ class _ROIBase(metaclass=ABCMeta):
         :Getter: Nx2 array containing the r,c coordinate pairs comprising the roi's approximate convex hull. Can be
             considered *approximately* the outline of the ROI considering the assumption that the ROI has no
             concavities.
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-            :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: This property cannot be set
         """
         return self.rc[self.vertices, :]
@@ -172,11 +176,11 @@ class _ROIBase(metaclass=ABCMeta):
     def x_pixels(self) -> NDArray[int]:
         """
         :Getter: X-pixels of the roi
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>`
-            [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: The x-pixels are protected from being changed after instantiation
-        :Setter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>`
-            [ :class:`int` ]]
+        :Setter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         """
         return self._x_pixels
 
@@ -184,11 +188,11 @@ class _ROIBase(metaclass=ABCMeta):
     def y_pixels(self) -> NDArray[int]:
         """
         :Getter: Y-pixels of the roi
-        :Getter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>`
-            [ :class:`int` ]]
+        :Getter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         :Setter: The y-pixels are protected from being changed after instantiation
-        :Setter Type: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>`
-            [ :class:`int` ]]
+        :Setter Type: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+            :class:`dtype <numpy.dtype>`\[:class:`int`\]]
         """
         return self._y_pixels
 
@@ -219,8 +223,9 @@ class _ROIBase(metaclass=ABCMeta):
 
 class ROI(_ROIBase):
     """
-    An ROI object containing the base characteristics & properties of an ROI. Note that the properties are only
-    calculated once.
+    An ROI object containing the base characteristics & properties of an ROI.
+
+    :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
 
     :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
@@ -230,12 +235,12 @@ class ROI(_ROIBase):
 
     :type ypixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
         :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\],
-        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: None
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
 
     :param reference_shape: the shape of the reference image from which the roi was generated
 
     :param method: the method utilized for generating an approximation of the roi
-        ("mean", "bound", "unbound", "ellipse")
+        ("mean", "bound", "unbound", "ellipse")`
 
     :param plane: index of the imaging plane (if multi-plane)
 
@@ -245,7 +250,7 @@ class ROI(_ROIBase):
 
     :type zpix: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
         :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]],
-        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]]
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
@@ -275,7 +280,7 @@ class ROI(_ROIBase):
         :Getter: Method used for approximating the roi ("literal", "bound", "unbound", "ellipse")
         :Getter Type: :class:`str`
         :Setter: Method used for approximating the roi ("literal", "bound", "unbound", "ellipse")
-        :Setter Type: :class:`str` , default: "literal"
+        :Setter Type: :class:`str` , default: ``'literal'``
         """
         return self._method
 
@@ -297,13 +302,15 @@ class ApproximateROI(_ROIBase):
     characteristics & properties of an ROI. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, the properties of this class
     are only calculated once.
 
+    :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
+
     :param roi: ROI instance
 
     :type roi: :class:`ROI <CalSciPy.roi_tools.ROI>`
 
     :param method: method used to calculate radius
 
-    :type method: :class:`str` , default: 'literal'
+    :type method: :class:`str` , default: ``'literal'``
     """
     def __init__(self,
                  roi: ROI,
@@ -383,7 +390,8 @@ class ROIHandler(metaclass=ABCMeta):
 
         :param reference_shape: The reference_shape of the image containing the rois
 
-        :type reference_shape: :class:`Sequence <typing.Sequence>` [ :class:`int` , :class:`int` ], default: (512, 512)
+        :type reference_shape: :class:`Sequence <typing.Sequence>`\[:class:`int`\, :class:`int`\],
+            default: ``(512, 512)``
 
         :returns: One ROI object
 
@@ -398,6 +406,7 @@ class ROIHandler(metaclass=ABCMeta):
         Abstract method to load the rois_data_structure and reference_image_data_structure from a file or folder
 
         :returns: Data structures containing the rois and reference image
+        :rtype: :class:`Tuple <typing.Tuple>`\[:class:`Any <typing.Any>`\, :class:`Any <typing.Any>`\]
         """
         ...
 
@@ -424,12 +433,13 @@ class ROIHandler(metaclass=ABCMeta):
         :param rois: Some sort of data structure iterating over all rois or a numpy array which will be converted to
             an Iterable
 
-        :type rois: :class:`Union <typing.Union>` [ :class:`Iterable <typing.Iterable>` ,
-            :class:`ndarray <numpy.ndarray>` ]
+        :type rois: :class:`Union <typing.Union>`\[:class:`Iterable <typing.Iterable>`\,
+            :class:`ndarray <numpy.ndarray>`\]
 
         :param reference_shape: The reference_shape of the image containing the rois
 
-        :type reference_shape: :class:`Sequence <typing.Sequence>` [ :class:`int` , :class:`int` ] = (512, 512)
+        :type reference_shape: :class:`Sequence <typing.Sequence>`\[:class:`int`\, :class:`int`\],
+            default: ``(512, 512)``
 
         :returns: Dictionary in which the keys are integers indexing the roi and each roi is an ROI object
 
@@ -482,24 +492,24 @@ def calculate_radius(centroid: Sequence[Number, Number],
 
     :param centroid: Centroid of the roi in row-column format (y, x)
 
-    :type centroid: :class:`Sequence <typing.Sequence>` [ :class:`Number <numbers.Number>` ,
-        :class:`Number <numbers.Number>` ]
+    :type centroid: :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\,
+        :class:`Number <numbers.Number>`\]
 
     :param vertices_coordinates: Nx2 array containing the pixels that form the vertices of the approximate convex hull
 
-    :type vertices_coordinates: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-        :class:`dtype <numpy.dtype>` [ :class:`int` ]]
+    :type vertices_coordinates: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+        :class:`dtype <numpy.dtype>`\[:class:`int`\]]
 
     :param method: Method to use when calculating radius ("mean", "bound", "unbound", "ellipse")
 
-    :type method: :class:`str` , default: 'mean'
+    :type method: :class:`str`\, default: ``'mean'``
 
     :returns: The radius of the roi for symmetrical radi;
         the major & minor radii and the value of theta for asymmetrical radii
 
-    :rtype: :class:`Union <typing.Union>` [ :class:`float` , :class:`Tuple <typing.Tuple>
-        [ :class:`Tuple <typing.Tuple>` [ :class:`Tuple <typing.Tuple>`
-        [ :class:`float` , :class:`float` ], :class:`float` ]]
+    :rtype: :class:`Union <typing.Union>`\[:class:`float`\,
+        :class:`Tuple <typing.Tuple>\[:class:`Tuple <typing.Tuple>`\[:class:`Tuple <typing.Tuple>`\[:class:`float`\,
+         :class:`float`\], :class:`float`\]]
     """
 
     center = np.asarray(centroid)
@@ -530,19 +540,19 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :type pixels: :class:`Union <typing.Union>` [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-        :class:`dtype <numpy.dtype>` [ :class:`int` ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]
+    :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+        :class:`dtype <numpy.dtype>`\[:class:`int`\], :class:`Sequence <typing.Sequence>`\[:class:`int`\]]
 
     :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
-    :type y_pixels: :class:`Optional <typing.Optional>` [ :class:`Union <typing.Union>`
-        [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>` [ :class:`int`
-        ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]], default: None
+    :type y_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
+        :class:`ndarray <numpy.ndarray>`\[ :class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\],
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
 
     :returns: The centroid of the roi. Whether the centroid is in xy or rc form is dependent on the
         form of the arguments
 
-    :rtype: :class:`Tuple <typing.Tuple>` [ :class:`float` , :class:`float` ]
+    :rtype: :class:`Tuple <typing.Tuple>`\[:class:`float`\, :class:`float`\]
     """
     # if ypix is provided and xpix is one dimensional
     # we have to do it weird this way because many users will pass a 2D array that is of shape (N, 1) rather than (N, )
@@ -589,30 +599,30 @@ def calculate_mask(centroid: Sequence[Number, Number],
 
     :param centroid: Centroid of the roi in row-column form (y, x)
 
-    :type centroid: :class:`Sequence <typing.Sequence>` [ :class:`Number <numbers.Number>` ,
-    :class:`Number <numbers.Number>` ]]
+    :type centroid: :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\,
+        :class:`Number <numbers.Number>`\]]
 
     :param radii: Radius of the roi. Only one radius is required if the roi is symmetrical (i.e., circular).
         For an elliptical roi both a long and short radius can be provided.
 
-    :type radii: :class:`Union <typing.Union>` [ :class:`Number <numbers.Number>` ,
-        :class:`Sequence <typing.Sequence>` [ :class:`Number <numbers.Number>` , :class:`Number <numbers.Number>` ]]
+    :type radii: :class:`Union <typing.Union>`\[:class:`Number <numbers.Number>`\,
+        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]]
 
     :param reference_shape: Dimensions of the reference image the roi lies within. If only one value is provided
         it is considered symmetrical.
 
-    :type reference_shape: :class:`Union <typing.Union>` [ :class:`Number <numbers.Number>` ,
-        :class:`Sequence <typing.Sequence>` [ :class:`Number <numbers.Number>` , :class:`Number <numbers.Number>` ]],
-        default: None
+    :type reference_shape: :class:`Union <typing.Union>`\[ :class:`Number <numbers.Number>`\,
+        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]],
+        default: ``None``
 
     :param theta: Angle of the long-radius with respect to the y-axis of the reference image
 
-    :type theta: :class:`Number <numbers.Number>` , default: None
+    :type theta: :class:`Number <numbers.Number>`\, default: ``None``
 
     :returns: Boolean mask identifying which pixels contain the roi within the reference image
 
-    :rtype: :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-        :class:`dtype <numpy.dtype>` [ :class:`bool` ]]
+    :rtype: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+        :class:`dtype <numpy.dtype>`\[:class:`bool`\]]
     """
 
     if theta is not None:
@@ -685,14 +695,14 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
-    :type pixels: :class:`Union <typing.Union>` [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` ,
-        :class:`dtype <numpy.dtype>` [ :class:`int` ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]
+    :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
+        :class:`dtype <numpy.dtype>`\[:class:`int`\], :class:`Sequence <typing.Sequence>`\[:class:`int`\]]
 
     :param y_pixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
 
-    :type y_pixels: :class:`Optional <typing.Optional>` [ :class:`Union <typing.Union>`
-        [ :class:`ndarray <numpy.ndarray>` [ :class:`Any <typing.Any>` , :class:`dtype <numpy.dtype>` [ :class:`int`
-        ], :class:`Sequence <typing.Sequence>` [ :class:`int` ]]], default: None
+    :type y_pixels: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
+        :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\],
+        :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
 
     :returns: Index of which points form the vertices of the approximate convex hull.
         It may alternatively be considered an index of the smallest set of pixels that are able to demarcate the

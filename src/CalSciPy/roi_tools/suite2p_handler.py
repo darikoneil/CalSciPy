@@ -20,7 +20,8 @@ class Suite2PHandler(ROIHandler):
 
         :param reference_shape: Reference_shape of the reference image containing the roi
 
-        :type reference_shape: :class:`Sequence <typing.Sequence>` [ :class:`int`, :class:`int` ] = (512, 512)
+        :type reference_shape: :class:`Sequence <typing.Sequence>`\[:class:`int`\, :class:`int`\],
+            default: ``(512, 512)``
 
         :returns: ROI instance for the roi
 
@@ -47,7 +48,7 @@ class Suite2PHandler(ROIHandler):
 
         :returns: Stat and ops
 
-        :rtype: :class:`Sequence <typing.Sequence>` [ :class:`ndarray <numpy.ndarray>` , :class:`dict` ]
+        :rtype: :class:`Sequence <typing.Sequence>`\[:class:`ndarray <numpy.ndarray>`\, :class:`dict`\]
         """
 
         # append suite2p + plane if necessary
