@@ -77,9 +77,9 @@ class TerminalScheme:
     """
     BLUE: str = "\u001b[38;5;39m"  # Types
     YELLOW: str = "\u001b[38;5;11m"  # Emphasis
-    BOLD: str = "\u001b[1m"  # Titles, Headers + UNDERLINE + YELLOW
-    UNDERLINE: str = "\u001b[7m"  # Titles, Headers + BOLD + YELLOW, implemented as a reverse of font color/background color
-    # on some terminals (e.g., PyCharm)
+    BOLD: str = "\u001b[1m"  # Titles, Headers + YELLOW
+    UNDERLINE: str = "\u001b[7m"  # Titles, Headers + BOLD + UNDERLINE + YELLOW, implemented as a reverse of font
+    # color/background color on some terminals (e.g., PyCharm)
     RESET: str = "\033[0m"
 
     def __new__(cls: TerminalScheme) -> TerminalScheme:
@@ -97,27 +97,29 @@ class TerminalScheme:
     @property
     def type(self) -> str:
         """
-        Style for type hinting
+        :Getter: Blue font style for type hinting
+        :Getter Type: :class:`str`
 
-        :rtype: :class:`str`
         """
         return self.BLUE
 
     @property
     def emphasis(self) -> str:
         """
-        Style for emphasis
+        :Getter: Yellow font style for emphasis
+        :Getter Type: :class:`str`
 
-        :rtype: :class:`str`
         """
         return self.YELLOW
 
     @property
     def header(self) -> str:
         """
-        Style for headers, titles and other things of utmost importance
+        :Getter: Style for headers, titles and other things of utmost importance consisting of
+            bold yellow font and underline (implemented as a reverse of font color / background on some terminals
+            (e.g., PyCharm)
+        :Getter Type: :class:`str`
 
-        :rtype: :class:`str`
         """
         return self.BOLD + self.UNDERLINE + self.YELLOW
 

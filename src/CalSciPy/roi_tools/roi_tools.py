@@ -508,7 +508,7 @@ def calculate_radius(centroid: Sequence[Number, Number],
 
     :rtype: :class:`Union <typing.Union>`\[:class:`float`\,
         :class:`Tuple <typing.Tuple>\[:class:`Tuple <typing.Tuple>`\[:class:`Tuple <typing.Tuple>`\[:class:`float`\,
-         :class:`float`\], :class:`float`\]]
+        :class:`float`\], :class:`float`\]]
     """
 
     center = np.asarray(centroid)
