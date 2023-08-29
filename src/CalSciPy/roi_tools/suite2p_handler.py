@@ -36,7 +36,7 @@ class Suite2PHandler(ROIHandler):
                    )
 
     @staticmethod
-    @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+    # @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
     def from_file(folder: Union[str, Path], *args, **kwargs) -> Sequence[np.ndarray, dict]:  # noqa: U100
         """
         Loads stat and ops from file

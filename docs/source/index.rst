@@ -46,6 +46,7 @@ considered useful to others.
    :caption: API REFERENCE
 
    color_scheme <CalSciPy.color_scheme>
+   events <CalSciPy.events>
    io_tools <CalSciPy.io_tools>
    roi_tools <CalSciPy.roi_tools>
    version <CalSciPy.version>

@@ -257,8 +257,8 @@ def _plot_spiral(photostimulation,
                  **kwargs):
     for target in target_index:
         roi = photostimulation.rois.get(target)
-        radius = roi.mask.bound_radius
-        x, y = _make_spiral(*roi.coordinates[::-1], radius=radius)
+        radius = roi.approximation.radius
+        x, y = _make_spiral(*roi.centroid[::-1], radius=radius)
         axes.plot(x, y, **kwargs)
 
 
