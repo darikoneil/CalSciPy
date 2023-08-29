@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import Sequence, Any
+from typing import Sequence, Any, Union
 from pathlib import Path
 
 import numpy as np
-
+from PPVD.parsing import convert_permitted_types_to_required
 from .roi_tools import ROI, ROIHandler
 
 
@@ -36,15 +36,16 @@ class Suite2PHandler(ROIHandler):
                    )
 
     @staticmethod
-    def from_file(folder: Path, *args, **kwargs) -> Sequence[np.ndarray, dict]:  # noqa: U100
+    @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+    def from_file(folder: Union[str, Path], *args, **kwargs) -> Sequence[np.ndarray, dict]:  # noqa: U100
         """
-         Loads stat and ops from file
+        Loads stat and ops from file
 
         :param folder: Folder containing `suite2p <https://www.suite2p.org>`_ data. The folder must contain the
             associated *stat.npy* & *ops.npy* files, though it is recommended the folder also contain the *iscell.npy*
             file.
 
-        :type folder: :class:`Path <pathlib.Path>`
+        :type folder: :class:`Union <typing.Union>`\[:class:`str`\, :class:`Path <pathlib.Path>`\]
 
         :returns: Stat and ops
 

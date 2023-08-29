@@ -5,7 +5,7 @@ from operator import eq
 from ._backports import PatternMatching
 
 
-class _ColorScheme:
+class ColorScheme:
     """
     A container class for CalSciPy's color scheme
 
@@ -23,23 +23,34 @@ class _ColorScheme:
     BLACK: Tuple[float, float, float] = (0 / 255, 0 / 255, 0 / 255)
     WHITE: Tuple[float, float, float] = (255 / 255, 255 / 255, 255 / 255)
     BACKGROUND: Tuple[float, float, float] = (245 / 255, 245 / 255, 245 / 255)
-    colors = ("red", "green", "blue", "orange", "purple", "yellow", "black", "medium", "dark", "light")
+    colors: Tuple[str, ...] = ("red", "green", "blue", "orange", "purple", "yellow", "black", "medium", "dark", "light")
 
-    def __new__(cls: _ColorScheme) -> _ColorScheme:
+    def __new__(cls: ColorScheme) -> ColorScheme:
         """
         Force color scheme as singleton
 
         """
         if not hasattr(cls, "instance"):
-            cls.instance = super(_ColorScheme, cls).__new__(cls)
+            cls.instance = super(ColorScheme, cls).__new__(cls)
         return cls.instance
 
     @property
     def mapping(self) -> List[Tuple[int, Tuple[float, float, float]]]:
+        """
+        Mapping of integers to ordered color scheme
+
+        :rtype: :class:`List <typing.List>`\[:class:`Tuple <typing.Tuple>`\[:class:`int`\,
+            :class:`Tuple <typing.Tuple>`\[:class:`float`\, :class:`float`\, :class:`float`\]]]
+        """
         return list(enumerate(self.colors))
 
     @property
     def num_colors(self) -> int:
+        """
+        Total number of colors
+
+        :rtype: :class:`int`
+        """
         return len(self.colors)
 
     def __call__(self, value: Union[int, str], *args, **kwargs) -> Tuple[float, float, float]:
@@ -59,25 +70,25 @@ class _ColorScheme:
             raise TypeError("color scheme accepts int or str args only")
 
 
-class _TerminalScheme:
+class TerminalScheme:
     """
     A container class for CalSciPy's terminal printing color/font scheme
 
     """
-    BLUE = "\u001b[38;5;39m"  # Types
-    YELLOW = "\u001b[38;5;11m"  # Emphasis
-    BOLD = "\u001b[1m"  # Titles, Headers + UNDERLINE + YELLOW
-    UNDERLINE = "\u001b[7m"  # Titles, Headers + BOLD + YELLOW, implemented as a reverse of font color/background color
+    BLUE: str = "\u001b[38;5;39m"  # Types
+    YELLOW: str = "\u001b[38;5;11m"  # Emphasis
+    BOLD: str = "\u001b[1m"  # Titles, Headers + UNDERLINE + YELLOW
+    UNDERLINE: str = "\u001b[7m"  # Titles, Headers + BOLD + YELLOW, implemented as a reverse of font color/background color
     # on some terminals (e.g., PyCharm)
-    RESET = "\033[0m"
+    RESET: str = "\033[0m"
 
-    def __new__(cls: _TerminalScheme) -> _TerminalScheme:
+    def __new__(cls: TerminalScheme) -> TerminalScheme:
         """
         Force color scheme as singleton
 
         """
         if not hasattr(cls, "instance"):
-            cls.instance = super(_TerminalScheme, cls).__new__(cls)
+            cls.instance = super(TerminalScheme, cls).__new__(cls)
         return cls.instance
 
     def __str__(self):
@@ -88,6 +99,7 @@ class _TerminalScheme:
         """
         Style for type hinting
 
+        :rtype: :class:`str`
         """
         return self.BLUE
 
@@ -96,6 +108,7 @@ class _TerminalScheme:
         """
         Style for emphasis
 
+        :rtype: :class:`str`
         """
         return self.YELLOW
 
@@ -104,6 +117,7 @@ class _TerminalScheme:
         """
         Style for headers, titles and other things of utmost importance
 
+        :rtype: :class:`str`
         """
         return self.BOLD + self.UNDERLINE + self.YELLOW
 
@@ -135,7 +149,7 @@ class _TerminalScheme:
 
 
 # instance color scheme
-COLORS = _ColorScheme()
+COLORS = ColorScheme()
 
 # instance terminal scheme
-TERM_SCHEME = _TerminalScheme()
+TERM_SCHEME = TerminalScheme()

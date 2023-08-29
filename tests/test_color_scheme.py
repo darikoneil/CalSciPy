@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 # noinspection PyProtectedMember
-from CalSciPy.color_scheme import _ColorScheme, _TerminalScheme, COLORS, TERM_SCHEME
+from CalSciPy.color_scheme import ColorScheme, TerminalScheme, COLORS, TERM_SCHEME
 
 
 def test_color_scheme():
@@ -27,7 +27,7 @@ def test_color_scheme():
             called_color = COLORS(i)
 
     # finally check singleton status
-    new_color_scheme = _ColorScheme()
+    new_color_scheme = ColorScheme()
     assert(new_color_scheme.__repr__() == COLORS.__repr__())
 
     # check argument exception
@@ -55,5 +55,5 @@ def test_terminal_scheme():
     assert("42!" in new_msg)
 
     # finally check singleton status
-    new_terminal_scheme = _TerminalScheme()
+    new_terminal_scheme = TerminalScheme()
     assert(new_terminal_scheme.__repr__() == TERM_SCHEME.__repr__())
