@@ -4,7 +4,8 @@ Visuals
 CalSciPy Style
 ``````````````
 Access to the styles utilized by CalSciPy is provided through :class:`COLORS <CalSciPy.color_scheme.COLORS>`\,
-:class:`TERM_SCHEME <CalSciPy.color_scheme.TERM_SCHEME>`\, ColorSpectrum, and through matplotlib's style contexts.
+:class:`TERM_SCHEME <CalSciPy.color_scheme.TERM_SCHEME>`\, ColorSpectrum, and through
+:class:`matplotlib's <matplotlib>` style contexts.
 
 Color Scheme
 ############
@@ -12,7 +13,7 @@ Access to :class:`COLORS <CalSciPy.color_scheme.COLORS>` permits retrieval of th
 color through its name, index, or directly through its attribute implementation. More information on which colors are
 available can be found :class:`here <CalSciPy.color_scheme._ColorScheme>`\.
 
-.. centered:: **Using CalSciPy's color scheme**
+.. centered:: **Using CalSciPy's Color Scheme**
 
 .. code-block:: python
 
@@ -28,9 +29,10 @@ available can be found :class:`here <CalSciPy.color_scheme._ColorScheme>`\.
 
 Matplotlib Style
 ################
-Users can utilized CalSciPy's matplotlib style through matplotlib style context manager.
+Users can utilize CalSciPy's :class:`matplotlib` style through
+:class:`matplotlib's style context manager <matplotlib.pyplot.style.context>`\.
 
-.. centered:: **Using CalSciPy's matplotlib style**
+.. centered:: **Using CalSciPy's Matplotlib Style**
 
 .. code-block:: python
 
@@ -39,3 +41,20 @@ Users can utilized CalSciPy's matplotlib style through matplotlib style context 
 
     with plt.style.context("CalSciPy.main"):
         fig = plt.figure()
+
+Terminal Style
+##############
+Users can utilize CalSciPy's terminal printing style by using :class:`TERM_SCHEME <CalSciPy.color_scheme.TERM_SCHEME>`\.
+Calling :class:`TERM_SCHEME <CalSciPy.color_scheme.TERM_SCHEME>` with a specific property or attribute string alongside
+a string message will return your original message with the requested formatting. More information on available
+formatting can be found :class:`here <CalSciPy.color_scheme._TerminalScheme>`\.
+
+.. centered:: **Using CalSciPy's Terminal Style
+
+.. code-block:: python
+
+   from CalSciPy.color_scheme import TERM_SCHEME
+
+   message = "Hello World!"
+
+   formatted_message = TERM_SCHEME(message, "header")

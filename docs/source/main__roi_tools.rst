@@ -14,9 +14,33 @@ Constructing an ROI requires only knowledge of its pixel coordinates. From these
 are calculated, including its centroid, radius, and approximate outline. Importantly, these attributes are only
 calculated at instantiation and then permanently cached for performance benefits. Therefore, changing the pixels of an
 existing :class:`ROI <CalSciPy.roi_tools.ROI>` instance is not permitted. A properties attribute is provided to allow
-users to incorporate arbitrary information for a particular ROI (e.g., SNR).
+users to incorporate arbitrary information for a particular ROI (e.g., SNR). All keyword arguments will be passed to
+the properties attribute.
 
-Importing ROIs from file
+.. centered:: **Generating an ROI instance**
+
+.. code-block:: python
+
+   import numpy as np
+   from CalSciPy.roi_tools import ROI
+
+   x_pixels = [31, 31, 31, 32, 32, 32, 33, 33, 33]
+   y_pixels = [31, 32, 33, 31, 32, 33, 31, 32, 33]
+   reference_shape = (64, 64)
+   properties = {"cool_roi": True}
+
+   roi = ROI(x_pixels, y_pixels, reference_shape, properties, special_roi=True)
+
+   >>>print(f"{roi.radius=}")
+   roi.radius=1
+
+   >>>print(f"{roi.centroid=}")
+   roi.centroid=(32, 32)
+
+   >>>print(f"{roi.properties}")
+   roi.properties={'special_roi': True, 'cool_roi': True}
+
+Importing ROIs from File
 ````````````````````````
 The :class:`ROI Handler <CalSciPy.roi_tools.ROIHandler>` metaclass describes a standardized approach to loading
 ROIs and can be adapted to handle any arbitrary data structure your ROIs may be stored in. Calling the
@@ -32,6 +56,8 @@ The :class:`Suite2P Handler <CalSciPy.roi_tools.suite2p_handler.Suite2PHandler>`
 `suite2p <https://www.suite2p.org>`_ data. It requires the path to a folder containing suite2p data
 as its only argument. The folder ought to contain at least the *stat.npy* and *ops.npy* files, although the
 *iscell.npy* file is also recommended.
+
+.. centered:: **Using the Suite2P Handler**
 
 .. code-block:: python
 
