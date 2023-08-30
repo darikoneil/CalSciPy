@@ -1,13 +1,9 @@
 __all__ = [
-    "bruker",
     "color_scheme"
     "events",
     "images",
     "io_tools",
-    "optogenetics",
-    "reorganization",
     "roi_tools",
-    "traces",
     "version",
 ]
 

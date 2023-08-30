@@ -8,6 +8,10 @@ Events and Spiking
    imaging quality, and innumerable other factors. It follows that the term *event* and *spike* are used
    interchangeably in CalSciPy.
 
+Generating Rasters
+``````````````````
+To generate a raster, utilize the :func:`generate_raster <CalSciPy.events.generate_raster>` function.
+
 Firing Rates
 ````````````
 CalSciPy provides several small functions that abstract firing rate calculations and improve the readability of your
@@ -19,4 +23,3 @@ scripts.
   instantaneous firing rates.
 * :func:`normalize_firing_rates <CalSciPy.events.normalize_firing_rates>`\: Normalize firing rates by scaling to a max
   of 1.0.
-
