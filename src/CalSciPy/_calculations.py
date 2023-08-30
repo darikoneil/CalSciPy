@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Iterator, Callable, Union, Tuple, Any
+from typing import Iterable, Iterator, Callable, Union, Tuple, Any, Sequence
 from collections import deque
 from pathlib import Path
 from numbers import Number
