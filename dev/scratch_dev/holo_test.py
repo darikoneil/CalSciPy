@@ -13,14 +13,16 @@ from dev.experimental.visualize_optogenetics import *
 
 
 # parameters
-data_folder = Path(".\\tests\\testing_samples\\suite2p\\plane0")
+#data_folder = Path(".\\tests\\testing_samples\\suite2p\\plane0")
+
+data_folder = Path("D:\\SD_C\\pre_session_one\\results\\suite2p\\plane0")
 
 # create experiment
-photostimulation = Photostimulation.import_rois(folder=data_folder)
+photostimulation = Photostimulation.import_rois(folder=str(data_folder))
 
 # create targets
 targets = randomize_targets(np.arange(photostimulation.num_neurons),
-                            neurons_per_target=4,
+                            neurons_per_target=96,
                             num_targets=1,
                             trials=1)[0]
 
@@ -30,7 +32,7 @@ for idx, target in enumerate(targets):
 
 group = photostimulation.sequence[0]
 
-view_targets(photostimulation)
+view_spiral_targets(photostimulation)
 
 masks = generate_target_mask(group)
 
@@ -41,8 +43,8 @@ hologram = Hologram(masks, slm_shape=(512, 512))
 zoombox = hologram.plot_farfield(source=hologram.target, cbar=True)
 
 # Run 5 iterations of GS.
-hologram.optimize(method="WGS-Kim", maxiter=100)
+hologram.optimize(method="GS", maxiter=100)
 
 # Look at the associated near- and far- fields
-hologram.plot_nearfield(cbar=True)
-hologram.plot_farfield(limits=zoombox, cbar=True, title='FF Amp')
+hologram.plot_nearfield(cbar=False)
+hologram.plot_farfield(limits=zoombox, cbar=False, title='FF Amp')

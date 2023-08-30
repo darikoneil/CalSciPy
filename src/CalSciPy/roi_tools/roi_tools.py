@@ -224,8 +224,6 @@ class ROI(_ROIBase):
     """
     An ROI object containing the base characteristics & properties of an ROI.
 
-    :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
-
     :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form. If this argument is one-dimensional,
         it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
@@ -250,6 +248,15 @@ class ROI(_ROIBase):
     :type zpix: :class:`Optional <typing.Optional>`\[:class:`Union <typing.Union>`\[
         :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`dtype <numpy.dtype>`\[:class:`int`\]],
         :class:`Sequence <typing.Sequence>`\[:class:`int`\]]], default: ``None``
+
+    .. note::
+
+        The approximation attribute is dynamic and can be changed by setter the approximation method.
+
+    .. warning::
+
+        The properties of the ROI will only be calculated **once** and thereafter cached for performance benefits.
+
     """
     def __init__(self,
                  pixels: Union[NDArray[int], Sequence[int]],
@@ -301,8 +308,6 @@ class ApproximateROI(_ROIBase):
     characteristics & properties of an ROI. Like :class:`ROI <CalSciPy.roi_tools.ROI>`, the properties of this class
     are only calculated once.
 
-    :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
-
     :param roi: ROI instance
 
     :type roi: :class:`ROI <CalSciPy.roi_tools.ROI>`
@@ -310,6 +315,12 @@ class ApproximateROI(_ROIBase):
     :param method: method used to calculate radius
 
     :type method: :class:`str` , default: ``'literal'``
+
+    .. warning::
+
+        The properties of the Approximate ROI will only be calculated **once** and thereafter cached for performance
+        benefits.
+
     """
     def __init__(self,
                  roi: ROI,

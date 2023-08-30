@@ -1,4 +1,4 @@
-CalSciPy.version module
+CalSciPy.version
 =======================
 
 .. automodule:: CalSciPy.version

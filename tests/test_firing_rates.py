@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from CalSciPy.events import calculate_instantaneous_firing_rates, calculate_mean_firing_rates, \
+from CalSciPy.events import calc_firing_rates, calc_mean_firing_rates, \
     normalize_firing_rates
 
 
@@ -50,24 +50,24 @@ def expected_normalized_firing_rates(request):
 
     """
     return np.array([
-        [0.11364, 0.33333, 0.66667, 1.00000, 1.00000, 0.75000, 1.00000],
-        [1.00000, 1.00000, 1.00000, 1.00000, 0.66667, 0.25000, 0.11364],
-        [0.00000, 0.00000, 0.13333, 0.20000, 1.00000, 1.00000, 0.45455]
+        [0.11364, 0.11364, 0.22727, 0.22727, 0.34091, 0.34091, 1.00000],
+        [1.00000, 0.34091, 0.34091, 0.22727, 0.22727, 0.11364, 0.11364],
+        [0.00000, 0.00000, 0.10000, 0.10000, 0.75000, 1.00000, 1.00000]
     ])
 
 
 def test_calculate_instantaneous_firing_rates(spike_probabilities, expected_instantaneous_firing_rate):
     frame_rate = 30.0
     # out of place
-    firing_matrix = calculate_instantaneous_firing_rates(spike_probabilities, frame_rate)
+    firing_matrix = calc_firing_rates(spike_probabilities, frame_rate)
     np.testing.assert_equal(firing_matrix, expected_instantaneous_firing_rate)
     # in place
-    calculate_instantaneous_firing_rates(spike_probabilities, frame_rate, in_place=True)
+    calc_firing_rates(spike_probabilities, frame_rate, in_place=True)
     np.testing.assert_equal(spike_probabilities, expected_instantaneous_firing_rate)
 
 
 def test_calculate_mean_firing_rates(spike_probabilities, expected_mean_firing_rates):
-    mean_rates = calculate_mean_firing_rates(spike_probabilities)
+    mean_rates = calc_mean_firing_rates(spike_probabilities)
     np.testing.assert_allclose(mean_rates, expected_mean_firing_rates, rtol=1e-3)
 
 

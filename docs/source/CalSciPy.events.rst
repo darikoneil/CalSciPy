@@ -1,17 +1,5 @@
-CalSciPy.events package
+CalSciPy.events
 =======================
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   CalSciPy.events.event_visuals
-   CalSciPy.events.firing_rates
-
-Module contents
----------------
 
 .. automodule:: CalSciPy.events
    :members:

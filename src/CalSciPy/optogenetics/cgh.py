@@ -27,7 +27,7 @@ def generate_target_mask(group: StimulationGroup, method: str = "radius") -> NDA
     #rois = [getattr(roi.mask, method) for roi in group.rois]
     rois = [roi for roi in group.rois]
 
-    shape = group.shape
+    shape = group.reference_shape
 
     masks = [roi.mask for roi in rois]
 

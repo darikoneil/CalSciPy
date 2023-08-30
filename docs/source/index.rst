@@ -5,47 +5,30 @@ interactive visualization of data to computer-generated holography for "read/wri
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be
 considered useful to others.
 
+MAIN
+````
+* :doc:`Introduction <main__introduction>`
+* :doc:`Loading and Saving Data <main__io_tools>`
+* :doc:`Events and Spiking <main__events>`
+* :doc:`Regions of Interest <main__roi_tools>`
+* :doc:`Style <main__style>`
 
-.. toctree::
-   :maxdepth: 1
-   :caption: INTRODUCTION:
+INTERACTIVE VISUALS
+```````````````````
 
-   Motivation <introduction__motivation>
-   Limitations <introduction__limitations>
-   Contributions <introduction__contributions>
-   Installation <introduction__installation>
+BRUKER PRAIRIEVIEW
+``````````````````
 
-.. toctree::
-   :maxdepth: 1
-   :caption: MAIN:
+OPTOGENETICS
+````````````
 
-   Introduction <main__introduction>
-   Loading and Saving Data <main__io_tools>
-   Events and Spiking <main__events>
-   Regions of Interest <main__roi_tools>
-   Visuals <main__visuals>
+ORGANIZATION
+````````````
 
-.. toctree::
-   :maxdepth: 1
-   :caption: INTERACTIVE VISUALS
-
-.. toctree::
-   :maxdepth: 1
-   :caption: BRUKER PRAIRIEVIEW
-
-.. toctree::
-   :maxdepth: 1
-   :caption: OPTOGENETICS
-
-.. toctree::
-   :maxdepth: 1
-   :caption: ORGANIZATION
-
-.. toctree::
-   :maxdepth: 2
-   :caption: API REFERENCE
-
-   color_scheme <CalSciPy.color_scheme>
-   io_tools <CalSciPy.io_tools>
-   roi_tools <CalSciPy.roi_tools>
-   version <CalSciPy.version>
+API REFERENCE
+`````````````
+* :doc:`color_scheme <CalSciPy.color_scheme>`
+* :doc:`events <CalSciPy.events>`
+* :doc:`io_tools <CalSciPy.io_tools>`
+* :doc:`roi_tools <CalSciPy.roi_tools>`
+* :doc:`version <CalSciPy.version>`
