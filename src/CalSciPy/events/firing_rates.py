@@ -53,7 +53,7 @@ def calc_firing_rates(spike_prob: np.ndarray,
 
 def calc_mean_firing_rates(firing_rates: np.ndarray) -> np.ndarray:
     """
-    Calculate mean firing rates
+    Calculate mean firing rates instantaneous firing rates.
 
     :param firing_rates: Matrix of n neuron x m samples or tensor of t trials x n neurons x m samples where each
         element is either a spike or an instantaneous firing rate

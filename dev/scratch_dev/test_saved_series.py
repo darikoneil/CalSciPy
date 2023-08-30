@@ -31,7 +31,7 @@ lines = factory.constructor(mpse)
 
 def gen(ps, gpl, factory):
     order = np.arange(0, 750, 50).tolist()
-    num_neuro\ns = len(order)
+    num_neurons = len(order)
     params = {"initial_delay": 1,
               "spiral_revolutions": 50,
               "duration": 100,
