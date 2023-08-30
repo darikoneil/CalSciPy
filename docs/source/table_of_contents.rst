@@ -14,6 +14,7 @@
    Introduction <main__introduction>
    Loading and Saving Data <main__io_tools>
    Events and Spiking <main__events>
+   Image Processing <main__images>
    Regions of Interest <main__roi_tools>
    Style <main__style>
 
@@ -39,6 +40,7 @@
 
    color_scheme <CalSciPy.color_scheme>
    events <CalSciPy.events>
+   images <CalSciPy.images>
    io_tools <CalSciPy.io_tools>
    roi_tools <CalSciPy.roi_tools>
    version <CalSciPy.version>

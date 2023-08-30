@@ -29,6 +29,7 @@ API REFERENCE
 `````````````
 * :doc:`color_scheme <CalSciPy.color_scheme>`
 * :doc:`events <CalSciPy.events>`
+* :doc:`images <CalSciPy.images>`
 * :doc:`io_tools <CalSciPy.io_tools>`
 * :doc:`roi_tools <CalSciPy.roi_tools>`
 * :doc:`version <CalSciPy.version>`

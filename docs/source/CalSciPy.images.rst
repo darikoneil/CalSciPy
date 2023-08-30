@@ -1,16 +1,5 @@
-CalSciPy.images package
-=======================
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   CalSciPy.images.image_processing
-
-Module contents
----------------
+CalSciPy.images
+===============
 
 .. automodule:: CalSciPy.images
    :members:
