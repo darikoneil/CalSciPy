@@ -58,7 +58,7 @@ class InteractivePlot(ABC):
 
     def init_figure(self, one_axes: bool = True) -> None:
         self.pointer = 0
-        plt.style.use("CalSciPy.style")
+        plt.style.use("CalSciPy.main")
         self.figure = plt.figure(figsize=(16, 9))
         self.figure.canvas.mpl_connect("key_press_event", self.on_key)
         if one_axes:

@@ -38,7 +38,7 @@ source_suffix = ".rst"
 
 language = "en"
 
-master_doc = "table_of_contents"
+root_doc = "table_of_contents"
 
 intersphinx_mapping = {
     'cupy': ('https://docs.cupy.dev/en/stable/', None),

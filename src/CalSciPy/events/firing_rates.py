@@ -53,7 +53,7 @@ def calc_firing_rates(spike_prob: np.ndarray,
 
 def calc_mean_firing_rates(firing_rates: np.ndarray) -> np.ndarray:
     """
-    Calculate mean firing rates instantaneous firing rates.
+    Calculate mean firing rates from instantaneous firing rates.
 
     :param firing_rates: Matrix of n neuron x m samples or tensor of t trials x n neurons x m samples where each
         element is either a spike or an instantaneous firing rate
@@ -63,7 +63,7 @@ def calc_mean_firing_rates(firing_rates: np.ndarray) -> np.ndarray:
     .. warning::
 
         If you do not pass firing_rates in the shape of n neurons x m samples or tensor of t trials x n neurons x
-        m samples your result will be **wrong**.
+        m samples your result will be incorrect.
 
     """
     return np.nanmean(firing_rates, axis=-1)
@@ -85,11 +85,11 @@ def normalize_firing_rates(firing_rates: np.ndarray,
     .. warning::
 
         If you do not pass firing_rates in the shape of n neurons x m samples or tensor of t trials x n neurons x
-        m samples your result will be **wrong**.
+        m samples your result will be incorrect.
 
     """
 
-    if len(firing_rates) >= 3:
+    if len(firing_rates.shape) >= 3:
         raise NotImplementedError
 
     if in_place:

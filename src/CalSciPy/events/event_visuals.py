@@ -36,6 +36,7 @@ class SpikePlot(InteractivePlot):
             self.x_label = "Time (s)"
         else:
             self.x_label = "Frame (#)"
+
         self.time = self.set_time()
 
         self.title_template = "Spike Inference: Neuron "
@@ -71,9 +72,9 @@ class SpikePlot(InteractivePlot):
     def plot(self) -> None:
         self.set_labels()
         if self.spike_prob is not None:
-            self.axes.plot(self.time, self.spike_prob[self.pointer, :] - 1, lw=1.5, alpha=0.95, color=COLORS.red)
+            self.axes.plot(self.time, self.spike_prob[self.pointer, :] - 1, lw=1.5, alpha=0.95, color=COLORS.RED)
         if self.traces is not None:
-            self.axes.plot(self.time, self.traces[self.pointer, :], lw=1.5, alpha=0.95, color=COLORS.blue)
+            self.axes.plot(self.time, self.traces[self.pointer, :], lw=1.5, alpha=0.95, color=COLORS.BLUE)
         if self.spike_times is not None:
             for spike in self.spike_times[self.pointer]:
                 self.axes.plot(np.asarray([self.time[spike], self.time[spike]]), [-1.4, -1.2], "k")

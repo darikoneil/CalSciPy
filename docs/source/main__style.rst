@@ -49,7 +49,7 @@ Calling :class:`TERM_SCHEME <CalSciPy.color_scheme.TERM_SCHEME>` with a specific
 a string message will return your original message with the requested formatting. More information on available
 formatting can be found :class:`here <CalSciPy.color_scheme._TerminalScheme>`\.
 
-.. centered:: **Using CalSciPy's Terminal Style
+.. centered:: **Using CalSciPy's Terminal Style**
 
 .. code-block:: python
 

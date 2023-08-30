@@ -18,7 +18,7 @@ from dev.experimental.visualize_optogenetics import *
 data_folder = Path("D:\\SD_C\\pre_session_one\\results\\suite2p\\plane0")
 
 # create experiment
-photostimulation = Photostimulation.import_rois(folder=data_folder)
+photostimulation = Photostimulation.import_rois(folder=str(data_folder))
 
 # create targets
 targets = randomize_targets(np.arange(photostimulation.num_neurons),
