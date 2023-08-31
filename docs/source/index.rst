@@ -34,11 +34,14 @@ ORGANIZATION
 
 API REFERENCE
 `````````````
+* :doc:`bruker <CalSciPy.bruker>`
 * :doc:`color_scheme <CalSciPy.color_scheme>`
 * :doc:`conversion <CalSciPy.conversion>`
 * :doc:`events <CalSciPy.events>`
 * :doc:`images <CalSciPy.images>`
 * :doc:`io_tools <CalSciPy.io_tools>`
+* :doc:`organization <CalSciPy.organization>`
+* :doc:`optogenetics <CalSciPy.optogenetics>`
 * :doc:`roi_tools <CalSciPy.roi_tools>`
 * :doc:`traces <CalSciPy.traces>`
 * :doc:`version <CalSciPy.version>`
