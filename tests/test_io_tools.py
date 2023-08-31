@@ -2,8 +2,9 @@ from __future__ import annotations
 from typing import Callable, Any
 
 import pytest
-from tests.conftest import retrieve_dataset_ids
-from tests.helpers import read_descriptions, generate_dummy_file_name, generate_dummy_output_folder, BlockPrinting
+from .conftest import retrieve_dataset_ids
+# noinspection PyProtectedMember
+from CalSciPy._helpers import read_descriptions, generate_dummy_file_name, generate_dummy_output_folder, BlockPrinting
 
 from pathlib import Path
 import numpy as np

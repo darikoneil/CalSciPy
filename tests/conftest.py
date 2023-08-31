@@ -1,5 +1,6 @@
 import pytest
-from tests.helpers import copy_dummies, purge_dummies, identify_dummy_source
+# noinspection PyProtectedMember
+from CalSciPy._helpers import copy_dummies, purge_dummies, identify_dummy_source
 
 from os import environ
 from pathlib import Path

@@ -1,6 +1,7 @@
 import pytest
-from tests.conftest import retrieve_roi, retrieve_suite2p
-from tests.helpers import BlockPrinting
+from .conftest import retrieve_roi, retrieve_suite2p
+# noinspection PyProtectedMember
+from CalSciPy._helpers import BlockPrinting
 
 from copy import deepcopy
 from math import ceil
