@@ -1,22 +1,26 @@
 from __future__ import annotations
-from typing import Union, Callable, Tuple, Sequence
+from typing import Union, Tuple, Sequence
 from numbers import Number
 
 import numpy as np
 
-from .._calculations import generate_blocks, wrap_cupy_block
+from .._calculations import generate_blocks
 
 # try to import cupy else use scipy as drop-in replacement
 from scipy.ndimage import gaussian_filter as _scipy_gaussian_filter
 from scipy.ndimage import median_filter as _scipy_median_filter
 
 try:
-    import cupy
     from cupyx.scipy.ndimage import gaussian_filter as _gaussian_filter
     from cupyx.scipy.ndimage import median_filter as _median_filter
+    from .._calculations import wrap_cupy_block
+    _gaussian_filter = wrap_cupy_block(_gaussian_filter)
+    _median_filter = wrap_cupy_block(_median_filter)
+    USE_GPU = True
 except ModuleNotFoundError:
     _gaussian_filter = _scipy_gaussian_filter
     _median_filter = _scipy_median_filter
+    USE_GPU = False
 
 
 """
@@ -130,10 +134,10 @@ def median_filter(images: np.ndarray,
         block_gen = generate_blocks(range(frames), block_size, block_buffer)
         try:
             for block in block_gen:
-                filtered_images[block, :, :] = _median_filter(filtered_images[block, :, :], mask=mask)
+                filtered_images[block, :, :] = _median_filter(filtered_images[block, :, :], footprint=window)
         except (RuntimeError, StopIteration):
             pass
     else:
-        filtered_images = _median_filter(filtered_images, mask=window)
+        filtered_images = _median_filter(filtered_images, footprint=window)
 
     return filtered_images
