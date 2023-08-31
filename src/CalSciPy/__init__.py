@@ -1,9 +1,11 @@
 __all__ = [
     "color_scheme"
+    "conversion",
     "events",
     "images",
     "io_tools",
     "roi_tools",
+    "traces",
     "version",
 ]
 

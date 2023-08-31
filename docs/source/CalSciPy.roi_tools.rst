@@ -1,5 +1,5 @@
 CalSciPy.roi\_tools
-===========================
+===================
 
 .. automodule:: CalSciPy.roi_tools
    :members:

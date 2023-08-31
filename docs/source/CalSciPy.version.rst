@@ -1,5 +1,5 @@
 CalSciPy.version
-=======================
+================
 
 .. automodule:: CalSciPy.version
    :members:

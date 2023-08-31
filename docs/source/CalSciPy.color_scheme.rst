@@ -1,5 +1,5 @@
-CalSciPy.color\_scheme module
-=============================
+CalSciPy.color\_scheme
+======================
 
 .. automodule:: CalSciPy.color_scheme
    :members:
