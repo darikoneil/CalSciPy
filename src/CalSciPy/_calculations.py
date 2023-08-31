@@ -1,7 +1,6 @@
 from __future__ import annotations
-from typing import Iterable, Iterator, Callable, Union, Tuple, Any, Sequence
+from typing import Iterable, Iterator, Callable, Union, Tuple, Sequence
 from collections import deque
-from pathlib import Path
 from numbers import Number
 from functools import wraps, partial
 
@@ -172,7 +171,7 @@ def multiple_random_groups_without_replacement(sample_population: Union[np.ndarr
 
     selections = []
 
-    for group in range(num_groups):
+    for _ in range(num_groups):
         selections.append(np.random.choice(sample_population, size=group_size, replace=False).tolist())
         sample_population = np.setdiff1d(sample_population, np.hstack(selections))
 

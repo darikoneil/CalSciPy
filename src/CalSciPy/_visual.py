@@ -1,15 +1,15 @@
 from __future__ import annotations
 from numbers import Number
-
+from typing import Tuple, Any
 import numpy as np
 
 import matplotlib
 matplotlib.use("Qt5Agg")
-from matplotlib.cm import get_cmap  # noqa: E402
-from matplotlib import pyplot as plt  # noqa: E402
-from matplotlib.ticker import MultipleLocator  # noqa: E402
-from matplotlib.patches import Polygon  # noqa: E402
-import seaborn as sns  # noqa: E402
+from matplotlib.cm import get_cmap  # noqa: E402, F401
+from matplotlib import pyplot as plt  # noqa: E402, F401
+from matplotlib.ticker import MultipleLocator  # noqa: E402, F401
+from matplotlib.patches import Polygon  # noqa: E402, F401
+import seaborn as sns  # noqa: E402, F401
 
 
 """
@@ -26,7 +26,7 @@ class ColorSpectrum:
         self.cmap = self._generate_color_spectrum(samples, colormap, alpha)
 
     @staticmethod
-    def _generate_color_spectrum(samples: int, colormap: str = "Spectral_r", alpha: float = None):
+    def _generate_color_spectrum(samples: int, colormap: str = "Spectral_r", alpha: float = None) -> Tuple:
         cmap = get_cmap(colormap)
         points = np.linspace(0, 1, samples).tolist()
         colors = tuple([cmap(point) for point in points])
@@ -34,14 +34,14 @@ class ColorSpectrum:
             colors = tuple([(*color[:3], alpha) for color in colors])
         return colors
 
-    def _generator(self):
+    def _generator(self) -> Tuple[float, float, float, ...]:
         for color in self.cmap:
             yield color
 
-    def __enter__(self):
+    def __enter__(self):  #: noqa: ANN001
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):  #: noqa: ANN001
         ...
 
 

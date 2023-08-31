@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import Any
+from typing import Any, Tuple
+from numbers import Number
 import sys
-from sys import float_info
+from sys import float_info  # noqa: F401
 from os import devnull
 from shutil import copytree, rmtree
 from pathlib import Path
@@ -25,7 +26,7 @@ class BlockPrinting:
 
 
 # MARK TO USE NEW COPY OF DATASET EACH TIME SO ORIGINAL IS EFFECTIVELY IMMUTABLE
-def copy_dummies(source_folder, dest_folder) -> None:
+def copy_dummies(source_folder: Path, dest_folder: Path) -> None:
     """
     Copy dummy files to testing dir to avoid mutations concerns
 
@@ -35,14 +36,14 @@ def copy_dummies(source_folder, dest_folder) -> None:
     copytree(source_folder, dest_folder, dirs_exist_ok=True)
 
 
-def generate_dummy_file_name(name, dummy_folder, sub_folder):
+def generate_dummy_file_name(name: str, dummy_folder: Path, sub_folder: str) -> Path:
     if sub_folder:
         dummy_folder = dummy_folder.joinpath(sub_folder)
 
     return dummy_folder.joinpath(name)
 
 
-def generate_dummy_output_folder(name, dummy_folder):
+def generate_dummy_output_folder(name: str, dummy_folder: Path) -> Path:
 
     output_folder = dummy_folder.joinpath("".join(["output_", name]))
 
@@ -66,7 +67,7 @@ def identify_dummy_source() -> Path:
     return base_dir.joinpath("testing_samples")
 
 
-def purge_dummies(dest_folder) -> None:
+def purge_dummies(dest_folder: Path) -> None:
     """
     Purge dummy files in testing dir to avoid mutation concerns
 
@@ -75,6 +76,5 @@ def purge_dummies(dest_folder) -> None:
     rmtree(dest_folder)
 
 
-def read_descriptions(file):
+def read_descriptions(file: Path) -> Tuple[Number, ...]:
     return np.genfromtxt(str(file), delimiter=",", dtype="int")
-
