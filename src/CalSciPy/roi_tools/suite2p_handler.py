@@ -3,7 +3,9 @@ from typing import Sequence, Any, Union
 from pathlib import Path
 
 import numpy as np
-from PPVD.parsing import convert_permitted_types_to_required2 as convert_permitted_types_to_required
+from PPVD.parsing import parameterize
+from PPVD.style import TerminalStyle
+
 from .roi_tools import ROI, ROIHandler
 
 
@@ -36,7 +38,7 @@ class Suite2PHandler(ROIHandler):
                    )
 
     @staticmethod
-    @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="folder")
+    @_convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="folder")
     def from_file(folder: Union[str, Path], *args, **kwargs) -> Sequence[np.ndarray, dict]:  # noqa: U100
         """
         Loads stat and ops from file
@@ -101,3 +103,46 @@ class Suite2PHandler(ROIHandler):
             return true_reference_image
         else:
             return reference_image
+
+
+@parameterize
+def _convert_permitted_types_to_required(function: Callable,
+                                          permitted: Tuple,
+                                          required: Any,
+                                          pos: int = 0,
+                                          key: str = "folder") -> Callable:
+    """
+    Decorator that converts a tuple of permitted types to type supported by the decorated method
+
+    :param function: function to be decorated
+    :type function: Callable
+    :param permitted: permitted types
+    :type permitted: tuple
+    :param required: type required by code
+    :type required: Any
+    :param pos: index of argument to be converted
+    :type pos: int
+    """
+    @wraps(function)
+    def decorator(*args, **kwargs):
+        if key in kwargs:
+            use_args = False
+            allowed_input = kwargs.get(key)
+        elif args is not None and pos is not None:
+            use_args = True
+            allowed_input = args[pos]
+        else:
+            return function(*args, **kwargs)
+        if isinstance(allowed_input, permitted):
+            allowed_input = required(allowed_input)
+        if not isinstance(allowed_input, required):
+            raise TypeError(f"{TerminalStyle.GREEN}Input {pos}: {TerminalStyle.YELLOW}"
+                            f"inputs are permitted to be of the following types "
+                            f"{TerminalStyle.BLUE}{permitted} {TerminalStyle.RESET}")
+        if use_args:
+            args = amend_args(args, allowed_input, pos)
+        else:
+            kwargs[key] = allowed_input
+        # noinspection PyArgumentList
+        return function(*args, **kwargs)
+    return decorator
