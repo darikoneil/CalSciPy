@@ -1,6 +1,6 @@
 @echo off
 
-sphinx-apidoc -o docs\source src\CalSciPy -f -e
+sphinx-apidoc -o docs\source CalSciPy -f -e
 
 cd docs\source
 
