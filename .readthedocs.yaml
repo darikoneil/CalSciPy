@@ -24,6 +24,3 @@ formats:
 python:
   install:
     - requirements: docs/rtd_requirements.txt
-    - method: pip
-      path: .
-  system_packages: true
