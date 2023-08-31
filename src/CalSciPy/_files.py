@@ -5,8 +5,8 @@ from numbers import Number
 from operator import eq
 
 import numpy as np
-from PPVD.parsing import convert_permitted_types_to_required
 
+from ._validators import convert_permitted_types_to_required
 from ._backports import PatternMatching
 
 

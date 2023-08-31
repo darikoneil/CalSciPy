@@ -8,11 +8,10 @@ from imageio import mimwrite, mimread
 from PIL import Image
 import numpy as np
 import cv2
-from PPVD.validation import validate_extension, validate_filename
-from PPVD.parsing import convert_permitted_types_to_required
 
 from ._calculations import generate_blocks
 from ._files import calculate_frames_per_file, check_filepath, zero_pad_num_to_string
+from ._validators import validate_extension, validate_filename, convert_permitted_types_to_required
 
 
 """

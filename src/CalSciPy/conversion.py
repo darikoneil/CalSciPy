@@ -1,7 +1,8 @@
 from __future__ import annotations
 from typing import Iterable, Union
 import numpy as np
-from PPVD.validation import validate_evenly_divisible, validate_matrix, validate_tensor
+
+from ._validation import validate_evenly_divisible, validate_matrix, validate_tensor
 
 
 """
