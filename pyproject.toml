@@ -33,7 +33,6 @@ dependencies = [
     "joblib",
     "matplotlib",
     "memoization",
-    "numba",
     "numpy",
     "opencv-python",
     "pillow <= 9.4.0",
