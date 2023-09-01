@@ -38,7 +38,7 @@ class Photostimulation:
 
         :param reference_image: a reference image containing the provided ROIs.
 
-        :param sequence: the sequence of photostimulated groups for this experiment
+        :param stim_sequence: the stim_sequence of photostimulated groups for this experiment
         """
         #: :class:`dict`\: dictionary containing a collection of :class:`ROI <CalSciPy.roi_tools.ROI>` objects
         #: for potential photostimulation
@@ -48,9 +48,9 @@ class Photostimulation:
         #: the provided :class:`ROI <CalSciPy.roi_tools.ROI>`\'s
         self.reference_image = reference_image
 
-        #: :class:`StimulationSequence <CalSciPy.optogenetics.StimulationSequence>`\: The sequence
+        #: :class:`StimulationSequence <CalSciPy.optogenetics.StimulationSequence>`\: The stim_sequence
         #: of :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\'s for this experiment
-        self.sequence = StimulationSequence()
+        self.stim_sequence = StimulationSequence()
 
     def __str__(self):
         return f"Photostimulation experiment targeting {self.num_targets} neurons from {self.num_neurons} total " \
@@ -64,7 +64,7 @@ class Photostimulation:
         :Getter Type: :class:`int`
         :Setter: This property cannot be set
         """
-        return len(self.sequence)
+        return len(self.stim_sequence)
 
     @property
     def num_neurons(self) -> int:
@@ -93,7 +93,7 @@ class Photostimulation:
         :Setter: This property cannot be set
         """
         # copy to ensure no mutation
-        remapped_sequence = deepcopy(self.sequence)
+        remapped_sequence = deepcopy(self.stim_sequence)
         for group in remapped_sequence:
             group.ordered_index = [self.roi_to_target(target) for target in self.stimulated_neurons]
         return remapped_sequence
@@ -142,13 +142,13 @@ class Photostimulation:
     @property
     def stimulated_neurons(self) -> set:
         """
-        :Getter: The :class:`ROI <CalSciPy.roi_tools.ROI`\'s stimulated in the stimulation sequence
+        :Getter: The :class:`ROI <CalSciPy.roi_tools.ROI`\'s stimulated in the stimulation stim_sequence
         :Getter Type: :class:`Set <typing.Set>`\[:class:`int`\]
         :Setter: This property cannot be set
         """
-        # Return unique neurons in the ordered indices of each group in the sequence
-        if self.sequence is not None:
-            return set(chain.from_iterable([group.ordered_index for group in self.sequence]))
+        # Return unique neurons in the ordered indices of each group in the stim_sequence
+        if self.stim_sequence is not None:
+            return set(chain.from_iterable([group.ordered_index for group in self.stim_sequence]))
 
     @property
     def _target_to_roi_map(self) -> dict:
@@ -202,22 +202,22 @@ class Photostimulation:
         Method that creates a :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>` and appends it to this
         :class:`Photostimulation <CalSciPy.optogenetics.Photostimulation>` instance's
         :class:`StimulationSequence <CalSciPy.optogenetics.StimulationSequence>` (that is, the attribute
-        :attr:`sequence`). More information on the arguments can be found in the documentation of
+        :attr:`stim_sequence`). More information on the arguments can be found in the documentation of
         :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\.
 
 
-        :param ordered_index: a sequence containing the identity and order of the ROIs in this group
+        :param ordered_index: a stim_sequence containing the identity and order of the ROIs in this group
 
         :param delay: delay before stimulating group
 
         :param repetitions: the number of times to repeat the stimulation group
 
-        :param point_interval: the duration between stimulating each target in the sequence (ms)
+        :param point_interval: the duration between stimulating each target in the stim_sequence (ms)
 
         :param name: name of the group
         """
         rois = [self.rois.get(roi) for roi in ordered_index]
-        self.sequence.append(StimulationGroup(rois, ordered_index, delay, repetitions, point_interval, name))
+        self.stim_sequence.append(StimulationGroup(rois, ordered_index, delay, repetitions, point_interval, name))
 
     def __repr__(self):
         return "Photostimulation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
@@ -233,26 +233,28 @@ class StimulationGroup:
                  name: str = None,
                  ):
         """
-        Photostimulation group object containing the index of rois to stimulate
-        and relevant stimulation parameters
+        Group of targets to be stimulated. Contains the index of rois to stimulate
+        and relevant stimulation parameters.
 
         """
-        #: float: delay before stimulating group
+        #: :class:`float`\: delay before stimulating group
         self.delay = delay
 
-        #: str: name of the group
+        #: :class:`str`\: name of the group
         self.name = name
 
-        #: Sequence[int]: a sequence containing the identity and stimulation order of the :class:`ROI`'s
+        #: :class:`Sequence <typing.Sequence>`\[:class:`int`\]: a stim_sequence containing the identity and
+        #: stimulation order of the :class:`ROI <CalSciPy.roi_tools.ROI>`\'s
         self.ordered_index = ordered_index
 
-        #: float: the duration between stimulating each target in the sequence (ms)
+        #: :class:`float`\: the duration between stimulating each target in the stim_sequence (ms)
         self.point_interval = point_interval
 
-        #: int: the number of times to repeat the stimulation group
+        #: :class:`int`\: the number of times to repeat the stimulation group
         self.repetitions = repetitions
 
-        #: Sequence[ROIs]: this is a reference copy injected from the ROIs in photostimulation
+        #: :class:`Sequence <typing.Sequence>`\[:class:`ROI <CalSciPy.roi_tolls.ROI>`\]: this is a reference copy
+        #: injected from the ROIs in photostimulation
         self.rois = rois
 
     def __str__(self):
@@ -266,16 +268,18 @@ class StimulationGroup:
     @property
     def num_targets(self) -> int:
         """
-        Number of roi targets in group
-
+        :Getter: Number of roi targets in group
+        :Getter Type: :class:`int`
+        :Setter: This property cannot be set
         """
         return len(self.rois)
 
     @property
     def reference_shape(self) -> Tuple[int, int]:
         """
-        Shape of reference image
-
+        :Getter: Shape of reference image
+        :Getter Type: :class:`Tuple <typing.Tuple>`\[:class:`int`\, :class:`int`\]
+        :Setter: This property cannot be set
         """
         shapes = [roi.reference_shape for roi in self.rois]
         try:
@@ -293,7 +297,8 @@ class StimulationGroup:
 
 class StimulationSequence(UserList):
     """
-    Sequence of :class:`StimulationGroup`'s to be stimulated in the :class:`Photostimulation` experiment
+    The sequence of :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\'s to be stimulated in the
+    :class:`Photostimulation <CalSciPy.optogenetics.Photostimulation>` experiment.
 
     """
     def __init__(self,
@@ -302,28 +307,36 @@ class StimulationSequence(UserList):
                  repetitions: int = 1,
                  interval: float = 0.0):
         """
-        Sequence of :class:`StimulationGroup`'s to be stimulated in the :class:`Photostimulation` experiment
+        The sequence of :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\'s to be stimulated in the
+        :class:`Photostimulation <CalSciPy.optogenetics.Photostimulation>` experiment.
 
-        :param groups: a sequence of StimulationGroups
+        :param groups: The :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\'s to be stimulated
+
+        :param delay: The initial delay before starting the sequence
+
+        :param repetitions: The number of times to repeat the sequence
+
+        :param interval: The interval between repetitions
+
         """
-        #: int: number of repetitions
+        #: :class:`int`\: number of repetitions
         self.repetitions = repetitions
 
-        #: float: interval between repetitions
+        #: :class:`float`\: interval between repetitions
         self.interval = interval
 
-        #: float: delay before beginning sequence
+        #: :class:`float`\: delay before beginning stim_sequence
         self.delay = delay
 
         super().__init__(initlist=groups)
 
     def __str__(self):
-        return f"Photostimulation sequence containing {len(self)} groups repeated {self.repetitions} " \
+        return f"Photostimulation stim_sequence containing {len(self)} groups repeated {self.repetitions} " \
                f"times with an inter-repetition interval of {self.interval}"
 
     @staticmethod
     def __name__() -> str:
-        return "Photostimulation sequence"
+        return "Photostimulation stim_sequence"
 
     def __repr__(self):
         return "StimulationSequence(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"

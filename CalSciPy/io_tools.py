@@ -241,7 +241,7 @@ def _load_many_tif(folder: Union[str, Path]) -> np.ndarray:
     """
     Loads all .tif's within a folder into a single numpy array (implementation function)
 
-    :param folder: folder containing a sequence of tiff stacks
+    :param folder: folder containing a stim_sequence of tiff stacks
 
     :returns: numpy array (frames, y-pixels, x-pixels)
     """
