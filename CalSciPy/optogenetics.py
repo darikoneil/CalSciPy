@@ -342,28 +342,31 @@ class StimulationSequence(UserList):
         return "StimulationSequence(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
 
 
-def randomize_targets(target_vector: Union[Iterable, np.ndarray],
-                      neurons_per_target: int = 1,
-                      num_targets: int = 1,
+def randomize_targets(potential_targets: Union[Iterable, np.ndarray],
+                      targets_per_group: int = 1,
+                      num_groups: int = 1,
                       spatial_bin_size: int = None,
                       trials: int = 1,
                       ) -> Tuple[Tuple[int]]:
     """
     Randomly select targets to stimulate
 
-    :param target_vector:
+    :param potential_targets: The rois available to target
 
-    :param neurons_per_target:
+    :param targets_per_group: The number of neurons to include in each group
 
-    :param num_targets:
+    :param num_groups: The number of groups per trial
 
-    :param spatial_bin_size:
+    :param spatial_bin_size: Not implemented
 
-    :param trials:
+    :param trials: The number of trials to
 
-    :return:
     """
+
+    if spatial_bin_size is not None:
+        raise NotImplementedError
+
     return tuple(
-        [multiple_random_groups_without_replacement(target_vector, neurons_per_target, num_targets)
+        [multiple_random_groups_without_replacement(potential_targets, targets_per_group, num_groups)
          for _ in range(trials)]
     )
