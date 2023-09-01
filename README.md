@@ -37,11 +37,9 @@ and I want to explore population activity. I want to do so directly from the rel
 software used to collect or analyze it. I want to have my delicious cake and eat it too. So I made some interactive
 visualization tools that require only the exact information that ought to be required to plot them.
 
-3. I needed tools for holographic optogenetics & "read/write" experimentation in python for my own experiments.
+3. I needed tools for holographic optogenetics, "read/write" experimentation, and general optics in python for my own experiments.
 Since I was already doing it, why not make them abstracted enough for all neuroscientists to use...not for only the
-optical or imaging experts. I want them to be tested, documented, and easy-to-use.I want tools for holographic optogenetics &
-"read/write" experimentation in python. I want them written and abstracted enough for neuroscientists to use...not for only
-the optical or imaging experts. I want them to be tested, documented, and easy-to-use. 
+optical or imaging experts. I want them to be tested, documented, and easy-to-use.
 
 5. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
 metadata, generating protocols programmatically, and aligning collected data.
