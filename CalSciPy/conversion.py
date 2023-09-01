@@ -16,11 +16,11 @@ def matrix_to_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarra
     """
     Generates a tensor given chunk / trial indices
 
-    :param traces_as_matrix: traces in matrix form (neurons x frames)
+    :param traces_as_matrix: Traces in matrix form (neurons x frames)
 
-    :param chunk_size: size of each chunk
+    :param chunk_size: Size of each chunk
 
-    :returns: traces as a tensor of trial x neurons x frames
+    :returns: Traces as a tensor of trial x neurons x frames
     """
     return np.stack(np.hsplit(traces_as_matrix, traces_as_matrix.shape[1] // chunk_size), axis=0)
 
@@ -31,12 +31,12 @@ def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[i
     original trace:
 
 
-    :param factorized_traces: neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
+    :param factorized_traces: Neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
         into several components
 
-    :param components: specific component to extract
+    :param components: Specific component to extract
 
-    :returns: traces of specific component in matrix form
+    :returns: traces of specific Component in matrix form
     """
     if isinstance(components, Iterable):
         return np.dstack(
@@ -52,9 +52,9 @@ def tensor_to_matrix(traces_as_tensor: np.ndarray) -> np.ndarray:
     Concatenate multiple trials or tiffs into single matrix:
 
 
-    :param traces_as_tensor: chunk (trial, tif, etc) x neurons x frames
+    :param traces_as_tensor: Chunk (trial, tif, etc) x neurons x frames
 
-    :returns: traces in matrix form (neurons x frames)
+    :returns: Traces in matrix form (neurons x frames)
     """
     return np.hstack(traces_as_tensor)
 
@@ -65,12 +65,12 @@ def _merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0
     original trace:
 
 
-    :param factorized_traces: neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
+    :param factorized_traces: Neurons x chunks (trial, tif, etc) containing the neuron's trace factorized
         into several components
 
-    :param component: specific component to extract
+    :param component: Specific component to extract
 
-    :returns: traces of specific component in matrix form
+    :returns: Traces of specific component in matrix form
     """
     _neurons, _trials = factorized_traces.shape
     _frames = np.concatenate(factorized_traces[0], axis=1)[0, :].shape[0]

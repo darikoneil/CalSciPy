@@ -15,7 +15,7 @@ class Suite2PHandler(ROIHandler):
         Generates :class:`ROI <CalSciPy.roi_tools.ROI>` from `suite2p <https://www.suite2p.org>`_
         stat array
 
-        :param roi: dictionary containing one suite2p roi
+        :param roi: Dictionary containing one suite2p roi and its parameters
 
         :type roi: :class:`Any <typing.Any>`
 

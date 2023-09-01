@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Sequence, Tuple, Iterable, Set, Union
+from typing import Sequence, Tuple, Iterable, Set, Union, Dict, Optional
 from collections import UserList
 from itertools import chain
 from copy import deepcopy
@@ -32,23 +32,23 @@ class Photostimulation:
         standardized class for outlining parameters and selecting targets, and can be used as an argument to other
         functions for generating visuals, importing to microscopes, and other features.
 
-        :param rois: dictionary containing a collection of :class:`ROI <CalSciPy.roi_tools.ROI>`\'s.
+        :param rois: Dictionary mapping integer keys to :class:`ROI <CalSciPy.roi_tools.ROI>`\'s for potential
+            photostimulation.
 
-        :type rois: :class:`dict`\[key
+        :type rois: :class:`Dict <typing.Dict>`\[:class:`int`, :class:`ROI <CalSciPy.roi_tools.ROI>`\]
 
-        :param reference_image: a reference image containing the provided ROIs.
+        :param reference_image: Reference image containing the provided ROIs.
 
-        :param stim_sequence: the stim_sequence of photostimulated groups for this experiment
         """
-        #: :class:`dict`\: dictionary containing a collection of :class:`ROI <CalSciPy.roi_tools.ROI>` objects
-        #: for potential photostimulation
+        #: :class:`dict`\: Dictionary mapping integer keys to :class:`ROI <CalSciPy.roi_tools.ROI>`\s
+        #: for potential photostimulation.
         self.rois = rois
 
-        #: :class:`ndarray <numpy.ndarray>`\, default: ``None``\: np.ndarray: a reference image containing
+        #: :class:`ndarray <numpy.ndarray>`\, default: ``None``\: np.ndarray: Reference image containing
         #: the provided :class:`ROI <CalSciPy.roi_tools.ROI>`\'s
         self.reference_image = reference_image
 
-        #: :class:`StimulationSequence <CalSciPy.optogenetics.StimulationSequence>`\: The stim_sequence
+        #: :class:`StimulationSequence <CalSciPy.optogenetics.StimulationSequence>`\: The sequence
         #: of :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\'s for this experiment
         self.stim_sequence = StimulationSequence()
 
@@ -196,7 +196,7 @@ class Photostimulation:
                                    delay: float = 0.0,
                                    repetitions: int = 1,
                                    point_interval: float = 0.12,
-                                   name: str = None,
+                                   name: Optional[str] = None,
                                    ) -> Photostimulation:
         """
         Method that creates a :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>` and appends it to this
@@ -206,15 +206,17 @@ class Photostimulation:
         :class:`StimulationGroup <CalSciPy.optogenetics.StimulationGroup>`\.
 
 
-        :param ordered_index: a stim_sequence containing the identity and order of the ROIs in this group
+        :param ordered_index: Identity and order of the ROIs in this group
 
-        :param delay: delay before stimulating group
+        :param delay: Delay before stimulating group
 
-        :param repetitions: the number of times to repeat the stimulation group
+        :param repetitions: Number of times to repeat the stimulation group
 
-        :param point_interval: the duration between stimulating each target in the stim_sequence (ms)
+        :param point_interval: Duration between stimulating each target in the stim_sequence (ms)
 
-        :param name: name of the group
+        :param name: Name of the group
+
+        :type name: :class:`Optional <typing.Optional>`\[:class:`str`\], default: ``None``
         """
         rois = [self.rois.get(roi) for roi in ordered_index]
         self.stim_sequence.append(StimulationGroup(rois, ordered_index, delay, repetitions, point_interval, name))
@@ -237,23 +239,23 @@ class StimulationGroup:
         and relevant stimulation parameters.
 
         """
-        #: :class:`float`\: delay before stimulating group
+        #: :class:`float`\: Delay before stimulating group
         self.delay = delay
 
-        #: :class:`str`\: name of the group
+        #: :class:`str`\: Name of the group
         self.name = name
 
-        #: :class:`Sequence <typing.Sequence>`\[:class:`int`\]: a stim_sequence containing the identity and
+        #: :class:`Sequence <typing.Sequence>`\[:class:`int`\]: Identity and
         #: stimulation order of the :class:`ROI <CalSciPy.roi_tools.ROI>`\'s
         self.ordered_index = ordered_index
 
-        #: :class:`float`\: the duration between stimulating each target in the stim_sequence (ms)
+        #: :class:`float`\: Duration between stimulating each target in the stim_sequence (ms)
         self.point_interval = point_interval
 
-        #: :class:`int`\: the number of times to repeat the stimulation group
+        #: :class:`int`\: Number of times to repeat the stimulation group
         self.repetitions = repetitions
 
-        #: :class:`Sequence <typing.Sequence>`\[:class:`ROI <CalSciPy.roi_tolls.ROI>`\]: this is a reference copy
+        #: :class:`Sequence <typing.Sequence>`\[:class:`ROI <CalSciPy.roi_tolls.ROI>`\]: Reference copy
         #: injected from the ROIs in photostimulation
         self.rois = rois
 
@@ -319,13 +321,13 @@ class StimulationSequence(UserList):
         :param interval: The interval between repetitions
 
         """
-        #: :class:`int`\: number of repetitions
+        #: :class:`int`\: Number of repetitions
         self.repetitions = repetitions
 
-        #: :class:`float`\: interval between repetitions
+        #: :class:`float`\: Interval between repetitions
         self.interval = interval
 
-        #: :class:`float`\: delay before beginning stim_sequence
+        #: :class:`float`\: Delay before beginning stimulation sequence
         self.delay = delay
 
         super().__init__(initlist=groups)

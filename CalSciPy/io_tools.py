@@ -20,11 +20,11 @@ A collection of functions for loading, saving & converting imaging files. Stable
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def load_binary(path: Union[str, Path],
                 mapped: bool = False,
                 mode: str = "r+",
-                missing_metadata: Mapping = None
+                missing_metadata: Optional[Mapping] = None
                 ) -> Union[np.ndarray, np.memmap]:
     """
     This function loads images saved in language-agnostic binary format. Ideal for optimal read/write speeds and
@@ -33,15 +33,15 @@ def load_binary(path: Union[str, Path],
     If for some reason you lose the metadata, you can still load the binary if you know three of the following:
     number of frames, y-pixels, x-pixels, and the datatype (:class:`numpy.dtype`)
 
-    :param path: folder containing binary file
+    :param path: Folder containing binary file or path to file
 
-    :param mapped: boolean indicating whether to load image using memory-mapping
+    :param mapped: Boolean indicating whether to load image using memory-mapping
 
-    :param mode: indicates the level of access permitted to the original binary
+    :param mode: Indicates the level of access permitted to the original binary
 
-    :param missing_metadata: if you have lost the metadata or otherwise wish to manually provide it
+    :param missing_metadata: Enter metadata if you lost or otherwise wish to manually provide it
 
-    :returns: image (frames, y-pixels, x-pixels)
+    :returns: Images (frames, y-pixels, x-pixels)
     """
     # If path is a folder and not just the filepath without an extension
     if not path.is_file() and not path.with_suffix(".bin").exists():
@@ -73,15 +73,15 @@ def load_binary(path: Union[str, Path],
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def load_images(path: Union[str, Path]) -> np.ndarray:
     """
     Load images into a numpy array. If path is a folder, all .tif files found non-recursively in the directory will be
     compiled to a single array.
 
-    :param path: a file containing images or a folder containing several imaging stacks
+    :param path: File containing images or a folder containing several imaging stacks
 
-    :returns: image (frames, y-pixels, x-pixels)
+    :returns: Images (frames, y-pixels, x-pixels)
     """
     if not path.exists():
         raise FileNotFoundError("Unable to locate files")
@@ -92,14 +92,14 @@ def load_images(path: Union[str, Path]) -> np.ndarray:
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def load_video(path: Union[str, Path]) -> np.ndarray:
     """
-    Load video (.mp4) as numpy array.
+    Load video (.mp4)
 
-    :param path: absolute filepath
+    :param path: Path to file
 
-    :returns: image (frames, y-pixels, x-pixels, color)
+    :returns: Images (frames, y-pixels, x-pixels, color)
     """
 
     path = path.with_suffix(".mp4")
@@ -117,8 +117,8 @@ def load_video(path: Union[str, Path]) -> np.ndarray:
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) -> int:
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
+def save_binary(path: Union[str, Path], images: np.ndarray, name: Optional[str] = None) -> int:
     """
     Save images to language-agnostic binary format. Ideal for optimal read/write speeds and highly-robust to corruption.
     However, the downside is that the images and their metadata are split into two separate files. Images are saved with
@@ -127,12 +127,12 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) ->
     datatype. The datatype is almost always unsigned 16-bit (:class:`numpy.uint16`) for all modern imaging
     systems--even if they are collected at 12 or 13-bit.
 
-    :param path: path to save images to. The path stem is considered the filename if it doesn't have any extension. If
-        no filename is provided then the default filename is *binary_video*.
+    :param path: Location to save images in. The path stem is considered the filename if it doesn't have any extension.
+        If no filename is explicitly provided in the **name** argument then the default filename is *binary_video*.
 
-    :param images: images to save (frames, y-pixels, x-pixels)
+    :param images: Images to save (frames, y-pixels, x-pixels)
 
-    :param name: specify filename for produced files
+    :param name: Specify filename for produced files
 
     :returns: 0 if successful
     """
@@ -155,23 +155,23 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: str = None) ->
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def save_images(path: Union[str, Path],
                 images: np.ndarray,
-                name: str = None,
+                name: Optional[str] = None,
                 size_cap: float = 3.9
                 ) -> int:
     """
     Save a numpy array to a single .tif file. If size > 4GB then saved as a series of files. If path is not a file and
-    already exists the default filename will be *images*.
+    a filename is not explicitly provided in the **name** argument then the default filename will be *images*.
 
-    :param path: filename or absolute path
+    :param path: Location to save files in.
 
-    :param images: numpy array (frames, y pixels, x pixels)
+    :param images: Images (frames, y pixels, x pixels)
 
-    :param name: filename for saving images
+    :param name: Specify filename for produced files
 
-    :param size_cap: maximum size per file (in GB)
+    :param size_cap: Maximum size per file (in GB)
 
     :returns: 0 if successful
     """
@@ -189,23 +189,23 @@ def save_images(path: Union[str, Path],
 
 
 @validate_filename(pos=0)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def save_video(path: Union[str, Path],
                images: np.ndarray,
                frame_rate: Number = 30,
-               name: str = None
+               name: Optional[str] = None
                ) -> int:
     """
-    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype. If no name is provided than the
-    default is "video"
+    Save numpy array as an .mp4. Will be converted to uint8 if any other datatype. If a filename is not explicitly
+    provided in the **name** argument then the default filename will be *video*.
 
-    :param path: absolute filepath or filename
+    :param path: Location to save file in
 
-    :param images: numpy array (frames, y-pixels, x-pixels)
+    :param images: Images (frames, y-pixels, x-pixels)
 
-    :param frame_rate: frame rate for saved video (frames per second)
+    :param frame_rate: Frame rate for saved video (frames per second)
 
-    :param name: filename for saving images
+    :param name: Specify filename for produced files
 
     :returns: 0 if successful
     """
