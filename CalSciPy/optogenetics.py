@@ -5,9 +5,8 @@ from itertools import chain
 from copy import deepcopy
 
 import numpy as np
-from numpy.typing import NDArray
 
-from .roi_tools import ROIHandler, Suite2PHandler
+from .roi_tools import ROIHandler, Suite2PHandler, ROI
 from ._calculations import multiple_random_groups_without_replacement
 
 
@@ -24,7 +23,7 @@ class Photostimulation:
 
     """
     def __init__(self,
-                 rois: dict,
+                 rois: Dict[int, ROI],
                  reference_image: np.ndarray = None,
                  ):
         """
@@ -112,16 +111,6 @@ class Photostimulation:
             range(self.num_targets)
         ))
 
-    def roi_to_target(self, roi_index: int) -> int:
-        """
-        Converts a zero-indexed roi index to a zero-indexed target index
-
-        :param roi_index: Index of the roi in the roi map
-
-        :returns: Index of the roi in a target index
-        """
-        return self._roi_to_target_map.get(roi_index)
-
     @property
     def reference_shape(self) -> Tuple[int, int]:
         """
@@ -131,7 +120,7 @@ class Photostimulation:
         """
         shapes = [roi.reference_shape for roi in self.rois.values()]
         try:
-            assert(len(set(shapes)) <= 1)
+            assert (len(set(shapes)) <= 1)
             return shapes[0]
         except AssertionError:
             print("Inconsistent reference_shape detected, selecting largest dimension for each axis")
@@ -140,7 +129,7 @@ class Photostimulation:
             return y_shape, x_shape
 
     @property
-    def stimulated_neurons(self) -> set:
+    def stimulated_neurons(self) -> Set[int]:
         """
         :Getter: The :class:`ROI <CalSciPy.roi_tools.ROI`\'s stimulated in the stimulation stim_sequence
         :Getter Type: :class:`Set <typing.Set>`\[:class:`int`\]
@@ -159,16 +148,6 @@ class Photostimulation:
         :Setter: This property cannot be set
         """
         return dict(enumerate([roi for index, roi in enumerate(self.rois) if index in self.stimulated_neurons]))
-
-    def target_to_roi(self, target_index: int) -> int:
-        """
-        Converts a zero-indexed target index to the zero-indexed roi index
-
-        :param target_index: index of the target
-
-        :returns: Corresponding index in the roi map
-        """
-        return self._target_to_roi_map.get(target_index)
 
     @staticmethod
     def __name__() -> str:
@@ -221,6 +200,26 @@ class Photostimulation:
         rois = [self.rois.get(roi) for roi in ordered_index]
         self.stim_sequence.append(StimulationGroup(rois, ordered_index, delay, repetitions, point_interval, name))
 
+    def roi_to_target(self, roi_index: int) -> int:
+        """
+        Converts a zero-indexed roi index to a zero-indexed target index
+
+        :param roi_index: Index of the roi in the roi map
+
+        :returns: Index of the roi in a target index
+        """
+        return self._roi_to_target_map.get(roi_index)
+
+    def target_to_roi(self, target_index: int) -> int:
+        """
+        Converts a zero-indexed target index to the zero-indexed roi index
+
+        :param target_index: index of the target
+
+        :returns: Corresponding index in the roi map
+        """
+        return self._target_to_roi_map.get(target_index)
+
     def __repr__(self):
         return "Photostimulation(" + "".join([f"{key}: {value} " for key, value in vars(self).items()]) + ")"
 
@@ -263,10 +262,6 @@ class StimulationGroup:
         return f'Photostimulation group "{self.name}" containing {len(self.ordered_index)} targets with a ' \
                f'{self.point_interval} ms inter-point interval repeated {self.repetitions} times.'
 
-    @staticmethod
-    def __name__() -> str:
-        return "Photostimulation StimulationGroup"
-
     @property
     def num_targets(self) -> int:
         """
@@ -285,13 +280,17 @@ class StimulationGroup:
         """
         shapes = [roi.reference_shape for roi in self.rois]
         try:
-            assert(len(set(shapes)) <= 1)
+            assert (len(set(shapes)) <= 1)
             return shapes[0]
         except AssertionError:
             print("Inconsistent reference_shape detected, selecting largest dimension for each axis")
             x_shape = max({x for _, x in shapes})
             y_shape = min({y for y, _ in shapes})
             return y_shape, x_shape
+
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation StimulationGroup"
 
     def __repr__(self):
         return "StimulationGroup(" + "".join([f"{key}: {value}, " for key, value in vars(self).items()]) + ")"
