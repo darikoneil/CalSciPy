@@ -10,7 +10,7 @@ from CalSciPy.bruker.protocols import generate_marked_points_protocol
 from CalSciPy.optogenetics.cgh import SLM
 from slmsuite.holography.algorithms import Hologram
 
-from dev.experimental.visualize_optogenetics import *
+from _dev.experimental.visualize_optogenetics import *
 
 
 def randomize_targets(target_vector: Union[Iterable, np.ndarray],

@@ -9,7 +9,7 @@ from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.optogenetics.cgh import SLM, Hologram, generate_target_mask
 from CalSciPy.optogenetics.target_selection import randomize_targets
 
-from dev.experimental.visualize_optogenetics import *
+from _dev.experimental.visualize_optogenetics import *
 
 
 # parameters
