@@ -57,8 +57,8 @@ class ColorScheme:
         """
         Call for next color in scheme
 
-        :param value: requested color directly or by index
-        :returns: tuple of RGB values
+        :param value: Requested color directly or by index
+        :returns: Tuple of RGB values
         """
         if isinstance(value, int):
             if value >= self.num_colors:

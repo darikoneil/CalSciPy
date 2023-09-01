@@ -18,6 +18,7 @@
    Events and Spiking <main__events>
    Regions of Interest <main__roi_tools>
    Reorganizing Data <main__conversion>
+   Optogenetics <main__optogenetics>
    Style <main__style>
 
 .. toctree::
@@ -30,7 +31,7 @@
 
 .. toctree::
    :maxdepth: 1
-   :caption: OPTOGENETICS
+   :caption: OPTICS
 
 .. toctree::
    :maxdepth: 1

@@ -42,7 +42,7 @@ class _ROIBase(metaclass=ABCMeta):
         :warning: Note that these properties are only calculated **once** and then permanently cached for performance.
 
         :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
-            it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+            it will be considered as an ordered stim_sequence of x-pixels. The matching y-pixels must be then be provided
             as an additional argument.
 
         :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
@@ -225,7 +225,7 @@ class ROI(_ROIBase):
     An ROI object containing the base characteristics & properties of an ROI.
 
     :param pixels: Nx2 array of x and y-pixel pairs **strictly** in rc form. If this argument is one-dimensional,
-        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        it will be considered as an ordered stim_sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
     :param ypixels: The y-pixels of the roi if and only if the first argument is one-dimensional.
@@ -547,7 +547,7 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
     (if necessary) and the centroid estimated from these vertices using the shoelace formula.
 
     :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
-        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        it will be considered as an ordered stim_sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
     :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
@@ -702,7 +702,7 @@ def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
     cellular ROIs are convex (i.e., cellular rois ought to be roughly elliptical).
 
     :param pixels: Nx2 array of x and y-pixel pairs in xy or rc form. If this argument is one-dimensional,
-        it will be considered as an ordered sequence of x-pixels. The matching y-pixels must be then be provided
+        it will be considered as an ordered stim_sequence of x-pixels. The matching y-pixels must be then be provided
         as an additional argument.
 
     :type pixels: :class:`Union <typing.Union>`\[:class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,

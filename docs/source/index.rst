@@ -5,6 +5,14 @@ interactive visualization of data to computer-generated holography for "read/wri
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be
 considered useful to others.
 
+
+INTRODUCTION
+````````````
+* :doc:`Motivation <introduction__motivation>`
+* :doc:`Limitations <introduction__limitations>`
+* :doc:`Contributions <introduction__contributions>`
+* :doc:`Installation <introduction__installation>`
+
 MAIN
 ````
 * :doc:`Introduction <main__introduction>`
@@ -14,6 +22,7 @@ MAIN
 * :doc:`Events and Spiking <main__events>`
 * :doc:`Regions of Interest <main__roi_tools>`
 * :doc:`Reorganizing Data <main__conversion>`
+* :doc:`Optogenetics <main__optogenetics>`
 * :doc:`Style <main__style>`
 
 INTERACTIVE VISUALS
@@ -24,8 +33,8 @@ BRUKER PRAIRIEVIEW
 ``````````````````
 * FUTURE
 
-OPTOGENETICS
-````````````
+OPTICS
+``````
 * FUTURE
 
 ORGANIZATION
