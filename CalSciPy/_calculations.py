@@ -22,7 +22,7 @@ This is where the helpers live that are related to common  mathematical, set, an
 
 def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) -> Iterator:
     """
-    Returns a generator of some arbitrary iterable stim_sequence that yields m blocks with overlapping regions of size n
+    Returns a generator of some arbitrary iterable sequence that yields m blocks with overlapping regions of size n
 
     :param sequence: Sequence to be split into overlapping blocks
     :param block_size: size of blocks
@@ -34,7 +34,7 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
     if block_buffer >= block_size:
         raise AssertionError("Block buffer must be smaller than the size of the block.")
     if block_size >= len(sequence):
-        raise AssertionError("Block must be smaller than iterable stim_sequence")
+        raise AssertionError("Block must be smaller than iterable sequence")
 
     block_size = int(block_size)  # coerce in case float
 
@@ -66,7 +66,7 @@ def generate_blocks(sequence: Iterable, block_size: int, block_buffer: int = 0) 
 
 def generate_overlapping_blocks(sequence: Iterable, block_size: int, block_buffer: int) -> Iterator:
     """
-    Returns a generator of some arbitrary iterable stim_sequence that yields m blocks with overlapping regions of size n
+    Returns a generator of some arbitrary iterable sequence that yields m blocks with overlapping regions of size n
 
     :param sequence: Sequence to be split into overlapping blocks
     :param block_size: size of blocks
@@ -78,7 +78,7 @@ def generate_overlapping_blocks(sequence: Iterable, block_size: int, block_buffe
     if block_buffer >= block_size:
         raise AssertionError("Block buffer must be smaller than the size of the block.")
     if block_size >= len(sequence):
-        raise AssertionError("Block must be smaller than iterable stim_sequence")
+        raise AssertionError("Block must be smaller than iterable sequence")
 
     block_size = int(block_size)  # coerce in case float
 
