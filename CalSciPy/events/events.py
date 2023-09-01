@@ -1,16 +1,16 @@
 from __future__ import annotations
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Sequence
 
 import numpy as np
 
 
-def generate_raster(events: Iterable[Iterable[int]], samples: Optional[int] = None) -> np.ndarray:
+def generate_raster(events: Sequence[Iterable[int]], samples: Optional[int] = None) -> np.ndarray:
     """
-    Generate raster from an iterable of iterables containing the spike (event) times for each neuron
+    Generate raster the spike (event) times for each neuron
 
-    :param events: Iterable containing an iterable identifying which samples contain an event for each neuron
+    :param events: Sequence of iterables that identify the samples containing an event
 
-    :param samples: total number of samples
+    :param samples: Total number of samples
 
     :returns: Raster of n neurons x m samples
     """

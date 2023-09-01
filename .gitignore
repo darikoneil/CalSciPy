@@ -203,3 +203,8 @@ dmypy.json
 /python310.dll
 /scratch/
 /flake_report/
+/_dev/
+/_dev/experimental/
+/_dev/scratch_dev/
+/_dev/tests/
+/_dev/variables/
