@@ -58,12 +58,19 @@ def expected_normalized_firing_rates(request):
 
 def test_calculate_instantaneous_firing_rates(spike_probabilities, expected_instantaneous_firing_rate):
     frame_rate = 30.0
+    bin_duration = 1.0 / 30.0
     # out of place
-    firing_matrix = calc_firing_rates(spike_probabilities, frame_rate)
+    firing_matrix = calc_firing_rates(spike_probabilities, frame_rate=frame_rate)
+    np.testing.assert_equal(firing_matrix, expected_instantaneous_firing_rate)
+    # test bin duration matches frame rate
+    firing_matrix = calc_firing_rates(spike_probabilities, bin_duration=bin_duration)
     np.testing.assert_equal(firing_matrix, expected_instantaneous_firing_rate)
     # in place
-    calc_firing_rates(spike_probabilities, frame_rate, in_place=True)
+    calc_firing_rates(spike_probabilities, frame_rate=frame_rate, in_place=True)
     np.testing.assert_equal(spike_probabilities, expected_instantaneous_firing_rate)
+    # exception if frame rate & bin duration provided
+    with pytest.raises(AssertionError):
+        calc_firing_rates(spike_probabilities, frame_rate=frame_rate, bin_duration=bin_duration)
 
 
 def test_calculate_mean_firing_rates(spike_probabilities, expected_mean_firing_rates):

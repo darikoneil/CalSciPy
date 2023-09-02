@@ -101,10 +101,13 @@ def zero_pad_num_to_string(idx: int, length: int) -> str:
 
     :param idx: integer index
     :param length: desired length of the padded string
-    :return: a zero-padded string of the index
+    :returns: a zero-padded string of the index
     """
     str_idx = f"{idx}"
 
     pad_length = length - len(str_idx)
+
+    if pad_length < 0:
+        raise ValueError("Index is larger than allocated number of digits in representation" )
 
     return "".join(["_", "0" * pad_length, str_idx])
