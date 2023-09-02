@@ -79,6 +79,6 @@ def zero_pad_num_to_string(idx: int, length: int) -> str:
     pad_length = length - len(str_idx)
 
     if pad_length < 0:
-        raise ValueError("Index is larger than allocated number of digits in representation" )
+        raise ValueError("Index is larger than allocated number of digits in representation")
 
     return "".join(["_", "0" * pad_length, str_idx])
