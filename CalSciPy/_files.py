@@ -66,35 +66,6 @@ def check_filepath(path: Union[str, Path], name: str = None, extension: str = No
             return path.joinpath(name).with_suffix(extension)
 
 
-def generate_padded_filename(output_folder: Path,
-                             index: int,
-                             base: str = "images",
-                             digits: int = 2,
-                             ext: str = ".tif"
-                             ) -> Path:
-    """
-    Generates a pathlib Path whose name is defined as '{base}_{index}{ext}' where index is zero-padded if it
-    is not equal to the number of digits
-
-    :param output_folder: folder that will contain file
-    :param index: index of file
-    :param base: base tag of file
-    :param digits: number of digits for representing index
-    :param ext: file extension
-    :returns: generated filename
-    """
-    index = str(index)
-
-    if len(index) > digits:
-        raise ValueError("Index is larger than allocated number of digits in representation")
-
-    while len(index) < digits:
-        index = "".join(["0", index])
-
-    return output_folder.joinpath("".join([base, "_", index, ext]))
-# TODO: REDUNDANT WITH ZERO_PAD_NUM_TO_STRING?
-
-
 def zero_pad_num_to_string(idx: int, length: int) -> str:
     """
     converts an integer index into a zero-padded string with length num_zeros
