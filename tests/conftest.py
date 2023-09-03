@@ -102,3 +102,9 @@ def sample_tensor(request):
     for i in range(10):
         sample_tensor[i, :, :] = sample_matrix[:, i * 10: (i + 1) * 10]
     return sample_tensor
+
+
+@pytest.fixture(scope="function")
+def factorized_matrix(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_factorized_matrices.npy"),
+                   allow_pickle=True)
