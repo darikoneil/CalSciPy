@@ -10,19 +10,19 @@ A few methods for converting/reorganizing data
 """
 
 
-@validate_matrix(pos=0)
+@validate_matrix(pos=0, key="matrix")
 @validate_evenly_divisible(numerator=0, denominator=1, axis=1)
-def matrix_to_tensor(traces_as_matrix: np.ndarray, chunk_size: int) -> np.ndarray:
+def matrix_to_tensor(matrix: np.ndarray, chunk_size: int) -> np.ndarray:
     """
     Generates a tensor given chunk / trial indices
 
-    :param traces_as_matrix: Traces in matrix form (neurons x frames)
+    :param matrix: Traces in matrix form (neurons x frames)
 
     :param chunk_size: Size of each chunk
 
     :returns: Traces as a tensor of trial x neurons x frames
     """
-    return np.stack(np.hsplit(traces_as_matrix, traces_as_matrix.shape[1] // chunk_size), axis=0)
+    return np.stack(np.hsplit(matrix, matrix.shape[1] // chunk_size), axis=0)
 
 
 def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[int, Iterable[int]] = 0) -> np.ndarray:
@@ -46,17 +46,17 @@ def merge_factorized_matrices(factorized_traces: np.ndarray, components: Union[i
         return _merge_factorized_matrices(factorized_traces, components)
 
 
-@validate_tensor(pos=0)
-def tensor_to_matrix(traces_as_tensor: np.ndarray) -> np.ndarray:
+@validate_tensor(pos=0, key="tensor")
+def tensor_to_matrix(tensor: np.ndarray) -> np.ndarray:
     """
     Concatenate multiple trials or tiffs into single matrix:
 
 
-    :param traces_as_tensor: Chunk (trial, tif, etc) x neurons x frames
+    :param tensor: Chunk (trial, tif, etc) x neurons x frames
 
     :returns: Traces in matrix form (neurons x frames)
     """
-    return np.hstack(traces_as_tensor)
+    return np.hstack(tensor)
 
 
 def _merge_factorized_matrices(factorized_traces: np.ndarray, component: int = 0) -> np.ndarray:

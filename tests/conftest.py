@@ -86,8 +86,19 @@ def retrieve_suite2p() -> Path:
 
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
-def matrix(request):
+def sample_matrix(request):
     sample_matrix = np.full((5, 100), 1)
     for row in range(0, 5, 2):
         sample_matrix[row, :] = np.arange(100)
     return sample_matrix
+
+
+@pytest.fixture(scope="function")
+def sample_tensor(request):
+    sample_matrix = np.full((5, 100), 1)
+    for row in range(0, 5, 2):
+        sample_matrix[row, :] = np.arange(100)
+    sample_tensor = np.zeros((10, 5, 10))
+    for i in range(10):
+        sample_tensor[i, :, :] = sample_matrix[:, i * 10: (i + 1) * 10]
+    return sample_tensor
