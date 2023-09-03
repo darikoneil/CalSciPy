@@ -166,6 +166,7 @@ class Photostimulation:
         :rtype: :class:`Photostimulation <CalSciPy.optogenetics.Photostimulation>`
         """
 
+        # noinspection PyArgumentList
         rois, reference_image = handler.load(*args, **kwargs)
 
         return Photostimulation(rois, reference_image=reference_image)
