@@ -12,7 +12,7 @@ class SLM:
     """
     def __init__(self,
                  brand: Union[_SLM, str] = _SLM,
-                 pixel_pitch: Tuple[Number, Number] = (8, 8),
+                 pixel_pitch: Tuple[Number, Number] = (15, 15),
                  settle_time: Number = 300,
                  shape: Tuple[int, int] = (512, 512),
                  wavelength: Number = 1040,
@@ -61,7 +61,9 @@ class SLM:
         brand = brand.lower()
 
         # import module
-        _module = import_module("slmsuite.hardware.slms." + brand)
+        # _module = import_module("slmsuite.hardware.slms." + brand)
+        # TODO: Here until slmsuite fix for PCIe SLMs
+        _module = import_module("CalSciPy.optics." + brand)
 
         # retrieve implementation
         return vars(_module).get(brand.capitalize())
