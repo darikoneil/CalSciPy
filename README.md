@@ -2,14 +2,12 @@
 <!-- Line 1 Badges... PyPi, Downloads, Maintained, Coverage, Documentation -->
 <!-- Line 2 Badges... Python Versions, PyPi Status, License, Contributors -->
 ![PyPI](https://img.shields.io/pypi/v/CalSciPy)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/CalSciPy)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023)
 [![Coverage Status](https://coveralls.io/repos/github/darikoneil/CalSciPy/badge.svg?branch=master)](https://coveralls.io/github/darikoneil/CalSciPy?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/calscipy/badge/?version=latest)](https://calscipy.readthedocs.io/en/latest/?badge=latest)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/CalSciPy?)
 ![PyPI - Status](https://img.shields.io/pypi/status/CalSciPy)
 ![GitHub](https://img.shields.io/github/license/darikoneil/CalSciPy)
-[![Contributors](https://img.shields.io/github/contributors-anon/darikoneil/CalSciPy)](https://github.com/darikoneil/CalSciPy/graphs/contributors)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/darikoneil/CalSciPy/calscipy_lint_test_action.yml)
 
 CalSciPy is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from 
