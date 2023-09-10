@@ -182,7 +182,7 @@ class Handler:
 
 
 @pytest.fixture()
-def handler_folder(request, temp_path):
+def suite2p_handler_folder(request, temp_path):
     """
     Fixture for the handler helper class
 
@@ -190,28 +190,30 @@ def handler_folder(request, temp_path):
     return temp_path.joinpath("suite2p").joinpath(request.param)
 
 
-@pytest.mark.parametrize("handler_folder", [folder for folder in retrieve_suite2p()], indirect=["handler_folder"])
+@pytest.mark.parametrize("suite2p_handler_folder",
+                         [folder for folder in retrieve_suite2p()],
+                         indirect=["suite2p_handler_folder"])
 class TestSuite2PHandler:
 
-    def from_file(self, handler_folder):
-        return Suite2PHandler.from_file(handler_folder)
+    def from_file(self, suite2p_handler_folder):
+        return Suite2PHandler.from_file(suite2p_handler_folder)
 
-    def test_from_file(self, handler_folder):
-        assert len(self.from_file(handler_folder)) == 2
+    def test_from_file(self, suite2p_handler_folder):
+        assert len(self.from_file(suite2p_handler_folder)) == 2
 
-    def test_reference_image(self, handler_folder):
-        _, ops = self.from_file(handler_folder)
+    def test_reference_image(self, suite2p_handler_folder):
+        _, ops = self.from_file(suite2p_handler_folder)
         _ = Suite2PHandler.generate_reference_image(ops)
 
-    def test_conversion(self, handler_folder):
-        stat, _ = self.from_file(handler_folder)
+    def test_conversion(self, suite2p_handler_folder):
+        stat, _ = self.from_file(suite2p_handler_folder)
         roi = stat[0]
         _ = Suite2PHandler.convert_one_roi(roi)
 
-    def test_import_rois(self, handler_folder):
-        stat, ops = self.from_file(handler_folder)
+    def test_import_rois(self, suite2p_handler_folder):
+        stat, ops = self.from_file(suite2p_handler_folder)
         reference_shape = Suite2PHandler.generate_reference_image(ops).shape
         _ = Suite2PHandler.import_rois(stat, reference_shape)
 
-    def test_load(self, handler_folder):
-        _ = Suite2PHandler.load(handler_folder)
+    def test_load(self, suite2p_handler_folder):
+        _ = Suite2PHandler.load(suite2p_handler_folder)

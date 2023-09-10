@@ -86,11 +86,27 @@ def retrieve_suite2p() -> Path:
 
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
+def sample_factorized_matrix(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_factorized_matrices.npy"),
+                   allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
 def sample_matrix(request):
     sample_matrix = np.full((5, 100), 1)
     for row in range(0, 5, 2):
         sample_matrix[row, :] = np.arange(100)
     return sample_matrix
+
+
+@pytest.fixture(scope="function")
+def sample_reference_image(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_reference_image.npy"), allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
+def sample_roi_map(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_roi_map.npy"), allow_pickle=True).item()
 
 
 @pytest.fixture(scope="function")
@@ -102,9 +118,3 @@ def sample_tensor(request):
     for i in range(10):
         sample_tensor[i, :, :] = sample_matrix[:, i * 10: (i + 1) * 10]
     return sample_tensor
-
-
-@pytest.fixture(scope="function")
-def factorized_matrix(request):
-    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_factorized_matrices.npy"),
-                   allow_pickle=True)
