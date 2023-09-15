@@ -20,7 +20,6 @@ targets = randomize_targets(np.arange(photostimulation.num_neurons),
 for idx, target in enumerate(targets):
     photostimulation.add_photostimulation_group(target, name=f"Stimulation {idx}")
 
-
 group = photostimulation.stim_sequence[0]
 
 view_spiral_targets(photostimulation)
