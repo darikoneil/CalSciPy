@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 
-def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, frame_rate: float = 30.0) -> np.ndarray:
+def calculate_standardized_noise(dfof: np.ndarray, frame_rate: float = 30.0) -> np.ndarray:
     """
     Calculates a frame-rate independent standardized noise as defined as:
         | :math:`v = \\frac{\sigma \\frac{\Delta F}F}\sqrt{f}`
@@ -11,18 +11,19 @@ def calculate_standardized_noise(fold_fluorescence_over_baseline: np.ndarray, fr
     It is robust against outliers and approximates the standard deviation of Δf/f0 baseline fluctuations.
     For comparison, the more exquisite of the Allen Brain Institute's public datasets are approximately 1*%Hz^(-1/2)
 
-    :param fold_fluorescence_over_baseline: fold fluorescence over baseline (i.e., Δf/f0)
+    :param dfof: fold fluorescence over baseline (i.e., Δf/f0)
 
     :param frame_rate: frame rate of dataset
 
     :returns: standardized noise (1*%Hz^(-1/2) ) for each neuron
     """
-    return 100.0 * np.median(np.abs(np.diff(fold_fluorescence_over_baseline, axis=1)), axis=1) / np.sqrt(frame_rate)
+    return 100.0 * np.median(np.abs(np.diff(dfof, axis=1)), axis=1) / np.sqrt(frame_rate)
 
 
 def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray:
     """
-    Detrend traces using a fourth-order polynomial
+    Detrend traces using a fourth-order polynomial. This function is useful to correct for a drifting baseline due to
+    photo-bleaching and other processes that cause time-dependent degradation of signal-to-noise.
 
     :param traces: matrix of traces in the form of neurons x frames
 
