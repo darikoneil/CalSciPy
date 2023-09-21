@@ -31,10 +31,15 @@ def perona_malik_diffusion(traces: np.ndarray,
     This implementation is currently situated to handle 1-D vectors because it gives us some performance benefits.
 
     :param traces: matrix of M neurons by N samples
+
     :param iters: number of iterations
+
     :param kappa: used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1
+
     :param gamma: rate of diffusion for each iter. range 0-1
+
     :param in_place: whether to calculate in-place
+
     :returns: smoothed traces
     """
 
@@ -82,10 +87,15 @@ def _perona_malik_diffusion(trace: np.ndarray,
     This implementation is currently situated to handle 1-D vectors because it gives us some performance benefits.
 
     :param trace: trace for a single neuron (i.e., vector)
+
     :param iters: number of iterations
+
     :param kappa: used to calculate the true kappa, where true kappa = kappa * dynamic range. range 0-1
+
     :param gamma: rate of diffusion for each iter. range 0-1
+
     :param in_place: whether to calculate in-place
+
     :returns: smoothed traces
     """
 

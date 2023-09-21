@@ -1,21 +1,33 @@
 from __future__ import annotations
+from numbers import Number
 
 import numpy as np
 
 
-def calculate_standardized_noise(dfof: np.ndarray, frame_rate: float = 30.0) -> np.ndarray:
+def calculate_standardized_noise(dfof: np.ndarray, frame_rate: Number = 30.0) -> np.ndarray:
     """
     Calculates a frame-rate independent standardized noise as defined as:
         | :math:`v = \\frac{\sigma \\frac{\Delta F}F}\sqrt{f}`
 
     It is robust against outliers and approximates the standard deviation of Δf/f0 baseline fluctuations.
-    For comparison, the more exquisite of the Allen Brain Institute's public datasets are approximately 1*%Hz^(-1/2)
+    This metric was first defined in the publication associated with the spike-inference software package
+    `CASCADE <https://github.com/HelmchenLabSoftware/Cascade>`_\.
 
-    :param dfof: fold fluorescence over baseline (i.e., Δf/f0)
 
-    :param frame_rate: frame rate of dataset
+    :param dfof: Fold fluorescence over baseline (i.e., Δf/f0)
 
-    :returns: standardized noise (1*%Hz^(-1/2) ) for each neuron
+    :param frame_rate: Frame rate at which the images were acquired.
+
+    :returns: Standardized noise (1*%Hz^(-1/2) ) for each neuron
+
+    .. note::
+
+        For comparison, the more exquisite of the Allen Brain Institute's public datasets are approximately 1*%Hz^(-1/2)
+
+    .. warning::
+
+        If you do not pass traces in the shape of n neurons x m samples your result will be incorrect.
+
     """
     return 100.0 * np.median(np.abs(np.diff(dfof, axis=1)), axis=1) / np.sqrt(frame_rate)
 
@@ -25,22 +37,27 @@ def detrend_polynomial(traces: np.ndarray, in_place: bool = False) -> np.ndarray
     Detrend traces using a fourth-order polynomial. This function is useful to correct for a drifting baseline due to
     photo-bleaching and other processes that cause time-dependent degradation of signal-to-noise.
 
-    :param traces: matrix of traces in the form of neurons x frames
+    :param traces: Matrix of n neuron x m samples
 
-    :param in_place: boolean indicating whether to perform calculation in-place
+    :param in_place: Whether to perform calculation in-place
 
-    :returns: detrended traces
+    :returns: Detrended matrix of n neuron x m samples.
+
+    .. warning::
+
+        If you do not pass traces in the shape of n neurons x m samples your result will be incorrect.
+
     """
-    [_neurons, _samples] = traces.shape
-    _samples_vector = np.arange(_samples)
+    neurons, samples = traces.shape
+    samples_vector = np.arange(samples)
 
     if in_place:
         detrended_matrix = traces
     else:
         detrended_matrix = traces.copy()
 
-    for _neuron in range(_neurons):
-        _fit = np.polyval(np.polyfit(_samples_vector, detrended_matrix[_neuron, :], deg=4), _samples_vector)
-        detrended_matrix[_neuron] -= _fit
+    for neuron in range(neurons):
+        fit = np.polyval(np.polyfit(samples_vector, detrended_matrix[neuron, :], deg=4), samples_vector)
+        detrended_matrix[neuron] -= fit
 
     return detrended_matrix

@@ -18,7 +18,7 @@ def spike_probabilities(request):
     ])
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def expected_instantaneous_firing_rate(request):
     """
     This is an instantaneous firing rate matrix of 3 neurons with 7 samples each,
@@ -32,7 +32,7 @@ def expected_instantaneous_firing_rate(request):
     ])
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def expected_mean_firing_rates(request):
     """
     This is the expected mean firing rate of 3 neurons with 7 samples each,
@@ -42,7 +42,7 @@ def expected_mean_firing_rates(request):
     return np.array([0.74285714, 0.74285714, 0.42142857])
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def expected_normalized_firing_rates(request):
     """
     This is a normalized firing rate matrix of 3 neurons with 7 samples each,

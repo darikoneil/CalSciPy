@@ -78,9 +78,9 @@ def normalize_firing_rates(firing_rates: np.ndarray,
     :param firing_rates: Matrix of n neuron x m samples or tensor of t trials x n neurons x m samples where each
         element is either a spike or an instantaneous firing rate
 
-    :param in_place: boolean indicating whether to perform calculation in-place
+    :param in_place: Whether to perform calculation in-place
 
-    :returns: normalized firing rate matrix of n neurons x m samples
+    :returns: Normalized firing rate matrix of n neurons x m samples
 
     .. warning::
 
