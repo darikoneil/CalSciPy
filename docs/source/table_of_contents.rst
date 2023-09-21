@@ -25,13 +25,13 @@
    :maxdepth: 1
    :caption: INTERACTIVE VISUALS
 
-   Introduction <interactive_introduction>
+   Introduction <interactive__introduction>
 
 .. toctree::
    :maxdepth: 1
    :caption: BRUKER PRAIRIEVIEW
 
-   Introduction <bruker_introduction>
+   Introduction <bruker__introduction>
 
 .. toctree::
    :maxdepth: 1
