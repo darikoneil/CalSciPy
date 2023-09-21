@@ -118,3 +118,29 @@ def sample_tensor(request):
     for i in range(10):
         sample_tensor[i, :, :] = sample_matrix[:, i * 10: (i + 1) * 10]
     return sample_tensor
+
+
+@pytest.fixture(scope="function")
+def sample_traces(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_traces.npy"))
+
+
+# HERE ARE SOME HARDCODED RESULTS
+
+
+@pytest.fixture(scope="session")
+def detrended_sample_traces(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("detrended_polynomial_results.npy"),
+                   allow_pickle=True)
+
+
+@pytest.fixture(scope="session")
+def perona_smoothed_sample_traces(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("perona_results.npy"),
+                   allow_pickle=True)
+
+
+@pytest.fixture(scope="session")
+def standardized_noise_sample_traces(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("std_noise_results.npy"),
+                   allow_pickle=True)
