@@ -14,7 +14,7 @@ import numpy as np
 from CalSciPy.roi_tools import ROI, Suite2PHandler, ROIHandler
 
 # noinspection PyProtectedMember
-from CalSciPy.roi_tools.roi_tools import _ROIBase
+from CalSciPy.roi_tools.roi_tools import _ROIBase, calculate_mask
 
 
 """
@@ -138,6 +138,10 @@ class TestROI:
     def test_mask(self, sample_roi):
         test_roi = sample_roi.generate_test_roi_x_and_y_args()
         _ = test_roi.mask  # why am I not being registered as called during tests?
+
+    def test_boolean_mask_construction(self, sample_roi):
+        test_roi = sample_roi.generate_test_roi_x_and_y_args()
+        mask = calculate_mask(test_roi.centroid, test_roi.radius, test_roi.reference_shape)
 
     def test_magic(self, sample_roi):
         with BlockPrinting():

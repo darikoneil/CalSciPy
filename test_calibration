@@ -1,0 +1,42 @@
+
+if __name__ == "__main__":
+
+    from slmsuite.hardware.slms.slm import SLM
+    from slmsuite.hardware.slms.santec import Santec
+    from slmsuite.hardware.cameras.alliedvision import AlliedVision
+    from slmsuite.hardware.cameraslms import FourierSLM
+
+    try:
+        # Load the hardware.
+        slm = Santec(slm_number=1, display_number=2, wav_um=.633, settle_time_s=.5);
+        print()
+        cam = AlliedVision(serial="02C5V", verbose=True, fliplr=True)
+
+        # Load the composite CameraSLM.
+        fs = FourierSLM(cam, slm)
+        fs.load_wavefront_calibration()
+    except Exception as e:
+        # Fallback to virtual hardware.
+        print("Hardware failed to load: {}".format(e))
+        slm = SLM(width=1920, height=1200, dx_um=8, dy_um=8, wav_um=.633)
+        cam = None
+
+    #slm = SLM(brand="meadowlark", hdmi=False)
+
+    # noinspection PyProtectedMember
+    #calib_blaze = blaze(slm._slm, vector=(0.001, 0.001))
+    calib_blaze = blaze(grid=slm,
+                        vector=(0.001, 0.001))
+
+    calib_lens = lens(grid=slm, f=1e-7)
+
+    # preview
+    fig, ax = plt.subplots(1, 1)
+
+    image = np.mod(zernike_sum_phase, 2*np.pi)
+
+    ax.imshow(image,
+              vmin=0,
+              vmax=2*np.pi,
+              interpolation="none",
+              cmap="twilight")

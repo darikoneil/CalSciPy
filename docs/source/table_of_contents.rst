@@ -25,17 +25,28 @@
    :maxdepth: 1
    :caption: INTERACTIVE VISUALS
 
+   Introduction <interactive_introduction>
+
 .. toctree::
    :maxdepth: 1
    :caption: BRUKER PRAIRIEVIEW
+
+   Introduction <bruker_introduction>
 
 .. toctree::
    :maxdepth: 1
    :caption: OPTICS
 
+   Introduction <optics__introduction>
+   Aligning Excitation and Stimulation Beams <optics__coalignment>
+   Coordinate Transformations <optics__transformation>
+   Wavefront Calibration <optics__wavefront>
+
 .. toctree::
    :maxdepth: 1
    :caption: ORGANIZATION
+
+   Introduction <organization__introduction>
 
 .. toctree::
    :maxdepth: 2

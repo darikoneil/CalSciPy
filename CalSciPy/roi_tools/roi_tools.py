@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Tuple, Union, Sequence, Iterable, Any, Mapping
+from typing import Optional, Tuple, Union, Sequence, Iterable, Any, Mapping, List
 from numbers import Number
 from collections import ChainMap
 from functools import partial, cached_property
@@ -375,7 +375,8 @@ class ApproximateROI(_ROIBase):
             y_pixels = roi.y_pixels
         else:
             radius = calculate_radius(roi.centroid, roi.rc_vert, method=method)
-            y_pixels, x_pixels = calculate_mask(roi.centroid, radius, roi.reference_shape)
+            mask = calculate_mask_pixels(roi.centroid, radius, roi.reference_shape)
+            y_pixels, x_pixels = np.where(mask == 1)
         return x_pixels, y_pixels, roi.reference_shape
 
     def __repr__(self):
@@ -600,12 +601,13 @@ def calculate_centroid(pixels: Union[NDArray[int], Sequence[int]],
 
 def calculate_mask(centroid: Sequence[Number, Number],
                    radii: Union[Number, Sequence[Number, Number]],
-                   reference_shape: Union[Number, Sequence[Number, Number]] = None,
+                   reference_shape: Union[Number, Sequence[Number, Number]],
                    theta: Number = None
                    ) -> NDArray[bool]:
     """
-    Calculates a boolean mask for an elliptical roi constrained to lie within the dimensions imposed by the reference
-    shape.The major-axis is considered to have angle theta with respect to the y-axis of the reference image.
+    Calculates boolean mask for an elliptical roi constrained to lie within the dimensions imposed
+    by the reference shape.The major-axis is considered to have angle theta with respect to the y-axis of the reference
+    image.
 
     :param centroid: Centroid of the roi in row-column form (y, x)
 
@@ -621,18 +623,74 @@ def calculate_mask(centroid: Sequence[Number, Number],
     :param reference_shape: Dimensions of the reference image the roi lies within. If only one value is provided
         it is considered symmetrical.
 
-    :type reference_shape: :class:`Union <typing.Union>`\[ :class:`Number <numbers.Number>`\,
-        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]],
-        default: ``None``
+    :type reference_shape: :class:`Union <typing.Union>`\[:class:`Number <numbers.Number>`\,
+        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]]
 
     :param theta: Angle of the long-radius with respect to the y-axis of the reference image
 
     :type theta: :class:`Number <numbers.Number>`\, default: ``None``
 
-    :returns: Boolean mask identifying which pixels contain the roi within the reference image
+    :returns: Pixels in row-column form (y, x) comprising a boolean mask identifying which pixels contain the roi
+        within the reference image
 
-    :rtype: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
-        :class:`dtype <numpy.dtype>`\[:class:`bool`\]]
+    :rtype: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\, :class:`bool`\]
+    """
+    # generate pixels
+    y_pixels, x_pixels = calculate_mask_pixels(centroid, radii, reference_shape, theta)
+
+    # make sure radii contains both x & y directions
+    try:
+        assert (len(radii) == 2)
+    except TypeError:
+        radii = np.asarray([radii, radii])
+    except AssertionError:
+        radii = np.asarray([*radii, *radii])
+
+    # generate mask
+    mask = np.zeros(reference_shape, dtype=np.bool_)
+
+    for pixel_pair in zip(y_pixels, x_pixels):
+        mask[pixel_pair[0], pixel_pair[1]] = True
+
+    return mask
+
+
+def calculate_mask_pixels(centroid: Sequence[Number, Number],
+                          radii: Union[Number, Sequence[Number, Number]],
+                          reference_shape: Union[Number, Sequence[Number, Number]] = None,
+                          theta: Number = None
+                          ) -> Tuple[List[int], List[int]]:
+    """
+    Calculates the pixels of a boolean mask for an elliptical roi constrained to lie within the dimensions imposed
+    by the reference shape.The major-axis is considered to have angle theta with respect to the y-axis of the reference
+    image.
+
+    :param centroid: Centroid of the roi in row-column form (y, x)
+
+    :type centroid: :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\,
+        :class:`Number <numbers.Number>`\]]
+
+    :param radii: Radius of the roi. Only one radius is required if the roi is symmetrical (i.e., circular).
+        For an elliptical roi both a long and short radius can be provided.
+
+    :type radii: :class:`Union <typing.Union>`\[:class:`Number <numbers.Number>`\,
+        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]]
+
+    :param reference_shape: Dimensions of the reference image the roi lies within. If only one value is provided
+        it is considered symmetrical.
+
+    :type reference_shape: :class:`Union <typing.Union>`\[:class:`Number <numbers.Number>`\,
+        :class:`Sequence <typing.Sequence>`\[:class:`Number <numbers.Number>`\, :class:`Number <numbers.Number>`\]]
+
+    :param theta: Angle of the long-radius with respect to the y-axis of the reference image
+
+    :type theta: :class:`Number <numbers.Number>`\, default: ``None``
+
+    :returns: Pixels in row-column form (y, x) comprising a boolean mask identifying which pixels contain the roi
+        within the reference image
+
+    :rtype: :class:`Tuple <typing.Tuple>`\[:class`List <typing.List>`\[:class:`int`\],
+        :class:`List <typing.List>`\[:class:`int`\]]
     """
 
     if theta is not None:
@@ -689,7 +747,7 @@ def calculate_mask(centroid: Sequence[Number, Number],
         yy.clip(0, reference_shape[0] - 1)
         xx.clip(0, reference_shape[-1] - 1)
 
-    return yy, xx
+    return yy.tolist(), xx.tolist()
 
 
 def identify_vertices(pixels: Union[NDArray[int], Sequence[int]],
