@@ -83,7 +83,7 @@ def io_helper(request, temp_path):
     return IO(request.param, temp_path)
 
 
-@pytest.mark.usefixtures("datafiles")
+#@pytest.mark.usefixtures("datafiles")
 @pytest.mark.parametrize("io_helper", [dataset for dataset in retrieve_dataset_ids()], indirect=["io_helper"])
 class TestIO:
     """

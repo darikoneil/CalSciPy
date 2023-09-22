@@ -33,8 +33,8 @@ def temp_path():
 
 
 # Call only for tests that risk manipulating the original datafiles
-@pytest.fixture(autouse=False)
-#@pytest.fixture(autouse=True)
+# @pytest.fixture(autouse=False)
+@pytest.fixture(autouse=True)
 def datafiles():
 
     # USING TEMP_PATH INSTEAD OF PYTEST TMP_PATH BECAUSE THAT IS A FUNCTION-BASED FIXTURE
@@ -46,7 +46,7 @@ def datafiles():
     yield
 
     # PURGE
-    # purge_dummies(_TEMPORARY_DIRECTORY)
+    purge_dummies(_TEMPORARY_DIRECTORY)
 
 
 # GENERATORS FOR ITERATING THROUGH INDIVIDUAL SAMPLE SETS FOR TESTING
