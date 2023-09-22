@@ -3,6 +3,53 @@ from numbers import Number
 
 import numpy as np
 
+from .baseline import baseline_calculation
+
+
+def calculate_dfof(traces: np.ndarray,
+                   method: str = "mean",
+                   external_reference: Optional[np.ndarray] = None,
+                   in_place: bool = False,
+                   **kwargs
+                   ) -> np.ndarray:
+    """
+    Calculates the fold fluorescence over baseline (i.e., Δf/f0). A variety of different methods of calculating the
+    baseline are provided. All keyword-arguments are passed to the baseline calculation.
+
+    :param traces: Matrix of n neurons x m samples
+
+    :param method: Method used to calculate baseline fluorescence
+
+    :param external_reference: Matrix of n neurons x m samples used to calculate baseline
+
+    :param in_place: Whether to perform calculations in-place
+
+    :returns: Matrix of n neurons x m samples where each element is the fold fluorescence over baseline for a
+        particular observation.
+
+    """
+
+    # determine if in place
+    if in_place:
+        dfof = traces
+    else:
+        dfof = np.zeros_like(traces)
+
+    # point to external reference if not using original traces as the reference
+    if external_reference is not None:
+        reference_traces = external_reference
+    else:
+        reference_traces = traces
+
+    # retrieve baseline calculation method
+    baseline_func = baseline_calculation(method)
+
+    # calculate baselines
+    baselines = baseline_func(reference_traces, **kwargs)
+
+    # calculate dfof
+    return (dfof - baselines) / baselines
+
 
 def calculate_standardized_noise(dfof: np.ndarray, frame_rate: Number = 30.0) -> np.ndarray:
     """

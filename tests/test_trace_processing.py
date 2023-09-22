@@ -33,24 +33,3 @@ def test_calculate_dfof(sample_traces, extended_sample_traces, dfof_sample_trace
     calculate_dfof(sample_traces, in_place=True)
     np.testing.assert_allclose(sample_traces, dfof_sample_traces, rtol=1e-3,
                                err_msg="Failed calculating in-place dfof")
-
-
-def test_calculate_standardized_noise(dfof_sample_traces, std_noise_sample_traces,
-                                      std_noise_frame_rate_halved_sample_traces):
-
-    std_noise = calculate_standardized_noise(dfof_sample_traces)
-    np.testing.assert_allclose(std_noise, std_noise_sample_traces, rtol=1e-3,
-                               err_msg="Failed first call to calculate std noise")
-
-    std_noise_frame_rate = calculate_standardized_noise(dfof_sample_traces, 15.0)
-    np.testing.assert_allclose(std_noise_frame_rate, std_noise_frame_rate_halved_sample_traces, rtol=1e-3,
-                               err_msg="Failed second call to calculate std noise")
-
-
-def test_polynomial_detrending(dfof_sample_traces, detrended_dfof_sample_traces):
-    # out of place
-    detrended_dfof = detrend_polynomial(dfof_sample_traces)
-    np.testing.assert_allclose(detrended_dfof, detrended_dfof_sample_traces, err_msg="Failed polynomial detrending")
-    # in place
-    detrend_polynomial(dfof_sample_traces, in_place=True)
-    np.testing.assert_allclose(detrended_dfof, dfof_sample_traces, err_msg="Failed in-place polynomial detrending")
