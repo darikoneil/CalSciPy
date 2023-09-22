@@ -11,7 +11,7 @@ def calculate_standardized_noise(dfof: np.ndarray, frame_rate: Number = 30.0) ->
 
     It is robust against outliers and approximates the standard deviation of Δf/f0 baseline fluctuations.
     This metric was first defined in the publication associated with the spike-inference software package
-    `CASCADE <https://github.com/HelmchenLabSoftware/Cascade>`_\.
+    `CASCADE <https://www.nature.com/articles/s41593-021-00895-5>`_\.
 
 
     :param dfof: Fold fluorescence over baseline (i.e., Δf/f0)
