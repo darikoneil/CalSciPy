@@ -130,25 +130,25 @@ def sample_traces(request):
 # HERE ARE SOME HARDCODED RESULTS
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def detrended_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("detrended_polynomial_results.npy"),
                    allow_pickle=True)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def dfof_results(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("dfof_results.npy"),
                    allow_pickle=True).item()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def perona_smoothed_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("perona_results.npy"),
                    allow_pickle=True)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def standardized_noise_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("std_noise_results.npy"),
                    allow_pickle=True)
