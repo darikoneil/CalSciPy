@@ -1,6 +1,5 @@
-from .traces import calculate_standardized_noise, detrend_polynomial
+from .traces import calculate_dfof, calculate_standardized_noise, detrend_polynomial
 from .smoothing import perona_malik_diffusion
-from .baseline import calculate_dfof
 
 
 __all__ = [

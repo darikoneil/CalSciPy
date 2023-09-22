@@ -53,4 +53,9 @@ exclude =
     scratch,
     share,
     scratch_dev,
-    dev
+    dev,
+    test_calib.py,
+    test_parfocal.py,
+    test_slm.py,
+    visualize_optogenetics.py,
+    CalSciPy/optics

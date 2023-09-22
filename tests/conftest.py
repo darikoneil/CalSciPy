@@ -32,7 +32,9 @@ def temp_path():
     return _TEMPORARY_DIRECTORY
 
 
-@pytest.fixture(autouse=True)
+# Call only for tests that risk manipulating the original datafiles
+@pytest.fixture(autouse=False)
+#@pytest.fixture(autouse=True)
 def datafiles():
 
     # USING TEMP_PATH INSTEAD OF PYTEST TMP_PATH BECAUSE THAT IS A FUNCTION-BASED FIXTURE
@@ -44,7 +46,7 @@ def datafiles():
     yield
 
     # PURGE
-    purge_dummies(_TEMPORARY_DIRECTORY)
+    # purge_dummies(_TEMPORARY_DIRECTORY)
 
 
 # GENERATORS FOR ITERATING THROUGH INDIVIDUAL SAMPLE SETS FOR TESTING
@@ -135,6 +137,12 @@ def detrended_sample_traces(request):
 
 
 @pytest.fixture(scope="session")
+def dfof_results(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("dfof_results.npy"),
+                   allow_pickle=True).item()
+
+
+@pytest.fixture(scope="session")
 def perona_smoothed_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("perona_results.npy"),
                    allow_pickle=True)
@@ -144,3 +152,4 @@ def perona_smoothed_sample_traces(request):
 def standardized_noise_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("std_noise_results.npy"),
                    allow_pickle=True)
+
