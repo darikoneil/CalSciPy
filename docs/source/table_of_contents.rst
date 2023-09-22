@@ -1,3 +1,11 @@
+CalSciPy
+====================================
+**CalSciPy** is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from
+interactive visualization of data to computer-generated holography for "read/write" experiments, and
+everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be
+considered useful to others.
+
+
 .. toctree::
    :maxdepth: 1
    :caption: INTRODUCTION:
@@ -51,7 +59,9 @@
 .. toctree::
    :maxdepth: 2
    :caption: API REFERENCE
+   :hidden:
 
+   baseline <CalSciPy.traces.baseline>
    bruker <CalSciPy.bruker>
    color_scheme <CalSciPy.color_scheme>
    conversion <CalSciPy.conversion>
