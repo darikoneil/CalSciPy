@@ -375,8 +375,7 @@ class ApproximateROI(_ROIBase):
             y_pixels = roi.y_pixels
         else:
             radius = calculate_radius(roi.centroid, roi.rc_vert, method=method)
-            mask = calculate_mask_pixels(roi.centroid, radius, roi.reference_shape)
-            y_pixels, x_pixels = np.where(mask == 1)
+            y_pixels, x_pixels = calculate_mask_pixels(roi.centroid, radius, roi.reference_shape)
         return x_pixels, y_pixels, roi.reference_shape
 
     def __repr__(self):
