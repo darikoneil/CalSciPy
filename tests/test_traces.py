@@ -5,18 +5,18 @@ import numpy as np
 from CalSciPy.traces import calculate_dfof, calculate_standardized_noise, detrend_polynomial
 
 
-@pytest.mark.parametrize("method", ["mean", ])
+@pytest.mark.parametrize("method", ["mean", "low-pass"])
 def test_calculate_dfof(sample_traces, dfof_results, method):
     # grab expected results
     results = dfof_results.get(method)
-    dfof = calculate_dfof(sample_traces)
+    dfof = calculate_dfof(sample_traces, method=method)
     # check out-of-place
     np.testing.assert_equal(dfof, results)
     # check external reference
-    ext_dfof = calculate_dfof(sample_traces, external_reference=sample_traces + 1)
+    ext_dfof = calculate_dfof(sample_traces, method=method, external_reference=sample_traces + 1)
     np.testing.assert_raises(AssertionError, np.testing.assert_equal, ext_dfof, results)
     # check in-place
-    calculate_dfof(sample_traces, in_place=True)
+    calculate_dfof(sample_traces, method=method, in_place=True)
     np.testing.assert_equal(sample_traces, results)
 
 
