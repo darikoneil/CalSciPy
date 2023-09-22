@@ -9,6 +9,7 @@ from .baseline import baseline_calculation
 def calculate_dfof(traces: np.ndarray,
                    method: str = "mean",
                    external_reference: Optional[np.ndarray] = None,
+                   offset: Number = 0,
                    in_place: bool = False,
                    **kwargs
                    ) -> np.ndarray:
@@ -21,6 +22,8 @@ def calculate_dfof(traces: np.ndarray,
     :param method: Method used to calculate baseline fluorescence
 
     :param external_reference: Matrix of n neurons x m samples used to calculate baseline
+
+    :param offset: Used to offset baselines by some constant
 
     :param in_place: Whether to perform calculations in-place
 
@@ -45,7 +48,7 @@ def calculate_dfof(traces: np.ndarray,
     baseline_func = baseline_calculation(method)
 
     # calculate baselines (Uses 2X memory, but much more simple?)
-    baselines = baseline_func(reference_traces, **kwargs)
+    baselines = baseline_func(reference_traces, **kwargs) + offset
 
     # calculate dfof
     dfof -= baselines
