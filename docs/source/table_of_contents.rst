@@ -37,12 +37,6 @@ considered useful to others.
 
 .. toctree::
    :maxdepth: 1
-   :caption: BRUKER PRAIRIEVIEW
-
-   Introduction <bruker__introduction>
-
-.. toctree::
-   :maxdepth: 1
    :caption: OPTICS
 
    Introduction <optics__introduction>
@@ -55,6 +49,12 @@ considered useful to others.
    :caption: ORGANIZATION
 
    Introduction <organization__introduction>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: BRUKER PRAIRIEVIEW
+
+   Introduction <bruker__introduction>
 
 .. toctree::
    :maxdepth: 2
@@ -73,3 +73,4 @@ considered useful to others.
    roi_tools <CalSciPy.roi_tools>
    traces <CalSciPy.traces>
    version <CalSciPy.version>
+
