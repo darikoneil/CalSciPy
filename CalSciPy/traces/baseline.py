@@ -17,4 +17,5 @@ def mean_baseline(traces: np.ndarray) -> np.ndarray:
 
     :returns: Vector of n neurons where each element is the baseline for the associated neuron
     """
-    return np.mean(traces, axis=-1) * np.ones(traces.shape)
+    # must reshape to be 2D here to match shape of traces
+    return np.mean(traces, axis=-1).reshape((traces.shape[0], 1)) * np.ones(traces.shape)

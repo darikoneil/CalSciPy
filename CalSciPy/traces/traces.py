@@ -33,7 +33,7 @@ def calculate_dfof(traces: np.ndarray,
     if in_place:
         dfof = traces
     else:
-        dfof = np.zeros_like(traces)
+        dfof = traces.copy()
 
     # point to external reference if not using original traces as the reference
     if external_reference is not None:
@@ -44,11 +44,14 @@ def calculate_dfof(traces: np.ndarray,
     # retrieve baseline calculation method
     baseline_func = baseline_calculation(method)
 
-    # calculate baselines
+    # calculate baselines (Uses 2X memory, but much more simple?)
     baselines = baseline_func(reference_traces, **kwargs)
 
     # calculate dfof
-    return (dfof - baselines) / baselines
+    dfof -= baselines
+    dfof /= baselines
+
+    return dfof
 
 
 def calculate_standardized_noise(dfof: np.ndarray, frame_rate: Number = 30.0) -> np.ndarray:
