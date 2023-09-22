@@ -155,8 +155,10 @@ def sliding_mean_baseline(traces: np.ndarray, window_length: int = 150) -> np.nd
     :returns: Matrix of n neurons x m samples where each element is the sample's baseline value for the associated
         neuron
     """
-    return np.nanmean(sliding_window(traces, window_length, np.nanmean, axis=-1).reshape((traces.shape[0], 1))) \
-        * np.ones_like(traces)
+    return np.nanmean(sliding_window(traces,
+                                     window_length,
+                                     np.nanmean,
+                                     axis=-1), axis=0).reshape((traces.shape[0], 1)) * np.ones_like(traces)
 
 
 def sliding_median_baseline(traces: np.ndarray, window_length: int = 150) -> np.ndarray:
@@ -170,8 +172,10 @@ def sliding_median_baseline(traces: np.ndarray, window_length: int = 150) -> np.
     :returns: Matrix of n neurons x m samples where each element is the sample's baseline value for the associated
         neuron
     """
-    return np.nanmean(sliding_window(traces, window_length, np.nanmedian, axis=-1).reshape((traces.shape[0], 1))) \
-        * np.ones_like(traces)
+    return np.nanmean(sliding_window(traces,
+                                     window_length,
+                                     np.nanmedian,
+                                     axis=-1), axis=0).reshape((traces.shape[0], 1)) * np.ones_like(traces)
 
 
 def sliding_percentile_baseline(traces: np.ndarray,
@@ -193,4 +197,4 @@ def sliding_percentile_baseline(traces: np.ndarray,
                                      window_length,
                                      np.nanpercentile,
                                      q=percentile,
-                                     axis=-1).reshape((traces.shape[0], 1))) * np.ones_like(traces)
+                                     axis=-1), axis=0).reshape((traces.shape[0], 1)) * np.ones_like(traces)
