@@ -1,2 +1,0 @@
-Bruker Introduction
-===================

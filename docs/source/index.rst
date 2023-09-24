@@ -17,44 +17,13 @@ considered useful to others.
 
 .. toctree::
    :maxdepth: 1
-   :caption: MAIN:
+   :caption: MODULES:
 
-   Introduction <main__introduction>
-   Loading and Saving Data <main__io_tools>
-   Image Processing <main__images>
-   Trace Processing <main__traces>
-   Events and Spiking <main__events>
-   Regions of Interest <main__roi_tools>
-   Reorganizing Data <main__conversion>
-   Optogenetics <main__optogenetics>
-   Style <main__style>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: INTERACTIVE VISUALS
-
-   Introduction <interactive__introduction>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: OPTICS
-
-   Introduction <optics__introduction>
-   Aligning Excitation and Stimulation Beams <optics__coalignment>
-   Coordinate Transformations <optics__transformation>
-   Wavefront Calibration <optics__wavefront>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: ORGANIZATION
-
-   Introduction <organization__introduction>
-
-.. toctree::
-   :maxdepth: 1
-   :caption: BRUKER PRAIRIEVIEW
-
-   Introduction <bruker__introduction>
+    MAIN <main.rst>
+    OPTICS <optics.rst>
+    BRUKER <bruker.rst>
+    INTERACTIVE <interactive_visuals.rst>
+    ORGANIZATION <organization.rst>
 
 .. toctree::
    :maxdepth: 2
