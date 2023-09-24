@@ -126,6 +126,7 @@ def moving_mean_baseline(traces: np.ndarray, window_length: int = 150) -> np.nda
         neuron
     """
     weights = np.ones((window_length, 1)) * (1 / window_length)
+    weights = np.reshape(weights, (-1, ))
     return convolve1d(traces, weights, mode="nearest")
 
 
