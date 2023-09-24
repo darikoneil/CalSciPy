@@ -49,6 +49,7 @@ def calculate_dfof(traces: np.ndarray,
     baseline_func = baseline_calculation(method)
 
     # calculate baselines (Uses 2X memory, but much more simple?)
+    # noinspection PyArgumentList
     baselines = baseline_func(reference_traces, **kwargs) + offset
 
     # calculate dfof
