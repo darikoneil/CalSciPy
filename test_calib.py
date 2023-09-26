@@ -38,13 +38,18 @@ hologram.cameraslm = setup
 
 fs = FourierSLM(camera, slm)
 
-xlist = np.arange(100, min(fs.cam.shape), 100)
+xlist = np.arange(100, 512, 100)
 xgrid, ygrid = np.meshgrid(xlist, xlist)
 square = np.vstack((xgrid.ravel(), ygrid.ravel()))
-hologram = SpotHologram(shape=(2048, 2048), spot_vectors=square, basis='ij', cameraslm=fs)
+hologram = SpotHologram(shape=(512, 512), spot_vectors=square, basis='knm')
 hologram.plot_farfield(hologram.target)
 
 
+lg90_phase = toolbox.phase.laguerre_gaussian(
+    slm,
+    l=9,                                        # A larger azimuthal wavenumber
+    p=0
+)
 
 
 for units in ["kxy", "knm", "freq", "deg"]:
