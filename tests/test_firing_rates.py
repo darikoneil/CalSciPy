@@ -4,6 +4,12 @@ from CalSciPy.events import calc_firing_rates, calc_mean_firing_rates, \
     normalize_firing_rates
 
 
+"""
+Test suite for firing rate processing (events)
+
+"""
+
+
 @pytest.fixture(scope="function")
 def spike_probabilities(request):
     """

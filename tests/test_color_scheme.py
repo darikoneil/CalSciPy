@@ -6,6 +6,12 @@ import pytest
 from CalSciPy.color_scheme import ColorScheme, TerminalScheme, COLORS, TERM_SCHEME
 
 
+"""
+Test suite for color/terminal schemes
+
+"""
+
+
 def test_color_scheme():
     # check properties
     for attr in ["mapping", "num_colors"]:

@@ -7,6 +7,12 @@ import toml
 from PPVD.style import TerminalStyle
 
 
+"""
+Test package installation
+
+"""
+
+
 def retrieve_details(path):
     details = toml.load(path).get("project")
     name = details.get("name")

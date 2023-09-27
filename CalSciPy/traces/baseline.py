@@ -17,22 +17,14 @@ def baseline_calculation(method: str) -> Callable:
 
     :returns: The function for desired baseline calculation method
     """
-    if method == "low-pass":
-        return low_pass_baseline
-    elif method == "mean":
-        return mean_baseline
-    elif method == "median":
-        return median_baseline
-    elif method == "moving_mean":
-        return moving_mean_baseline
-    elif method == "percentile":
-        return percentile_baseline
-    elif method == "sliding_mean":
-        return sliding_mean_baseline
-    elif method == "sliding_median":
-        return sliding_median_baseline
-    elif method == "sliding_percentile":
-        return sliding_percentile_baseline
+    # make sure all lowercase
+    function_signature = "".join([method.lower(), "_baseline"])
+    # make sure '-' is now '_'
+    function_signature = function_signature.replace("-", "_")
+
+    # check if method exists and return
+    if function_signature in globals():
+        return globals().get(function_signature)
     else:
         raise NotImplementedError("The requested method is not implemented")
 

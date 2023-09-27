@@ -5,6 +5,12 @@ import numpy as np
 from CalSciPy.traces import calculate_dfof, calculate_standardized_noise, detrend_polynomial
 
 
+"""
+Test suite for trace processing functions (generic)
+
+"""
+
+
 @pytest.mark.parametrize("method", ["low-pass", "mean", "median", "moving_mean", "percentile", "sliding_mean",
                                     "sliding_median", "sliding_percentile"])
 def test_calculate_dfof(sample_traces, dfof_results, method):

@@ -5,6 +5,13 @@ import numpy as np
 from CalSciPy.conversion import matrix_to_tensor, tensor_to_matrix, merge_factorized_matrices
 
 
+
+"""
+Test suite for conversions
+
+"""
+
+
 def test_matrix_to_tensor(sample_matrix, sample_tensor):
     # test
     calc_tensor = matrix_to_tensor(sample_matrix, 10)

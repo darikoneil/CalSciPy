@@ -6,7 +6,7 @@ from CalSciPy.events import generate_raster
 
 
 """
-Test for general events module
+Test for events (generic)
 """
 
 

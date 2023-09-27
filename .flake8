@@ -59,3 +59,4 @@ exclude =
     test_slm.py,
     visualize_optogenetics.py,
     CalSciPy/optics
+    make_test_images.py

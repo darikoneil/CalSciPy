@@ -10,6 +10,12 @@ from CalSciPy.roi_tools import Suite2PHandler
 from CalSciPy.optogenetics import Photostimulation, StimulationGroup, StimulationSequence, randomize_targets
 
 
+"""
+Testing suite for optogenetics (generic)
+
+"""
+
+
 @pytest.fixture()
 def suite2p_handler_folder(request, temp_path):
     """

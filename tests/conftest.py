@@ -9,7 +9,12 @@ import numpy as np
 
 """
 CONFIGURATION FOR TESTING
+
 """
+
+
+# TODO: Tests are currently a bit slow because I have to auto-use the datafiles fixture.
+
 
 # Turn off JIT for proper coverage if anything uses numba
 environ["NUMBA_DISABLE_JIT"] = "1"
@@ -128,6 +133,11 @@ def sample_traces(request):
 
 
 # HERE ARE SOME HARDCODED RESULTS
+
+@pytest.fixture(scope="function")
+def baseline_results(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("baseline_results.npy"),
+                   allow_pickle=True).item()
 
 
 @pytest.fixture(scope="function")
