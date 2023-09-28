@@ -93,6 +93,12 @@ def retrieve_suite2p() -> Path:
 
 # HERE ARE SOME MISCELLANEOUS DATA STRUCTURES REQUIRED BY SEVERAL TEST SUITES
 @pytest.fixture(scope="function")
+def sample_images(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_images.npy"),
+                   allow_pickle=True)
+
+
+@pytest.fixture(scope="function")
 def sample_factorized_matrix(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("variables").joinpath("sample_factorized_matrices.npy"),
                    allow_pickle=True)
