@@ -6,19 +6,23 @@ import string
 
 
 def collector(pos: int, key: str, *args, **kwargs) -> Tuple[bool, Any, bool]:
-    if key in kwargs:
-        collected = True
-        use_args = False
-        target = kwargs.get(key)
-    elif args is not None and pos is not None:
-        collected = True
-        use_args = True
-        target = args[pos]
-    else:
+    # noinspection PyBroadException
+    try:
+        if key in kwargs:
+            collected = True
+            use_args = False
+            target = kwargs.get(key)
+        elif pos is not None and args[pos] is not None:
+            collected = True
+            use_args = True
+            target = args[pos]
+        else:
+            raise Exception
+    except Exception:  # if any exception, just report a failure to collect
         collected = False
-        target = None
         use_args = None
-
+        target = None
+    # noinspection PyUnboundLocalVariable
     return collected, target, use_args
 
 
@@ -167,22 +171,6 @@ def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
 
     arguments = list(arguments)
     arguments[pos] = amendment
-    return tuple(arguments)
-
-
-def append_args(arguments: Tuple, value: Any) -> Tuple:
-    """
-    Function appends arguments tuple (~scary tuple mutation~)
-
-    :param arguments: arguments to be appended
-    :type arguments: tuple
-    :param value: new value of argument
-    :type value: Any
-    :return: appended arguments
-    :rtype: Tuple
-    """
-    arguments = list(arguments)
-    arguments.append(value)
     return tuple(arguments)
 
 
