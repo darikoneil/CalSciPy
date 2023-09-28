@@ -168,4 +168,3 @@ def perona_smoothed_sample_traces(request):
 def standardized_noise_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("std_noise_results.npy"),
                    allow_pickle=True)
-
