@@ -22,7 +22,7 @@ considered useful to others.
     MAIN <main.rst>
     OPTICS <optics.rst>
     BRUKER <bruker.rst>
-    INTERACTIVE <interactive_visuals.rst>
+    INTERACTIVE <interactive.rst>
     ORGANIZATION <organization.rst>
 
 .. toctree::
