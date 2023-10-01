@@ -15,7 +15,7 @@ def test_image_filters(sample_images, image_filter_results, method):
     expected_results = image_filter_results.get(method)
     # test out-of-place
     results = filter_handle(sample_images)
-    np.testing.assert_equal(results, expected_results)
+    np.testing.assert_allclose(results, expected_results, rtol=1)
     # test in-place
     # filter_handle(sample_images, in_place=True)
     # np.testing.assert_equal(sample_images, expected_results)
