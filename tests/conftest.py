@@ -159,6 +159,12 @@ def dfof_results(request):
 
 
 @pytest.fixture(scope="function")
+def image_filter_results(request):
+    return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("image_filter_results.npy"),
+                   allow_pickle=True).item()
+
+
+@pytest.fixture(scope="function")
 def perona_smoothed_sample_traces(request):
     return np.load(_TEMPORARY_DIRECTORY.joinpath("results").joinpath("perona_results.npy"),
                    allow_pickle=True)
