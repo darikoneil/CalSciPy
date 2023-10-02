@@ -16,6 +16,12 @@ def test_image_filters(sample_images, image_filter_results, method):
     # test out-of-place
     results = filter_handle(sample_images)
     np.testing.assert_allclose(results, expected_results, rtol=1)
+    # test block no buffer with approximately 1% tolerance
+    results = filter_handle(sample_images, block_size=50, block_buffer=0)
+    np.testing.assert_allclose(results, expected_results, rtol=100, atol=3)
+    # test block with buffer with approximately 1% tolerance
+    results = filter_handle(sample_images, block_size=50, block_buffer=5)
+    np.testing.assert_allclose(results, expected_results, rtol=100, atol=3)
     # test in-place
-    # filter_handle(sample_images, in_place=True)
-    # np.testing.assert_equal(sample_images, expected_results)
+    filter_handle(sample_images, block_size=50, block_buffer=5, in_place=True)
+    np.testing.assert_allclose(sample_images, expected_results, rtol=100, atol=3)
