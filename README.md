@@ -51,10 +51,13 @@ alpha/beta. Please be patient, refactoring my code for public use is a pet-proje
 
 
 #### Stable Modules
-Until things are more stable, I'll explicitly note which modules' are stable, have >90% test coverage, and are
+Until things are more stable, I'll explicitly note which subpackages are stable, have >90% test coverage, and are
 ready-to-use.
-* io_tools as of version 0.4.0
-
+* The main module is ready to use as of 0.7.5. New features will be demarcated by a label indicating the version added in the docs.
+* The interactive module is unstable and not incorporated into the distributed pypi version
+* The bruker module is unstable and not incorporated into the distributed pypi version
+* The optics module is unstable and not incorporated into the distributed pypi version
+* The organization module is unstable and not incorporated into the distributed pypi version
 
 #### Installation
 Eventually I will break things up into sub-packages so you don't have to install everything together...         
