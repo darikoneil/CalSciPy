@@ -4,7 +4,6 @@ from numbers import Number
 import numpy as np
 
 
-
 """
 Functions useful for designing optical systems
 """
@@ -74,4 +73,3 @@ def rayleigh_length(wavelength: Number,
     zr /= wavelength
 
     return zr
-
