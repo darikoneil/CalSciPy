@@ -1,7 +1,7 @@
 MAIN
 ====
 
-The main CalSciPy module is collection of useful, well-documented tools relevant to calcium imaging.
+The main CalSciPy module is a collection of useful, well-documented tools relevant to calcium imaging.
 
 .. toctree::
    :maxdepth: 1
