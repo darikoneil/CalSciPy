@@ -13,14 +13,13 @@ Objects for organizing files
 class FileTree:
     """
     A file tree that organizes experiment data, analyzed results, and figures. For implementation concerns it is not
-    an extension of the built-in dictionary type, but it replicates the following of its built-in methods:
-    clear | get | items | iter | keys | len | pop | popitem | values
+    an extension of the built-in dictionary type, but it replicates most of its built-in methods.
     """
 
     def __init__(self, name: str, base_directory: Path, **kwargs):
         """
         A file tree that organizes experiment data, analyzed results, and figures. For implementation concerns it is not
-        an extension of the built-in dictionary type, but it replicates the following of its built-in methods:
+        an extension of the built-in dictionary type, but it replicates most of its built-in methods.:
 
         :param name: name of experiment
 
@@ -82,10 +81,11 @@ class FileTree:
 
     def get(self, key: str) -> FileSet:
         """
-        Returns the file set associated with some key
-
         :param key: key of specific file set
 
+        :returns: The file set associated with some key
+
+        :rtype: :class:`FileSet <CalSciPy.organization.files.FileSet>`
         """
         return self.__getattribute__(key)
 
@@ -107,6 +107,9 @@ class FileTree:
         """
         Collects the keys (filesets) of the file tree
 
+        :returns: The keys (filesets) of the file tree
+
+        :rtype: :class:`List <typing.List>`\[:class:`str`\]
         """
         return [key for key, _ in self.items()]  # items call guarantees filesets only
 
@@ -165,7 +168,7 @@ class FileTree:
         """
         return [value for _, value in self.items()]    # items call guarantees filesets only
 
-    def __call__(self, target: str = None) -> Path:
+    def __call__(self, target: Optional[str] = None) -> Path:
         """
         Call the file tree for a specific file or folder and return its Path. If no target provided,
         the file tree directory is returned. If multiple paths meet the target criterion a key error is raised.
@@ -187,7 +190,9 @@ class FileTree:
 
     def __len__(self) -> int:
         """
-        Implementation of length magic method. Returns number of filesets
+        Implementation of length magic method.
+
+        :returns: Number of filesets
 
         """
         return len(self.keys())
@@ -196,18 +201,16 @@ class FileTree:
 class FileSet:
     """
     Organizing class for a set of files. Contents may be only files or a collection of folders and files.
-    It is useful in managing coherent sets of data like experimental sessions or a calendar day. It offers several
-    methods for keeping track of datasets like file validation and easy access to full file paths
-    using filename keys.
+    This class is useful in managing coherent sets of data like experimental sessions or a calendar day. It offers
+    several methods for keeping track of datasets.
 
     """
 
     def __init__(self, name: str, parent_directory: Path):
         """
         Organizing class for a set of files. Contents may be only files or a collection of folders and files.
-        It is useful in managing coherent sets of data like experimental sessions or a calendar day. It offers several
-        methods for keeping track of datasets like file validation and easy access to full file paths
-        using filename keys.
+        This class is useful in managing coherent sets of data like experimental sessions or a calendar day. It offers
+        several methods for keeping track of datasets.
 
         :param name: Name of file set
 
@@ -286,6 +289,7 @@ class FileSet:
 
         :param parent_directory: Parent directory
 
+        :type parent_directory: :class:`Path <pathlib.Path>`
         """
         self.directory = parent_directory.joinpath(self._name)
         self.reindex()
@@ -299,12 +303,16 @@ class FileSet:
             if not location.exists():
                 raise FileNotFoundError(f"{name}")
 
-    def __call__(self, target: str = None) -> Path:
+    def __call__(self, target: Optional[str] = None) -> Path:
         """
-        Call the fileset using a specific target file or folder name and return the associated path
+        Call the fileset using a specific target file or folder name and return the associated path. If no target is provided,
+        the directory path is returned
 
         :param target: file or folder name
 
+        :type target: :class:`Optional <typing.Optional>`\[:class:`str`\]
+
+        :rtype: :class:`Path <pathlib.Path>`
         """
         if target:
             try:
