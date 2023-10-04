@@ -93,12 +93,19 @@ class FileTree:
         """
         Collects the key-value pairs of the filetree
 
+        :returns: Key-value pairs of the filetree
+
+        :rtype: :class:`Tuple <typing.Tuple>`\[:class:`str`\, :class:`FileSet <CalSciPy.organization.files.FileSet>`\]
+
         """
         return [(key, value) for key, value in vars(self).items() if isinstance(value, FileSet)]
 
     def iter(self) -> Iterator:
         """
-        Returns an iterator over the filesets keys in the filetree
+
+        :returns: Iterator over the filesets keys in the filetree
+
+        :rtype: :class:`Iterator <typing.Iterator>`
 
         """
         return iter(self.keys())
@@ -148,6 +155,7 @@ class FileTree:
 
         :param base_directory: base directory of mouse
 
+        :type base_directory: :class:`Path <pathlib.Path>`
         """
         self.directory = base_directory.joinpath(self._name)
         for key in self.keys():
@@ -163,7 +171,9 @@ class FileTree:
 
     def values(self) -> List[FileSet]:
         """
-        Returns filesets
+        :returns: Filesets of the FileTree
+
+        :rtype: :class:`List <typing.List>`\[:class:`FileSet <CalSciPy.organization.files.FileSet>`\]
 
         """
         return [value for _, value in self.items()]    # items call guarantees filesets only
@@ -175,6 +185,10 @@ class FileTree:
         If no path meets the target criterion a file not found error is raised.
 
         :param target: file or folder name
+
+        :type target: :class:`Optional <typing.Optional>`\[:class:`str`\]
+
+        :rtype: :class:`Path <pathlib.Path>`
 
         """
         if target:
