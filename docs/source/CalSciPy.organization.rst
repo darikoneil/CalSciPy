@@ -1,7 +1,8 @@
 CalSciPy.organization
 =====================
 
-.. automodule:: CalSciPy.organization
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 2
+   :caption: organization
+
+   files <organization/files>
