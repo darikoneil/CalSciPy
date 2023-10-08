@@ -11,11 +11,19 @@ plt.style.use("CalSciPy.main")
 
 from CalSciPy.simulations import SimulatedResponse
 
-time = np.arange(-5, 5, 0.01)
+time = np.arange(0, 55, 1)
 
-sr = SimulatedResponse(peak=0, width=1, amplitude=1, reliability=1, noise=0, jitter=(0, 0, 0))
+peaks = np.arange(5, 45, 1).tolist()
 
-response = sr.respond(time)
+width = [3 for _ in range(len(peaks))]
+
+neurons = len(peaks)
+
+sim_pop = [SimulatedResponse(peak=peaks[neuron],
+                             width=width[neuron]
+                             ) for neuron in range(neurons)]
+
+responses = np.vstack([sim_pop[neuron].respond(time) for neuron in range(neurons)])
 
 fig, ax = plt.subplots(1, 1)
-ax.plot(time, response)
+s = sns.heatmap(responses, ax=ax, cmap="Spectral_r")
