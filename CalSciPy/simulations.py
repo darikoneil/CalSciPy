@@ -20,9 +20,11 @@ def jitterize(original, jitter, trials):
 # centre_jitter
 
 
-def generate_sample_neuron(time, mu, sigma, trials):
-    trials = [gaussian_pdf(time, mu, sigma) for _ in range(trials)]
-    return trials
+def generate_sample_neuron(time, a, c, w, aj, cj, wj, trials):
+    times = [time for _ in range(trials)]
+    mus = jitterize(c, cj, trials)
+    sigmas = jitterize(w, wj, 10)
+    return [gaussian_pdf(time_, mu_, sigma_) for time_, mu_, sigma_ in zip(times, mus, sigmas)]
 
 
 def gaussian_pdf(x, mu, sigma):
@@ -36,9 +38,6 @@ def gaussian_pdf(x, mu, sigma):
 
 if __name__ == "__main__":
 
-    sample = np.arange(-5, 5, 0.1)
-    m = 0
-    s = np.sqrt(0.2)
-    y = gaussian_pdf(sample, m, s)
-    fig, ax = plt.subplots(1, 1)
-    ax.plot(sample, y)
+    x = np.arange(-15, 40, 0.1)
+    ys = generate_sample_neuron(x, 1, 0, np.sqrt(0.2), 0, 2, 0.1, 5)
+
