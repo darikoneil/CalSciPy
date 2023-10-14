@@ -1,10 +1,12 @@
 from __future__ import annotations
-from functools import cached_property
+from typing import Tuple
+from memoization import cached
 import numpy as np
 
+# noinspection PyPackageRequirements
 from scipy.signal import convolve
 from scipy.ndimage import median_filter, affine_transform
-from scipy.optimize import minimize, least_squares
+from scipy.optimize import minimize, least_squares, OptimizeResult
 
 import matplotlib
 matplotlib.use("Qt5Agg")
@@ -16,93 +18,67 @@ from matplotlib.gridspec import GridSpec
 
 
 class PSF:
-    # noinspection PyShadowingNames
+    """
+    Class for experimental determination of point spread function
+
+    :param stack: Planes x y-pixels x x-pixels imaging stack of unresolved fluorescent bead
+
+    :param filter_shape: Shape of filter used for denoising
+
+    :param scaling: Scaling of pixels
+
+    :param downscale: Factor used for downscaling XY dimensions when calculating center plane
+
+    """
     def __init__(self,
-                 stack,
-                 filter_shape=(1, 1, 1),
-                 scaling=(1, 1, 1)
+                 stack: np.ndarray,
+                 downscale: float = 0.25,
+                 filter_shape: Tuple[int, ...] = (1, 1, 1),
+                 scaling: Tuple[float, ...] = (1, 1, 1)
                  ):
-        # actual observed values
-        self.stack = stack.astype(np.float64)
-        # denoised values
+
+        #: :class:`np.ndarray <numpy.ndarray>`\: Planes x y-pixels x x-pixels imaging stack of
+        #: unresolved fluorescent bead
+        self.stack = self._validate_stack(stack)
+
+        #: :class:`np.ndarray <numpy.ndarray>`\: Denoised pixel intensities with shape planes x y-pixels x x-pixels
         self.denoised = None
-        # filter for denoising
-        self.filter_shape = filter_shape
-        # units
-        self.scaling = scaling
-        # dimensions
-        self.planes, self.y_pixels, self.x_pixels = stack.shape
+
+        #: :class:`np.ndarray <numpy.ndarray>`\: Convolved pixel intensities with shape planes x y-pixels x x-pixels
+        self.convolved = None
+
+        #: :class:`np.ndarray <numpy.ndarray>`\: Double-denoised pixel intensities at the center plane
+        self.center = None
+
+        #: :class:`float:`\: Factor used for downscaling XY dimensions when calculating center plane
+        self.downscale = downscale if 0.0 < downscale <= 1.0 else 1.0
+
+        #: :class:`Tuple <typing.Tuple>`\[:class:`int`\, ...]: Shape of filter used for denoising
+        self.filter_shape = self._validate_filter_shape(filter_shape)
+
+        #: :class:`Tuple <typing.Tuple>`\[:class:`float`\, ...]: Scaling of pixels
+        self.scaling = self._validate_scaling(scaling)
+
+        #: :class:`int`\: Number of planes in imaging stack
+        self.planes = stack.shape[0]
+
+        #: :class:`int`\: Number of y-pixels per plane in imaging stack
+        self.y_pixels = stack.shape[1]
+
+        #: :class:`int`\: Number of x-pixels per plane in imaging stack
+        self.x_pixels = stack.shape[2]
 
         # conduct denoising
         self._denoise()
 
-    def _denoise(self):
-        # median filter
-        self.denoised = median_filter(self.stack, footprint=np.ones((1, 1, 1)), mode="mirror")
+        # conduct downscaling with subsequent convolution
+        self._downscale()
 
-        # subtract baseline
-        self.denoised -= np.median(self.denoised)
-
-        # bicubic interpolate downward
-        trans_matrix = np.zeros((4, 4))
-        trans_matrix[0, 0] = 1
-        trans_matrix[1, 1] = 4
-        trans_matrix[2, 2] = 4
-        trans_matrix[3, 3] = 1
-
-        output_shape = (self.planes,
-                        int(self.y_pixels // 4),
-                        int(self.x_pixels // 4))
-
-        denoised = np.ones(output_shape, dtype=np.float64) * 4
-
-        self.denoised = affine_transform(self.denoised,
-                                         trans_matrix,
-                                         output=denoised,
-                                         output_shape=output_shape)
-
-        for plane in range(output_shape[0]):
-            self.denoised[plane, :, :] = convolve(self.denoised[plane, :, :],
-                                                  np.ones((2, 2)),
-                                                  mode="same",
-                                                  method="direct")
-
-    @property
-    def center(self):
-        return self.z_max, self.y_max, self.x_max
-
-    @cached_property
-    def _filtered_center_plane(self):
-        return median_filter(self.stack[self.z_max, :, :], 1, mode="mirror")
-
-    @cached_property
-    def x_fit(self):
-        x_maxes = np.max(self._filtered_center_plane, axis=0)
-        return self._fit_intensity(x_maxes, self.x_pixels, 1, 1)
-
-    @property
-    def x_max(self):
-        return round(self.x_fit.x[1])
-
-    @cached_property
-    def y_fit(self):
-        y_maxes = np.max(self._filtered_center_plane, axis=1)
-        return self._fit_intensity(y_maxes, self.y_pixels, 1, 1)
-
-    @property
-    def y_max(self):
-        return round(self.y_fit.x[1])
-
-    @cached_property
-    def z_fit(self):
-        plane_maxes = np.max(self.denoised, axis=(1, 2))
-        return self._fit_intensity(plane_maxes, self.planes, 1, 1)
-
-    @property
-    def z_max(self):
-        return round(self.z_fit.x[1])
+        # secondary filter on center plane
+        self.center = self._double_denoised(self.denoised, self.z_max)
 
     @staticmethod
+    @cached(max_size=6, order_independent=True)
     def _fit_intensity(intensity, pixels, units, terms=1):
         x = np.arange(pixels) * units
         y = intensity
@@ -112,7 +88,122 @@ class PSF:
                                  x0=[1, 1, 1],
                                  args=(x, y, single_term_gaussian))
 
+    @staticmethod
+    def _validate_filter_shape(filter_shape: Tuple[int, ...]) -> Tuple[int, int, int]:
+        if len(filter_shape) == 1:
+            filter_shape *= 3
+        elif len(filter_shape) == 2:
+            filter_shape = (filter_shape[0], filter_shape[1], filter_shape[1])
+        elif len(filter_shape) == 3:
+            assert (filter_shape[1] == filter_shape[2]), "Requested incompatible filter shape"
+        else:
+            raise ValueError("Requested incompatible filter shape")
+        return filter_shape
 
+    @staticmethod
+    def _validate_scaling(scaling: Tuple[float, ...]) -> Tuple[float, float, float]:
+        if len(scaling) == 1:
+            scaling *= 3
+        elif len(scaling) == 2:
+            scaling = (scaling[0], scaling[1], scaling[1])
+        elif len(scaling) == 3:
+            assert (scaling[1] == scaling[2]), "X & Y dimensions use different spatial scales"
+        else:
+            raise ValueError("Incompatible scaling provided")
+        return scaling
+
+    @staticmethod
+    def _validate_stack(stack: np.ndarray) -> np.ndarray:
+        assert (stack.ndim == 3), "Stack must be a three-dimensional array (planes x y-pixels x x-pixels)"
+        stack -= np.min(stack)
+        return stack.astype(np.float64)
+
+    @property
+    def bead(self):
+        return self.z_max, self.y_max, self.x_max
+
+    @staticmethod
+    @cached(max_size=2, order_independent=True)
+    def _double_denoised(stack: np.ndarray, z_max: int) -> np.ndarray:
+        return median_filter(stack[z_max, :, :], 1, mode="mirror")
+
+    @property
+    def x_fit(self):
+        x_maxes = np.max(self.center, axis=0)
+        return self._fit_intensity(x_maxes, self.x_pixels, self.scaling[2], 1)
+
+    @property
+    def x_max(self):
+        return round(self.x_fit.x[1] / self.scaling[2])
+    
+    @property
+    def x_scale(self):
+        length = self.x_pixels * self.scaling[2]
+        return np.linspace(-length/2, length/2, self.x_pixels)
+    
+    @property
+    def y_fit(self):
+        y_maxes = np.max(self.center, axis=1)
+        return self._fit_intensity(y_maxes, self.y_pixels, self.scaling[1], 1)
+
+    @property
+    def y_max(self):
+        return round(self.y_fit.x[1] / self.scaling[1])
+
+    def y_scale(self):
+        length = self.y_pixels * self.scaling[1]
+        return np.linspace(-length / 2, length / 2, self.y_pixels)
+        
+    @property
+    def z_fit(self):
+        plane_maxes = np.max(self.convolved, axis=(1, 2))
+        return self._fit_intensity(plane_maxes, self.planes, self.scaling[0], 1)
+
+    @property
+    def z_max(self):
+        return round(self.z_fit.x[1] / self.scaling[0])
+    
+    @property
+    def z_scale(self):
+        length = self.planes * self.scaling[0]
+        return np.linspace(-length / 2, length / 2, self.planes)
+    
+    def _denoise(self):
+        # median filter
+        self.denoised = median_filter(self.stack, footprint=np.ones(self.filter_shape), mode="mirror")
+
+        # subtract baseline
+        self.denoised -= np.median(self.denoised)
+
+    def _downscale(self):
+        # bicubic interpolate downward
+        scale_factor = 1 / self.downscale
+
+        trans_matrix = np.zeros((4, 4))
+        trans_matrix[0, 0] = 1
+        trans_matrix[1, 1] = scale_factor
+        trans_matrix[2, 2] = scale_factor
+        trans_matrix[3, 3] = 1
+
+        output_shape = (self.planes,
+                        int(self.y_pixels // scale_factor),
+                        int(self.x_pixels // scale_factor))
+
+        denoised = np.ones(output_shape, dtype=np.float64) * scale_factor
+
+        self.convolved = affine_transform(self.denoised,
+                                          trans_matrix,
+                                          output=denoised,
+                                          output_shape=output_shape)
+
+        # Convolve
+        for plane in range(output_shape[0]):
+            self.convolved[plane, :, :] = convolve(self.convolved[plane, :, :],
+                                                   np.ones((2, 2)),
+                                                   mode="same",
+                                                   method="direct")
+    
+    
 # noinspection PyShadowingNames
 def interactive_psf(psf):
     fig = plt.figure()
@@ -179,6 +270,6 @@ def least_squares_residual(theta, x, y, func):
     return y - pred
 
 
-psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
+psf = PSF(np.load("C:\\Users\\Yuste\\Desktop\\PSF.npy"), scaling=(0.5, 0.1, 0.1))
 
 # fig = interactive_psf(psf)
