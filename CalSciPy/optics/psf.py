@@ -77,6 +77,75 @@ class PSF:
         # secondary filter on center plane
         self.center = self._double_denoised(self.denoised, self.z_max)
 
+    @property
+    def bead(self):
+        return self.z_max, self.y_max, self.x_max
+
+    @property
+    def fwhm(self):
+        x = self._extract_fwhm(self.x_fit, self.x_scale)
+        y = self._extract_fwhm(self.y_fit, self.y_scale)
+        z = self._extract_fwhm(self.z_fit, self.z_scale)
+        return z, y, x
+
+    @property
+    def x_fit(self):
+        x_maxes = np.max(self.center, axis=0)
+        return self._fit_intensity(x_maxes, self.x_pixels, self.scaling[2], 1)
+
+    @property
+    def x_max(self):
+        return round(self.x_fit.x[1] / self.scaling[2])
+
+    @property
+    def x_scale(self):
+        length = self.x_pixels * self.scaling[2]
+        return np.linspace(-length / 2, length / 2, self.x_pixels)
+
+    @property
+    def y_fit(self):
+        y_maxes = np.max(self.center, axis=1)
+        return self._fit_intensity(y_maxes, self.y_pixels, self.scaling[1], 1)
+
+    @property
+    def y_max(self):
+        return round(self.y_fit.x[1] / self.scaling[1])
+
+    @property
+    def y_scale(self):
+        length = self.y_pixels * self.scaling[1]
+        return np.linspace(-length / 2, length / 2, self.y_pixels)
+
+    @property
+    def z_fit(self):
+        plane_maxes = np.max(self.convolved, axis=(1, 2))
+        return self._fit_intensity(plane_maxes, self.planes, self.scaling[0], 1)
+
+    @property
+    def z_max(self):
+        return round(self.z_fit.x[1] / self.scaling[0])
+
+    @property
+    def z_scale(self):
+        length = self.planes * self.scaling[0]
+        return np.linspace(-length / 2, length / 2, self.planes)
+
+    @staticmethod
+    @cached(max_size=2, order_independent=True)
+    def _double_denoised(stack: np.ndarray, z_max: int) -> np.ndarray:
+        return median_filter(stack[z_max, :, :], 1, mode="mirror")
+
+    @staticmethod
+    @cached(max_size=6, order_independent=True)
+    def _extract_fwhm(fit: OptimizeResult, scale: np.ndarray) -> float:
+        #adj
+        adj_scale = scale - np.min(scale)
+        model_intensities = single_term_gaussian(*fit.x, adj_scale, None)
+        half_max = np.max(model_intensities) / 2
+        residuals = np.abs(model_intensities - half_max)
+        half_width = scale[np.argmin(residuals)]
+        return np.abs(half_width * 2)
+
     @staticmethod
     @cached(max_size=6, order_independent=True)
     def _fit_intensity(intensity, pixels, units, terms=1):
@@ -118,56 +187,6 @@ class PSF:
         stack -= np.min(stack)
         return stack.astype(np.float64)
 
-    @property
-    def bead(self):
-        return self.z_max, self.y_max, self.x_max
-
-    @staticmethod
-    @cached(max_size=2, order_independent=True)
-    def _double_denoised(stack: np.ndarray, z_max: int) -> np.ndarray:
-        return median_filter(stack[z_max, :, :], 1, mode="mirror")
-
-    @property
-    def x_fit(self):
-        x_maxes = np.max(self.center, axis=0)
-        return self._fit_intensity(x_maxes, self.x_pixels, self.scaling[2], 1)
-
-    @property
-    def x_max(self):
-        return round(self.x_fit.x[1] / self.scaling[2])
-    
-    @property
-    def x_scale(self):
-        length = self.x_pixels * self.scaling[2]
-        return np.linspace(-length/2, length/2, self.x_pixels)
-    
-    @property
-    def y_fit(self):
-        y_maxes = np.max(self.center, axis=1)
-        return self._fit_intensity(y_maxes, self.y_pixels, self.scaling[1], 1)
-
-    @property
-    def y_max(self):
-        return round(self.y_fit.x[1] / self.scaling[1])
-
-    def y_scale(self):
-        length = self.y_pixels * self.scaling[1]
-        return np.linspace(-length / 2, length / 2, self.y_pixels)
-        
-    @property
-    def z_fit(self):
-        plane_maxes = np.max(self.convolved, axis=(1, 2))
-        return self._fit_intensity(plane_maxes, self.planes, self.scaling[0], 1)
-
-    @property
-    def z_max(self):
-        return round(self.z_fit.x[1] / self.scaling[0])
-    
-    @property
-    def z_scale(self):
-        length = self.planes * self.scaling[0]
-        return np.linspace(-length / 2, length / 2, self.planes)
-    
     def _denoise(self):
         # median filter
         self.denoised = median_filter(self.stack, footprint=np.ones(self.filter_shape), mode="mirror")
@@ -270,6 +289,6 @@ def least_squares_residual(theta, x, y, func):
     return y - pred
 
 
-psf = PSF(np.load("C:\\Users\\Yuste\\Desktop\\PSF.npy"), scaling=(0.5, 0.1, 0.1))
+psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
 
 # fig = interactive_psf(psf)
