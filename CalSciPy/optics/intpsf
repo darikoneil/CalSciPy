@@ -1,0 +1,147 @@
+from __future__ import annotations
+from typing import TypedDict
+
+from pathlib import Path
+import numpy as np
+from dearpygui import dearpygui as dpg
+from psf import PSF
+
+
+import matplotlib
+matplotlib.use("Qt5Agg")
+from matplotlib import pyplot as plt
+from matplotlib.colors import Normalize
+get_cmap = matplotlib.colormaps.get_cmap
+import seaborn as sns
+
+
+# noinspection PyPep8Naming
+class INT_PSF:
+    title = "CalSciPy - PSF"
+    default_colormap = "coolwarm"
+
+    def __new__(cls, *args, **kwargs):
+        """
+        GUI is a singleton
+        """
+        if not hasattr(cls, "_instance"):
+            cls._instance = super(INT_PSF, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self, psf: PSF = None):
+
+        dpg.create_context()
+        dpg.create_viewport(title=self.title,
+                            min_width=1080,
+                            min_height=720,
+                            always_on_top=False
+                            )
+
+        self.psf = psf
+        self.colormap = get_cmap(self.default_colormap)
+        self.image_handlers = {"full": {},
+                               "xy": {},
+                               "xz": {},
+                               "yz": {}
+                               }
+        self._dev_mode = True
+        self._test_mode = False
+
+    def initialize_psf(self):
+        self.init_full()
+
+    def launch(self):
+
+        # hidden dev tools
+        if self._dev_mode:
+            dpg.show_style_editor()
+            dpg.show_font_manager()
+            dpg.show_documentation()
+            dpg.show_metrics()
+            dpg.show_item_registry()
+
+        self.initialize_psf()
+
+        dpg.setup_dearpygui()
+        dpg.show_viewport()
+
+        if self._test_mode:
+            self._test_mode_()
+
+        while dpg.is_dearpygui_running():
+            self._internal_render_loop()
+
+        dpg.destroy_context()
+
+    def init_full(self):
+        # setup texture slot
+        with dpg.texture_registry():
+            texture_id = dpg.add_dynamic_texture(self.psf.x_pixels,
+                                                 self.psf.y_pixels,
+                                                 np.ones(
+                                                     (self.psf.x_pixels,
+                                                      self.psf.y_pixels,
+                                                      4)))
+
+        # setup handler slot
+        self.image_handlers["full"] = ImageContainer(
+            key="full",
+            images={},
+            normalized=Normalize(*self.psf.range)(self.psf.denoised),
+            planes=self.psf.planes,
+            texture_id=texture_id)
+
+        # update colormap
+        self.update_colormap("full")
+
+        # generate window
+        with dpg.window(label="Imaging Stack",
+                        no_close=True,
+                        no_collapse=True,
+                        no_move=True,
+                        autosize=True):
+            # fill window
+            dpg.add_image(self.image_handlers.get("full").get("texture_id"))
+            dpg.add_slider_int(label="Selected Plane",
+                               callback=_full_image_callback,
+                               user_data=self.image_handlers.get("full"),
+                               min_value=0,
+                               max_value=self.psf.planes - 1)
+
+    def update_colormap(self, key):
+        self.image_handlers[key]["images"] = \
+            {plane: self.colormap(self.image_handlers.get(key).get("normalized")[plane, :, :])
+             for plane
+             in range(self.psf.planes)}
+
+    def _internal_render_loop(self):
+        dpg.render_dearpygui_frame()
+
+    def _test_mode_(self, frames_limit: int = 4) -> GUI:
+        frames = 0
+        while dpg.is_dearpygui_running():
+            if frames >= frames_limit:
+                dpg.stop_dearpygui()
+            else:
+                self._internal_render_loop_()
+                frames += 1
+
+
+class ImageContainer(TypedDict):
+    key: str
+    images: dict
+    normalized: np.ndarray
+    planes: int
+    texture_id: int
+
+
+def _full_image_callback(sender, app_data, user_data):
+    if 0 <= app_data < (user_data.get("planes") - 1):
+        dpg.set_value(user_data.get("texture_id"), user_data["images"].get(app_data))
+
+
+psf_ = PSF(np.load("C:\\Users\\YUSTE\\Desktop\\PSF.npy"), scaling=(0.5, 0.1, 0.1))
+
+gui = INT_PSF(psf_)
+
+gui.launch()
