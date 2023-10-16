@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Tuple
+from typing import NamedTuple
 from memoization import cached
 import numpy as np
 
@@ -9,6 +10,7 @@ from scipy.ndimage import median_filter, affine_transform
 from scipy.optimize import minimize, least_squares, OptimizeResult
 
 import matplotlib
+
 matplotlib.use("Qt5Agg")
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -30,6 +32,7 @@ class PSF:
     :param downscale: Factor used for downscaling XY dimensions when calculating center plane
 
     """
+
     def __init__(self,
                  stack: np.ndarray,
                  downscale: float = 0.25,
@@ -84,9 +87,11 @@ class PSF:
     @property
     def fwhm(self):
         x = self._extract_fwhm(self.x_fit, self.x_scale)
+        xz = self._extract_fwhm(self.xz_fit, self.z_scale)
         y = self._extract_fwhm(self.y_fit, self.y_scale)
+        yz = self._extract_fwhm(self.yz_fit, self.z_scale)
         z = self._extract_fwhm(self.z_fit, self.z_scale)
-        return z, y, x
+        return FWHM(x, xz, y, yz, z)
 
     @property
     def x_fit(self):
@@ -103,6 +108,14 @@ class PSF:
         return np.linspace(-length / 2, length / 2, self.x_pixels)
 
     @property
+    def xz_fit(self):
+        planes = self.denoised[:, self.y_max, :]
+        planes = np.max(planes, axis=-1)
+        baselines = np.sort(planes)[1:5]
+        planes = planes - np.mean(baselines)
+        return self._fit_intensity(planes, self.planes, self.scaling[0], 1)
+
+    @property
     def y_fit(self):
         y_maxes = np.max(self.center, axis=1)
         return self._fit_intensity(y_maxes, self.y_pixels, self.scaling[1], 1)
@@ -115,6 +128,14 @@ class PSF:
     def y_scale(self):
         length = self.y_pixels * self.scaling[1]
         return np.linspace(-length / 2, length / 2, self.y_pixels)
+
+    @property
+    def yz_fit(self):
+        planes = self.denoised[:, :, self.x_max]
+        planes = np.max(planes, axis=-1)
+        baselines = np.sort(planes)[1:5]
+        planes = planes - np.mean(baselines)
+        return self._fit_intensity(planes, self.planes, self.scaling[0], 1)
 
     @property
     def z_fit(self):
@@ -138,7 +159,7 @@ class PSF:
     @staticmethod
     @cached(max_size=6, order_independent=True)
     def _extract_fwhm(fit: OptimizeResult, scale: np.ndarray) -> float:
-        #adj
+        # adj
         adj_scale = scale - np.min(scale)
         model_intensities = single_term_gaussian(*fit.x, adj_scale, None)
         half_max = np.max(model_intensities) / 2
@@ -221,8 +242,16 @@ class PSF:
                                                    np.ones((2, 2)),
                                                    mode="same",
                                                    method="direct")
-    
-    
+
+
+class FWHM(NamedTuple):
+    x: float = None
+    xz: float = None
+    y: float = None
+    yz: float = None
+    z: float = None
+
+
 # noinspection PyShadowingNames
 def interactive_psf(psf):
     fig = plt.figure()
@@ -278,7 +307,7 @@ def interactive_psf(psf):
 def single_term_gaussian(c0, c1, c2, x, y):
     numerator = (x - c1)
     denominator = c2
-    exponent = (numerator / denominator)**2
+    exponent = (numerator / denominator) ** 2
     exponent *= -1
     return c0 * np.exp(exponent)
 
