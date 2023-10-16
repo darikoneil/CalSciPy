@@ -321,6 +321,6 @@ def least_squares_residual(theta, x, y, func):
     return y - pred
 
 
-# psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
+psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
 
 # fig = interactive_psf(psf)
