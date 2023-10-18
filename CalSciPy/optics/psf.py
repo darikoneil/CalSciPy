@@ -10,12 +10,11 @@ from scipy.ndimage import median_filter, affine_transform
 from scipy.optimize import minimize, least_squares, OptimizeResult
 
 import matplotlib
-
-matplotlib.use("Qt5Agg")
+matplotlib.use("QtAgg")
 from matplotlib import pyplot as plt
 import seaborn as sns
 from matplotlib.backends.qt_compat import QtCore, QtWidgets, QtGui
-from matplotlib.backends.backend_qt5agg import FigureCanvas
+from matplotlib.backends.backend_qtagg import FigureCanvas
 from matplotlib.gridspec import GridSpec
 
 
@@ -321,6 +320,6 @@ def least_squares_residual(theta, x, y, func):
     return y - pred
 
 
-psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
+# psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
 
 # fig = interactive_psf(psf)
