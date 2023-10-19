@@ -9,13 +9,14 @@ from scipy.signal import convolve
 from scipy.ndimage import median_filter, affine_transform
 from scipy.optimize import minimize, least_squares, OptimizeResult
 
-import matplotlib
-matplotlib.use("QtAgg")
-from matplotlib import pyplot as plt
-import seaborn as sns
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, QtGui
-from matplotlib.backends.backend_qtagg import FigureCanvas
-from matplotlib.gridspec import GridSpec
+#import matplotlib
+
+#matplotlib.use("QtAgg")
+#from matplotlib import pyplot as plt
+#import seaborn as sns
+#from matplotlib.backends.qt_compat import QtCore, QtWidgets, QtGui
+#from matplotlib.backends.backend_qtagg import FigureCanvas
+#from matplotlib.gridspec import GridSpec
 
 
 class PSF:
@@ -158,16 +159,22 @@ class PSF:
     def _double_denoised(stack: np.ndarray, z_max: int) -> np.ndarray:
         return median_filter(stack[z_max, :, :], 1, mode="mirror")
 
-    @staticmethod
+    @classmethod
     @cached(max_size=6, order_independent=True)
-    def _extract_fwhm(fit: OptimizeResult, scale: np.ndarray) -> float:
-        # adj
-        adj_scale = scale - np.min(scale)
-        model_intensities = single_term_gaussian(*fit.x, adj_scale, None)
+    def _extract_fwhm(cls: PSF, fit: OptimizeResult, scale: np.ndarray) -> float:
+        model_intensities = cls.calculate_intensities(fit, scale)
         half_max = np.max(model_intensities) / 2
         residuals = np.abs(model_intensities - half_max)
         half_width = scale[np.argmin(residuals)]
         return np.abs(half_width * 2)
+
+    @staticmethod
+    @cached(max_size=6, order_independent=True)
+    def calculate_intensities(fit: OptimizeResult, scale: np.ndarray) -> np.ndarray:
+        # adj
+        adj_scale = scale - np.min(scale)
+        model_intensities = single_term_gaussian(*fit.x, adj_scale, None)
+        return model_intensities
 
     @staticmethod
     @cached(max_size=6, order_independent=True)
@@ -254,58 +261,6 @@ class FWHM(NamedTuple):
     z: float = None
 
 
-# noinspection PyShadowingNames
-def interactive_psf(psf):
-    fig = plt.figure()
-    gs = GridSpec(2, 2)
-    # current plane
-    ax1 = plt.subplot(gs[0, 0])
-    # center plane
-    ax2 = plt.subplot(gs[0, 1])
-    # XZ
-    ax3 = plt.subplot(gs[1, 0])
-    # YZ
-    ax4 = plt.subplot(gs[1, 1])
-
-    current_plane = psf.z_max
-
-    # current plane
-    ax1.imshow(psf.stack[current_plane, :, :], cmap="coolwarm")
-    ax1.set_title("Current Plane")
-    ax1.set_xticks([])
-    ax1.set_yticks([])
-
-    # center plane
-    ax2.imshow(psf.stack[psf.z_max, :, :], cmap="coolwarm")
-    ax2.set_title("Center Plane")
-    ax2.set_xticks([])
-    ax2.set_yticks([])
-
-    ax3.imshow(psf.stack[:, :, psf.x_max], cmap="coolwarm")
-    ax3.set_title("XZ")
-    ax3.set_xticks([])
-
-    ax4.imshow(psf.stack[:, psf.y_max, :], cmap="coolwarm")
-    ax4.set_title("YZ")
-    ax4.set_xticks([])
-
-    def update():
-        cp = plane_slider.value()
-        ax1.imshow(psf.stack[cp, :, :], cmap="coolwarm")
-
-    plane_slider = QtWidgets.QSlider(QtCore.Qt.Vertical)
-    plane_slider.setRange(0, psf.planes)
-    plane_slider.setSingleStep(1)
-    plane_slider.setValue(psf.z_max)
-    plane_slider.valueChanged.connect(update)
-    # plane_slider.
-    vbox = QtWidgets.QVBoxLayout()
-    vbox.addWidget(plane_slider)
-    fig.canvas.setLayout(vbox)
-
-    return fig
-
-
 def single_term_gaussian(c0, c1, c2, x, y):
     numerator = (x - c1)
     denominator = c2
@@ -318,8 +273,3 @@ def least_squares_residual(theta, x, y, func):
     c0, c1, c2 = theta
     pred = func(c0, c1, c2, x, y)
     return y - pred
-
-
-# psf = PSF(np.load("C:\\Users\\Darik\\psf.npy"), scaling=(0.5, 0.1, 0.1))
-
-# fig = interactive_psf(psf)
