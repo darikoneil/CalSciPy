@@ -2,6 +2,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 from tqdm import tqdm as tq
 
 from ..io_tools import _load_single_tif, _verbose_load_single_tif
@@ -53,6 +54,25 @@ def load_bruker_tifs(folder: Union[str, Path],
                      for channel_, plane_ in comb])
 
 
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
+def load_voltage_recording(path: Union[str, Path]) -> pd.DataFrame:
+    """
+    Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
+    files contain "VoltageRecording" in the name.
+
+    :param path: folder or filename containing analog data
+    :returns: dataframe containing time (index, ms) x channel data
+    """
+    if "VoltageRecording" in path.name and path.is_file():
+        return _import_csv(path)
+    elif not path.is_file():
+        file = [file for file in path.glob("*.csv") if "VoltageRecording" in str(file)]
+        assert (len(file) == 1), f"Too many files meet parsing requirements: {file}"
+        return _import_csv(file)
+    else:
+        raise FileNotFoundError
+
+
 def _load_bruker_tif_stack(input_folder: Path,
                            channel: int,
                            plane: int,
@@ -83,3 +103,18 @@ def _load_bruker_tif_stack(input_folder: Path,
         images = [_load_single_tif(file) for file in files]
 
     return np.concatenate(images, axis=0)
+
+
+@convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
+@validate_extension(required_extension=".csv", pos=0)
+def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
+    """
+    Implementation function for loading csv files. Abstracted from the upper-level functions for cleaner logic.
+
+    :param path: filepath of .csv to import
+    :return: dataframe containing time (index) x data [0:8]
+    """
+    data = pd.read_csv(path, skipinitialspace=True)
+    data = data.set_index("Time(ms)")
+    data.sort_index(inplace=True)
+    return data

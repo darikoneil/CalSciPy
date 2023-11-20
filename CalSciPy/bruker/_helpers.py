@@ -1,10 +1,12 @@
 from __future__ import annotations
-from typing import Sequence
+from typing import Sequence, Union
 from pathlib import Path
 from itertools import product
 from operator import eq
+from xml.etree import ElementTree
 
 import numpy as np
+import pandas as pd
 from PPVD.parsing import find_num_unique_files_containing_tag, find_num_unique_files_given_static_substring
 import cv2  # in convoluted determine function
 
@@ -29,6 +31,43 @@ def calc_ch_pl_comb(channels: Union[int, Sequence[int]],
             planes = range(planes)
 
     return list(product(channels, planes))
+
+
+@convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
+def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
+    """
+    Function to extract the relative frame times from a PrairieView imaging session's primary .xml file
+
+    :param: filename
+    :returns: dataframe containing time (index, ms) x imaging frame (*zero-indexed*)
+    """
+    tree = ElementTree.parse(filename)
+    root = tree.getroot()
+
+    # assert expected
+    # child_tags = [child.tag for child in root]
+    # expected_tags = ("SystemIDs", "PVStateShard", "Sequence")
+
+    # for tag_ in expected_tags:
+    #   assert (tag_ in child_tags), "XML follows unexpected structure"
+
+    # Since expected, let's grab frame sequence
+    sequence = root.find("Sequence")
+    # use set comprehension to avoid duplicates
+    relative_frame_times = {frame.attrib.get("relativeTime") for frame in sequence if "relativeTime" in frame.attrib}
+    # convert to float (appropriate type) & sort chronologically
+    relative_frame_times = sorted([float(frame) for frame in relative_frame_times])
+    frames = range(len(relative_frame_times))
+    # convert to same type as analog data to avoid people getting gotcha'd by pandas
+    frames = np.array(frames).astype(np.float64)
+    # convert to milliseconds, create new array to avoid people getting gotcha'd by pandas
+    frame_times = np.array(relative_frame_times) * 1000
+    # round to each millisecond
+    frame_times = np.round(frame_times).astype(np.int64)
+    # make index
+    frame_times = pd.Index(data=frame_times, name="Time (ms)")
+    # make dataframe
+    return pd.DataFrame(data=frames, index=frame_times, columns=["Imaging Frame"])
 
 
 def print_image_description(channels: int,

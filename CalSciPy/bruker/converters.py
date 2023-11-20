@@ -3,6 +3,7 @@ from typing import Union
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 from tqdm import tqdm as tq
 
 from ..io_tools import _save_single_tif, _verbose_load_single_tif
@@ -11,6 +12,38 @@ from .._files import calculate_frames_per_file
 from .._calculations import generate_blocks
 from .parsers import determine_imaging_content, generate_bruker_naming_convention
 from ._helpers import print_image_description
+
+
+def align_data(analog_data: pd.DataFrame,
+               frame_times: pd.DataFrame,
+               fill: bool = False,
+               method: str = "nearest"
+               ) -> pd.DataFrame:
+    """
+    Synchronizes analog data & imaging frames using the timestamp of each frame. Option to generate a second column
+    in which the frame index is interpolated such that each analog sample matches with an associated frame.
+
+    :param analog_data: analog data
+    :param frame_times: frame timestamps
+    :param fill: whether to include an interpolated column so each sample has an associated frame
+    :param method: method for interpolating samples
+    :returns: a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and imaging frame
+    """
+    frame_times = frame_times.reindex(index=analog_data.index)
+
+    # Join frames & analog (deep copy to make sure not a view)
+    data = analog_data.copy(deep=True)
+    data = data.join(frame_times)
+
+    if fill:
+        frame_times_filled = frame_times.copy(deep=True)
+        frame_times_filled.columns = ["Imaging Frame (interpolated)"]
+        frame_times_filled.interpolate(method=method, inplace=True)
+        # forward fill the final frame
+        frame_times_filled.ffill(inplace=True)
+        data = data.join(frame_times_filled)
+
+    return data
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
