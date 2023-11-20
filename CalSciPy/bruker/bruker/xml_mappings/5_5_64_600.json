@@ -1,0 +1,10 @@
+{
+    "PVMarkPointSeriesElements": "MarkPointSeriesElements",
+    "PVSavedMarkPointSeriesElements": "MarkPointSeriesElements",
+    "PVMarkPointElement": "MarkPointElement",
+    "PVGalvoPointElement": "GalvoPointElement",
+    "PVGalvoPointList": "GalvoPointList",
+    "PVGalvoPointGroup": "GalvoPointGroup",
+    "PVGalvoPoint": "GalvoPoint",
+    "Point": "Point"
+}
