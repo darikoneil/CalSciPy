@@ -13,42 +13,15 @@
 CalSciPy is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from 
 interactive visualization of data to computer-generated holography for "read/write" experiments, and 
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be 
-considered useful to others. Its inspiration is to solve the following issues:
-
-Motivation: I was inspired to upload my own code to solve some of these issues--or at least create a neat package my friends and I 
-could use to easily analyze data across various environments and computers.
-
-1. I noticed I was constantly re-writing boilerplate, "one-liners", and copy/pasting code between
-environments. I wrote this so ~I don't have to~ you don't have to. It's intended to be a collection of useful, 
-well-documented functions often used in boilerplate code alongside software packages such as 
-[Caiman](https://github.com/flatironinstitute/CaImAn), [SIMA](https://github.com/losonczylab/sima), 
-and [Suite2P](https://github.com/MouseLand/suite2p). Examples of such tasks include compiling imaging stacks, 
-normalizing signals to baselines, reorganizing data, and common data visualizations. No more wasting time writing 6
-lines to simply preview your tiff stack, extract a particular channel, or bin some spikes. No more vague tracebacks or
-incomplete documentation when re-using a hastily-made function from 2 months ago.
-
-2. Most scientific software these days have GUIs. But if you want to visualize your data after performing some arbitrary
-transformation? *Womp womp*. Maybe you use different tools to extract the same sorts of data, and just
-want one darn gui to look at them both? *Womp womp* Well, I want generic, interactive visualization tools. I want to
-assess the quality of spike inference from recently published spike-finder number #12, I want to sort through ROIs,
-and I want to explore population activity. I want to do so directly from the relevant data--independent of the
-software used to collect or analyze it. I want to have my delicious cake and eat it too. So I made some interactive
-visualization tools that require only the exact information that ought to be required to plot them.
-
-3. I needed tools for holographic optogenetics, "read/write" experimentation, and general optics in python for my own experiments.
-Since I was already doing it, why not make them abstracted enough for all neuroscientists to use...not for only the
-optical or imaging experts. I want them to be tested, documented, and easy-to-use.
-
-5. I needed some more bespoke software for use with Bruker's PrairieView imaging software for tasks such as parsing 
-metadata, generating protocols programmatically, and aligning collected data.
-
-6. Finally, I wanted a flexible & extensible system for neatly organizing & timestamping data.
+considered useful to others. I was inspired to upload my own code to solve some of the issues outlined in the [motivation](https://calscipy.readthedocs.io/en/latest/introduction__motivation.html) section of the [docs](https://calscipy.readthedocs.io/en/latest/index.html#) or at least create a neat package my friends and I could use to easily analyze data across various environments and computers.
 
 
 #### Active Development
 The current implementation is unstable, partially untested, partially finished, and should be considered an open 
 alpha/beta. Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point.
 
+### Roadmap
+My current focus is primarily on refactoring and testing functionality related to automatic protocol generation and metadatem parsing for bruker's prairieview.
 
 #### Stable Modules
 Until things are more stable, I'll explicitly note which subpackages are stable, have >90% test coverage, and are
