@@ -1,3 +1,6 @@
+![Alt text](/docs/images/dancing_neuron_band.png?raw=true)
+
+
 ## CalSciPy       
 <!-- Line 1 Badges... PyPi, Downloads, Maintained, Coverage, Documentation -->
 <!-- Line 2 Badges... Python Versions, PyPi Status, License, Contributors -->
