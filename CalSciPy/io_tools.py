@@ -315,6 +315,20 @@ def _save_many_tif(path: Union[str, Path], images: np.ndarray, size_cap: int = 3
     return 0
 
 
+def _verbose_load_single_tif(file: Union[str, Path], pbar: Any) -> np.ndarray:
+    """
+    Verbosely loads single tif by running the io_tools load single tif function
+    and updating progressbar
+
+    :param file: file to load
+    :param pbar: progressbar
+    :return: loaded image
+    """
+    image = _load_single_tif(file)
+    pbar.update(1)
+    return image
+
+
 class _Metadata:
     """
     Metadata object used for saving/loading binary images

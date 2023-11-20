@@ -17,7 +17,7 @@ from . import CONSTANTS
 from .meta_objects import PhotostimulationMeta
 from .factories import BrukerElementFactory
 from .._calculations import generate_blocks
-from .._files import calculate_frames_per_file#, generate_padded_filename
+from .._files import calculate_frames_per_file #, generate_padded_filename
 from ..io_tools import _load_single_tif, _save_single_tif
 from .._backports import PatternMatching
 
@@ -62,71 +62,6 @@ def align_data(analog_data: pd.DataFrame,
     return data
 
 
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def determine_imaging_content(folder: Union[str, Path]) -> Tuple[int, int, int, int, int]:  # noqa: C901
-    """
-    This function determines the number of channels and planes within a folder containing .tif files
-    exported by Bruker's Prairieview software. It also determines the size of the images (frames, y-pixels, x-pixels).
-    It's a quick / fast alternative to parsing its respective xml. However, note that the function is dependent on the
-    naming conventions of PrairieView and will not work on arbitrary folders.
-
-    :param folder: folder containing bruker imaging data
-    :returns: channels, planes, frames, height, width
-    """
-
-    # TODO: I am spaghetti
-
-    _files = [_file for _file in folder.glob("*.tif") if _file.is_file()]
-
-    def _extract_file_identifiers(str_to_split: str) -> list:
-        return str_to_split.split("_")[-3:]
-
-    def _check_file_identifiers(tag_: str, str_to_split: str) -> str:
-        return [_tag for _tag in _extract_file_identifiers(str_to_split) if tag_ in _tag]
-
-    def _find_num_unique_files_containing_tag(tag: str, files: List[Path]) -> int:
-        _hits = [_check_file_identifiers(tag, str(_file)) for _file in files]
-        _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
-        return list(dict.fromkeys(_hits)).__len__()
-
-    def find_channels() -> int:
-        nonlocal _files
-        return _find_num_unique_files_containing_tag("Ch", _files)
-
-    def is_multiplane() -> bool:
-        nonlocal _files
-        if find_num_unique_files_containing_tag("Cycle0000", _files) > 1:
-            return True
-        else:
-            return False
-
-    def find_planes() -> int:
-        nonlocal channels
-        nonlocal _files
-        if is_multiplane():
-            return find_num_unique_files_given_static_substring("Cycle00001", _files) // channels
-        else:
-            return 1
-
-    def find_frames() -> int:
-        nonlocal channels
-        if is_multiplane():
-            return find_num_unique_files_given_static_substring("000001.ome", _files) // channels
-        else:
-            return find_num_unique_files_given_static_substring("Cycle00001", _files) // channels
-
-    def find_dimensions() -> Tuple[int, int]:
-        nonlocal folder
-        nonlocal _files
-        return cv2.imread("".join(str(_files[0])), flags=-1).shape
-
-    channels = find_channels()
-
-    # noinspection PyTypeChecker
-    return channels, find_planes(), find_frames(), find_dimensions()[0], find_dimensions()[1]
-    # apparently * on a return is illegal for python 3.7  # noqa
-
-
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
     """
@@ -162,41 +97,6 @@ def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
     frame_times = pd.Index(data=frame_times, name="Time (ms)")
     # make dataframe
     return pd.DataFrame(data=frames, index=frame_times, columns=["Imaging Frame"])
-
-
-def generate_bruker_naming_convention(channel: int,
-                                      plane: int,
-                                      num_channels: int = 1,
-                                      num_planes: int = 1
-                                      ) -> str:
-    """
-    Generates the expected bruker naming convention for images collected with an arbitrary number of cycles & channels
-
-    This function expects that the naming convention is _Cycle00000_Ch0_000000.ome.tiff where the channel is
-    one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and the 6-digit tag represents
-    the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.
-
-    Please note that the parameters channel and plane are *zero-indexed*.
-
-    :param channel: channel to produce name for
-    :param plane: plane to produce name for
-    :param num_channels: number of channels
-    :param num_planes: number of planes
-    :returns: proper naming convention
-    """
-    if num_channels > 1:
-        num_channels = 2
-    if num_planes > 1:
-        num_planes = 2
-    with PatternMatching([num_channels, num_planes], [eq, eq]) as case:
-        if case([1, 1]):
-            return "*.ome.tif"
-        elif case([2, 1]):
-            return "".join(["*Ch", str(channel + 1), "*"])
-        elif case([1, 2]):
-            return "".join(["*00000", str(plane + 1), ".ome.tif"])
-        elif case([2, 2]):
-            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
@@ -288,57 +188,6 @@ def load_voltage_output(path: Union[str, Path]) -> pd.DataFrame:
     raise NotImplementedError
 
 
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
-def repackage_bruker_tifs(input_folder: Union[str, Path],
-                          output_folder: Union[str, Path],
-                          channel: int = 0,
-                          plane: int = 0
-                          ) -> None:
-    """
-    This function repackages a folder containing .tif files exported by Bruker's Prairieview software into a sequence
-    of <4 GB .tif stacks. Note that parameters channel and plane are **zero-indexed**.
-
-    :param input_folder: folder containing a sequence of single frame .tif files exported by Bruker's Prairieview
-    :param output_folder: empty folder where .tif stacks will be saved
-    :param channel: specify channel
-    :param plane: specify plane
-    """
-    num_channels, num_planes, num_frames, y, x = determine_imaging_content(input_folder)
-    _print_image_description(num_channels, num_planes, num_frames, y, x)
-
-    naming_convention = generate_bruker_naming_convention(channel, plane, num_channels, num_planes)
-
-    files = list(input_folder.glob(naming_convention))
-
-    pbar = tq(total=num_frames)
-    pbar.set_description("Repackaging...")
-
-    block_size = calculate_frames_per_file(y, x)
-
-    if num_frames > block_size:
-
-        block_buffer = 0
-        frame_index = list(range(num_frames))
-        blocks = generate_blocks(frame_index, block_size, block_buffer)
-        stack_index = 0
-
-        for block in blocks:
-            images = []
-            for frame in block:
-                images.append(_verbose_load_single_tif(files[frame], pbar))
-
-            filename = generate_padded_filename(output_folder, stack_index)
-            _save_single_tif(filename, np.concatenate(images, axis=0))
-
-            stack_index += 1
-    else:
-        images = [_verbose_load_single_tif(file, pbar) for file in files]
-        images = np.concatenate(images, axis=0)
-        _save_single_tif(output_folder.joinpath("images.tif"), images)
-
-    pbar.close()
-
-
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 @validate_extension(required_extension=".csv", pos=0)
 def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
@@ -352,68 +201,3 @@ def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
     data = data.set_index("Time(ms)")
     data.sort_index(inplace=True)
     return data
-
-
-def _load_bruker_tif_stack(input_folder: Path,
-                           channel: int,
-                           plane: int,
-                           num_channels: int,
-                           num_planes: int
-                           ) -> np.ndarray:
-    """
-    Implementation function to load a single bruker tif stack
-
-    :param input_folder: folder containing tif stack
-    :param channel: selected channel to load
-    :param plane: selected plane to load
-    :param num_channels: total number of channels
-    :param num_planes: total number of planes
-    :returns: loaded images
-    """
-    naming_convention = generate_bruker_naming_convention(channel, plane, num_channels, num_planes)
-    files = list(input_folder.glob(naming_convention))
-    pbar = tq(total=len(files))
-    pbar.set_description("".join(["Loading Channel ", str(channel), " Plane ", str(plane)]))
-    images = [_verbose_load_single_tif(file, pbar) for file in files]
-    pbar.close()
-    return np.concatenate(images, axis=0)
-
-
-def _print_image_description(channels: int,
-                             planes: int,
-                             frames: int,
-                             height: int,
-                             width: int
-                             ) -> None:
-    """
-    Function prints the description of an imaging dataset.
-
-    :param channels: number of channels
-    :param planes: number of planes
-    :param frames: number of frames
-    :param height: y-pixels
-    :param width: x-pixels
-    """
-    msg = f"\nTotal Images Detected: {channels * planes * frames}"
-    msg += f"\nChannels\t\t{channels}"
-    msg += f"\nPlanes\t\t{planes}"
-    msg += f"\nFrames\t\t{frames}"
-    msg += f"\nHeight\t\t{height}"
-    msg += f"\nWidth\t\t{width}"
-    msg += "\n"
-
-    print(msg)
-
-
-def _verbose_load_single_tif(file: Union[str, Path], pbar: Any) -> np.ndarray:
-    """
-    Verbosely loads single tif by running the io_tools load single tif function
-    and updating progressbar
-
-    :param file: file to load
-    :param pbar: progressbar
-    :return: loaded image
-    """
-    image = _load_single_tif(file)
-    pbar.update(1)
-    return image

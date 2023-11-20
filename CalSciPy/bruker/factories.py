@@ -1,9 +1,11 @@
 from __future__ import annotations
-from typing import Mapping, Iterable, Any, List, Union
+from typing import Mapping, Iterable, Any, List, Union, Sequence
 from types import MappingProxyType
+from collections import namedtuple
 from importlib import import_module
 from xml.etree.ElementTree import Element
 from numbers import Number
+from itertools import product
 
 from . import CONSTANTS
 from .xml_mappings.xml_mapping import load_mapping
@@ -120,6 +122,21 @@ class BrukerElementFactory:
         except AssertionError:
             # here we raise a key error because he is missing, otherwise we could end up passing none to the eval)
             raise KeyError("Bruker object not present in element mapping")
+
+
+class BrukerImageFactory:
+    """
+    Factory class for constructing bruker images
+    """
+    @classmethod
+    def create(cls, ch_pl_comb):
+
+        # make field names
+        combinations = tuple([f"channel{ch}plane{pl}" for ch, pl in ch_pl_comb])
+
+        return namedtuple("BrukerImages",
+                          field_names=combinations,
+                          defaults=[None, ] * len(combinations))
 
 
 class BrukerXMLFactory:
