@@ -6,7 +6,7 @@ import pandas as pd
 from tqdm import tqdm as tq
 
 from ..io_tools import _load_single_tif, _verbose_load_single_tif
-from .._validators import convert_permitted_types_to_required
+from .._validators import convert_permitted_types_to_required, validate_extension
 from .factories import BrukerImageFactory
 from .parsers import determine_imaging_content, generate_bruker_naming_convention
 from ._helpers import calc_ch_pl_comb, print_image_description
