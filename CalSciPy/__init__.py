@@ -1,18 +1,8 @@
+from .files import FileTree, FileSet, FileMap
+
+
 __all__ = [
-    "color_scheme"
-    "conversion",
-    "events",
-    "images",
-    "io_tools",
-    "optogenetics",
-    "roi_tools",
-    "traces",
-    "version",
+    "experiment",
+    "files",
+    "subject",
 ]
-
-from .version import author, name, maintainer, version
-
-author = author
-name = name
-maintainer = maintainer
-version = version
