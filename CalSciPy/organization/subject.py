@@ -10,20 +10,19 @@ from .experiment import Experiment, ExperimentFactory
 from .user_interaction import select_directory
 
 
-DEFAULT_MOUSE = "default_mouse"
+DEFAULT_SUBJECT = "default_subject"
 DEFAULT_PATH = Path.cwd()
 
 
-class Mouse:
+class Subject:
 
     #: list: modifications to this object
     _modifications = ModificationLogger()
 
-    def __init__(self, name: str = DEFAULT_MOUSE, directory: Path = DEFAULT_PATH, study: str = None,
+    def __init__(self, name: str = DEFAULT_SUBJECT, directory: Path = DEFAULT_PATH, species: str = None, study: str = None,
                  condition: str = None):
         """
-        Class for organizing experiments for a single mouse
-
+        Class for organizing experiments for a single subject
         :param name: name of mouse
         :type name: str
         :param directory: directory to save mouse within
@@ -221,3 +220,8 @@ class Mouse:
         """
         if "_logger" in vars(self):
             self._logger.end_log()
+
+
+class Mouse(Subject):
+    def __init__(self, name: str = DEFAULT_SUBJECT, directory: Path = DEFAULT_PATH, species: str = "mouse", study: str = None, condition: str = None):
+        super().__init__(self, name, directory, species, study, condition)
