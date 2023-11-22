@@ -1,6 +1,10 @@
-from .subject import Subject, Mouse, Rat, Human, Fly, Fish
-from .files import FileTree, FileSet, FileMap
-from .imaging import ImagingExperiment
+from .subject import Subject, Mouse, Rat, Human, Fly, Fish  # noqa: F401
+from .files import FileTree, FileSet, FileMap  # noqa: F401
+from .imaging import ImagingExperiment  # noqa: F401
+
+
+# the linting has some bugs here for some reason?
+
 
 __all__ = [
     "FileTree",

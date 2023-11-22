@@ -8,11 +8,13 @@ Main Dependencies
 * `imageio-ffmpeg <https://github.com/imageio/imageio-ffmpeg>`_
 * `joblib <https://joblib.readthedocs.io/en/stable/>`_
 * `matplotlib <https://matplotlib.org/>`_
+* `memoization <https://github.com/lonelyenvoy/python-memoization>`_
 * `numba <https://numba.pydata.org/>`_
 * `numpy <https://numpy.org/>`_
 * `opencv-python <https://github.com/opencv/opencv-python>`_
+* `pandas <https://pandas.pydata.org/>`_
 * `pillow <https://python-pillow.org/>`_
-* `PyQt5 <https://www.riverbankcomputing.com/software/pyqt/>`_
+* `PyQt6 <https://www.riverbankcomputing.com/software/pyqt/>`_
 * `seaborn <https://seaborn.pydata.org/>`_
 * `scikit-learn <https://scikit-learn.org/stable/>`_
 * `scipy <https://scipy.org/>`_
@@ -21,13 +23,9 @@ Main Dependencies
 Optional Dependencies
 *********************
 * `CUDA toolkit <https://developer.nvidia.com/cuda-toolkit>`_
-* `cupy <https://github.com/cupy/cupy>`_
+* `CuPy <https://github.com/cupy/cupy>`_
 * `cuTENSOR <https://docs.nvidia.com/cuda/cutensor/index.html>`_
 
-Bruker Dependencies
-*******************
-* `memoization <https://github.com/lonelyenvoy/python-memoization>`_
-* `pywin32 <https://github.com/mhammond/pywin32>`_
 
 Optics Dependencies
 *******************
@@ -35,6 +33,7 @@ Optics Dependencies
 
 Organization Dependencies
 *************************
+* `ipython <https://ipython.org/>`_
 * `json-tricks <https://github.com/mverleg/pyjson_tricks>`_
 
 Contributions

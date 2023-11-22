@@ -97,4 +97,3 @@ def repackage_bruker_tifs(input_folder: Union[str, Path],
         _save_single_tif(output_folder.joinpath("images.tif"), images)
 
     pbar.close()
-

@@ -12,7 +12,9 @@ __all__ = [
     "version",
 ]
 
+
 from .version import author, name, maintainer, version
+
 
 author = author
 name = name
