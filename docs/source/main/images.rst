@@ -1,6 +1,21 @@
 Image Processing
 ================
 
+Resonant Deinterlacing
+**********************
+Resonant scanning microscopes achieve fast image acquisition by pairing a slow-galvometric mirror with a fast-resonant scanning mirror: the fast-resonant scanning mirror rapidly scans a single-axis of the field-of-view (i.e., a horizontal line), while the slow-galvometric mirror moves the line along a second-axis. Further gains in acquisition speed are achieved by acquired images during both the forward and backward scans of the resonant mirror. That is, lines are scanned in alternating directions rather than returning to the origin to scan each line in a left-right, left-right, left-right strategy. While galvonmetric scanning mirrors can be tightly-controlled using servos, resonant scanning microscopes achieve their rapid motion by vibrating at a fixed frequency in response to applied voltage. Resonant scanning are extremly underdampened harmonic oscillators; while their frequency is tightly fixed, they are prone to large variations in amplitude given small deviations in their drive. Resonant scanners also display a smooth cosinusiodal velocity through their range-of-motiont--the scanner moves fastest in the center and slower on the edges--that further complicates synchronizing to an external frequnecy. Therefore, the entire microscope is typically aligned to the motion of the resonance scanner. Most microscopy software organized the incoming pixel-stream into resonant scanner cycles. Rather than immediately organizing pixels into individual lines, pixels are collected through a complete oscillation of the resonant scanner. The data is then split down the center and the latter half reversed to generate two lines. Because the position of the mirror is variable, the index of center pixel is usually offset within the software or in real-time. Never-the-less, variations related to temperature, voltage, and murphy's law--as well as poor signal-to-noise--often result in images with interlacing artifacts.
+
+CalSciPy provides a convienent deinterlacing function to correct for these artifacts
+
+.. centered:: Deinterlacing images
+
+.. code-block:: python
+
+   from CalSciPy.images import deinterlace
+
+   images = deinterlace(images)
+
+
 Multi-dimensional Filtering
 ***************************
 CalSciPy supports fast de-noising of imaging stacks using multidimensional filters.
@@ -49,8 +64,3 @@ Available Multi-dimensional Filters
    Using gpu-parallelization is recommended to quickly process imaging stacks. Being said, using gpu parallelization
    requires that the dataset fit within your GPU's VRAM. In most cases, this requires breaking the dataset down into
    smaller blocks. This can be done automatically by using the block_size keyword.
-
-
-
-
-
