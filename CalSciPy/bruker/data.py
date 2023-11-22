@@ -1,25 +1,12 @@
 from __future__ import annotations
-from typing import Tuple, Optional, Union, List, Any
-from operator import eq
+from typing import Union
 from pathlib import Path
-from itertools import product
 from xml.etree import ElementTree
-
-import numpy as np
-import pandas as pd
-import cv2
-from PPVD.parsing import convert_permitted_types_to_required, find_num_unique_files_given_static_substring, \
-    find_num_unique_files_containing_tag
-from PPVD.validation import validate_extension
-from tqdm import tqdm as tq
 
 from . import CONSTANTS
 from .meta_objects import PhotostimulationMeta
 from .factories import BrukerElementFactory
-from .._calculations import generate_blocks
-from .._files import calculate_frames_per_file
-from ..io_tools import _load_single_tif, _save_single_tif
-from .._backports import PatternMatching
+from .._validators import convert_permitted_types_to_required
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION

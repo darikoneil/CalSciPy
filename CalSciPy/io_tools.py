@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Union, Optional, Mapping
+from typing import Union, Optional, Mapping, Any
 from pathlib import Path
 from json import load, dump
 from numbers import Number

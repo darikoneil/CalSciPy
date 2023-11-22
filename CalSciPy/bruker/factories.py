@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Mapping, Iterable, Any, List, Union, Sequence
+from typing import Mapping, Iterable, Any, List, Union, Tuple, NamedTuple
 from types import MappingProxyType
 from collections import namedtuple
 from importlib import import_module
 from xml.etree.ElementTree import Element
 from numbers import Number
-from itertools import product
 
 from . import CONSTANTS
 from .xml_mappings.xml_mapping import load_mapping
@@ -129,7 +128,7 @@ class BrukerImageFactory:
     Factory class for constructing bruker images
     """
     @classmethod
-    def create(cls, ch_pl_comb):
+    def create(cls: BrukerImageFactory, ch_pl_comb: Tuple[Tuple[int, int], ...]) -> NamedTuple:
 
         # make field names
         combinations = tuple([f"channel{ch}plane{pl}" for ch, pl in ch_pl_comb])

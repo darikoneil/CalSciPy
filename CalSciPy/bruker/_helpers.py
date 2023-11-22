@@ -1,22 +1,19 @@
 from __future__ import annotations
-from typing import Sequence, Union
+from typing import Sequence, Union, Tuple
 from pathlib import Path
 from itertools import product
-from operator import eq
 from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
-from PPVD.parsing import find_num_unique_files_containing_tag, find_num_unique_files_given_static_substring
-import cv2  # in convoluted determine function
 
-from .._backports import PatternMatching
 from .._validators import convert_permitted_types_to_required
 
 
 def calc_ch_pl_comb(channels: Union[int, Sequence[int]],
                     planes: Union[int, Sequence[int]],
-                    exact: bool = True):
+                    exact: bool = True
+                    ) -> Tuple[Tuple[int, int], ...]:
 
     if not isinstance(channels, Sequence):
         if exact:
@@ -30,7 +27,7 @@ def calc_ch_pl_comb(channels: Union[int, Sequence[int]],
         else:
             planes = range(planes)
 
-    return list(product(channels, planes))
+    return tuple(product(channels, planes))
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)

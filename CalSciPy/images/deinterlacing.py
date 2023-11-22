@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Generator, Optional
+from typing import Generator, Optional, Callable
 import numpy as np
 
 # try to import cupy else use numpy as drop-in replacement
@@ -23,7 +23,7 @@ Functions to deinterlace images collected using resonance-scanning microscopes
 """
 
 
-def _batch_calc(images: np.ndarray, batch_size: int = None, func: Callable = _fft):
+def _batch_calc(images: np.ndarray, batch_size: int = None, func: Callable = _fft) -> np.ndarray:
     """
     :param images: Images (input) for calculating fast-fourier transforms (frames, y-pixels, x-pixels)
 
@@ -32,7 +32,7 @@ def _batch_calc(images: np.ndarray, batch_size: int = None, func: Callable = _ff
     :return: Transformed images
 
     :rtype: :class:`ndarray <numpy.ndarray>`\[:class:`Any <typing.Any>`\,
-         :class:`dtype <numpy.dtype>`\[:class:`complex128`\]
+         :class:`dtype <numpy.dtype>`\[:class:`complex128`\]]
     """
     if batch_size is None:
         batch_size = images.shape[0]
@@ -42,7 +42,7 @@ def _batch_calc(images: np.ndarray, batch_size: int = None, func: Callable = _ff
 
 def _batch_generator(images: np.ndarray, batch_size: int) -> Generator:
     for idx in range(0, images.shape[0], batch_size):
-        yield images[idx:idx+batch_size]
+        yield images[idx:idx + batch_size]
 
 
 def _calculate_phase_offset(images: np.ndarray, batch_size: int = None) -> int:
@@ -83,7 +83,7 @@ def deinterlace(images: np.ndarray,
                 reference: Optional[np.ndarray] = None
                 ) -> np.ndarray:
     """
-    Deinterlaces or corrects insufficient deinterlacing of images. This functions correct the insufficient alignment
+    Deinterlaces or corrects insufficient deinterlacing of images. This function corrects the insufficient alignment
     of left-right and right-left oriented line scans when using a resonant scanner. The images are deinterlaced by
     calculating the translative offset using the phase correlation between left-right and right-left lines. The offset
     is then discretized and the odd lines "bumped" by the offset. It does not correct for inconsistencies related to
@@ -100,17 +100,21 @@ def deinterlace(images: np.ndarray,
 
     :type batch_size: :class:`Optional <typing.Optional>`\[:class:`int`\], default: ``None``
 
+    :param reference: Calculate phase offset using external reference
+
+    :type reference: :class:`ndarray <numpy.ndarray>`
+
     :returns: The deinterlaced images (frames, y-pixels, x-pixels)
 
-    .. versionadded: 0.8.0
+
+    .. versionadded:: 0.8.0
+
+
     """
     if in_place:
         images_ = images
     else:
         images_ = images.copy()
-
-    if sliding_window:
-        raise NotImplementedError
 
     if reference is not None:
         phase_offset = _calculate_phase_offset(reference, batch_size)

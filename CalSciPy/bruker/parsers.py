@@ -1,10 +1,8 @@
 from __future__ import annotations
-from typing import Sequence, Union, Tuple
+from typing import Union, Tuple, List
 from pathlib import Path
-from itertools import product
 from operator import eq
 
-import numpy as np
 from PPVD.parsing import find_num_unique_files_containing_tag, find_num_unique_files_given_static_substring
 import cv2  # in convoluted determine function
 

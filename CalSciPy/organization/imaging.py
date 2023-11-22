@@ -1,16 +1,9 @@
 from __future__ import annotations
-from typing import Tuple
 from pathlib import Path
-from xml.etree import ElementTree
 
 
-import pandas as pd
-import numpy as np
-
-from .._validators import convert_permitted_types_to_required, validate_extension
 from .experiment import Experiment
 from .._user import select_directory, verbose_copying
-from .files import FileSet
 
 
 class ImagingExperiment(Experiment):

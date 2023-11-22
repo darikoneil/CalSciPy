@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Union, Optional
+from typing import Union, Optional, Tuple
 from pathlib import Path
 
 import numpy as np
@@ -21,9 +21,9 @@ def load_bruker_tifs(folder: Union[str, Path],
                      ) -> Tuple[np.ndarray, ...]:  # noqa: C901
     """
     This function loads a **tuple** of images collected and converted to .tif files by Bruker's Prairieview software.
-    Each channel and plane combination is loaded to a separate numpy array. Identification of multiple channels / planes is dependent on :func:`determine_imaging_content`.
-    Images are loaded as unsigned 16-bit (:class:`numpy.uint16`), though note that raw bruker files are
-    natively could be 12 or 13-bit.
+    Each channel and plane combination is loaded to a separate numpy array. Identification of multiple
+    channels / planes is dependent on :func:`determine_imaging_content`. Images are loaded as unsigned 16-bit
+    (:class:`numpy.uint16`), though note that raw bruker files are natively could be 12 or 13-bit.
 
     :param folder: folder containing a sequence of single frame tiff files
     :param channel: specific channel/s to load from dataset (zero-indexed)
