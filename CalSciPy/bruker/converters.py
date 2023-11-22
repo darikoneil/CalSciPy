@@ -8,7 +8,7 @@ from tqdm import tqdm as tq
 
 from ..io_tools import _save_single_tif, _verbose_load_single_tif
 from .._validators import convert_permitted_types_to_required
-from .._files import calculate_frames_per_file
+from .._files import calculate_frames_per_file, zero_pad_num_to_string
 from .._calculations import generate_blocks
 from .parsers import determine_imaging_content, generate_bruker_naming_convention
 from ._helpers import print_image_description
@@ -85,7 +85,9 @@ def repackage_bruker_tifs(input_folder: Union[str, Path],
             for frame in block:
                 images.append(_verbose_load_single_tif(files[frame], pbar))
 
-            filename = generate_padded_filename(output_folder, stack_index)
+            filename = output_folder.joinpath("".join(["images_",
+                                                       zero_pad_num_to_string(stack_index, 2),
+                                                       ".tif"]))
             _save_single_tif(filename, np.concatenate(images, axis=0))
 
             stack_index += 1
