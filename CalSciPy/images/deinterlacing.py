@@ -102,6 +102,7 @@ def deinterlace(images: np.ndarray,
 
     :returns: The deinterlaced images (frames, y-pixels, x-pixels)
 
+    .. versionadded: 0.8.0
     """
     if in_place:
         images_ = images
