@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Union, Optional
 from pathlib import Path
 
 import numpy as np

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Sequence
+from typing import Sequence, Union, Tuple
 from pathlib import Path
 from itertools import product
 from operator import eq
