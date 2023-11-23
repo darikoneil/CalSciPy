@@ -20,17 +20,30 @@ def load_bruker_tifs(folder: Union[str, Path],
                      verbose: bool = True
                      ) -> Tuple[np.ndarray, ...]:  # noqa: C901
     """
-    This function loads a **tuple** of images collected and converted to .tif files by Bruker's Prairieview software.
-    Each channel and plane combination is loaded to a separate numpy array. Identification of multiple
+    This function loads images collected during a *t-series* and converted to .tif files by Bruker's Prairieview
+    software. Each channel and plane combination is loaded to a separate numpy array. Identification of multiple
     channels / planes is dependent on :func:`determine_imaging_content`. Images are loaded as unsigned 16-bit
     (:class:`numpy.uint16`), though note that raw bruker files are natively could be 12 or 13-bit.
 
     :param folder: folder containing a sequence of single frame tiff files
+
+    :type folder: :class:`Union <typing.Union>`\[:class:`str`\, :class:`Path <pathlib.Path>`\]
+
     :param channel: specific channel/s to load from dataset (zero-indexed)
-    :param plane: specific plane/s to load from dataset (zero-indexed)\
-    :param verbose: whether to print progress to terminal
-    :return: a named tuple of numpy arrays (channel x plane) (frames, y-pixels, x-pixels, :class:`numpy.uint16`)
-     """
+
+    :type channel: :class:`Optional <typing.Optional>`\[:class:`int`\], default: ``None``
+
+    :param plane: specific plane/s to load from dataset (zero-indexed)
+
+    :type plane: :class:`Optional <typing.Optional>`\[:class:`int`\], default: ``None``
+
+    :param verbose: whether to print progress
+
+    :return: a namedtuple of numpy arrays (channel x plane) (frames, y-pixels, x-pixels, :class:`numpy.uint16`)
+
+    .. versionadded:: 0.8.0 (experimental)
+
+    """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(folder)
 
     if verbose:
@@ -51,20 +64,32 @@ def load_bruker_tifs(folder: Union[str, Path],
 
     factory = BrukerImageFactory.create(comb)
 
-    return factory(*[_load_bruker_tif_stack(folder, channel_, plane_, num_channels, num_planes)
+    return factory(*[_load_bruker_tif_stack(folder, channel_, plane_, num_channels, num_planes, verbose=verbose)
                      for channel_, plane_ in comb])
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 def load_voltage_recording(path: Union[str, Path]) -> pd.DataFrame:
     """
-    Import bruker analog data from an imaging folder or individual file. By PrairieView naming conventions, these
-    files contain "VoltageRecording" in the name.
+    Import bruker analog "voltage" recording from a *t-series* folder or from an individual file.
 
     :param path: folder or filename containing analog data
-    :returns: dataframe containing time (index, ms) x channel data
+
+    :type path: :class:`Union <typing.Union>`\[:class:`str`\, :class:`Path <pathlib.Path>`\]
+
+    :returns: Dataframe containing time (index, ms) x channel data
+
+    :rtype: :class:`DataFrame <pandas.DataFrame>`
+
+    .. note::
+
+        By PrairieView naming conventions,these files contain "VoltageRecording" in the name. If your file does not
+        follow these naming convention, you must be explicitly pass the path to your file.
+
+    .. versionadded:: 0.8.0 (experimental)
+
     """
-    if "VoltageRecording" in path.name and path.is_file():
+    if path.is_file():
         return _import_csv(path)
     elif not path.is_file():
         file = [file for file in path.glob("*.csv") if "VoltageRecording" in str(file)]
@@ -96,7 +121,7 @@ def _load_bruker_tif_stack(input_folder: Path,
     files = list(input_folder.glob(naming_convention))
 
     if verbose:
-        pbar = tq(total=len(files))
+        pbar = tq(total=len(files), desc=f"Loading channel {channel} of {num_channels}, plane {plane} of {num_planes}")
         pbar.set_description("".join(["Loading Channel ", str(channel), " Plane ", str(plane)]))
         images = [_verbose_load_single_tif(file, pbar) for file in files]
         pbar.close()
@@ -113,6 +138,7 @@ def _import_csv(path: Union[str, Path]) -> pd.DataFrame:
     Implementation function for loading csv files. Abstracted from the upper-level functions for cleaner logic.
 
     :param path: filepath of .csv to import
+
     :return: dataframe containing time (index) x data [0:8]
     """
     data = pd.read_csv(path, skipinitialspace=True)

@@ -4,8 +4,8 @@ from pathlib import Path
 from abc import abstractmethod
 from importlib import import_module
 
-from ._logging_tools import get_timestamp
 from .files import FileTree
+from ._logging_tools import get_timestamp
 
 
 def import_mix_in_string(json_string: str) -> Experiment:

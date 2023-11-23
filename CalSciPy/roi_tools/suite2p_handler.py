@@ -4,8 +4,8 @@ from pathlib import Path
 
 import numpy as np
 
-from .roi_tools import ROI, ROIHandler
 from .._validators import convert_permitted_types_to_required
+from .roi_tools import ROI, ROIHandler
 
 
 class Suite2PHandler(ROIHandler):

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any, Iterable
 from datetime import datetime
+# noinspection PyProtectedMember
 from IPython import get_ipython
 from collections import deque
 from pathlib import Path

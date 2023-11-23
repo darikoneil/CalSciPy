@@ -5,9 +5,9 @@ from pathlib import Path
 from PPVD.style import TerminalStyle
 from json_tricks import load, dump
 
-from ._logging_tools import IPythonLogger, ModificationLogger, get_timestamp
-from .experiment import Experiment, ExperimentFactory
 from .._user import select_directory
+from .experiment import Experiment, ExperimentFactory
+from ._logging_tools import IPythonLogger, ModificationLogger, get_timestamp
 
 
 DEFAULT_SUBJECT = "default_subject"

@@ -1,9 +1,8 @@
 from __future__ import annotations
 from pathlib import Path
 
-
-from .experiment import Experiment
 from .._user import select_directory, verbose_copying
+from .experiment import Experiment
 
 
 class ImagingExperiment(Experiment):
