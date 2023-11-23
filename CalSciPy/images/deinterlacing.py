@@ -18,6 +18,7 @@ except ModuleNotFoundError:
     _ifft = _numpy_ifft
     USE_GPU = False
 
+
 """
 Functions to deinterlace images collected using resonance-scanning microscopes
 """
@@ -59,11 +60,11 @@ def _calculate_phase_offset(images: np.ndarray, batch_size: int = None) -> int:
     # offset
     offset = 1e-5
 
-    # left-right (even) lines
+    # forward scans
     f0 = _batch_calc(images[:, 1::2, :], batch_size)
     f0 /= (np.abs(f0) + offset)
 
-    # right-left (odd) lines
+    # backward scans
     f1 = _batch_calc(images[:, ::2, :], batch_size)
     np.conj(f1, out=f1)
     f1 /= (np.abs(f1) + offset)
@@ -74,6 +75,7 @@ def _calculate_phase_offset(images: np.ndarray, batch_size: int = None) -> int:
     comp_conj = comp_conj.mean(axis=1).mean(axis=0)
     comp_conj = np.fft.fftshift(comp_conj)
 
+    # find peak
     return -(np.argmax(comp_conj[-10 + images.shape[1] // 2:11 + images.shape[2] // 2]) - 10)
 
 
@@ -89,7 +91,9 @@ def deinterlace(images: np.ndarray,
     This offset is then discretized and the backward scans "bumped" by the offset. Specifically, the fourier transforms
     of forward and backward scanned lines are used to calculate the cross-power spectral density. Thereafter, an inverse
     fourier transform is used to generate a normalized cross-correlation matrix. The peak of this matrix is the
-    translative offset (phase offset, practically speaking).
+    translative offset (phase offset, practically speaking). Fourier transforms implemented through
+    `CuPy <https://cupy.dev>`_\.If `CuPy <https://cupy.dev>`_ is not installed `NumPy <https://numpy.org>`_ is
+    used as a (slower) replacement.
 
     :param images: Images to deinterlace (frames, y-pixels, x-pixels)
 
@@ -106,9 +110,14 @@ def deinterlace(images: np.ndarray,
 
     :returns: The deinterlaced images (frames, y-pixels, x-pixels)
 
+    .. warning::
+
+        The number of frames included in each fourier transform must be several times smaller than the maximum number
+        of frames that fit within your GPU's VRAM (`CuPy <https://cupy.dev>`_) or RAM (`NumPy <https://numpy.org>`_).
+        This function will not automatically revert to the NumPy implementation if there is not sufficient VRAM.
+        Instead, an out of memory error will be raised.
 
     .. versionadded:: 0.8.0
-
 
     """
     if in_place:
