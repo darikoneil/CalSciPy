@@ -3,29 +3,32 @@ Image Processing
 
 Resonant Deinterlacing
 **********************
-Resonant scanning microscopes achieve fast image acquisition by pairing a slow-galvometric mirror with a fast-resonant
+Resonance scanning microscopes achieve fast image acquisition by pairing a slow-galvometric mirror with a fast-resonance
 scanning mirror: the fast-resonant scanning mirror rapidly scans a single-axis of the field-of-view
 (i.e., a horizontal line), while the slow-galvometric mirror moves the line along a second-axis.
-Further gains in acquisition speed are achieved by acquired images during both the forward and backward scans of the
-resonant mirror. That is, lines are scanned in alternating directions rather than returning to the origin to scan each
-line in a left-right, left-right, left-right strategy. While galvometric scanning mirrors can be tightly-controlled
-using servos, resonant scanning microscopes achieve their rapid motion by vibrating at a fixed frequency in response
-to applied voltage. Resonant scanning are extremely under-dampened harmonic oscillators; while their frequency is
-tightly fixed, they are prone to large variations in amplitude given small deviations in their drive. Resonant
-scanners also display a smooth cosinusoidal velocity through their range-of-motion--the scanner moves fastest in
-the center and slower on the edges--that further complicates synchronizing to an external frequency. Therefore, the
-entire microscope is typically aligned to the motion of the resonance scanner.
+Further gains in acquisition speed are achieved by acquiring images during both the forward and backward scans of the
+resonant mirror. That is, lines are scanned in alternating directions instead of returning to the origin after each
+scan in a left-right, left-right, left-right strategy.
+
+While galvometric scanning mirrors can be tightly-controlled using servos, resonant scanning mirrors lack such granular
+control. Resonance scanning mirrors achieve their rapid motion by *vibrating* at a fixed frequency. Resonance scanning
+mirrors are extremely under-dampened harmonic oscillators: while their frequency is tightly distributed, they are prone
+to large variations in amplitude given very small deviations in their drive. Resonance scanning mirrors also display a
+smooth cosinusoidal velocity through their entire range-of-motion--the scanner moves slower near the limits of its
+range--that further complicates synchronization to an external frequency or other means of fine control. Therefore,
+the entire microscope is typically aligned to the motion of the resonance scanner.
 
 .. image:: scan_sync.png
     :width: 800
 
-Most microscopy software organized the
-incoming pixel-stream into resonant scanner cycles. Rather than immediately organizing pixels into individual lines,
-pixels are collected through a complete oscillation of the resonant scanner. The data is then split down the center
-and the latter half reversed to generate two lines. Because the position of the mirror is variable, the index of center
-pixel is usually offset within the software or in real-time. Never-the-less, variations related to temperature,
-voltage, and murphy's law--as well as poor signal-to-noise--often result in images with interlacing artifacts.
-CalSciPy provides a convienent deinterlacing function to correct for these artifacts
+Resonance-scanning microscopes generate pixel-streams that most microscopy software organize by resonance-scanning
+cycles. Rather than immediately organizing pixels into individual lines, pixels are collected through the complete
+oscillation of the resonant scanner. The data is then split down the center and the latter half reversed to generate
+two lines. Because the exact angle of the mirror at any given time is variable, the exact index of the center pixel is
+usually defined manually within the software or estimated in real-time by a software algorithm. Never-the-less,
+variations related to temperature, drive fluctuations, and murphy's law--as well as poor signal-to-noise--often result
+in images with interlacing artifacts. CalSciPy provides a convenient
+:class:`deinterlace <CalSciPy.images.deinterlacing.deinterlace>`  function to correct for these artifacts.
 
 .. centered:: Deinterlacing images
 
@@ -34,19 +37,30 @@ CalSciPy provides a convienent deinterlacing function to correct for these artif
    from CalSciPy.images import deinterlace
    import numpy as np
 
+    # standard case
    images = deinterlace(images)
-
-   # in-place
-   images = deinterlace(images, in_place=True)
-
-   # significant memory constraints
-   batch_size = 5000 # number of frames to include in one batch
-   images = deinterlace(images, batch_size=batch_size, in_place=True)
 
    # correcting noisy data with external reference
    y_pixels, x_pixels = images.shape[1:]
    reference = np.std(images, axis=0).reshape(1, y_pixels, x_pixels)  # get z-projected standard deviation
    images = deinterlace(images, reference=reference)
+
+Unfortunately, the fast-fourier transform methods that underlie the implementation of the deinterlacing algorithm
+have poor spatial complexity (i.e., large memory constraints). This weakness is particularly problematic when using
+GPU-parallelization. To mitigate these issues, deinterlacing can be performed in-place and batch-wise while
+maintaining  numerically identical results.
+
+.. centered:: Deinterlacing images (memory constrained)
+
+.. code-block:: python
+
+    from CalSCiPy.images import deinterlace
+
+    # In-Place
+    deinterlace(images, in_place=True)
+
+    # Batch-wise
+    images = deinterlace(images, batch_size=5000)
 
 
 Multi-dimensional Filtering

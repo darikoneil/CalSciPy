@@ -84,12 +84,12 @@ def deinterlace(images: np.ndarray,
                 ) -> np.ndarray:
     """
     Deinterlaces or corrects insufficient deinterlacing of images. This function corrects the insufficient alignment
-    of left-right and right-left oriented line scans when using a resonant scanner. The images are deinterlaced by
-    calculating the translative offset using the phase correlation between left-right and right-left lines. The offset
-    is then discretized and the odd lines "bumped" by the offset. It does not correct for inconsistencies related to
-    the velocity of the scanner. Phase correlation is performed by calculating the fourier transform of each set of
-    lines, calculating the cross-power spectral density, and calculating the inverted fourier transform to generate the
-    normalized cross-correlation, whose peak is the translative offset.
+    of forward and backward scanned lines. The images are deinterlaced by
+    calculating the translative offset using the phase correlation between forward and backward scanned lines.
+    This offset is then discretized and the backward scans "bumped" by the offset. Specifically, the fourier transforms
+    of forward and backward scanned lines are used to calculate the cross-power spectral density. Thereafter, an inverse
+    fourier transform is used to generate a normalized cross-correlation matrix. The peak of this matrix is the
+    translative offset (phase offset, practically speaking).
 
     :param images: Images to deinterlace (frames, y-pixels, x-pixels)
 
