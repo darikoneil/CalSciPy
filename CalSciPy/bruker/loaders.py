@@ -20,10 +20,12 @@ def load_bruker_tifs(folder: Union[str, Path],
                      verbose: bool = True
                      ) -> Tuple[np.ndarray, ...]:  # noqa: C901
     """
-    This function loads images collected during a *t-series* and converted to .tif files by Bruker's Prairieview
-    software. Each channel and plane combination is loaded to a separate numpy array. Identification of multiple
-    channels / planes is dependent on :func:`determine_imaging_content`. Images are loaded as unsigned 16-bit
-    (:class:`numpy.uint16`), though note that raw bruker files are natively could be 12 or 13-bit.
+    This function loads images that were collected during a *t-series* by Bruker's Prairieview software and converted
+    to .ome.tif files. Each channel and plane combination is loaded to a separate numpy array. Identification of
+    multiple channels / planes is dependent on
+    :func:`determine_imaging_content <CalSciPy.bruker.parsers.determine_imaging_content`\.
+    Images are loaded as unsigned 16-bit (:class:`numpy.uint16`), though note that raw bruker files are natively
+    could be 12 or 13-bit.
 
     :param folder: folder containing a sequence of single frame tiff files
 
@@ -42,6 +44,10 @@ def load_bruker_tifs(folder: Union[str, Path],
     :return: a namedtuple of numpy arrays (channel x plane) (frames, y-pixels, x-pixels, :class:`numpy.uint16`)
 
     .. versionadded:: 0.8.0 (experimental)
+
+    .. seealso ::
+
+        :func:`repackage_bruker_tifs <CalSciPy.bruker.converters.repackage_bruker_tifs>`
 
     """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(folder)
