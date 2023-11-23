@@ -39,7 +39,7 @@ def temp_path():
 
 # Call only for tests that risk manipulating the original datafiles
 # @pytest.fixture(autouse=False)
-@pytest.fixture(autouse=False)
+@pytest.fixture(autouse=True)
 def datafiles():
 
     # USING TEMP_PATH INSTEAD OF PYTEST TMP_PATH BECAUSE THAT IS A FUNCTION-BASED FIXTURE
