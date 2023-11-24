@@ -7,8 +7,9 @@ from xml.etree.ElementTree import Element
 from numbers import Number
 
 from . import CONSTANTS
-from .xml_mappings.xml_mapping import load_mapping
-from .xml_objects import _BrukerObject
+from .xml import load_mapping
+# noinspection PyProtectedMember
+from .xml.xml_objects import _BrukerObject
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
@@ -60,7 +61,8 @@ class BrukerElementFactory:
         :param type_annotations: dictionary mapping attribute key and expected type
         """
         # Because bool("False") == True, here I specifically check for the "False" value
-        return {key: (eval("".join([type_annotations.get(key), "(value)"])) if value != "False" else False)
+        # Lower to avoid issues with generic types
+        return {key: (eval("".join([type_annotations.get(key).lower(), "(value)"])) if value != "False" else False)
                 for key, value in attr.items()}
 
     @classmethod
@@ -116,7 +118,7 @@ class BrukerElementFactory:
             assert (element.tag in self.element_class_mapping)
             return eval(self.element_class_mapping.get(element.tag))
         except NameError:
-            return getattr(import_module(name=BRUKER_XML_OBJECT_MODULES, package="CalSciPy.bruker"),
+            return getattr(import_module(name=BRUKER_XML_OBJECT_MODULES, package="CalSciPy.bruker.xml"),
                            self.element_class_mapping.get(element.tag))
         except AssertionError:
             # here we raise a key error because he is missing, otherwise we could end up passing none to the eval)

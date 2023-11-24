@@ -58,5 +58,7 @@ exclude =
     test_parfocal.py,
     test_slm.py,
     visualize_optogenetics.py,
-    CalSciPy/optics
-    make_test_images.py
+    make_test_images.py,
+    CalSciPy/_backports/kw_dataclasses.py,
+    source_targeting.py,
+    target_loading.py

@@ -1,9 +1,15 @@
 from __future__ import annotations
 from configparser import ConfigParser
 from pathlib import Path
-from dataclasses import dataclass
 from typing import Tuple
 from numbers import Number
+
+# backport if python < 3.10
+from sys import version_info
+if version_info.minor < 10:
+    from .._backports import dataclass
+else:
+    from dataclasses import dataclass
 
 
 """Configuration constants that describe the user's PrairieView setup"""

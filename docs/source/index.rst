@@ -1,3 +1,6 @@
+.. image:: dancing_neuron_band.png
+    :width: 800
+
 CalSciPy
 ====================================
 **CalSciPy** is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from
@@ -17,7 +20,7 @@ considered useful to others.
 
 .. toctree::
    :maxdepth: 1
-   :caption: MODULES:
+   :caption: MODULES GUIDE:
 
     MAIN <main.rst>
     OPTICS <optics.rst>
