@@ -15,6 +15,12 @@ if version_info.minor < 10:
 else:
     from dataclasses import dataclass, Field
 
+from time import time
+
+
+idx_idx = 0
+var_var = []
+
 
 def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
     """
@@ -350,6 +356,17 @@ def type_check_nested_types(var: Any, expected: str) -> bool:
     :return: boolean type comparison
     :rtype: bool
     """
+    global idx_idx
+    global var_var
+
+    if expected == "Tuple[int]":
+        print(f"{expected=}, time={time()}")
+        idx_idx += 1
+        print(f"\n{idx_idx=}\n")
+        var_var.append(var)
+        if idx_idx >= 180:
+            print(f"{var_var[-1]=}")
+
     # noinspection DuplicatedCode
     try:
         if isinstance(var, (MappingProxyType, dict)):

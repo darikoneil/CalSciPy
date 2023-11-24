@@ -3,10 +3,12 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("QtAgg")
+from matplotlib import pyplot as plt
+import seaborn as sns
 
 from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.roi_tools import Suite2PHandler
-from bruker.protocols.protocols import generate_galvo_point_list
+from CalSciPy.bruker.protocols.mark_points import generate_galvo_point_list
 
 
 # file locs
@@ -31,6 +33,26 @@ for trial in range(len(targ_src)):
     name = f"Trial {trial}"
     photostim.add_photostimulation_group(targ_src.get(trial), delay=delay, point_interval=point_interval, name=name)
 
-
-# load GPL
+# load src GPL
 src_gpl = generate_galvo_point_list(photostim, targets_only=True, name="src_targets", z_offset=21.44)
+
+# preview
+# fig, ax = plt.subplots(1, 1)
+# ax.imshow(photostim.reference_image, cmap="Spectral_r")
+# plt.show(block=False)
+
+
+from xml.etree import ElementTree
+from CalSciPy.bruker.factories import BrukerXMLFactory, BrukerElementFactory
+from CalSciPy.bruker import CONSTANTS
+from CalSciPy.bruker.meta.meta_objects import GalvoPointListMeta
+
+
+version = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
+factory = BrukerElementFactory(version)
+
+tree = ElementTree.parse(gpl_file)
+root = tree.getroot()
+
+file_gpl = GalvoPointListMeta(root, factory=factory)
+

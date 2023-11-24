@@ -5,9 +5,9 @@ from collections import ChainMap
 
 from math import inf
 
-from ... import CONSTANTS
 from ...color_scheme import TERM_SCHEME
 from ..._validators import validate_fields
+from .. import CONSTANTS
 
 # backport if necessary
 from sys import version_info
@@ -233,7 +233,7 @@ class GalvoPointList(_BrukerObject):
         super().__post_init__()
 
     def __str__(self):
-        return f" Galvo Point List containing {len(self.galvo_points)} ROIs"
+        return f" Galvo Point List containing {len(self.galvo_points)} marked points"
 
     @staticmethod
     def __name__() -> str:
@@ -246,7 +246,7 @@ class GalvoPointGroup(_BrukerObject):
     Dataclass for a group of points during galvo-stimulation
 
     """
-    #: Tuple[int]: a tuple indexing the :class:`GalvoPoint`'s to be stimulated as part of this group
+    #: Tuple[int, ...]: a tuple indexing the :class:`GalvoPoint`'s to be stimulated as part of this group
     indices: Tuple[int] = (0, )
     #: str: name of the group
     name: str = "Group 0"

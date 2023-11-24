@@ -61,7 +61,8 @@ class BrukerElementFactory:
         :param type_annotations: dictionary mapping attribute key and expected type
         """
         # Because bool("False") == True, here I specifically check for the "False" value
-        return {key: (eval("".join([type_annotations.get(key), "(value)"])) if value != "False" else False)
+        # Lower to avoid issues with generic types
+        return {key: (eval("".join([type_annotations.get(key).lower(), "(value)"])) if value != "False" else False)
                 for key, value in attr.items()}
 
     @classmethod

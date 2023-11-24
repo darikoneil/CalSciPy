@@ -8,14 +8,15 @@ from itertools import chain
 import numpy as np
 
 
-from ... import CONSTANTS
 from ...optogenetics import Photostimulation, StimulationGroup
 from ...roi_tools import ROI
 # noinspection PyProtectedMember
-from ...xml.xml_objects import (GalvoPoint, GalvoPointList, GalvoPointGroup, MarkPointSeriesElements,
-                                GalvoPointElement, MarkPointElement)
+
 from ..._calculations import min_max_scale
 from ..._validators import validate_keys
+from .. import CONSTANTS
+from ..xml.xml_objects import (GalvoPoint, GalvoPointList, GalvoPointGroup, MarkPointSeriesElements,
+                               GalvoPointElement, MarkPointElement)
 from ._helpers import write_protocol
 
 

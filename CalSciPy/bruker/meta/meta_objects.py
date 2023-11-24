@@ -54,6 +54,32 @@ class _BrukerMeta:
         ...
 
 
+class GalvoPointListMeta(_BrukerMeta):
+    def __init__(self, root: ElementTree, factory: object, width: int = 512, height: int = 512):
+        """
+        Metadata object for a galvo point list saved from mark points in pyprairieview
+
+        """
+        self.stuff = []
+        self.width = width
+        self.height = height
+
+        super().__init__(root, factory)
+
+    def _build_meta(self, root: ElementTree, factory: object) -> _BrukerMeta:
+        children = [child for idx, child in enumerate(root) if idx >= 25]
+        child = children[0]
+        # beep
+        # factory.constructor(child)
+
+    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
+        return 0
+
+    @staticmethod
+    def __name__() -> str:
+        return "GalvoPointListMeta"
+
+
 class PhotostimulationMeta(_BrukerMeta):
     def __init__(self, root: ElementTree, factory: object, width: int = 512, height: int = 512):
         """
@@ -68,7 +94,6 @@ class PhotostimulationMeta(_BrukerMeta):
         self.image_height = height
 
         super().__init__(root, factory)
-        return
 
     def __str__(self):
         return f"Photostimulation metadata containing {len(self.rois)} ROIs within " \
