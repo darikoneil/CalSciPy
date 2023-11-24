@@ -1,16 +1,14 @@
 from __future__ import annotations
 from typing import Union, Tuple, List
 from pathlib import Path
-from operator import eq
+from xml.etree import ElementTree
 
 import numpy as np
 import pandas as pd
 from tqdm import tqdm as tq
 import cv2  # in convoluted determine function
 
-
 from ..io_tools import _save_single_tif, _verbose_load_single_tif
-from .._backports import PatternMatching
 from .._calculations import generate_blocks
 from .._files import (calculate_frames_per_file, find_num_unique_files_containing_tag,
                       find_num_unique_files_given_static_substring, zero_pad_num_to_string)

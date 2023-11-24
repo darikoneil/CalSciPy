@@ -9,14 +9,14 @@ import numpy as np
 
 
 from ... import CONSTANTS
-from ...factories import BrukerXMLFactory
 from ...optogenetics import Photostimulation, StimulationGroup
 from ...roi_tools import ROI
 # noinspection PyProtectedMember
-from ...xml.xml_objects import (GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements,
+from ...xml.xml_objects import (GalvoPoint, GalvoPointList, GalvoPointGroup, MarkPointSeriesElements,
                                 GalvoPointElement, MarkPointElement)
 from ..._calculations import min_max_scale
-from ..._validators import convert_permitted_types_to_required, validate_filename
+from ..._validators import validate_keys
+from ._helpers import write_protocol
 
 
 """
@@ -183,7 +183,7 @@ def _generate_galvo_group(index: int,
     parameters = deepcopy(parameters)
 
     # make sure we only pass expected parameters since type checking will flag the unexpected
-    parameters = _validate_keys(GalvoPoint, parameters)
+    parameters = validate_keys(GalvoPoint, parameters)
 
     # merge and allow parameters to override roi properties
     parameters = ChainMap(parameters, group_properties)
@@ -240,7 +240,7 @@ def _generate_galvo_point(roi: ROI,
     parameters = deepcopy(parameters)
 
     # make sure we only pass expected parameters since type checking will flag the unexpected
-    parameters = _validate_keys(GalvoPoint, parameters)
+    parameters = validate_keys(GalvoPoint, parameters)
 
     # merge and allow parameters to override roi properties
     parameters = ChainMap(parameters, roi_properties)
@@ -308,7 +308,7 @@ def _generate_galvo_point_element(group: StimulationGroup,
     parameters = deepcopy(parameters)
 
     # make sure we only pass expected parameters since type checking will flag the unexpected
-    parameters = _validate_keys(GalvoPointElement, parameters)
+    parameters = validate_keys(GalvoPointElement, parameters)
 
     # merge and allow parameters to override roi properties
     parameters = ChainMap(parameters, group_properties)
@@ -333,7 +333,7 @@ def _generate_mark_point_element(group: StimulationGroup,
     parameters = deepcopy(parameters)
 
     # make sure we only pass expected parameters since type checking will flag the unexpected
-    parameters = _validate_keys(MarkPointElement, parameters)
+    parameters = validate_keys(MarkPointElement, parameters)
 
     # convert values
     _convert_parameters_relative_to_galvo_voltage(parameters)

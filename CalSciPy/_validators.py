@@ -11,9 +11,9 @@ from .color_scheme import TERM_SCHEME
 # backport if necessary
 from sys import version_info
 if version_info.minor < 10:
-    from _backports import dataclass, field, Field
+    from _backports import dataclass, Field
 else:
-    from dataclasses import dataclass, field, Field
+    from dataclasses import dataclass, Field
 
 
 def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
@@ -354,8 +354,7 @@ def type_check_nested_types(var: Any, expected: str) -> bool:
     try:
         if isinstance(var, (MappingProxyType, dict)):
             pass
-        _ = ite
-        r(var)
+        _ = iter(var)
     except TypeError:
         return isinstance(var, eval(expected))
     else:

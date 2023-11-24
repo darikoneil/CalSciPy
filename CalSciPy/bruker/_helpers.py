@@ -1,9 +1,7 @@
 from __future__ import annotations
 from typing import Sequence, Union, Tuple
-from pathlib import Path
 from itertools import product
-
-import numpy as np
+from operator import eq
 
 from .._backports import PatternMatching
 
