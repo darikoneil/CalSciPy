@@ -1,9 +1,16 @@
 from __future__ import annotations
 from typing import List, Tuple, Any
 from PPVD.style import TerminalStyle
-from dataclasses import Field
+
 from types import MappingProxyType
 import re
+
+# use backport if necessary
+from sys import version_info
+if version_info.minor < 10:
+    from _backports import Field
+else:
+    from dataclasses import Field
 
 
 def _validate_range(var: Any, val_range: Tuple[Any, Any]) -> List[Exception]:

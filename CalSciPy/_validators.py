@@ -1,8 +1,38 @@
 from __future__ import annotations
-from typing import Callable, Tuple, Any
+from typing import Callable, Tuple, Any, Union, List
+from types import MappingProxyType
 from functools import wraps
 from pathlib import Path
 import string
+import re
+
+from .color_scheme import TERM_SCHEME
+
+# backport if necessary
+from sys import version_info
+if version_info.minor < 10:
+    from _backports import dataclass, field, Field
+else:
+    from dataclasses import dataclass, field, Field
+
+
+def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
+    """
+    Function amends arguments tuple (~scary tuple mutation~)
+
+    :param arguments: arguments to be amended
+    :type arguments: tuple
+    :param amendment: new value of argument
+    :type amendment: Any
+    :param pos: index of argument to be converted
+    :type pos: int
+    :return: amended arguments
+    :rtype: Tuple
+    """
+
+    arguments = list(arguments)
+    arguments[pos] = amendment
+    return tuple(arguments)
 
 
 def collector(pos: int, key: str, *args, **kwargs) -> Tuple[bool, Any, bool]:
@@ -155,25 +185,6 @@ def validate_filename(function: Callable, pos: int = 0, key: str = None) -> Call
     return decorator
 
 
-def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
-    """
-    Function amends arguments tuple (~scary tuple mutation~)
-
-    :param arguments: arguments to be amended
-    :type arguments: tuple
-    :param amendment: new value of argument
-    :type amendment: Any
-    :param pos: index of argument to be converted
-    :type pos: int
-    :return: amended arguments
-    :rtype: Tuple
-    """
-
-    arguments = list(arguments)
-    arguments[pos] = amendment
-    return tuple(arguments)
-
-
 @parameterize
 def validate_evenly_divisible(function: Callable, numerator: int = 0, denominator: int = 1, axis: int = 1) -> Callable:
     """
@@ -219,3 +230,201 @@ def validate_tensor(function: Callable, pos: int = 0, key: str = None) -> Callab
         # noinspection PyArgumentList
         return function(*args, **kwargs)
     return decorator
+
+
+def validate_field_length(var: Any, val_length: int) -> Exception:
+    logger = MultiExceptionLogger()
+    try:
+        _ = iter(var)
+    except TypeError:
+        if len(var) != val_length:
+            return [AssertionError("Value Length")]
+    else:
+        return logger.exceptions
+
+
+def validate_field_range(var: Any, val_range: Tuple[Any, Any]) -> List[Exception]:
+    logger = MultiExceptionLogger()
+    val_min, val_max = val_range
+    try:
+        _ = iter(var)
+    except TypeError:
+        if not val_min <= var <= val_max:
+            return [AssertionError("Range")]
+    else:
+        for val in var:
+            try:
+                assert (val_min <= val <= val_max), "Range"
+            except AssertionError as e:
+                logger += e
+        return logger.exceptions
+
+
+def validate_field_value_length(var: Any, val_length: int) -> Exception:
+    logger = MultiExceptionLogger()
+    for val in var.values():
+        try:
+            _ = iter(val)
+        except TypeError:
+            if val_length != 1:
+                return [AssertionError("Value Length")]
+        else:
+            try:
+                assert (len(val) == val_length)
+            except AssertionError:
+                e = AssertionError("Value Length")
+                logger += e
+        return logger.exceptions
+
+
+def validate_keys(element: Any, parameters: dict) -> dict:
+    if isinstance(parameters, dict):
+        expected_keys = vars(element).keys()
+        return {key: value for key, value in parameters.items() if key in expected_keys}
+    else:
+        return {}
+
+
+FIELD_VALIDATORS = MappingProxyType(dict({
+    "length": validate_field_length,
+    "range": validate_field_range,
+    "value_length": validate_field_value_length
+
+}))
+
+
+class MultiExceptionLogger:
+    def __init__(self, exception_class: Exception = Exception, exceptions: List[Exception] = None):
+        self.exceptions = []
+        self.exception_class = exception_class
+        if exceptions:
+            self.add_exception(exceptions)
+
+    def __str__(self):
+        exceptions = "".join([f"\n{message}" for message in self.exceptions])
+        return TERM_SCHEME(*exceptions, "emphasis")
+
+    def add_exception(self, other: Union[Exception, List[Exception]]) -> MultiExceptionLogger:
+        try:
+            _ = iter(other)
+        except TypeError:
+            self.exceptions.append(other)
+        else:
+            for exception in other:
+                self.add_exception(exception)
+        self.exceptions = [exception for exception in self.exceptions if exception is not None]
+
+    def raise_exceptions(self) -> MultiExceptionLogger:
+        # noinspection PyCallingNonCallable
+        raise self.exception_class(self.__str__())
+
+    def __add__(self, other: Union[Exception, List[Exception]]):
+        try:
+            _ = iter(other)
+        except TypeError:
+            self.add_exception(other)
+        else:
+            for exception in other:
+                self.add_exception(exception)
+        return MultiExceptionLogger(self.exceptions)
+
+    def __call__(self, *args, **kwargs):
+        self.raise_exceptions()
+
+
+class MultiException(Exception):
+    def __init__(self, errors: List[Exception]):
+        self.errors = errors
+        super().__init__(self.errors)
+        return
+
+
+def type_check_nested_types(var: Any, expected: str) -> bool:
+    """
+    Checks type of nested types. WORKS FOR ONLY ONE NEST.
+
+    :param var: variable to check
+    :type var: Any
+    :param expected: expected type
+    :type expected: str
+    :return: boolean type comparison
+    :rtype: bool
+    """
+    # noinspection DuplicatedCode
+    try:
+        if isinstance(var, (MappingProxyType, dict)):
+            pass
+        _ = ite
+        r(var)
+    except TypeError:
+        return isinstance(var, eval(expected))
+    else:
+        # separate out the nested types
+        expected = re.split(r"[\[\],]", expected)[:-1]
+        outer_type = isinstance(var, eval(expected[0]))
+        expected.pop(0)
+
+        var_list = list(var)
+
+        # if the provided types aren't equal to number of items in var, then fill out with last type
+        if len(var_list) != len(expected):
+            while len(var_list) != len(expected):
+                expected.append(expected[-1])
+        try:
+            assert (len(var.keys()) >= 1)
+            checks = [isinstance(nested_var, eval(nested_type))
+                      for nested_var, nested_type in zip(var.values(), expected)]
+            checks.append(outer_type)
+        except AttributeError:
+            checks = [isinstance(nested_var, eval(nested_type))
+                      for nested_var, nested_type in zip(var, expected)]
+            checks.append(outer_type)
+        return all(checks)
+
+
+def format_fields(data_class: dataclass()) -> Tuple[Tuple[str, Any, Field], ...]:
+    return tuple([(key, data_class.__dict__.get(key), data_class.__dataclass_fields__.get(key))
+                  for key in sorted(data_class.__dataclass_fields__)])
+
+
+def field_validator(key: str, value: Any, var: Field) -> List[Exception]:
+    if value is None:
+        return
+
+    logger = MultiExceptionLogger()
+    # noinspection DuplicatedCode
+    type_ = var.type
+
+    # first check type always
+    try:
+        # Type Check
+        if not isinstance(value, eval(type_)):
+            raise AttributeError(f"Field {key} must be type {type_} not {type(value).__name__}")
+    except TypeError:
+        # Type Check
+        if not type_check_nested_types(value, str(type_)):
+            raise AttributeError(f"Field {key} must be type {type_} not {type(value).__name__}")
+    except AttributeError as e:
+        logger += e
+        return logger.exceptions  # short-circuit to prevent shenanigans on the field validators which are type specific
+
+    # now use validators on metadata
+    meta = var.metadata
+
+    for key in meta.keys():
+        if key in FIELD_VALIDATORS.keys():
+            e = FIELD_VALIDATORS.get(key)(value, meta.get(key))
+            if e:
+                logger += e
+    return logger.exceptions
+
+
+def validate_fields(data_class: dataclass) -> bool:
+    logger = MultiExceptionLogger()
+    fields = format_fields(data_class)
+
+    for key, val, field_ in fields:
+        logger.add_exception(field_validator(key=key, value=val, var=field_))
+
+    if logger.exceptions:
+        logger.raise_exceptions()

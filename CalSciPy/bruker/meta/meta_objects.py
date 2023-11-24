@@ -5,10 +5,10 @@ from xml.etree import ElementTree
 from collections import ChainMap
 
 import numpy as np
-from PPVD.style import TerminalStyle
 from scipy.spatial import ConvexHull
 
-from ..roi_tools import calculate_mask
+from ...color_scheme import TERM_SCHEME
+from ...roi_tools import calculate_mask
 
 
 class _BrukerMeta:
@@ -147,23 +147,21 @@ class ROIMeta:
 
         :rtype: str
         """
-        string_to_print = ""
-        string_to_print += f"\n{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{TerminalStyle.UNDERLINE}" \
-                           f"{self.__name__()}{TerminalStyle.RESET}\n"
+        string_to_print = TERM_SCHEME(f"{self.__name__()}\n", "header")
         for key, value in vars(self).items():
             if isinstance(value, dict):
-                string_to_print += f"{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{key}{TerminalStyle.RESET}:"
+                string_to_print += TERM_SCHEME(f"{key}", "emphasis")
+                string_to_print += ":"
                 for nested_key in vars(self).get(key):
-                    string_to_print += f"\n\t{TerminalStyle.YELLOW}{nested_key}: {TerminalStyle.RESET}" \
-                                       f"{vars(self).get(key).get(nested_key)}"
+                    string_to_print += f"\n\t{nested_key}: {vars(self).get(key).get(nested_key)}"
                 string_to_print += "\n"
             elif isinstance(value, ChainMap):
                 pass
             elif isinstance(value, np.ndarray):
                 pass
             else:
-                string_to_print += f"{TerminalStyle.YELLOW}{TerminalStyle.BOLD}{key}: " \
-                                   f"{TerminalStyle.RESET}{vars(self).get(key)}\n"
+                string_to_print += TERM_SCHEME(f"{key}", "emphasis")
+                string_to_print += f": {vars(self).get(key)}\n"
         return string_to_print
 
     @staticmethod

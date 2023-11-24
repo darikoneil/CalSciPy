@@ -2,18 +2,27 @@ from __future__ import annotations
 from typing import Sequence, Union, Tuple
 from pathlib import Path
 from itertools import product
-from xml.etree import ElementTree
 
 import numpy as np
-import pandas as pd
 
-from .._validators import convert_permitted_types_to_required
+from .._backports import PatternMatching
 
 
 def calc_ch_pl_comb(channels: Union[int, Sequence[int]],
                     planes: Union[int, Sequence[int]],
                     exact: bool = True
                     ) -> Tuple[Tuple[int, int], ...]:
+    """
+    Calculates all combinations of channels / planes that are requested. For ease of implementation, pass the exact flag
+    to request combinations where there is only a single plane or channel, otherwise the integer will be considered the
+    total number of channels or planes (e.g., if you request all planes at channel 2, use the exact flag. otherwise,
+    the function will return all planes across two channels)
+
+    :param channels:
+    :param planes:
+    :param exact:
+    :returns: All combinations of channels x planes in a tuple of tuples
+    """
 
     if not isinstance(channels, Sequence):
         if exact:
@@ -30,41 +39,39 @@ def calc_ch_pl_comb(channels: Union[int, Sequence[int]],
     return tuple(product(channels, planes))
 
 
-@convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
-def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
+def generate_bruker_naming_convention(channel: int,
+                                      plane: int,
+                                      num_channels: int = 1,
+                                      num_planes: int = 1
+                                      ) -> str:
     """
-    Function to extract the relative frame times from a PrairieView imaging session's primary .xml file
+    Generates the expected bruker naming convention for images collected with an arbitrary number of cycles & channels
 
-    :param: filename
-    :returns: dataframe containing time (index, ms) x imaging frame (*zero-indexed*)
+    This function expects that the naming convention is _Cycle00000_Ch0_000000.ome.tiff where the channel is
+    one-indexed. The 5-digit cycle id represents the frame if using multiplane imaging and the 6-digit tag represents
+    the plane. Otherwise, the 5-digit tag is static and the 6-digit tag represents the frame.
+
+    Please note that the parameters channel and plane are *zero-indexed*.
+
+    :param channel: channel to produce name for
+    :param plane: plane to produce name for
+    :param num_channels: number of channels
+    :param num_planes: number of planes
+    :returns: proper naming convention
     """
-    tree = ElementTree.parse(filename)
-    root = tree.getroot()
-
-    # assert expected
-    # child_tags = [child.tag for child in root]
-    # expected_tags = ("SystemIDs", "PVStateShard", "Sequence")
-
-    # for tag_ in expected_tags:
-    #   assert (tag_ in child_tags), "XML follows unexpected structure"
-
-    # Since expected, let's grab frame sequence
-    sequence = root.find("Sequence")
-    # use set comprehension to avoid duplicates
-    relative_frame_times = {frame.attrib.get("relativeTime") for frame in sequence if "relativeTime" in frame.attrib}
-    # convert to float (appropriate type) & sort chronologically
-    relative_frame_times = sorted([float(frame) for frame in relative_frame_times])
-    frames = range(len(relative_frame_times))
-    # convert to same type as analog data to avoid people getting gotcha'd by pandas
-    frames = np.array(frames).astype(np.float64)
-    # convert to milliseconds, create new array to avoid people getting gotcha'd by pandas
-    frame_times = np.array(relative_frame_times) * 1000
-    # round to each millisecond
-    frame_times = np.round(frame_times).astype(np.int64)
-    # make index
-    frame_times = pd.Index(data=frame_times, name="Time (ms)")
-    # make dataframe
-    return pd.DataFrame(data=frames, index=frame_times, columns=["Imaging Frame"])
+    if num_channels > 1:
+        num_channels = 2
+    if num_planes > 1:
+        num_planes = 2
+    with PatternMatching([num_channels, num_planes], [eq, eq]) as case:
+        if case([1, 1]):
+            return "*.ome.tif"
+        elif case([2, 1]):
+            return "".join(["*Ch", str(channel + 1), "*"])
+        elif case([1, 2]):
+            return "".join(["*00000", str(plane + 1), ".ome.tif"])
+        elif case([2, 2]):
+            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
 
 
 def print_image_description(channels: int,

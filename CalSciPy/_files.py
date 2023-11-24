@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Union
+from typing import Union, List
 from pathlib import Path
 from numbers import Number
 from operator import eq
 
 import numpy as np
 
-from ._validators import convert_permitted_types_to_required
 from ._backports import PatternMatching
+from ._validators import convert_permitted_types_to_required
 
 
 """
@@ -66,6 +66,25 @@ def check_filepath(path: Union[str, Path], name: str = None, extension: str = No
             return path.joinpath(name).with_suffix(extension)
 
 
+def check_split_strings(tag_: str, str_to_split: str) -> str:
+    return [_tag for _tag in str_to_split.split("_") if tag_ in _tag]
+# REFACTOR
+
+
+def find_num_unique_files_given_static_substring(tag: str, files: List[Path]) -> int:
+    _hits = [check_split_strings(tag, str(_file)) for _file in files]
+    _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+    return list(_hits).__len__()
+# REFACTOR
+
+
+def find_num_unique_files_containing_tag(tag: str, files: List[Path]) -> int:
+    _hits = [check_split_strings(tag, str(_file)) for _file in files]
+    _hits = [_hit for _nested_hit in _hits for _hit in _nested_hit]
+    return list(dict.fromkeys(_hits)).__len__()
+
+
+# REFACTOR
 def zero_pad_num_to_string(idx: int, length: int) -> str:
     """
     converts an integer index into a zero-padded string with length num_zeros

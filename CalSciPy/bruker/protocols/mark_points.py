@@ -7,24 +7,21 @@ from itertools import chain
 
 import numpy as np
 
-from PPVD.validation import validate_filename
-from PPVD.parsing import convert_permitted_types_to_required
 
-from . import CONSTANTS
-from .xml_objects import GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements, \
-    GalvoPointElement, MarkPointElement
-from .factories import BrukerXMLFactory
-from ..optogenetics import Photostimulation, StimulationGroup
-from ..roi_tools import ROI
-from .._calculations import min_max_scale
+from ... import CONSTANTS
+from ...factories import BrukerXMLFactory
+from ...optogenetics import Photostimulation, StimulationGroup
+from ...roi_tools import ROI
+# noinspection PyProtectedMember
+from ...xml.xml_objects import (GalvoPoint, GalvoPointList, _BrukerObject, GalvoPointGroup, MarkPointSeriesElements,
+                                GalvoPointElement, MarkPointElement)
+from ..._calculations import min_max_scale
+from ..._validators import convert_permitted_types_to_required, validate_filename
 
 
 """
 Collection of functions for generating protocols importable into PrairieView
 """
-
-# DEFAULT LOCATION / NAME FOR SAVING PROTOCOLS
-_DEFAULT_PATH = Path.cwd().joinpath("prairieview_protocol.xml")
 
 
 def generate_galvo_point_list(photostimulation: Photostimulation,
@@ -106,36 +103,6 @@ def generate_marked_points_protocol(photostimulation: Photostimulation,
                                       name)
 
     return mpl, gpl
-
-
-@validate_filename(pos=1)
-@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=1)
-def write_protocol(protocol: _BrukerObject,
-                   file_path: Path = _DEFAULT_PATH,
-                   ext: str = ".xml",
-                   name: Optional[str] = None) -> None:
-    """
-    Write prairieview protocol to file
-
-    :param protocol: prairieview object
-    :param file_path: file path for saving file
-    :param name: name of protocol
-    :param ext: file extension for saving file
-    """
-
-    # If name  provided, append name
-    if name is not None:
-        file_path = file_path.joinpath(name)
-
-    # If no extension, append ext
-    if file_path.suffix == '':
-        file_path = file_path.with_suffix(ext)
-
-    factory = BrukerXMLFactory()
-    lines = factory.constructor(protocol)
-    with open(file_path, "w+") as file:
-        for line in lines:
-            file.write(line)
 
 
 def _convert_parameters_relative_to_galvo_voltage(parameters: dict,
@@ -384,11 +351,3 @@ def _offset_z(parameters: dict, z_offset: float = None) -> dict:
             parameters["z"] += z_offset
         else:
             parameters["z"] = z_offset
-
-
-def _validate_keys(element: _BrukerObject, parameters: dict) -> dict:
-    if isinstance(parameters, dict):
-        expected_keys = vars(element).keys()
-        return {key: value for key, value in parameters.items() if key in expected_keys}
-    else:
-        return {}
