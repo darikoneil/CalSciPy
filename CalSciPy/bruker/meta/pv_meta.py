@@ -59,7 +59,7 @@ def load_mark_points(file_path: Union[str, Path],
 
     bruker_element_factory = BrukerElementFactory(version)
 
-    return MarkedPointSeriesMeta(root, factory=bruker_element_factory)
+    return MarkedPointSeriesMeta(root, factory=bruker_element_factory).marked_point_series
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
@@ -92,4 +92,4 @@ def _import_gpl(path: Union[str, Path], version: str = DEFAULT_PRAIRIEVIEW_VERSI
 
     factory = BrukerElementFactory(version)
 
-    return GalvoPointListMeta(root=root, factory=factory)
+    return GalvoPointListMeta(root=root, factory=factory).galvo_point_list
