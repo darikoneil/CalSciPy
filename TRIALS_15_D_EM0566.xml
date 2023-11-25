@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PVSavedMarkPointSeriesElements Iterations="1" IterationDelay="0.00000000000000" CalcFunctMap="False">
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 0" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 1" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 2" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 3" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 4" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 5" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 6" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 7" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 8" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 9" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 10" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 11" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 12" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 13" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+  <PVMarkPointElement Repetitions="1" UncagingLaser="Uncaging" UncagingLaserPower="0.00000000000000" TriggerFrequency="None" TriggerSelection="PFI0" TriggerCount="0" AsyncSyncFrequency="FirstRepetition" VoltageOutputCategoryName="None" VoltageRecCategoryName="None" ParameterSet="CurrentSettings">
+    <PVGalvoPointElement InitialDelay="5000.00000000000" InterPointDelay="4900.00000000000" Duration="100.000000000000" SpiralRevolutions="0.01000000000000" AllPointsAtOnce="False" Points="Trial 14" Indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24" />
+    </PVMarkPointElement>
+</PVSavedMarkPointSeriesElements>

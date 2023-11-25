@@ -115,7 +115,7 @@ class MarkPointSeriesElements(_BrukerObject):
     Dataclass for a sequence of photostimulations
     """
     #: Tuple[MarkPointElement]: series of mark point elements
-    marks: Tuple[object]
+    marks: tuple = (None, )
     #: int: number of times this series is iterated
     iterations: int = field(default=1, metadata={"range": (1, inf)})
     #: float: delay between each series iteration (ms)
@@ -134,7 +134,7 @@ class MarkPointElement(_BrukerObject):
     Dataclass for a specific marked point in a sequence of photostimulations
     """
     #: Tuple[GalvoPointElement]: Tuple of galvo point elements
-    points: tuple[object]
+    points: tuple = (None, )
     #: int: repetitions of this stimulation event
     repetitions: int = field(default=1, metadata={"range": (1, inf)})
     #: str: identity of uncaging laser
@@ -178,7 +178,7 @@ class GalvoPointElement(_BrukerObject):
     all_points_at_once: bool = False
     #: str: id from galvo point list
     points: str = "Point 0"
-    #: int: index from galvo point list
+    #: Tuple[int]: index from galvo point list
     indices: Tuple[int] = (0, )
 
     @staticmethod
