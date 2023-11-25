@@ -8,7 +8,7 @@ import seaborn as sns
 
 from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.roi_tools import Suite2PHandler
-from CalSciPy.bruker.protocols import generate_galvo_point_list
+from CalSciPy.bruker.protocols import generate_galvo_point_list, generate_marked_points_protocol
 from CalSciPy.bruker.meta import load_galvo_point_list, load_mark_points
 
 
@@ -37,6 +37,13 @@ for trial in range(len(targ_src)):
 # load src GPL
 src_gpl = generate_galvo_point_list(photostim, targets_only=True, name="src_targets", z_offset=21.44)
 
+src_mpl = generate_marked_points_protocol(photostim,
+                                          targets_only=True,
+                                          file_path=str(base_path),
+                                          name="TRIALS_15_E_EM0566",
+                                          z_offset=21.44)
+
 gpl = load_galvo_point_list(gpl_file)
 
 mps = load_mark_points(prot_file)
+

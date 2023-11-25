@@ -1,7 +1,7 @@
 from CalSciPy.optogenetics import randomize_targets
 from CalSciPy.roi_tools import Suite2PHandler
 from visualize_optogenetics import view_target_overlay
-from bruker.protocols.protocols import *
+from CalSciPy.bruker.protocols.mark_points import generate_marked_points_protocol
 
 path_1 = Path("Y:\\EM0564_PRE_SCREEN_11_1_23-001")
 
