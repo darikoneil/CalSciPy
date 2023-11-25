@@ -9,6 +9,7 @@ from scipy.spatial import ConvexHull
 
 from ...color_scheme import TERM_SCHEME
 from ...roi_tools import calculate_mask
+from ..xml.xml_objects import GalvoPointList  # womp womp, has to be exception atm
 
 
 class _BrukerMeta:
@@ -55,22 +56,17 @@ class _BrukerMeta:
 
 
 class GalvoPointListMeta(_BrukerMeta):
-    def __init__(self, root: ElementTree, factory: object, width: int = 512, height: int = 512):
+    def __init__(self, root: ElementTree, factory: object):
         """
         Metadata object for a galvo point list saved from mark points in pyprairieview
 
         """
-        self.stuff = []
-        self.width = width
-        self.height = height
-
+        self.galvo_point_list = None
         super().__init__(root, factory)
 
     def _build_meta(self, root: ElementTree, factory: object) -> _BrukerMeta:
-        children = [child for idx, child in enumerate(root) if idx >= 25]
-        child = children[0]
-        # beep
-        # factory.constructor(child)
+        self.galvo_point_list = (
+            GalvoPointList(galvo_points=[factory.constructor(child) for idx, child in enumerate(root)]))
 
     def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
         return 0

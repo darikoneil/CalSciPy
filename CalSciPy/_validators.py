@@ -15,12 +15,6 @@ if version_info.minor < 10:
 else:
     from dataclasses import dataclass, Field
 
-from time import time
-
-
-idx_idx = 0
-var_var = []
-
 
 def amend_args(arguments: Tuple, amendment: Any, pos: int = 0) -> Tuple:
     """
@@ -356,17 +350,6 @@ def type_check_nested_types(var: Any, expected: str) -> bool:
     :return: boolean type comparison
     :rtype: bool
     """
-    global idx_idx
-    global var_var
-
-    if expected == "Tuple[int]":
-        print(f"{expected=}, time={time()}")
-        idx_idx += 1
-        print(f"\n{idx_idx=}\n")
-        var_var.append(var)
-        if idx_idx >= 180:
-            print(f"{var_var[-1]=}")
-
     # noinspection DuplicatedCode
     try:
         if isinstance(var, (MappingProxyType, dict)):
@@ -416,9 +399,8 @@ def field_validator(key: str, value: Any, var: Field) -> List[Exception]:
         # Type Check
         if not isinstance(value, eval(type_)):
             raise AttributeError(f"Field {key} must be type {type_} not {type(value).__name__}")
-        # TODO: Add logic for correcting string indices to tuples of integers
     except TypeError:
-        # Type Check
+        # Type Check for nested groups and tuples
         if not type_check_nested_types(value, str(type_)):
             raise AttributeError(f"Field {key} must be type {type_} not {type(value).__name__}")
     except AttributeError as e:
@@ -434,6 +416,26 @@ def field_validator(key: str, value: Any, var: Field) -> List[Exception]:
             if e:
                 logger += e
     return logger.exceptions
+
+
+def parse_tuple(vars, nested_type: typle) -> Tuple:
+
+    parse_vars = []
+
+    for var in vars.split(","):
+
+        var = var.replace(" ", "")
+
+        if "-" in var:
+            start_val, end_val = var.split("-")
+            start_val = int(start_val)
+            end_val = int(end_val)
+            var = list(range(start_val, end_val + 1, 1))
+            var = str(var).replace("[", "").replace("]", "").replace(" ", "")
+
+        parse_vars.extend([char for char in var.split(",")])
+
+    return tuple([nested_type(var) for var in parse_vars])
 
 
 def validate_fields(data_class: dataclass) -> bool:

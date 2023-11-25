@@ -220,7 +220,7 @@ class GalvoPointList(_BrukerObject):
 
     """
     #: Tuple[Union[GalvoPoint, GalvoPointGroup]]
-    galvo_points: Tuple[object]
+    galvo_points: tuple
 
     def __post_init__(self):
         """
