@@ -6,7 +6,7 @@ from xml.etree import ElementTree
 from ..._validators import convert_permitted_types_to_required, validate_extension
 from ...factories import BrukerElementFactory
 from ..constants import CONSTANTS
-from .meta_objects import GalvoPointListMeta, PhotostimulationMeta
+from .meta_objects import GalvoPointListMeta, MarkedPointSeriesMeta
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
@@ -34,7 +34,7 @@ def load_galvo_point_list(path: Union[str, Path]) -> GalvoPointListMeta:
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def load_mark_points(file_path: Union[str, Path],
                      version: str = DEFAULT_PRAIRIEVIEW_VERSION
-                     ) -> PhotostimulationMeta:
+                     ) -> MarkedPointSeriesMeta:
     """
 
     :param file_path: path to xml file
@@ -59,7 +59,7 @@ def load_mark_points(file_path: Union[str, Path],
 
     bruker_element_factory = BrukerElementFactory(version)
 
-    return PhotostimulationMeta(root, factory=bruker_element_factory)
+    return MarkedPointSeriesMeta(root, factory=bruker_element_factory)
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)

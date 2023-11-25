@@ -76,7 +76,7 @@ class GalvoPointListMeta(_BrukerMeta):
         return "GalvoPointListMeta"
 
 
-class PhotostimulationMeta(_BrukerMeta):
+class MarkedPointSeriesMeta(_BrukerMeta):
     def __init__(self, root: ElementTree, factory: object, width: int = 512, height: int = 512):
         """
         Metadata object for Photostimulation / MarkedPoints Protocols.
@@ -99,7 +99,7 @@ class PhotostimulationMeta(_BrukerMeta):
     def __name__() -> str:
         return "Photostimulation Metadata"
 
-    def _build_meta(self, root: ElementTree, factory: object) -> PhotostimulationMeta:
+    def _build_meta(self, root: ElementTree, factory: object) -> MarkedPointSeriesMeta:
         """
         Abstract method for building metadata object
 
@@ -110,14 +110,14 @@ class PhotostimulationMeta(_BrukerMeta):
         self.sequence = factory.constructor(root)
         self._roi_constructor(root, factory)
 
-    def _extra_actions(self) -> PhotostimulationMeta:
+    def _extra_actions(self) -> MarkedPointSeriesMeta:
         for idx, roi in enumerate(self.rois):
             roi.coordinates = roi.generate_coordinates(self.image_width, self.image_height)
             roi.mask = roi.generate_mask(self.image_width, self.image_height)
             roi.stimulation_group = idx
             roi.vertices = roi.generate_hull_vertices()
 
-    def _roi_constructor(self, root: ElementTree, factory: object) -> PhotostimulationMeta:
+    def _roi_constructor(self, root: ElementTree, factory: object) -> MarkedPointSeriesMeta:
         """
         Constructs each ROI
 
