@@ -4,7 +4,7 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 from ..._validators import convert_permitted_types_to_required, validate_extension
-from ...factories import BrukerElementFactory
+from ..factories import BrukerElementFactory
 from ..constants import CONSTANTS
 from .meta_objects import GalvoPointListMeta, MarkedPointSeriesMeta
 
