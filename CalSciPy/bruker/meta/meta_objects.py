@@ -9,7 +9,8 @@ from scipy.spatial import ConvexHull
 
 from ...color_scheme import TERM_SCHEME
 from ...roi_tools import calculate_mask
-from ..xml.xml_objects import GalvoPointList, MarkPointElement, MarkPointSeriesElements  # womp womp, has to be exception atm
+from ..xml.xml_objects import GalvoPointList, MarkPointElement, MarkPointSeriesElements
+# womp womp, has to be exception atm
 
 
 class _BrukerMeta:
