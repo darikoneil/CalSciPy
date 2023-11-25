@@ -83,12 +83,12 @@ class MarkedPointSeriesMeta(_BrukerMeta):
 
         loaded from an experiment or from a protocol template
         """
-        self.series = None
+        self.marked_point_series = None
 
         super().__init__(root, factory)
 
     def __str__(self):
-        return f"Photostimulation metadata containing {len(self.rois)} marked_points"
+        return f"Marked point series meta containing {len(self.marked_point_series.marks)} marks"
 
     @staticmethod
     def __name__() -> str:
@@ -102,7 +102,7 @@ class MarkedPointSeriesMeta(_BrukerMeta):
         :param factory:
         :return:
         """
-        self.series = factory.constructor(root)
+        self.marked_point_series = factory.constructor(root)
 
         marks = []
         for marked_point in root:
@@ -111,7 +111,7 @@ class MarkedPointSeriesMeta(_BrukerMeta):
             marked_point.points = points
             marks.append(marked_point)
 
-        self.series.marks = tuple(marks)
+        self.marked_point_series.marks = tuple(marks)
 
     def _extra_actions(self) -> MarkedPointSeriesMeta:
         # for idx, roi in enumerate(self.rois):

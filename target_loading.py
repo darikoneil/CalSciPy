@@ -35,15 +35,14 @@ for trial in range(len(targ_src)):
     photostim.add_photostimulation_group(targ_src.get(trial), delay=delay, point_interval=point_interval, name=name)
 
 # load src GPL
-src_gpl = generate_galvo_point_list(photostim, targets_only=True, name="src_targets", z_offset=21.44)
+# src_gpl = generate_galvo_point_list(photostim, targets_only=True, name="src_targets", z_offset=21.44)
 
-src_mpl = generate_marked_points_protocol(photostim,
-                                          targets_only=True,
-                                          file_path=str(base_path),
-                                          name="TRIALS_15_E_EM0566",
-                                          z_offset=21.44)
+# src_mpl = generate_marked_points_protocol(photostim,
+#                                          targets_only=True,
+#                                          file_path=str(base_path),
+#                                          name="TRIALS_15_E_EM0566",
+#                                          z_offset=21.44)
 
 gpl = load_galvo_point_list(gpl_file)
 
 mps = load_mark_points(prot_file)
-
