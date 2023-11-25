@@ -416,6 +416,7 @@ def field_validator(key: str, value: Any, var: Field) -> List[Exception]:
         # Type Check
         if not isinstance(value, eval(type_)):
             raise AttributeError(f"Field {key} must be type {type_} not {type(value).__name__}")
+        # TODO: Add logic for correcting string indices to tuples of integers
     except TypeError:
         # Type Check
         if not type_check_nested_types(value, str(type_)):
