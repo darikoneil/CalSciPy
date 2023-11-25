@@ -12,7 +12,7 @@ from CalSciPy.bruker.protocols.mark_points import generate_galvo_point_list
 
 
 # file locs
-base_path = Path("C:\\Users\\YUSTE\\Desktop\\EM0566_SET")
+base_path = Path("C:\\Users\\Darik\\Desktop\\EM0566_SET")
 s2p_file = base_path.joinpath("suite2p").joinpath("plane0")
 src_trgs_file = base_path.joinpath("targets_file.npy")
 gpl_file = base_path.joinpath("TRIALS_15_D_EM0566.gpl")
@@ -55,4 +55,3 @@ tree = ElementTree.parse(gpl_file)
 root = tree.getroot()
 
 file_gpl = GalvoPointListMeta(root, factory=factory)
-
