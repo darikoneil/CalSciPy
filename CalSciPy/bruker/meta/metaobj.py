@@ -9,8 +9,6 @@ from scipy.spatial import ConvexHull
 
 from ...color_scheme import TERM_SCHEME
 from ...roi_tools import calculate_mask
-from ..xml.xml_objects import GalvoPointList, MarkPointElement, MarkPointSeriesElements
-# womp womp, has to be exception atm
 
 
 class _BrukerMeta:
@@ -66,8 +64,8 @@ class GalvoPointListMeta(_BrukerMeta):
         super().__init__(root, factory)
 
     def _build_meta(self, root: ElementTree, factory: object) -> _BrukerMeta:
-        self.galvo_point_list = (
-            GalvoPointList(galvo_points=[factory.constructor(child) for idx, child in enumerate(root)]))
+        self.galvo_point_list = factory.constructor(root)
+        self.galvo_point_list.galvo_points = tuple([factory.constructor(child) for idx, child in enumerate(root)])
 
     def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
         return 0
@@ -77,10 +75,55 @@ class GalvoPointListMeta(_BrukerMeta):
         return "GalvoPointListMeta"
 
 
-class MarkedPointSeriesMeta(_BrukerMeta):
+class MarkPointSeriesMeta(_BrukerMeta):
     def __init__(self, root: ElementTree, factory: object):
         """
-        Metadata object for MarkedPoints Protocols.
+        Metadata object for MarkedPointsSeries.
+
+        loaded from an experiment
+        """
+        self.marked_point_series = None
+        self.nested_points = None
+
+        super().__init__(root, factory)
+
+    def _build_meta(self, root: ElementTree, factory: object) -> MarkedPointSeriesMeta:
+        """
+        Abstract method for building metadata object
+
+        :param root:
+        :param factory:
+        :return:
+        """
+        self.marked_point_series = factory.constructor(root)
+
+        marks = []
+        points = []
+        nested_points = []
+        for marked_point in root:
+            nested_ = []
+            for galvo_point in marked_point:
+                nested_.append(tuple([factory.constructor(nested_point) for nested_point in galvo_point]))
+            points = tuple([factory.constructor(point) for point in marked_point])
+            marked_point = factory.constructor(marked_point)
+            marked_point.points = points
+            marks.append(marked_point)
+            nested_points.append(nested_)
+        self.marked_point_series.marks = tuple(marks)
+        self.nested_points = tuple(nested_points)
+
+    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
+        pass
+
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation Metadata"
+
+
+class SavedMarkPointSeriesMeta(_BrukerMeta):
+    def __init__(self, root: ElementTree, factory: object):
+        """
+        Metadata object for MarkedPointsSeries Protocols.
 
         loaded from an experiment or from a protocol template
         """
@@ -89,7 +132,7 @@ class MarkedPointSeriesMeta(_BrukerMeta):
         super().__init__(root, factory)
 
     def __str__(self):
-        return f"Marked point series meta containing {len(self.marked_point_series.marks)} marks"
+        return f"Saved marked point series meta containing {len(self.marked_point_series.marks)} marks"
 
     @staticmethod
     def __name__() -> str:

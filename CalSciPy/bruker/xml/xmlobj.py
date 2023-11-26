@@ -110,6 +110,28 @@ class _BrukerObject:
 
 
 @dataclass(kw_only=True)
+class VoltageOutput(_BrukerObject):
+    """
+    Dataclass for a voltage recording
+
+    """
+    @staticmethod
+    def __name__() -> str:
+        return "VoltageOutput"
+
+
+@dataclass(kw_only=True)
+class VoltageRecording(_BrukerObject):
+    """
+    Dataclass for a voltage recording
+
+    """
+    @staticmethod
+    def __name__() -> str:
+        return "VoltageRecording"
+
+
+@dataclass(kw_only=True)
 class MarkPointSeriesElements(_BrukerObject):
     """
     Dataclass for a sequence of photostimulations
@@ -122,6 +144,13 @@ class MarkPointSeriesElements(_BrukerObject):
     iteration_delay: float = field(default=0.0, metadata={"range": (0.0, inf)})
     #: bool: whether to calculate functional map
     calc_funct_map: bool = False
+
+    def __post_init__():
+        if self.marks is not None:
+            for idx, point in enumerate(self.points):
+                if not isinstance(point, MarkPointElement):
+                    raise TypeError(f"Marked point {idx} is not a MarkPointElement object")
+        super().__post_init__()
 
     @staticmethod
     def __name__() -> str:
@@ -155,6 +184,13 @@ class MarkPointElement(_BrukerObject):
     voltage_rec_category_name: str = "None"
     #: str: id of parameter set
     parameter_set: str = "CurrentSettings"
+
+    def __post_init__():
+        if self.points is not None:
+            for idx, point in enumerate(self.points):
+                if not isinstance(point, GalvoPointElement):
+                    raise TypeError(f"Galvo point {idx} is not a GalvoPointElement object")
+        super().__post_init__()
 
     @staticmethod
     def __name__() -> str:
@@ -220,16 +256,17 @@ class GalvoPointList(_BrukerObject):
 
     """
     #: Tuple[Union[GalvoPoint, GalvoPointGroup]]
-    galvo_points: tuple
+    galvo_points: tuple = None
 
     def __post_init__(self):
         """
         check that the galvo_points are correct classes
 
         """
-        for idx, point in enumerate(self.galvo_points):
-            if not isinstance(point, (GalvoPoint, GalvoPointGroup)):
-                raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
+        if self.galvo_points is not None:
+            for idx, point in enumerate(self.galvo_points):
+                if not isinstance(point, (GalvoPoint, GalvoPointGroup)):
+                    raise TypeError(f"Galvo Point {idx} is not a GalvoPoint object")
         super().__post_init__()
 
     def __str__(self):

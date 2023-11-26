@@ -15,8 +15,8 @@ from ...roi_tools import ROI
 from ..._calculations import min_max_scale
 from ..._validators import validate_keys
 from .. import CONSTANTS
-from ..xml.xml_objects import (GalvoPoint, GalvoPointList, GalvoPointGroup, MarkPointSeriesElements,
-                               GalvoPointElement, MarkPointElement)
+from ..xml.xmlobj import (GalvoPoint, GalvoPointList, GalvoPointGroup, MarkPointSeriesElements,
+                          GalvoPointElement, MarkPointElement)
 from ._helpers import write_protocol
 
 

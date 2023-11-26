@@ -10,7 +10,7 @@ from .._validators import parse_tuple
 from . import CONSTANTS
 from .xml import load_mapping
 # noinspection PyProtectedMember
-from .xml.xml_objects import _BrukerObject
+from .xml.xmlobj import _BrukerObject
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION

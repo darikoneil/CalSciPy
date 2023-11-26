@@ -5,7 +5,7 @@ from pathlib import Path
 from ..._validators import convert_permitted_types_to_required, validate_filename
 from ..factories import BrukerXMLFactory
 # noinspection PyProtectedMember
-from ..xml.xml_objects import _BrukerObject
+from ..xml.xmlobj import _BrukerObject
 
 
 # DEFAULT LOCATION / NAME FOR SAVING PROTOCOLS

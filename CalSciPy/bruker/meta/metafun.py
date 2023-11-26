@@ -6,7 +6,7 @@ from xml.etree import ElementTree
 from ..._validators import convert_permitted_types_to_required, validate_extension
 from ..factories import BrukerElementFactory
 from ..constants import CONSTANTS
-from .meta_objects import GalvoPointListMeta, MarkedPointSeriesMeta
+from .metaobj import GalvoPointListMeta, MarkPointSeriesMeta, SavedMarkPointSeriesMeta
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
@@ -32,9 +32,9 @@ def load_galvo_point_list(path: Union[str, Path]) -> GalvoPointListMeta:
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
-def load_mark_points(file_path: Union[str, Path],
-                     version: str = DEFAULT_PRAIRIEVIEW_VERSION
-                     ) -> MarkedPointSeriesMeta:
+def load_saved_mark_points(file_path: Union[str, Path],
+                           version: str = DEFAULT_PRAIRIEVIEW_VERSION
+                           ) -> SavedMarkPointSeriesMeta:
     """
 
     :param file_path: path to xml file
@@ -59,7 +59,39 @@ def load_mark_points(file_path: Union[str, Path],
 
     bruker_element_factory = BrukerElementFactory(version)
 
-    return MarkedPointSeriesMeta(root, factory=bruker_element_factory).marked_point_series
+    return SavedMarkPointSeriesMeta(root, factory=bruker_element_factory).marked_point_series
+
+
+@convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
+def load_mark_points(file_path: Union[str, Path],
+                     version: str = DEFAULT_PRAIRIEVIEW_VERSION
+                     ) -> Tuple[_B]:
+    """
+    :param file_path: path to xml file
+    :param version: version of prairieview
+    :return: photostimulation metadata
+    """
+    # We generally expected the file to be structured such that
+    # File/
+    # ├── MarkPointSeriesElements
+    # │   └──MarkPointElement
+    # │      ├──GalvoPointElement
+    # │      |      └──Point
+    #        └──GalvoPointElement (Empty)
+    # However, by using configurable mappings we do have some wiggle room
+
+    tree = ElementTree.parse(file_path)
+    root = tree.getroot()
+
+    # if it's imaging we can grab the version directly
+    if "version" in root.attrib:
+        version = root.attrib.get("version")
+
+    bruker_element_factory = BrukerElementFactory(version)
+
+    meta = MarkPointSeriesMeta(root, factory=bruker_element_factory)
+
+    return meta.marked_point_series, meta.nested_points
 
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
