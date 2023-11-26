@@ -10,6 +10,8 @@ from CalSciPy.optogenetics import Photostimulation
 from CalSciPy.roi_tools import Suite2PHandler
 from CalSciPy.bruker.protocols import generate_galvo_point_list, generate_marked_points_protocol
 from CalSciPy.bruker.meta import load_galvo_point_list, load_mark_points, load_saved_mark_points
+from CalSciPy.bruker.data import load_voltage_recording
+from CalSciPy.bruker.helpers import align_data, extract_frame_times
 
 
 # file locs
@@ -63,3 +65,12 @@ protocol_info = {
 
 
 mps = load_mark_points(file_locs.get("mps"))
+
+vrd = load_voltage_recording(file_locs.get("vrd"))
+
+frame_times = extract_frame_times(file_locs.get("t"))
+
+data = align_data(vrd, frame_times, fill=True)
+
+idx = [gpe.name.split(" ")[-1] for gpe in protocol_info.get("gpl").galvo_points]
+
