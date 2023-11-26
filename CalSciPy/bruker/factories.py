@@ -6,10 +6,11 @@ from importlib import import_module
 from xml.etree.ElementTree import Element
 from numbers import Number
 
+from .._validators import parse_tuple
 from . import CONSTANTS
 from .xml import load_mapping
 # noinspection PyProtectedMember
-from .xml.xml_objects import _BrukerObject
+from .xml.xmlobj import _BrukerObject
 
 
 DEFAULT_PRAIRIEVIEW_VERSION = CONSTANTS.DEFAULT_PRAIRIEVIEW_VERSION
@@ -60,10 +61,21 @@ class BrukerElementFactory:
         :param attr: attributes containing keys and xml strings
         :param type_annotations: dictionary mapping attribute key and expected type
         """
-        # Because bool("False") == True, here I specifically check for the "False" value
-        # Lower to avoid issues with generic types
-        return {key: (eval("".join([type_annotations.get(key).lower(), "(value)"])) if value != "False" else False)
-                for key, value in attr.items()}
+
+        for key, value in attr.items():
+
+            # Because bool("False") == True, here I specifically check for the "False" value
+            if value == "False":
+                attr[key] = False
+            # Because we need to parse nested tuples more explicitly
+            elif "Tuple[" in type_annotations.get(key):
+                nested_type = type_annotations.get(key)
+                nested_type = nested_type.split("[")[1].split("]")[0]
+                nested_type = eval(nested_type)
+                value = parse_tuple(value, nested_type)
+                attr[key] = value
+            else:
+                attr[key] = eval("".join([type_annotations.get(key).lower(), "(value)"]))
 
     @classmethod
     def _map_attributes(cls: BrukerElementFactory, attr: dict) -> dict:
@@ -96,7 +108,7 @@ class BrukerElementFactory:
         attr = self._map_attributes(element.attrib)
         bruker_object = self._identify_element_class(element)
         type_annotations = bruker_object.collect_annotations()
-        attr = self._type_conversion(attr, type_annotations)
+        self._type_conversion(attr, type_annotations)
         # noinspection PyArgumentList,PyCallingNonCallable
         return bruker_object(**attr)
 
