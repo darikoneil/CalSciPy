@@ -28,6 +28,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "get-annotations",
     "imageio",
     "imageio-ffmpeg",
     "ipython",
