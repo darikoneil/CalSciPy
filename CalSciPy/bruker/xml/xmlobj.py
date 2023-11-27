@@ -137,7 +137,7 @@ class MarkPointSeriesElements(_BrukerObject):
     Dataclass for a sequence of photostimulations
     """
     #: Tuple[MarkPointElement]: series of mark point elements
-    marks: tuple = (None, )
+    marks: tuple = None
     #: int: number of times this series is iterated
     iterations: int = field(default=1, metadata={"range": (1, inf)})
     #: float: delay between each series iteration (ms)
@@ -145,9 +145,9 @@ class MarkPointSeriesElements(_BrukerObject):
     #: bool: whether to calculate functional map
     calc_funct_map: bool = False
 
-    def __post_init__():
+    def __post_init__(self):
         if self.marks is not None:
-            for idx, point in enumerate(self.points):
+            for idx, point in enumerate(self.marks):
                 if not isinstance(point, MarkPointElement):
                     raise TypeError(f"Marked point {idx} is not a MarkPointElement object")
         super().__post_init__()
@@ -163,7 +163,7 @@ class MarkPointElement(_BrukerObject):
     Dataclass for a specific marked point in a sequence of photostimulations
     """
     #: Tuple[GalvoPointElement]: Tuple of galvo point elements
-    points: tuple = (None, )
+    points: tuple = None
     #: int: repetitions of this stimulation event
     repetitions: int = field(default=1, metadata={"range": (1, inf)})
     #: str: identity of uncaging laser
@@ -185,7 +185,7 @@ class MarkPointElement(_BrukerObject):
     #: str: id of parameter set
     parameter_set: str = "CurrentSettings"
 
-    def __post_init__():
+    def __post_init__(self):
         if self.points is not None:
             for idx, point in enumerate(self.points):
                 if not isinstance(point, GalvoPointElement):
