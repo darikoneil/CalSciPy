@@ -1,6 +1,8 @@
 from __future__ import annotations
 from typing import Iterable, Union
+
 import numpy as np
+import pandas as pd
 
 from ._validators import validate_evenly_divisible, validate_matrix, validate_tensor
 
@@ -8,6 +10,73 @@ from ._validators import validate_evenly_divisible, validate_matrix, validate_te
 """
 A few methods for converting/reorganizing data
 """
+
+
+def align_data(analog_data: pd.DataFrame,
+               frame_times: pd.DataFrame,
+               fill: bool = False,
+               method: str = "nearest"
+               ) -> pd.DataFrame:
+    """
+    Synchronizes analog data & imaging frames using the timestamp of each frame. Option to generate a second column
+    in which the frame index is interpolated such that each analog sample matches with an associated frame.
+
+    :param analog_data: analog data
+    :param frame_times: frame timestamps
+    :param fill: whether to include an interpolated column so each sample has an associated frame
+    :param method: method for interpolating samples
+    :returns: a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and
+        imaging frame
+
+    .. versionadded:: 0.8.0
+    """
+    frame_times = frame_times.reindex(index=analog_data.index)
+
+    # Join frames & analog (deep copy to make sure not a view)
+    data = analog_data.copy(deep=True)
+    data = data.join(frame_times)
+
+    if fill:
+        frame_times_filled = frame_times.copy(deep=True)
+        frame_times_filled.columns = ["Imaging Frame (interpolated)"]
+        frame_times_filled.interpolate(method=method, inplace=True)
+        # forward fill the final frame
+        frame_times_filled.ffill(inplace=True)
+        data = data.join(frame_times_filled)
+
+    return data
+
+
+def interpolate_traces(traces, aligned_data, method="pchip") -> pd.DataFrame:
+    """
+    function
+
+    :param traces: ok
+    :param aligned_data: ok
+    :param method: ko
+    :return: ok
+
+    .. versionadded:: 0.8.0
+    """
+    frame_times = aligned_data["Imaging Frame"].dropna().index
+    inc_frames = frame_times.shape[0]
+    true_frames = traces.shape[-1]
+    frame_diff = inc_frames - true_frames
+
+    if frame_diff == 0:
+        inc_traces = traces
+    elif frame_diff < 0:
+        frame_range = (aligned_data.get("Imaging Frame").min(), aligned_data.get("Imaging Frame").max())
+        inc_traces = traces[:, int(frame_range[0]):int(frame_range[-1])+1]
+    else:
+        raise AssertionError("Selected frames don't exist")
+
+    traces = pd.DataFrame(data=inc_traces.T, index=frame_times, columns=[
+        "".join(["Neuron ", str(x)]) for x in range(inc_traces.shape[0])
+    ])
+    traces = traces.reindex(aligned_data.index)
+    traces.interpolate(method=method, inplace=True)
+    return traces
 
 
 @validate_matrix(pos=0, key="matrix")
