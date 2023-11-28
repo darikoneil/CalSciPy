@@ -2,8 +2,12 @@ from __future__ import annotations
 import tkinter as tk
 from tkinter.filedialog import askdirectory
 from pathlib import Path
-from tqdm import tqdm
 from shutil import copytree, copy2, rmtree
+from functools import partial
+
+from tqdm import tqdm
+from joblib import Parallel, delayed
+
 from ._validators import convert_permitted_types_to_required
 
 
@@ -34,7 +38,7 @@ def select_directory(**kwargs) -> str:
 
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=1)
-def verbose_copying(source: Path, dest: Path, content_string: str = "") -> None:
+def verbose_copying(source: Path, dest: Path, content_string: str = "") -> int:
     """
 
     Verbose copying from source to dest
@@ -45,17 +49,32 @@ def verbose_copying(source: Path, dest: Path, content_string: str = "") -> None:
     :type dest: pathlib.Path
     :param content_string: content to display in loading bar
     :type content_string: str
-    :rtype: None
+    :returns: 0 if successful
     """
-    def copy_(source_: str, dest_: str) -> None:
-        copy2(source_, dest_)
-        pbar.update(1)
 
-    num_files = sum([1 for file in source.rglob("*") if file.is_file()])
-    pbar = tqdm(total=num_files)
-    pbar.set_description("".join(["Copying ", content_string, " files"]))
-    try:
-        copytree(source, dest, copy_function=copy_, dirs_exist_ok=True)
-    except TypeError:
-        rmtree(dest)
-        copytree(source, dest, copy_function=copy_)
+    def copy_(dest_: Path, source_: Path, file_: Path) -> None:
+        destination = dest_.joinpath(file_.relative_to(source_))
+        copy2(file_, destination)
+
+    # collect files
+    files = [file for file in source.rglob("*") if file.is_file()]
+
+    # collect folders
+    folders = [folder for folder in source.rglob("*") if not folder.is_file()]
+
+    # make tree
+    dest.mkdir(parents=True, exist_ok=True)
+    for folder in folders:
+        dest_folder = dest.joinpath(folder.relative_to(source))
+        dest_folder.mkdir(parents=True, exist_ok=True)
+
+    # create func handle for parallel
+    func_handle = partial(copy_, dest, source)
+
+    # copy
+    process = (Parallel(n_jobs=-1, backend="loky")
+               (delayed(func_handle)(file) for file in tqdm(files,
+                                                            total=len(files),
+                                                            desc=f"Copying {content_string} files")))
+
+    return 0

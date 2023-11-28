@@ -27,8 +27,7 @@ class ImagingExperiment(Experiment):
         """
         imaging_directory = \
             select_directory(title="Select folder containing raw imaging data")
-        verbose_copying(imaging_directory, self.file_tree.get("imaging")(),
-                        content_string="imaging data")
+        _ = verbose_copying(imaging_directory, self.file_tree.get("imaging")(), content_string="imaging data")
         self.reindex()
         super().collect_data()
 
@@ -39,7 +38,7 @@ class ImagingExperiment(Experiment):
         :rtype: Experiment
         """
         raise NotImplementedError
-
+        # noinspection PyUnreachableCode
         super().analyze_data()
 
     def generate_class_files(self) -> Experiment:

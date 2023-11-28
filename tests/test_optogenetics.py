@@ -80,7 +80,7 @@ class TestStim:
         assert (stim.photostimulation.target_to_roi(1) == 19)
 
         remapped = stim.photostimulation.remapped_sequence
-        assert(remapped[0].ordered_index == [0, 1, 2])
+        assert (remapped[0].ordered_index == [0, 1, 2])
 
     def test_printing(self, stim):
 
