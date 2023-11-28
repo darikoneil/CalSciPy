@@ -6,12 +6,12 @@ You can load, convert, and save your imaging data using very simple syntax throu
 Images (.tif)
 *************
 
-Loading
-```````
-CalScipy offers a single, simple function for loading images with the .tif file format and other closely associated
-formats like .ome.tiff. The :func:`load_images <CalSciPy.io_tools.load_images>` function loads .tif images into
-:class:`numpy arrays <numpy.ndarray>` with shape frames x height x width.
-It requires the path to the images as an argument.
+Loading .tif's
+``````````````
+CalScipy offers a single, simple function for loading images with the *.tif* file format and other closely associated
+formats like *.ome.tiff*. The :func:`load_images <CalSciPy.io_tools.load_images>` function loads *.tif* images into
+:class:`numpy arrays <numpy.ndarray>` with shape *frames* x *y-pixels* x *x-pixels*. It requires the path to the images
+as an argument.
 
 .. centered:: **Loading a 2D-image**
 
@@ -25,7 +25,7 @@ It requires the path to the images as an argument.
 
    images = load_images("imaging_stack.tif")
 
-.. centered:: **Loading entire folders**
+.. centered:: **Loading entire folders of imaging stacks**
 
 .. code-block:: python
 
@@ -33,11 +33,13 @@ It requires the path to the images as an argument.
 
 Easy, huh?
 
-Saving
-``````
-CalScipy also offers a single, simple function for saving images with the .tif file format. To save images,
+Saving .tif's
+`````````````
+CalScipy also offers a single, simple function for saving images with the *.tif* file format. To save images,
 simply pass the desired location and a :class:`numpy array <numpy.ndarray>` as arguments to
-:func:`save_images <CalSciPy.io_tools.save_images>`
+:func:`save_images <CalSciPy.io_tools.save_images>`\. If the image is size is larger the *size_cap* limit, the stack
+will be automatically split into chunks of size *size_cap*. By default, the size_cap is set to limit *.tif* stacks to
+less than 4GB each for compatibility with the majority of *.tif* readers.
 
 .. centered:: **Saving images to file**
 
@@ -51,12 +53,6 @@ simply pass the desired location and a :class:`numpy array <numpy.ndarray>` as a
 
    save_images("desired_folder", images)
 
-.. centered:: **Saving images as multiple stacks**
-
-.. code-block:: python
-
-    save_images("desired_folder", images, size_cap=0.01)
-
 .. centered:: **Saving images to a folder with specified name**
 
 .. code-block:: python
@@ -66,15 +62,17 @@ simply pass the desired location and a :class:`numpy array <numpy.ndarray>` as a
 Binary (Recommended)
 ********************
 CalScipy offers functions for loading and saving images as binary. This language-agnostic format is ideal for optimal
-read/write speeds, larger-than-memory data, and is highly-robust to corruption. However, the downside is that the
-images and their metadata are split into two separate files: ".bin" and ".json" respectively. If you happen to lose the
-metadata file, fear not! As long as you have the datatype and 2 of the 3 dimensions you can still load the data.
+read/write speeds, larger-than-memory data, and is highly-robust to corruption. However, it does have downsides. First,
+the images and their metadata are split into two separate files: ".bin" and ".json" respectively. If you happen to lose
+the metadata file, fear not! As long as you have the datatype and 2 of the 3 dimensions you can still load the data.
+A second disadvantage is a lack of compression. Using binary is excellent in cases where storage space is "cheaper" than
+I/O time: for example, when data is still being regularly accessed and not simply sitting in "cold storage".
 
-Loading
-```````
+Loading binary
+``````````````
 Binary data in CalSciPy can be loaded using the :func:`load_binary <CalSciPy.io_tools.load_binary>` function.
-The path to the binary data is required as an argument and the data is returned as a :class:`numpy array <numpy.ndarray>`
-with shape frames x height x width.
+The path to the binary data is required as an argument and the data is returned as a
+:class:`numpy array <numpy.ndarray>` with shape *frames* x *y-pixels* x *x-pixels*.
 
 .. centered:: **Loading binary data directly from file**
 
@@ -101,8 +99,8 @@ with shape frames x height x width.
     missing_metadata = {"frames": 100, "y": 100, "dtype": int}
     images = load_binary("desired_folder", missing_metadata=missing_metadata)
 
-Saving
-``````
+Saving binary
+`````````````
 Saving data to binary in CalSciPy uses the :func:`save_binary <CalSciPy.io_tools.save_binary>` function with the
 file path and a :class:`numpy array <numpy.ndarray>` as arguments
 
@@ -128,10 +126,10 @@ Video (.mp4)
 ************
 CalSciPy also provides simple functions to load and save .mp4 files.
 
-Loading
-```````
+Loading video
+`````````````
 Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
-a :class:`numpy array <numpy.ndarray>` with shape frames x height x width x color channel
+a :class:`numpy array <numpy.ndarray>` with shape *frames* x *y-pixels* x *x-pixels* x *color channels*
 
 .. centered:: **Loading video from file**
 
@@ -145,8 +143,8 @@ a :class:`numpy array <numpy.ndarray>` with shape frames x height x width x colo
 
     images = load_video("desired_folder")
 
-Saving
-``````
+Saving video
+````````````
 Saving .mp4's uses the :func:`save_video <CalSciPy.io_tools.save_video>` function with a file path and
 a :class:`numpy array <numpy.ndarray>` as arguments.
 

@@ -1,2 +1,0 @@
-Optics Introduction
-===================

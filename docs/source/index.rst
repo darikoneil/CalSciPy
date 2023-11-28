@@ -26,6 +26,15 @@ functionality--*refactoring* my existing code of interest, *writing* code for my
 mind, and *implementing* new features the science community could benefit from--because making scientific software
 open-source and proliferating expertise is simply the right thing to do.
 
+Highlights
+**********
+
+* Useful, well-documented functions often used in boilerplate code alongside registration and roi extraction software packages such as `Caiman <https://github.com/flatironinstitute/CaImAn>`_, `SIMA <https://github.com/losonczylab/sima>`_, and `Suite2P <https://github.com/MouseLand/suite2p>`_.
+* Flexible & extensible system for neatly organizing data, timestamping analysis, & single-step analyses.
+* Quality-of-life utilities for Bruker's PrairieView software
+* Interactive data visualization
+* Tools for optics & optogenetics
+
 
 .. toctree::
    :maxdepth: 1
@@ -41,5 +50,5 @@ open-source and proliferating expertise is simply the right thing to do.
     Regions of Interest <main/roi_tools>
     Optogenetics <main/optogenetics>
     Style <main/style>
+    Dependencies & Contributions <contributions>
     API Reference <api_reference>
-
