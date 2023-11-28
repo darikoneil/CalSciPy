@@ -11,7 +11,7 @@ from .color_scheme import TERM_SCHEME
 # backport if necessary
 from sys import version_info
 if version_info.minor < 10:
-    from _backports import dataclass, Field
+    from ._backports import dataclass, Field
 else:
     from dataclasses import dataclass, Field
 
