@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Union
+from typing import Union, Tuple
 from pathlib import Path
 from xml.etree import ElementTree
 
@@ -65,7 +65,7 @@ def load_saved_mark_points(file_path: Union[str, Path],
 @convert_permitted_types_to_required(permitted=(str, Path), required=str, pos=0)
 def load_mark_points(file_path: Union[str, Path],
                      version: str = DEFAULT_PRAIRIEVIEW_VERSION
-                     ) -> Tuple[_B]:
+                     ) -> Tuple[object, object]:
     """
     :param file_path: path to xml file
     :param version: version of prairieview

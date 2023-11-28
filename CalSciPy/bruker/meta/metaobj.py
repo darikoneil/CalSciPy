@@ -1,14 +1,6 @@
 from __future__ import annotations
-from typing import Tuple
 from abc import abstractmethod
 from xml.etree import ElementTree
-from collections import ChainMap
-
-import numpy as np
-from scipy.spatial import ConvexHull
-
-from ...color_scheme import TERM_SCHEME
-from ...roi_tools import calculate_mask
 
 
 class _BrukerMeta:
@@ -46,7 +38,7 @@ class _BrukerMeta:
         ...
 
     @abstractmethod
-    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
+    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:  # noqa: U100
         """
         Abstract method for any additional actions here
 
@@ -63,16 +55,16 @@ class GalvoPointListMeta(_BrukerMeta):
         self.galvo_point_list = None
         super().__init__(root, factory)
 
+    @staticmethod
+    def __name__() -> str:
+        return "GalvoPointListMeta"
+
     def _build_meta(self, root: ElementTree, factory: object) -> _BrukerMeta:
         self.galvo_point_list = factory.constructor(root)
         self.galvo_point_list.galvo_points = tuple([factory.constructor(child) for idx, child in enumerate(root)])
 
-    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
+    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:  # noqa: U100
         return 0
-
-    @staticmethod
-    def __name__() -> str:
-        return "GalvoPointListMeta"
 
 
 class MarkPointSeriesMeta(_BrukerMeta):
@@ -87,7 +79,11 @@ class MarkPointSeriesMeta(_BrukerMeta):
 
         super().__init__(root, factory)
 
-    def _build_meta(self, root: ElementTree, factory: object) -> MarkedPointSeriesMeta:
+    @staticmethod
+    def __name__() -> str:
+        return "Photostimulation Metadata"
+
+    def _build_meta(self, root: ElementTree, factory: object) -> MarkPointSeriesMeta:
         """
         Abstract method for building metadata object
 
@@ -112,12 +108,8 @@ class MarkPointSeriesMeta(_BrukerMeta):
         self.marked_point_series.marks = tuple(marks)
         self.nested_points = tuple(nested_points)
 
-    def _extra_actions(self, *args, **kwargs) -> _BrukerMeta:
+    def _extra_actions(self, *args, **kwargs) -> MarkPointSeriesMeta:
         pass
-
-    @staticmethod
-    def __name__() -> str:
-        return "Photostimulation Metadata"
 
 
 class SavedMarkPointSeriesMeta(_BrukerMeta):
@@ -138,7 +130,7 @@ class SavedMarkPointSeriesMeta(_BrukerMeta):
     def __name__() -> str:
         return "Photostimulation Metadata"
 
-    def _build_meta(self, root: ElementTree, factory: object) -> MarkedPointSeriesMeta:
+    def _build_meta(self, root: ElementTree, factory: object) -> SavedMarkPointSeriesMeta:
         """
         Abstract method for building metadata object
 
@@ -157,7 +149,7 @@ class SavedMarkPointSeriesMeta(_BrukerMeta):
 
         self.marked_point_series.marks = tuple(marks)
 
-    def _extra_actions(self) -> MarkedPointSeriesMeta:
+    def _extra_actions(self) -> SavedMarkPointSeriesMeta:
         # for idx, roi in enumerate(self.rois):
         #    roi.coordinates = roi.generate_coordinates(self.image_width, self.image_height)
         #    roi.mask = roi.generate_mask(self.image_width, self.image_height)

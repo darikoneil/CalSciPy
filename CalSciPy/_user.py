@@ -2,7 +2,7 @@ from __future__ import annotations
 import tkinter as tk
 from tkinter.filedialog import askdirectory
 from pathlib import Path
-from shutil import copytree, copy2, rmtree
+from shutil import copy2
 from functools import partial
 
 from tqdm import tqdm
@@ -72,9 +72,9 @@ def verbose_copying(source: Path, dest: Path, content_string: str = "") -> int:
     func_handle = partial(copy_, dest, source)
 
     # copy
-    process = (Parallel(n_jobs=-1, backend="loky")
-               (delayed(func_handle)(file) for file in tqdm(files,
-                                                            total=len(files),
-                                                            desc=f"Copying {content_string} files")))
+    _ = (Parallel(n_jobs=-1, backend="loky")
+         (delayed(func_handle)(file) for file in tqdm(files,
+                                                      total=len(files),
+                                                      desc=f"Copying {content_string} files")))  # noqa: F841
 
     return 0
