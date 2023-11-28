@@ -23,7 +23,7 @@ def import_mix_in_string(json_string: str) -> Experiment:
                    for char_ in json_string if char_.lower()]
     module_name = "".join(module_name)
     module_name = "".join(module_name[1:])
-    return getattr(import_module("".join(["mfr.", module_name])), json_string)
+    return getattr(import_module("".join(["CalSciPy.organization.", module_name])), json_string)
 
 
 class Experiment:
