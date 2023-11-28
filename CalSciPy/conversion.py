@@ -54,8 +54,8 @@ def align_data(data: pd.DataFrame,
         # coerce type and try to reindex
         data_ = data_.reindex(index=data_.index.astype(reference.index.dtype))
         # make sure it worked and didn't just change the dtype to object
-        assert (reference.index.dtype == data_.index.dtype,
-                "Datasets must have timestamps with identical types and units")
+        assert (reference.index.dtype == data_.index.dtype,  # noqa: F631
+                "Datasets must have timestamps with identical types and units")  # noqa: F631
 
     # reindex data
     data_ = data_.reindex(index=reference.index)
@@ -129,11 +129,11 @@ def external_align(data: np.ndarray,
     inc_data = data[:, int(first_sample):int(last_sample) + 1]
 
     # generate dataframe
-    column_names = ["".join([tag, f"{idx}"]) for tag in range(inc_data.shape[0])]
+    column_names = ["".join([tag, f"{idx}"]) for idx in range(inc_data.shape[0])]
     timestamped_data = pd.DataFrame(data=inc_data.T, index=samples_.index, columns=column_names)
 
     # align
-    return align_data(aligned_data, reference=reference, interpolate=interpolate, join=join)
+    return align_data(timestamped_data, reference=reference, interpolate=interpolate, join=join)
 
 
 @validate_matrix(pos=0, key="matrix")

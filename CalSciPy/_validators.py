@@ -418,7 +418,7 @@ def field_validator(key: str, value: Any, var: Field) -> List[Exception]:
     return logger.exceptions
 
 
-def parse_tuple(vars, nested_type: typle) -> Tuple:
+def parse_tuple(vars: str, nested_type: type) -> Tuple:
 
     parse_vars = []
 
@@ -433,7 +433,7 @@ def parse_tuple(vars, nested_type: typle) -> Tuple:
             var = list(range(start_val, end_val + 1, 1))
             var = str(var).replace("[", "").replace("]", "").replace(" ", "")
 
-        parse_vars.extend([char for char in var.split(",")])
+        parse_vars.extend([char for char in var.split(",")])  # noqa: C416
 
     return tuple([nested_type(var) for var in parse_vars])
 
