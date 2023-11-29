@@ -265,7 +265,7 @@ def _generate_mark_point_series(photostimulation: Photostimulation,
     # format for easy construction
     _, _, _, groups = _format_photostim(photostimulation, targets_only)
 
-    if len(groups) > 1:
+    if len(groups) >= 1:
         # make mark point / galvo point elements
         for group in groups:
             mark_point_elements = tuple([_generate_mark_point_element(group, parameters) for group in groups])

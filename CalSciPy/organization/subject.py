@@ -190,7 +190,7 @@ class Subject:
         for key, value in serialized_mouse.items():
             if isinstance(value, Experiment):
                 serialized_mouse[key] = {
-                    "__instance_type__": ["mfr.experiment", "Experiment"],
+                    "__instance_type__": ["CalSciPy.organization.experiment", "Experiment"],
                     "attributes": serialized_mouse[key].__json_encode__()
                 }
         return serialized_mouse
