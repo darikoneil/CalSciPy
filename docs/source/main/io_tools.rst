@@ -2,10 +2,10 @@ Loading and Saving Data
 =======================
 Simple importing and exporting of imaging data is a significant source of boilerplate code in most processing pipelines.
 The :mod:`io_tools <CalSciPy.io_tools>` module provides a few functions for loading, converting, and saving imaging
-data with very simple syntax and good performance. Currently, *.tif*, *.gif*, *.mp4*, and binary file types are
+data with very simple syntax and good performance. Currently, *\*.tif*, *\*.gif*, *\*.mp4*, and *\*.bin* (binary) file types are
 supported. Every function either returns or expects the images in the form of a
 :class:`numpy arrays <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixels*. They also all use a similar syntax:
-**load_{file_type}**(path) for loading and **save_{file_type}**(path, images) for saving.
+**load_{file_type}**\(path) for loading and **save_{file_type}**\(path, images) for saving.
 
 .. note::
     Color videos and gifs additionally accept :class:`numpy arrays <numpy.ndarray>` with
@@ -13,8 +13,8 @@ supported. Every function either returns or expects the images in the form of a
 
 Loading .tif's
 ``````````````
-CalScipy offers a single, simple function for loading images with the *.tif* file format and other closely associated
-formats like *.ome.tiff*: :func:`load_images <CalSciPy.io_tools.load_images>`\.
+CalScipy offers a single, simple function for loading images with the *\*.tif* file format and other closely associated
+formats like *\*.ome.tiff*: :func:`load_images <CalSciPy.io_tools.load_images>`\.
 
 .. centered:: **Loading a 2D-image**
 
@@ -38,10 +38,10 @@ Easy, huh?
 
 Saving .tif's
 `````````````
-CalScipy also offers a single, simple function for saving images with the *.tif* file format. If the image is size is
+CalScipy also offers a single, simple function for saving images with the *\*.tif* file format. If the image size is
 larger the *size_cap* limit, the stack will be automatically split into chunks of size *size_cap*.
 By default, the size_cap is set to limit *.tif* stacks to less than 4GB each for compatibility with the majority of
-*.tif* readers.
+*\*.tif* readers.
 
 .. centered:: **Saving images to file**
 
@@ -61,7 +61,7 @@ By default, the size_cap is set to limit *.tif* stacks to less than 4GB each for
 
    save_images("desired_folder", images, name="example_images")
 
-Loading binary
+Loading .bin's
 ``````````````
 Binary data in CalSciPy can be loaded using the :func:`load_binary <CalSciPy.io_tools.load_binary>` function with a
 similar syntax. However, additional arguments are available to load the images without reading the entire file into
@@ -93,7 +93,7 @@ memory (i.e., memory-mapping).
     images = load_binary("desired_folder", missing_metadata=missing_metadata)
 
 
-Saving binary
+Saving .bin's
 `````````````
 Binary data can be saved to file using the :func:`save_binary <CalSciPy.io_tools.save_binary` function.
 
@@ -124,9 +124,9 @@ Binary data can be saved to file using the :func:`save_binary <CalSciPy.io_tools
     Using binary is excellent in cases where storage space is "cheaper" than I/O time: for example, when data is still
     being regularly accessed and not simply sitting in "cold storage".
 
-Loading video
+Loading .mp4's
 `````````````
-Loading .mp4's uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
+Loading *\*.mp4*\'s uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
 a :class:`numpy array <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixels*, *colors*.
 
 .. centered:: **Loading video from file**
@@ -141,9 +141,9 @@ a :class:`numpy array <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixel
 
     images = load_video("desired_folder")
 
-Saving video
+Saving .mp4's
 ````````````
-Saving .mp4's uses the :func:`save_video <CalSciPy.io_tools.save_video>` function. The frame rate of the video can be
+Saving *\*.mp4*\'s uses the :func:`save_video <CalSciPy.io_tools.save_video>` function. The frame rate of the video can be
 set with the frame_rate argument.
 
 .. centered:: **Saving video to file**
@@ -170,11 +170,21 @@ set with the frame_rate argument.
 
     save_video("video_file.mp4", images, frame_rate=90.0)
 
-GIF (.gif)
+Loading .gif's
 **********
-Saving your images as a *.gif* is as easy as using the :func:`save_gif <CalSciPy.io_tools.save_gif>` function.
+Loading *\*.gif*\'s uses the :func:`load_gif <CalSciPyt.io_tools.load_gif>` function.
 
-.. centered:: **Saving a .gif**
+.. centered:: **Loading a \*.gif**
+
+.. code-block:: python
+
+    gif = load_gif("gif_file.gif")
+
+Saving .gif's
+**********
+Saving your images as a *\*.gif* is as easy as using the :func:`save_gif <CalSciPy.io_tools.save_gif>` function.
+
+.. centered:: **Saving a \*.gif**
 
 .. code-block:: python
 
@@ -182,4 +192,4 @@ Saving your images as a *.gif* is as easy as using the :func:`save_gif <CalSciPy
 
 .. tip::
 
-    Inserting videos into a presentation as a *.gif* is a clever way to avoid technical difficulties (shudder).
+    Inserting videos into a presentation as a *\*.gif* is a clever way to avoid technical difficulties (shudder).
