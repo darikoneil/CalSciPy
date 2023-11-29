@@ -171,7 +171,7 @@ set with the frame_rate argument.
     save_video("video_file.mp4", images, frame_rate=90.0)
 
 Loading .gif's
-**********
+``````````````
 Loading *\*.gif*\'s uses the :func:`load_gif <CalSciPyt.io_tools.load_gif>` function.
 
 .. centered:: **Loading a \*.gif**
@@ -181,7 +181,7 @@ Loading *\*.gif*\'s uses the :func:`load_gif <CalSciPyt.io_tools.load_gif>` func
     gif = load_gif("gif_file.gif")
 
 Saving .gif's
-**********
+`````````````
 Saving your images as a *\*.gif* is as easy as using the :func:`save_gif <CalSciPy.io_tools.save_gif>` function.
 
 .. centered:: **Saving a \*.gif**
