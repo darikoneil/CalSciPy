@@ -54,8 +54,8 @@ def align_data(data: pd.DataFrame,
         # coerce type and try to reindex
         data_ = data_.reindex(index=data_.index.astype(reference.index.dtype))
         # make sure it worked and didn't just change the dtype to object
-        assert (reference.index.dtype == data_.index.dtype,  # noqa: F631
-                "Datasets must have timestamps with identical types and units")  # noqa: F631
+        assert reference.index.dtype == data_.index.dtype, \
+            "Datasets must have timestamps with identical types and units"  # noqa: F631
 
     # reindex data
     data_ = data_.reindex(index=reference.index)

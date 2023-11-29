@@ -13,13 +13,12 @@ by following these `instructions <https://docs.cupy.dev/en/stable/install.html>`
 
 Limitations
 ***********
-The current implementation is unstable, partially untested, partially finished, and should be considered an open
-alpha/beta. Please be patient, this is a pet-project, I have a newborn, and I need to finish my thesis.
-Until things are more finalized, I'll explicitly note which modules are stable, have >90% test coverage, and are
-ready-to-use. Anything not listed as table should be considered experimental and use at your own risk. If you really
-need something labeled experimental I can probably provide offline code that will probably prove more useful short-term.
-While the majority of features are already written, they need to be refined for maintainability, readability, and to
-remove any bugs.
+The current implementation is partially finished. Please be patient, this is a pet-project, I have a newborn, and I
+need to finish my thesis. Until things are more finalized, I'll explicitly note which modules are stable, have >90%
+test coverage, and are ready-to-use. Anything not explicitly listed as stable should be considered experimental and
+should be used at your own risk. If you really need something labeled experimental I can probably provide offline code
+that will probably prove more useful short-term. While the majority of features are already written, they need to be
+refined for maintainability, readability, and to remove any bugs.
 
 Stable Modules
 ##############

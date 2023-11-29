@@ -8,7 +8,7 @@ import builtins
 import functools
 import abc
 import _thread
-from types import FunctionType, GenericAlias
+from types import FunctionType  #, GenericAlias
 
 
 __all__ = ['dataclass',
@@ -242,6 +242,7 @@ def _recursive_repr(user_function):
         return result
     return wrapper
 
+
 class InitVar:
     __slots__ = ('type', )
 
@@ -249,7 +250,7 @@ class InitVar:
         self.type = type
 
     def __repr__(self):
-        if isinstance(self.type, type) and not isinstance(self.type, GenericAlias):
+        if isinstance(self.type, type):  # and not isinstance(self.type, GenericAlias):
             type_name = self.type.__name__
         else:
             # typing objects, e.g. List[int]
@@ -330,7 +331,7 @@ class Field:
             # it.
             func(self.default, owner, name)
 
-    __class_getitem__ = classmethod(GenericAlias)
+    # __class_getitem__ = classmethod(GenericAlias)
 
 
 class _DataclassParams:
@@ -1210,7 +1211,7 @@ def _is_dataclass_instance(obj):
 def is_dataclass(obj):
     """Returns True if obj is a dataclass or an instance of a
     dataclass."""
-    cls = obj if isinstance(obj, type) and not isinstance(obj, GenericAlias) else type(obj)
+    cls = obj if isinstance(obj, type) else type(obj)  # and not isinstance(obj, GenericAlias) else type(obj)
     return hasattr(cls, _FIELDS)
 
 

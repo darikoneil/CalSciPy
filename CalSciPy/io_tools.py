@@ -74,6 +74,43 @@ def load_binary(path: Union[str, Path],
 
 @validate_filename(pos=0)
 @convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
+def load_gif(path: Union[str, Path]) -> np.ndarray:
+    """
+    Load gif (.mp4)
+
+    :param path: Path to file
+
+    :returns: Images (frames, y-pixels, x-pixels, color)
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    path = path.with_suffix(".gif")
+
+    images = mimread(path)
+
+    try:
+        images_ = np.concatenate(images, axis=0)
+    except ValueError:
+        # sometimes the first image is flat
+        shapes = {image.ndim for image in images}
+        dims = max({image.shape[-1] for image in images if image.ndim == max(shapes)})
+        image = images[0]
+        image = np.reshape(image, (*image.shape, 1))
+        colors = [image, image, image]
+        if dims == 4:
+            colors.append(np.ones_like(image) * 255)
+        image = np.concatenate(colors, axis=-1)
+        images[0] = image
+
+    images_ = np.stack(images, axis=0)
+
+    return images_
+
+
+@validate_filename(pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
 def load_images(path: Union[str, Path]) -> np.ndarray:
     """
     Load images into a numpy array. If path is a folder, all .tif files found non-recursively in the directory will be
@@ -150,6 +187,46 @@ def save_binary(path: Union[str, Path], images: np.ndarray, name: Optional[str] 
 
     # save images
     images.tofile(imaging_filename)
+
+    return 0
+
+
+@validate_filename(pos=0)
+@convert_permitted_types_to_required(permitted=(str, Path), required=Path, pos=0, key="path")
+def save_gif(path: Path,
+             images: np.ndarray,
+             frame_rate: Number = 30,
+             name: Optional[str] = None
+             ) -> int:
+    """
+    Save a numpy array to a single .gif file.
+
+    :param path: Location to save files in.
+
+    :param images: Images (frames, y pixels, x pixels)
+
+    :param frame_rate: Framerate of written .gif
+
+    :param name: Specify filename for produced files
+
+    :returns: 0 if successful
+
+    .. versionadded:: 0.8.0
+
+    """
+    default_name = "images"
+    extension = ".gif"
+    path = check_filepath(path, name, extension, default_name)
+
+    if images.dtype.type != np.uint8:
+        print(f"Forcing {images.dtype} to unsigned 8-bit")
+        images = images.astype(np.uint8)
+
+    if images.ndim == 3:
+        images = np.reshape(images, (*images.shape, 1))
+        images = np.concatenate([images, images, images, np.ones_like(images) * 255], axis=-1)
+
+    mimwrite(path, images, fps=frame_rate)
 
     return 0
 

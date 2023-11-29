@@ -11,7 +11,7 @@ import numpy as np
 
 # noinspection PyProtectedMember
 from CalSciPy.io_tools import load_images, _load_single_tif, _load_many_tif, save_images, _save_single_tif, \
-    _save_many_tif, load_binary, save_binary, load_video, save_video
+    _save_many_tif, load_binary, save_binary, load_video, save_video, load_gif, save_gif
 
 
 """
@@ -253,3 +253,21 @@ class TestIO:
         # Redundant, included to organizational purposes
         io_helper.load_validator(load_video)
         io_helper.save_validator(save_video)
+
+    def test_load_gif(self, io_helper):
+        test_data = load_gif(io_helper.directory.joinpath("gif").joinpath("images.gif"))
+        io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
+
+    def test_save_gif(self, io_helper):
+        with BlockPrinting():
+            save_gif(io_helper.outputs.joinpath("gif"), io_helper.data)
+
+    def test_mutation_gif(self, io_helper):
+        with BlockPrinting():
+            save_gif(io_helper.outputs.joinpath("gif"), io_helper.data)
+        test_data = load_gif(io_helper.outputs.joinpath("gif").joinpath("images.gif"))
+        io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
+
+    def test_gif_exceptions(self, io_helper):
+        # Redundant, included to organizational purposes
+        io_helper.save_validator(save_gif)

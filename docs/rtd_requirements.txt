@@ -34,6 +34,7 @@ flake8-comprehensions==3.11.1
 flake8-html==0.4.3
 flake8-unused-arguments==0.0.13
 fonttools==4.38.0
+get-annotations==0.1.2
 h5py==3.9.0
 html5lib==1.1
 idna==3.4

@@ -109,7 +109,8 @@ branch = true
 command_line = "-m pytest"
 omit = ["*/tests*", "*tests*", "*tests/*", "tests*", "tests/*", "tests", "scratch", "htmlcov", "flake_report", "docs",
     "dist", "lib", ".pytest_cache", ".idea", ".github", "config-3.py", "config.py", "*CalSciPy/config-3.py",
-    "*CalSciPy/config.py"]
+    "*CalSciPy/config.py", "*CalSciPy/_backports/kw_dataclasses.py", "*CalSciPy/_backports*",
+    "*/CalSciPy/_backports/kw_dataclasses*", "*/CalSciPy/_helpers*", "*CalSciPy/_validators*"]
 dynamic_context = "test_function"
 
 
