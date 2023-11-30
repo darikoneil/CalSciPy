@@ -74,10 +74,10 @@ class Experiment:
             else:
                 setattr(experiment, key, [import_mix_in_string(mix_in) for mix_in in self._mix_ins])
         return experiment
-    
+
     def get(self, *args, **kwargs) -> FileSet:
         return self.file_tree.get(*args, **kwargs)
-    
+
     def reindex(self) -> Experiment:
         """
         Updates file tree

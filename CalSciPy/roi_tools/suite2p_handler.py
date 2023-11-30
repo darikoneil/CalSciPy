@@ -32,7 +32,7 @@ class Suite2PHandler(ROIHandler):
         ypix = roi.get("ypix")[~roi.get("overlap")]
 
         # must correct ypix indexing
-        ypix = reference_shape[0] - ypix
+        # ypix = reference_shape[0] - ypix
 
         return ROI(pixels=xpix,
                    y_pixels=ypix,

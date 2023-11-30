@@ -1,20 +1,20 @@
 from __future__ import annotations
+from typing import Any
 from math import floor
-import sys
 
 import numpy as np
 from memoization import cached
 
-import matplotlib
-matplotlib.use("QtAgg")
-from matplotlib import pyplot as plt
-from matplotlib.widgets import Slider
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
-import seaborn as sns
-
 from ..color_scheme import COLORS
 from .interactive import InteractivePlot
+
+import matplotlib  # noqa: E402
+matplotlib.use("QtAgg")  # noqa: E402
+from matplotlib import pyplot as plt  # noqa: F401, E402
+from matplotlib.widgets import Slider  # noqa: E402
+from matplotlib.figure import Figure  # noqa: E402
+from matplotlib.axes import Axes  # noqa: E402
+import seaborn as sns  # noqa: F401, E402
 
 
 class ImageComparison(InteractivePlot):
@@ -65,16 +65,16 @@ class ImageComparison(InteractivePlot):
 
     @staticmethod
     @cached(max_size=50, order_independent=True)
-    def calculate_image(image_0, image_1, split):
+    def calculate_image(image_0: np.ndarray, image_1: np.ndarray, split: int) -> np.ndarray:
         composite = np.zeros_like(image_0)
         composite[:, :split] = image_0[:, :split]
         composite[:, split:] = image_1[:, split:]
         return composite
 
-    def init_pointer(self):
+    def init_pointer(self) -> "ImageComparison":
         self.pointer = self.n_cols // 2
 
-    def init_interactive(self):
+    def init_interactive(self) -> "ImageComparison":
         self.slider = Slider(ax=self.ax,
                              label="",
                              valmin=0,
@@ -91,18 +91,24 @@ class ImageComparison(InteractivePlot):
 
         self.slider.on_changed(self._update)
 
-    def plot(self):
+    def plot(self) -> "ImageComparison":
         self.ax.imshow(self.composite, cmap=self.cmap, vmin=self.c_min, vmax=self.c_max, interpolation=None)
         self.ax.vlines(self.pointer, 0, self.n_rows, lw=self.lw, colors=(*COLORS.BLACK, self.line_alpha))
 
-    def supplemental_style(self):
+    def supplemental_style(self) -> "ImageComparison":
         self.ax.set_xticks([])
         self.ax.set_yticks([])
 
-    def update(self, val):
+    def update(self, val: Any) -> "ImageComparison":
         self.pointer = int(floor(val))
         self.composite = self.calculate_image(self.image_0, self.image_1, self.pointer)
 
-def compare_images(image_0, image_1, cmap="Spectral_r", grid=False, title="Image Comparison"):
+
+def compare_images(image_0: np.ndarray,
+                   image_1: np.ndarray,
+                   cmap: str = "Spectral_r",
+                   grid: bool = False,
+                   title: str = "Image Comparison"
+                   ) -> ImageComparison:
     int_fig = ImageComparison(image_0, image_1, cmap=cmap, grid=grid, title=title)
     return int_fig

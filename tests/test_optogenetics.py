@@ -29,7 +29,7 @@ def suite2p_handler_folder(request, temp_path):
                          [folder for folder in retrieve_suite2p()],
                          indirect=["suite2p_handler_folder"])
 def test_optogenetics_handler_import(suite2p_handler_folder):
-    _ = Photostimulation.import_rois(Suite2PHandler, suite2p_handler_folder)
+    _ = Photostimulation.load_rois(Suite2PHandler, suite2p_handler_folder)
 
 
 class Stim:

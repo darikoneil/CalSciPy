@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Sequence, Any
 from abc import ABC, abstractmethod
 
-import matplotlib
-matplotlib.use("QtAgg")
-from matplotlib import pyplot as plt
-import seaborn as sns
-from matplotlib.figure import Figure
-from matplotlib.axes import Axes
+import matplotlib  # noqa: E402
+matplotlib.use("QtAgg")  # noqa: E402
+from matplotlib import pyplot as plt  # noqa: E402
+import seaborn as sns  # noqa: F401, E402
+from matplotlib.figure import Figure  # noqa: E402
+from matplotlib.axes import Axes  # noqa: E402
 
 
 class InteractivePlot(ABC):
@@ -40,7 +40,7 @@ class InteractivePlot(ABC):
 
         self.init_figure()
 
-    def init_figure(self):
+    def init_figure(self) -> "InteractivePlot":
         # create if necessary
         if self.fig is None and self.ax is None:
             with plt.style.context("CalSciPy.main"):
@@ -53,18 +53,18 @@ class InteractivePlot(ABC):
         self.fig.tight_layout()
 
     @abstractmethod
-    def plot(self):
+    def plot(self) -> "InteractivePlot":
         ...
 
     @abstractmethod
-    def init_pointer(self):
+    def init_pointer(self) -> "InteractivePlot":
         ...
 
     @abstractmethod
-    def init_interactive(self):
+    def init_interactive(self) -> "InteractivePlot":
         ...
 
-    def style_axes(self):
+    def style_axes(self) -> "InteractivePlot":
         self.ax.grid(self.grid)
         self.ax.set_title(self.title)
         self.ax.set_xlabel(self.xlabel)
@@ -73,21 +73,22 @@ class InteractivePlot(ABC):
         self.ax.set_ylim(self.ylim)
         self.supplemental_style()
 
-    def supplemental_style(self):
+    def supplemental_style(self) -> "InteractivePlot":  # noqa: B027
+        # optional method to add some more style
         ...
 
     @abstractmethod
-    def update(self, val):
+    def update(self, val: Any) -> "InteractivePlot":
         ...
 
-    def _update(self, val):
+    def _update(self, val: Any) -> "InteractivePlot":
         self._pre_update()
         self.update(val)
         self.plot()
         self._post_update()
 
-    def _pre_update(self):
+    def _pre_update(self) -> "InteractivePlot":
         self.ax.cla()
 
-    def _post_update(self):
+    def _post_update(self) -> "InteractivePlot":
         self.style_axes()

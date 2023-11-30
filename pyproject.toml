@@ -31,6 +31,7 @@ dependencies = [
     "get-annotations",
     "imageio",
     "imageio-ffmpeg",
+    "ipykernel",
     "ipython",
     "joblib",
     "json-tricks",
