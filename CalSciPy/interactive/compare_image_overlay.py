@@ -15,7 +15,8 @@ import seaborn as sns
 
 class RegistrationComparison:
     """
-    Interactive Figure for comparing registration success
+    Interactive figure for comparing registration  of two images. Users can slide the line that demarcates the two
+    images.
 
     """
     def __init__(self, image_0: np.ndarray, image_1: np.ndarray):
