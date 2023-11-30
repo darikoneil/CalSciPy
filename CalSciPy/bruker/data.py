@@ -44,12 +44,12 @@ def load_bruker_tifs(folder: Union[str, Path],
     :return: a namedtuple of numpy arrays (channel x plane) (frames, y-pixels, x-pixels, :class:`numpy.uint16`)
 
     .. versionadded:: 0.8.0 (experimental)
-    
+
     .. seealso ::
 
         :func:`repackage_bruker_tifs <CalSciPy.bruker.converters.repackage_bruker_tifs>`
 
-    """ 
+    """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(folder)
 
     if verbose:

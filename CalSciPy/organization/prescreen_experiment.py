@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pathlib import Path
-
+from .._user import verbose_copying
 from .experiment import Experiment
 
 
@@ -44,3 +44,9 @@ class PrescreenExperiment(Experiment):
         """
         self.file_tree.add_path("stimulation")
         super().generate_class_files()
+
+    def export_protocol(self, directory: Path) -> int:
+        stim_protocol_dir = self.file_tree.get("stimulation")()
+        assert len([file for file in stim_protocol_dir.rglob("*") if file.is_file()]) >= 1, "Missing protocol files!"
+        verbose_copying(self.file_tree.get("stimulation")(), directory, "stimulation protocols")
+        return 0
