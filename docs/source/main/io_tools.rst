@@ -2,8 +2,8 @@ Loading and Saving Data
 =======================
 Simple importing and exporting of imaging data is a significant source of boilerplate code in most processing pipelines.
 The :mod:`io_tools <CalSciPy.io_tools>` module provides a few functions for loading, converting, and saving imaging
-data with very simple syntax and good performance. Currently, *\*.tif*, *\*.gif*, *\*.mp4*, and *\*.bin* (binary) file types are
-supported. Every function either returns or expects the images in the form of a
+data with very simple syntax and good performance. Currently, *\*.tif*, *\*.gif*, *\*.mp4*, and *\*.bin* (binary) file
+types are supported. Every function either returns or expects the images in the form of a
 :class:`numpy arrays <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixels*. They also all use a similar syntax:
 **load_{file_type}**\(path) for loading and **save_{file_type}**\(path, images) for saving.
 
@@ -125,7 +125,7 @@ Binary data can be saved to file using the :func:`save_binary <CalSciPy.io_tools
     being regularly accessed and not simply sitting in "cold storage".
 
 Loading .mp4's
-`````````````
+``````````````
 Loading *\*.mp4*\'s uses the :func:`load_video <CalSciPy.io_tools.load_video>` function, returning the video as
 a :class:`numpy array <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixels*, *colors*.
 
@@ -142,7 +142,7 @@ a :class:`numpy array <numpy.ndarray>` with shape *frames*, *y-pixels*, *x-pixel
     images = load_video("desired_folder")
 
 Saving .mp4's
-````````````
+`````````````
 Saving *\*.mp4*\'s uses the :func:`save_video <CalSciPy.io_tools.save_video>` function. The frame rate of the video can be
 set with the frame_rate argument.
 

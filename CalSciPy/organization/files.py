@@ -330,11 +330,15 @@ class FileSet:
         """
         if target:
             try:
-                return self.files.get(target)
-            except KeyError:
+                target_file = self.files.get(target)
+                assert target_file is not None
+                return target_file
+            except (KeyError, AssertionError):
                 try:
-                    return self.folders.get(target)
-                except KeyError:
+                    target_folder = self.folders.get(target)
+                    assert target_folder is not None
+                    return target_folder
+                except (KeyError, AssertionError):
                     raise FileNotFoundError("Could not find target")
         if not target:
             return self.directory

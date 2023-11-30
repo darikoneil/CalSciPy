@@ -4,7 +4,7 @@ from pathlib import Path
 from abc import abstractmethod
 from importlib import import_module
 
-from .files import FileTree
+from .files import FileTree, FileSet
 from ._logging_tools import get_timestamp
 
 
@@ -74,6 +74,9 @@ class Experiment:
             else:
                 setattr(experiment, key, [import_mix_in_string(mix_in) for mix_in in self._mix_ins])
         return experiment
+
+    def get(self, *args, **kwargs) -> FileSet:
+        return self.file_tree.get(*args, **kwargs)
 
     def reindex(self) -> Experiment:
         """

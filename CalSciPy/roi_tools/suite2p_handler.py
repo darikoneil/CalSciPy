@@ -72,7 +72,16 @@ class Suite2PHandler(ROIHandler):
         except FileNotFoundError:
             stat[:] = stat
         else:
-            stat = stat[np.where(iscell[:, 0] == 1)[0]]
+
+            # ensure we embed index of original roi index
+            for roi_idx in range(stat.shape[0]):
+                stat[roi_idx]["roi_idx"] = roi_idx
+
+            # also embed an index of neuron index & prune to neuronal rois only
+            neuron_index = np.where(iscell[:, 0] == 1)[0]
+            stat = stat[neuron_index]
+            for neuron_idx in range(stat.shape[0]):
+                stat[neuron_idx]["neuron_idx"] = neuron_index
 
         ops = np.load(folder.joinpath("ops.npy"), allow_pickle=True).item()
 

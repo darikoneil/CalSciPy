@@ -63,7 +63,7 @@ def generate_galvo_point_list(photostimulation: Photostimulation,
 
     # generate galvo point for each group if exists
     if photostimulation.num_groups > 0:
-        index = [len(indices) for _ in range(photostimulation.num_groups)]
+        index = [len(indices) + idx for idx in range(photostimulation.num_groups)]
         galvo_groups = [_generate_galvo_group(index=index,
                                               group=group,
                                               parameters=parameters)

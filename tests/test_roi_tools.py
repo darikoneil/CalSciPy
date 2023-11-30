@@ -54,7 +54,7 @@ class SampleROI:
                    )
 
     def validate_approximations(self, comparison, approx_roi, test_roi):
-        assert(comparison(approx_roi.radius, test_roi.radius))
+        assert (comparison(approx_roi.radius, test_roi.radius))
 
     def validate_attrs(self, test_roi):
         for attr in vars(test_roi):

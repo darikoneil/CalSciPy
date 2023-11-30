@@ -94,7 +94,7 @@ class Photostimulation:
         # copy to ensure no mutation
         remapped_sequence = deepcopy(self.stim_sequence)
         for group in remapped_sequence:
-            group.ordered_index = [self.roi_to_target(target) for target in self.stimulated_neurons]
+            group.ordered_index = [self.roi_to_target(target) for target in group.ordered_index]
         return remapped_sequence
 
     @property
@@ -154,7 +154,7 @@ class Photostimulation:
         return "Photostimulation"
 
     @classmethod
-    def import_rois(cls: Photostimulation, handler: ROIHandler = Suite2PHandler, *args, **kwargs) -> Photostimulation:
+    def load_rois(cls: Photostimulation, handler: ROIHandler = Suite2PHandler, *args, **kwargs) -> Photostimulation:
         """
         Class method that builds a :class:`Photostimulation <CalSciPy.optogenetics.Photostimulation>` instance
         using the specified :class:`ROIHandler <CalSciPy.roi_tools.ROIHandler>`\. Any additional arguments or keyword

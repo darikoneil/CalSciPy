@@ -111,14 +111,6 @@ def median_filter(images: np.ndarray,
         or RAM (`SciPy <https://scipy.org>`_). This function will not automatically revert to the SciPy implementation
         if there is not sufficient VRAM. Instead, an out of memory error will be raised.
 
-    .. tip::
-
-       Median filtering is particularly beneficial for denoising images with mild-to-moderate, signal-independent noise
-       (e.g., the speckle that can occur on images collecting while supplying photomultiplier tubes with high-voltage).
-       It tends to cause less temporal distortion than gaussian filtering as it simply replaces outliers with common
-       datapoints. It also tends to induce less blurring of edges in the image (e.g., spikes, cell borders), though
-       in the worst-case both filters are equally problematic.
-
     """
 
     window = np.ones(window)
