@@ -110,6 +110,17 @@ class _BrukerObject:
 
 
 @dataclass(kw_only=True)
+class TSeries(_BrukerObject):
+    """
+    Dataclass for a tseries
+
+    """
+    @staticmethod
+    def __name__() -> str:
+        return "TSeries"
+
+
+@dataclass(kw_only=True)
 class VoltageOutput(_BrukerObject):
     """
     Dataclass for a voltage recording
