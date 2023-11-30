@@ -29,7 +29,7 @@ class RegistrationComparison:
         self.cmap = "Spectral_r"
         self.grid = True
         self.line_alpha = 0.5
-        self.title = "Registration Comparison"
+        self.title = "Registration Comparison: Pre-Screen vs. Stimulation Blocks"
 
         #: np.ndarray: image 0
         self.image_0 = image_0
