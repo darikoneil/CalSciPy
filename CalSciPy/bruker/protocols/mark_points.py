@@ -134,7 +134,6 @@ def _convert_parameters_relative_to_galvo_voltage(parameters: dict,
 
     return parameters
 
-
 def _format_photostim(photostimulation: Photostimulation,
                       targets_only: bool = False
                       ) -> Tuple[List[int], List[int], List[ROI], List[StimulationGroup]]:
@@ -227,6 +226,9 @@ def _generate_galvo_point(roi: ROI,
 
     # Retrieve and scale coordinates
     y, x = roi.centroid
+
+    # flip y because prairieview used a different origin
+    y = roi.reference_shape - y
 
     # Retrieve spiral size
     spiral_size = roi.approximation.radius
