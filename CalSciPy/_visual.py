@@ -13,7 +13,7 @@ import seaborn as sns  # noqa: E402, F401
 
 
 """
-Where all the helpers for visuals live
+Where all the helpers for generic visuals live
 """
 
 

@@ -228,7 +228,7 @@ def _generate_galvo_point(roi: ROI,
     y, x = roi.centroid
 
     # flip y because prairieview used a different origin
-    y = roi.reference_shape - y
+    y = roi.reference_shape[0] - y
 
     # Retrieve spiral size
     spiral_size = roi.approximation.radius

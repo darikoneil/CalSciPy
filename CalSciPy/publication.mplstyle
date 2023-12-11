@@ -1,0 +1,21 @@
+figure.facecolor: white
+axes.grid: False
+grid.linestyle: -
+grid.linewidth: 1.5
+axes.linewidth: 1.5
+lines.solid_capstyle: round
+axes.facecolor: white
+grid.color: white
+xtick.major.size: 3.5
+xtick.major.width: 1.5
+xtick.minor.size:0
+ytick.major.size: 3.5
+ytick.major.width: 1.5
+ytick.minor.size: 0
+axes.axisbelow: True
+axes.spines.left: True
+axes.spines.bottom: True
+axes.spines.top: False
+axes.spines.right: False
+axes.xmargin: 0
+axes.ymargin: 0.05

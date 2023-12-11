@@ -115,7 +115,7 @@ def external_align(data: np.ndarray,
     """
     # Make sure samples and reference have identical timestamps
     try:
-        assert (reference.index == samples.index)
+        assert all(reference.index == samples.index)
         samples_ = samples.copy(deep=True)
     except AssertionError:
         samples_ = align_data(samples, reference)
@@ -124,9 +124,9 @@ def external_align(data: np.ndarray,
     samples_ = samples_.dropna()
 
     # calculate first / last sample; not we assume here no missing samples between data timestamps and data
-    first_sample = samples_.min()
-    last_sample = samples_.max()
-    inc_data = data[:, int(first_sample):int(last_sample) + 1]
+    first_sample = samples_.values.min().astype(np.int64)
+    last_sample = samples_.values.max().astype(np.int64)
+    inc_data = data[:, first_sample:last_sample + 1]
 
     # generate dataframe
     column_names = ["".join([tag, f"{idx}"]) for idx in range(inc_data.shape[0])]
