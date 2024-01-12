@@ -11,11 +11,11 @@ class ColorScheme:
 
     """
     BLUE: Tuple[float, float, float] = (15 / 255, 159 / 255, 255 / 255)
-    ORANGE: Tuple[float, float, float] = (255 / 255, 159 / 255, 15 / 255)
-    GREEN: Tuple[float, float, float] = (64 / 255, 204 / 255, 139 / 255)
+    ORANGE: Tuple[float, float, float] = (254 / 255, 139 / 255, 16 / 255)
+    GREEN: Tuple[float, float, float] = (64 / 255, 204 / 255, 138 / 255)
     RED: Tuple[float, float, float] = (255 / 255, 78 / 255, 75 / 255)
     PURPLE: Tuple[float, float, float] = (120 / 255, 64 / 255, 204 / 255)
-    YELLOW: Tuple[float, float, float] = (255 / 255, 240 / 255, 15 / 255)
+    YELLOW: Tuple[float, float, float] = (248 / 255, 228 / 255, 115 / 255)
     SHADOW: Tuple[float, float, float] = (224 / 255, 224 / 255, 224 / 255)
     LIGHT: Tuple[float, float, float] = (192 / 255, 192 / 255, 192 / 255)
     MEDIUM: Tuple[float, float, float] = (128 / 255, 128 / 255, 128 / 255)
