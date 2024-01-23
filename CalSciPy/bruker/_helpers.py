@@ -69,7 +69,7 @@ def generate_bruker_naming_convention(channel: int,
         elif case([1, 2]):
             return "".join(["*00000", str(plane + 1), ".ome.tif"])
         elif case([2, 2]):
-            return "".join(["*Ch", str(channel + 1), "00000", str(plane + 1), ".ome.tif"])
+            return "".join(["*Ch", str(channel + 1), "_00000", str(plane + 1), ".ome.tif"])
 
 
 def print_image_description(channels: int,
