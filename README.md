@@ -20,7 +20,7 @@ considered useful to others. I was inspired to upload my own code to solve some 
 
 #### Active Development
 The current implementation is unstable, partially untested, partially finished, and should be considered an open 
-alpha/beta. Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point.
+alpha/beta. ***Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point and I have a newborn.***
 
 #### Stable Modules
 Until things are more stable, I'll explicitly note which subpackages are stable, have >90% test coverage, and are
