@@ -36,7 +36,8 @@ Eventually I will break things up into sub-packages so you don't have to install
 `pip install CalSciPy`
 
 #### Roadmap
-My current focus is primarily on refactoring and testing functionality related to automatic protocol generation and metadata parsing for bruker's prairieview.
+My current focus is primarily on refactoring and testing functionality related to automatic protocol generation, metadata parsing, and
+connecting to prairie link for bruker's prairieview.
 
 #### Contributions
 Save me from myself, contributions welcome :)
