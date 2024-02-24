@@ -25,7 +25,6 @@ Until things are more stable, I'll explicitly note which subpackages are stable,
 
 #### Stable & Tested Modules
 * The main module is ready to use as of 0.7.5. New features will be demarcated by a label indicating the version added in the docs.
-* 
 #### Experimental
 * The organization module is untested and not incorporated into the distributed pypi version
 * The bruker module is untested and not incorporated into the distributed pypi version
