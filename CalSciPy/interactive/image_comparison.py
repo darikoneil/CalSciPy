@@ -18,6 +18,7 @@ import seaborn as sns  # noqa: F401, E402
 
 
 class ImageComparison(InteractivePlot):
+
     def __init__(self, image_0: np.ndarray,
                  image_1: np.ndarray,
                  cmap: str = "Spectral_r",
@@ -110,5 +111,13 @@ def compare_images(image_0: np.ndarray,
                    grid: bool = False,
                    title: str = "Image Comparison"
                    ) -> ImageComparison:
+    """
+    Compare two images side-by-side with a slider to blend between them.
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
+    """
     int_fig = ImageComparison(image_0, image_1, cmap=cmap, grid=grid, title=title)
     return int_fig

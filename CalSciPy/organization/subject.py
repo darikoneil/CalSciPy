@@ -23,6 +23,7 @@ class Subject:
                  condition: str = None):
         """
         Class for organizing experiments for a single subject
+
         :param name: name of mouse
         :type name: str
         :param directory: directory to save mouse within
@@ -31,6 +32,11 @@ class Subject:
         :type study: str
         :param condition: experimental condition
         :type condition: str
+
+        .. versionadded:: 0.8.1
+
+        .. warning:: Currently untested
+
         """
 
         # if directory doesn't contain mouse, we ought to add it

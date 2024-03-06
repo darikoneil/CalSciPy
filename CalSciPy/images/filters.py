@@ -109,6 +109,10 @@ def mean_filter(images: np.ndarray,
 
     :rtype: :class:`ndarray <numpy.ndarray>`
 
+    .. versionadded:: 0.8.0
+
+    .. warning:: Currently untested
+
     .. warning::
 
         The number of frames in each processing block must fit within your GPU's VRAM (`CuPy <https://cupy.dev>`_)

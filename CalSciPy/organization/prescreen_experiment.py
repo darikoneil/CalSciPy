@@ -7,13 +7,18 @@ from .experiment import Experiment
 class PrescreenExperiment(Experiment):
     def __init__(self, name: str, base_directory: Path, **kwargs):
         """
-        Stimulation experiment mix-in
+        Stimulation pre-screen experiment mix-in
 
         :param name: name of experiment
         :type name: str
         :param base_directory: base directory of mouse
         :type base_directory: Path
         :key mix_ins: an iterable of mix-ins in string or object form
+
+        .. versionadded:: 0.8.1
+
+        .. warning:: Currently untested
+
         """
         # noinspection PyArgumentList
         super().__init__(name, base_directory, **kwargs)
