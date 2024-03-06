@@ -8,7 +8,7 @@ flake8-class-attributes-order
 flake8-comprehensions
 flake8-html
 flake8-unused-arguments
-pytest
+pytest < 8.0.0
 pytest-lazy-fixture
 pytest-sugar
 pytest-clarity
