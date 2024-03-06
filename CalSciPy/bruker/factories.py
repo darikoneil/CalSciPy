@@ -27,6 +27,10 @@ class BrukerElementFactory:
     Factory class for constructing bruker element objects
 
     :ivar element_class_mapping: dictionary mapping bruker xml objects to CalSciPy's bruker xml classes
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
     """
     def __init__(self, version: str = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerElementFactory:
         """
@@ -140,6 +144,11 @@ class BrukerElementFactory:
 class BrukerImageFactory:
     """
     Factory class for constructing bruker images
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     @classmethod
     def create(cls: BrukerImageFactory, ch_pl_comb: Tuple[Tuple[int, int], ...]) -> NamedTuple:
@@ -157,6 +166,11 @@ class BrukerXMLFactory:
     Factory class for constructing CalSciPy's bruker xml objects from CalSciPy's protocol objects.
 
     :ivar element_class_mapping: dictionary mapping bruker xml objects to CalSciPy's bruker xml classes
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     def __init__(self, version: str = DEFAULT_PRAIRIEVIEW_VERSION) -> BrukerXMLFactory:
         """

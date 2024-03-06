@@ -6,7 +6,7 @@ from pathlib import Path
 import string
 import re
 
-from .color_scheme import TERM_SCHEME
+from .color_scheme import FORMAT_TERMINAL
 
 # backport if necessary
 from sys import version_info
@@ -302,7 +302,7 @@ class MultiExceptionLogger:
 
     def __str__(self):
         exceptions = "".join([f"\n{message}" for message in self.exceptions])
-        return TERM_SCHEME(*exceptions, "emphasis")
+        return FORMAT_TERMINAL(*exceptions, "emphasis")
 
     def add_exception(self, other: Union[Exception, List[Exception]]) -> MultiExceptionLogger:
         try:

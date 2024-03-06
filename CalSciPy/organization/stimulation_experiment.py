@@ -15,6 +15,11 @@ class StimulationExperiment(Experiment):
         :param base_directory: base directory of mouse
         :type base_directory: Path
         :key mix_ins: an iterable of mix-ins in string or object form
+
+        .. versionadded:: 0.8.1
+
+        .. warning:: Currently untested
+
         """
         # noinspection PyArgumentList
         super().__init__(name, base_directory, **kwargs)

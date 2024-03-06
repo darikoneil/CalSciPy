@@ -5,7 +5,7 @@ from collections import ChainMap
 
 from math import inf
 
-from ...color_scheme import TERM_SCHEME
+from ...color_scheme import FORMAT_TERMINAL
 from ..._validators import validate_fields
 from .. import CONSTANTS
 
@@ -44,23 +44,23 @@ class _BrukerObject:
         Prints the dataclass name and each of its parameters, their values, and associated types
 
         """
-        string_to_print = TERM_SCHEME(f"\n{self.__name__()}\n", "header")
+        string_to_print = FORMAT_TERMINAL(f"\n{self.__name__()}\n", "header")
 
         annotations_ = self.collect_annotations()
 
         for key, type_ in annotations_.items():
             if "MappingProxyType" in type_ or "dict" in type_:  # Not robust to nesting
-                string_to_print += TERM_SCHEME(f"{key}", "emphasis")
+                string_to_print += FORMAT_TERMINAL(f"{key}", "emphasis")
                 string_to_print += ":"
-                string_to_print += TERM_SCHEME(f" ({type_})", "type")
+                string_to_print += FORMAT_TERMINAL(f" ({type_})", "type")
                 for nested_key in self.__dict__.get(key):
                     string_to_print += f"\n\t{nested_key}: {self.__dict__.get(key).get(nested_key)}"
                 string_to_print += "\n"
             else:
-                string_to_print += TERM_SCHEME(f"{key}", "emphasis")
+                string_to_print += FORMAT_TERMINAL(f"{key}", "emphasis")
                 string_to_print += ":"
                 string_to_print += f" {self.__dict__.get(key)}"
-                string_to_print += TERM_SCHEME(f" ({type_})\n", "type")
+                string_to_print += FORMAT_TERMINAL(f" ({type_})\n", "type")
 
         return string_to_print
 
@@ -85,13 +85,13 @@ class _BrukerObject:
         """
         Verbose printing of type information to assist users in setting decodanda parameters
         """
-        type_hints = TERM_SCHEME(f"\n{self.__name__()}\n", "header")
+        type_hints = FORMAT_TERMINAL(f"\n{self.__name__()}\n", "header")
 
         annotations_ = self._collect_annotations()
 
         for key, type_ in annotations_.items():
-            type_hints += TERM_SCHEME(f"{key}:", "emphasis")
-            type_hints += TERM_SCHEME(f"{type_}\n", "type")
+            type_hints += FORMAT_TERMINAL(f"{key}:", "emphasis")
+            type_hints += FORMAT_TERMINAL(f"{type_}\n", "type")
 
         print(type_hints)
 

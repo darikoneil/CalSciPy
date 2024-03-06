@@ -5,17 +5,17 @@ from operator import eq
 from ._backports import PatternMatching
 
 
-class ColorScheme:
+class _ColorScheme:
     """
     A container class for CalSciPy's color scheme
 
     """
     BLUE: Tuple[float, float, float] = (15 / 255, 159 / 255, 255 / 255)
-    ORANGE: Tuple[float, float, float] = (255 / 255, 159 / 255, 15 / 255)
+    ORANGE: Tuple[float, float, float] = (253 / 255, 174 / 255, 97 / 255)
     GREEN: Tuple[float, float, float] = (64 / 255, 204 / 255, 139 / 255)
     RED: Tuple[float, float, float] = (255 / 255, 78 / 255, 75 / 255)
     PURPLE: Tuple[float, float, float] = (120 / 255, 64 / 255, 204 / 255)
-    YELLOW: Tuple[float, float, float] = (255 / 255, 240 / 255, 15 / 255)
+    YELLOW: Tuple[float, float, float] = (255 / 255, 243 / 255, 109 / 255)
     SHADOW: Tuple[float, float, float] = (224 / 255, 224 / 255, 224 / 255)
     LIGHT: Tuple[float, float, float] = (192 / 255, 192 / 255, 192 / 255)
     MEDIUM: Tuple[float, float, float] = (128 / 255, 128 / 255, 128 / 255)
@@ -25,13 +25,13 @@ class ColorScheme:
     BACKGROUND: Tuple[float, float, float] = (245 / 255, 245 / 255, 245 / 255)
     colors: Tuple[str, ...] = ("red", "green", "blue", "orange", "purple", "yellow", "black", "medium", "dark", "light")
 
-    def __new__(cls: ColorScheme) -> ColorScheme:
+    def __new__(cls: _ColorScheme) -> _ColorScheme:
         """
         Force color scheme as singleton
 
         """
         if not hasattr(cls, "instance"):
-            cls.instance = super(ColorScheme, cls).__new__(cls)
+            cls.instance = super(_ColorScheme, cls).__new__(cls)
         return cls.instance
 
     @property
@@ -70,7 +70,7 @@ class ColorScheme:
             raise TypeError("color scheme accepts int or str args only")
 
 
-class TerminalScheme:
+class _TerminalScheme:
     """
     A container class for CalSciPy's terminal printing color/font scheme
 
@@ -82,13 +82,13 @@ class TerminalScheme:
     # color/background color on some terminals (e.g., PyCharm)
     RESET: str = "\033[0m"
 
-    def __new__(cls: TerminalScheme) -> TerminalScheme:
+    def __new__(cls: _TerminalScheme) -> _TerminalScheme:
         """
         Force color scheme as singleton
 
         """
         if not hasattr(cls, "instance"):
-            cls.instance = super(TerminalScheme, cls).__new__(cls)
+            cls.instance = super(_TerminalScheme, cls).__new__(cls)
         return cls.instance
 
     def __str__(self):
@@ -151,7 +151,7 @@ class TerminalScheme:
 
 
 # instance color scheme
-COLORS = ColorScheme()
+COLORS = _ColorScheme()
 
 # instance terminal scheme
-TERM_SCHEME = TerminalScheme()
+FORMAT_TERMINAL = _TerminalScheme()

@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 # noinspection PyProtectedMember
-from CalSciPy.color_scheme import ColorScheme, TerminalScheme, COLORS, TERM_SCHEME
+from CalSciPy.color_scheme import _ColorScheme, _TerminalScheme, COLORS, FORMAT_TERMINAL
 
 
 """
@@ -33,7 +33,7 @@ def test_color_scheme():
             called_color = COLORS(i)
 
     # finally check singleton status
-    new_color_scheme = ColorScheme()
+    new_color_scheme = _ColorScheme()
     assert(new_color_scheme.__repr__() == COLORS.__repr__())
 
     # check argument exception
@@ -45,21 +45,21 @@ def test_terminal_scheme():
 
     # check properties
     for attr in ["type", "emphasis", "header"]:
-        getattr(TERM_SCHEME, attr)
+        getattr(FORMAT_TERMINAL, attr)
 
     # check all styles unique
-    keys = [key for key in dir(TERM_SCHEME) if key.isupper()]
-    assert (len(keys) == len({getattr(TERM_SCHEME, key) for key in keys}))
+    keys = [key for key in dir(FORMAT_TERMINAL) if key.isupper()]
+    assert (len(keys) == len({getattr(FORMAT_TERMINAL, key) for key in keys}))
 
     # check wrapping messages actually resets
-    new_msg = TERM_SCHEME("42!", "type")
+    new_msg = FORMAT_TERMINAL("42!", "type")
     msg_parts = new_msg.split("!")
     assert(msg_parts[-1] == "\x1b[0m")
 
     # check msg still delivered if failed style request
-    new_msg = TERM_SCHEME("42!", "Adams")
+    new_msg = FORMAT_TERMINAL("42!", "Adams")
     assert("42!" in new_msg)
 
     # finally check singleton status
-    new_terminal_scheme = TerminalScheme()
-    assert(new_terminal_scheme.__repr__() == TERM_SCHEME.__repr__())
+    new_terminal_scheme = _TerminalScheme()
+    assert(new_terminal_scheme.__repr__() == FORMAT_TERMINAL.__repr__())

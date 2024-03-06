@@ -110,6 +110,8 @@ def deinterlace(images: np.ndarray,
 
     :returns: The deinterlaced images (frames, y-pixels, x-pixels)
 
+    .. warning:: Currently untested.
+
     .. warning::
 
         The number of frames included in each fourier transform must be several times smaller than the maximum number

@@ -20,6 +20,11 @@ def load_galvo_point_list(path: Union[str, Path]) -> GalvoPointListMeta:
     :param path:
 
     :return:
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     if path.is_file():
         return _import_gpl(path)
@@ -40,6 +45,11 @@ def load_saved_mark_points(file_path: Union[str, Path],
     :param file_path: path to xml file
     :param version: version of prairieview
     :return: photostimulation metadata
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     # We generally expected the file to be structured such that
     # File/
@@ -70,6 +80,11 @@ def load_mark_points(file_path: Union[str, Path],
     :param file_path: path to xml file
     :param version: version of prairieview
     :return: photostimulation metadata
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     # We generally expected the file to be structured such that
     # File/

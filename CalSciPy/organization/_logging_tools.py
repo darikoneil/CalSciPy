@@ -18,6 +18,7 @@ class IPythonLogger:
 
         :param path: path to save file
         :type path: str
+
         """
 
         #: object: IPython magic

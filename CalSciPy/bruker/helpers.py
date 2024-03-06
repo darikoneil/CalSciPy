@@ -31,6 +31,11 @@ def align_data(analog_data: pd.DataFrame,
     :param method: method for interpolating samples
     :returns: a dataframe containing time (index, ms) with aligned columns of voltage recordings/analog data and
         imaging frame
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     frame_times = frame_times.reindex(index=analog_data.index)
 
@@ -59,6 +64,11 @@ def determine_imaging_content(folder: Union[str, Path]) -> Tuple[int, int, int, 
 
     :param folder: folder containing bruker imaging data
     :returns: channels, planes, frames, height, width
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
 
     # TODO: I am spaghetti
@@ -121,6 +131,11 @@ def extract_frame_times(filename: Union[str, Path]) -> pd.DataFrame:
 
     :param: filename
     :returns: dataframe containing time (index, ms) x imaging frame (*zero-indexed*)
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     tree = ElementTree.parse(filename)
     root = tree.getroot()
@@ -165,6 +180,11 @@ def repackage_bruker_tifs(input_folder: Union[str, Path],
     :param output_folder: empty folder where .tif stacks will be saved
     :param channel: specify channel
     :param plane: specify plane
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     num_channels, num_planes, num_frames, y, x = determine_imaging_content(input_folder)
     print_image_description(num_channels, num_planes, num_frames, y, x)

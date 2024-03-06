@@ -14,6 +14,11 @@ class FileTree:
     """
     A file tree that organizes experiment data, analyzed results, and figures. For implementation concerns it is not
     an extension of the built-in dictionary type, but it replicates most of its built-in methods.
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
 
     def __init__(self, name: str, base_directory: Path, **kwargs):
@@ -218,6 +223,10 @@ class FileSet:
     This class is useful in managing coherent sets of data like experimental sessions or a calendar day. It offers
     several methods for keeping track of datasets.
 
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
 
     def __init__(self, name: str, parent_directory: Path):
@@ -348,6 +357,10 @@ class FileMap(dict):
     """
     Dictionary extension that appends an integer to duplicate keys before storing as a new key-value pair
     rather than overwriting the existing key-value pair.
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
 
     """
 

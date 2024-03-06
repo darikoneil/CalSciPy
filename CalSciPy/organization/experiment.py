@@ -18,6 +18,11 @@ def import_mix_in_string(json_string: str) -> Experiment:
     :type json_string: str
     :return: imported mix-in
     :rtype: Experiment
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     module_name = [char_ if char_.islower() else "".join(["_", char_.lower()])
                    for char_ in json_string if char_.lower()]
@@ -38,6 +43,11 @@ class Experiment:
         :param base_directory: base directory of mouse
         :type base_directory: pathlib.Path
         :key mix_ins: an iterable of mix-ins in string or object form
+
+        .. versionadded:: 0.8.1
+
+        .. warning:: Currently untested
+
         """
         #: str: name of the experiment
         self._name = name
@@ -158,6 +168,11 @@ class ExperimentFactory:
         :type name: str
         :param base_directory: base directory of mouse
         :type base_directory: pathlib.Path = None
+
+        .. versionadded:: 0.8.1
+
+        .. warning:: Currently untested
+
         """
         #: str: name of experiment
         self._name = name
