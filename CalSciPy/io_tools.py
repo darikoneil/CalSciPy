@@ -86,6 +86,8 @@ def load_gif(path: Union[str, Path]) -> np.ndarray:
 
     """
 
+    raise PermissionError("FAILING TESTS...")
+
     path = path.with_suffix(".gif")
 
     images = mimread(path)

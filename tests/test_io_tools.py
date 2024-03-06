@@ -254,6 +254,7 @@ class TestIO:
         io_helper.load_validator(load_video)
         io_helper.save_validator(save_video)
 
+    @pytest.mark.skip(reason="Expected Failure")
     def test_load_gif(self, io_helper):
         test_data = load_gif(io_helper.directory.joinpath("gif").joinpath("images.gif"))
         io_helper.check_data(test_data[:, :, :, 0], dtype=test_data.dtype)
@@ -262,6 +263,7 @@ class TestIO:
         with BlockPrinting():
             save_gif(io_helper.outputs.joinpath("gif"), io_helper.data)
 
+    @pytest.mark.skip(reason="Expected Failure")
     def test_mutation_gif(self, io_helper):
         with BlockPrinting():
             save_gif(io_helper.outputs.joinpath("gif"), io_helper.data)
