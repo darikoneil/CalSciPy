@@ -45,6 +45,8 @@ def load_bruker_tifs(folder: Union[str, Path],
 
     .. versionadded:: 0.8.0 (experimental)
 
+    .. warning:: Currently untested
+
     .. seealso ::
 
         :func:`repackage_bruker_tifs <CalSciPy.bruker.converters.repackage_bruker_tifs>`
@@ -94,6 +96,8 @@ def load_voltage_recording(path: Union[str, Path]) -> pd.DataFrame:
         follow these naming convention, you must be explicitly pass the path to your file.
 
     .. versionadded:: 0.8.0 (experimental)
+
+    .. warning:: Currently untested
 
     """
     if path.is_file():

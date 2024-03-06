@@ -20,6 +20,10 @@ def write_mapping(mapping: Mapping, version: str) -> None:
 
     :param version: Version of prairieview
 
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     # replace dots in version path with underscores
     version = version.replace(".", "_")
@@ -37,6 +41,11 @@ def load_mapping(version: str) -> MappingProxyType:
     :returns: Read-only mapping the xml tag and python object
 
     :rtype: :class:`MappingProxyType <types.MappingProxyType.>`
+
+    .. versionadded:: 0.8.1
+
+    .. warning:: Currently untested
+
     """
     # replace dots in version path with underscores
     version = version.replace(".", "_")
