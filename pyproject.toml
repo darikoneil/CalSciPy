@@ -83,9 +83,9 @@ gpu = [
     "cupy"
 ]
 
-prairielink = [
-    "pywin32"
-]
+#prairielink = [
+#    "pywin32"
+#]
 
 [tool.setuptools]
 packages = [
