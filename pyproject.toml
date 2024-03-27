@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CalSciPy"
-version = "0.8.1"
+version = "0.8.3"
 description = "A toolbox for analyzing, designing, and visualizing multiphoton imaging & optogenetics experiments."
 readme = "README.md"
 requires-python = ">=3.8, <4"
@@ -31,6 +31,7 @@ dependencies = [
     "get-annotations",
     "imageio",
     "imageio-ffmpeg",
+    "importlib-metadata",
     "ipykernel",
     "ipython",
     "joblib",
@@ -87,7 +88,25 @@ prairielink = [
 ]
 
 [tool.setuptools]
-packages = ["CalSciPy"]
+packages = [
+    "CalSciPy",
+    "CalSciPy._backports",
+    "CalSciPy.bruker",
+    "CalSciPy.bruker.xml",
+    "CalSciPy.bruker.xml.xml_mappings",
+    "CalSciPy.bruker.meta",
+    "CalSciPy.bruker.protocols",
+    "CalSciPy.events",
+    "CalSciPy.images",
+    "CalSciPy.interactive",
+    "CalSciPy.optics",
+    "CalSciPy.organization",
+    "CalSciPy.roi_tools",
+    "CalSciPy.traces",
+]
+
+[tool.setuptools.package-data]
+"*" = ["*.mplstyle", "*.ini", "*.json", "*.xml"]
 
 [tool.pytest.ini_options]
 addopts = [
