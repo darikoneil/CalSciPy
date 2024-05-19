@@ -18,6 +18,10 @@ interactive visualization of data to computer-generated holography for "read/wri
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be 
 considered useful to others. I was inspired to upload my own code to solve some of the issues outlined in the [motivation](https://calscipy.readthedocs.io/en/latest/introduction__motivation.html) section of the [docs](https://calscipy.readthedocs.io/en/latest/index.html#) or at least create a neat package my friends and I could use to easily analyze data across various environments and computers.
 
+### Notice - 05/19/2024
+**I plan on breaking up this repo because its many of its contents are way too decoupled (e.g., bruker prairieview tricks / helpers vs experiment organization). All code related to computer-generated holography and holographic optogenetics will be migrated to my forthcoming neurobeam package (Neuroscience Experiments Using Real-time Optogenetics, BEhavior, and Microscopy). All prairieview specific code will become a submodule. Experiment organization will become a submodule and contain functionality to convert to and from the NWB format. It will be some time before this is updated; neurobeam is my primary focus.**
+
+
 #### Active Development
 As of version 0.9.8, the current implementation is unstable, partially untested, partially finished, and should be considered an open alpha/beta. ***Please be patient, refactoring my code for public use is a pet-project. I have to graduate at some point and I have a newborn.***
 
@@ -37,10 +41,6 @@ Until things are more stable, I'll explicitly note which subpackages are stable,
 #### Installation
 Eventually I will break things up into sub-packages so you don't have to install everything together...         
 `pip install CalSciPy`
-
-#### Roadmap
-My current focus is on refactoring tools for holographic optogenetics and circumventing PrairieView's writing of data to proprietary RAW format. I also plan on
-breaking up this repo because its many of its contents are too decoupled (e.g., bruker prairieview tricks / helpers vs experiment organization)
 
 #### Contributions
 Save me from myself, contributions welcome :)
