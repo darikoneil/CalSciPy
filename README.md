@@ -13,13 +13,13 @@
 ![GitHub](https://img.shields.io/github/license/darikoneil/CalSciPy)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/darikoneil/CalSciPy/calscipy_lint_test_action.yml)
 
+## Notice - 05/19/2024
+I plan on breaking up this repo because its many of its contents are way too decoupled (e.g., bruker prairieview tricks / helpers vs experiment organization). All code related to computer-generated holography and holographic optogenetics will be migrated to my forthcoming neurobeam package (**N**euroscience **E**xperiments **U**sing **R**eal-time **O**ptogenetics, **BE**havior, and **M**icroscopy). All prairieview specific code will become a submodule. Experiment organization will become a submodule and contain functionality to convert to and from the NWB format. It will be some time before this is updated; neurobeam is my primary focus.
+
 CalSciPy is a utility toolbox for calcium imaging experiments. It contains a variety of useful features, from 
 interactive visualization of data to computer-generated holography for "read/write" experiments, and 
 everything in-between. Essentially, it's a collection of code written for my imaging experiments that might be 
 considered useful to others. I was inspired to upload my own code to solve some of the issues outlined in the [motivation](https://calscipy.readthedocs.io/en/latest/introduction__motivation.html) section of the [docs](https://calscipy.readthedocs.io/en/latest/index.html#) or at least create a neat package my friends and I could use to easily analyze data across various environments and computers.
-
-## Notice - 05/19/2024
-I plan on breaking up this repo because its many of its contents are way too decoupled (e.g., bruker prairieview tricks / helpers vs experiment organization). All code related to computer-generated holography and holographic optogenetics will be migrated to my forthcoming neurobeam package (**N**euroscience **E**xperiments **U**sing **R**eal-time **O**ptogenetics, **BE**havior, and **M**icroscopy). All prairieview specific code will become a submodule. Experiment organization will become a submodule and contain functionality to convert to and from the NWB format. It will be some time before this is updated; neurobeam is my primary focus.
 
 
 #### Active Development
